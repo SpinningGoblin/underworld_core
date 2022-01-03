@@ -1,3 +1,5 @@
+pub mod describable;
+
 #[cfg(test)]
 mod tests {
     #[test]
