@@ -1,17 +1,13 @@
-#[derive(Clone, Debug)]
-pub struct Name(pub String);
+pub mod name;
+pub mod player;
+pub mod non_player;
 
-#[derive(Clone, Debug)]
-pub struct Player {
-    pub character: Character,
-}
+use self::name::Name;
 
-#[derive(Clone, Debug)]
-pub struct NonPlayer {
-    pub character: Character,
-}
+use super::stats::Stats;
 
 #[derive(Clone, Debug)]
 pub struct Character {
     pub name: Option<Name>,
+    pub stats: Stats,
 }
