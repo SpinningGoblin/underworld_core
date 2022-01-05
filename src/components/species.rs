@@ -20,7 +20,7 @@ impl Describable for Species {
             Self::Human => "Human".to_string(),
             Self::Kobold => "Kobold".to_string(),
             Self::Orc => "Orc".to_string(),
-            _ => "Mysterious Entity".to_string()
+            _ => "Mysterious Entity".to_string(),
         }
     }
 }
