@@ -1,6 +1,6 @@
-use crate::{describable::Describable, components::stats::Stats};
+use crate::describable::Describable;
 
-use super::Character;
+use super::{character::Character, stats::Stats};
 
 #[derive(Clone, Debug)]
 pub struct Player {

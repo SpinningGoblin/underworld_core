@@ -1,6 +1,4 @@
-use crate::components::stats::Stats;
-
-use super::Character;
+use super::{character::Character, stats::Stats};
 
 #[derive(Clone, Debug)]
 pub struct NonPlayer {

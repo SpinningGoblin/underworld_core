@@ -1,10 +1,4 @@
-pub mod name;
-pub mod player;
-pub mod non_player;
-
-use self::name::Name;
-
-use super::stats::Stats;
+use super::{stats::Stats, name::Name};
 
 #[derive(Clone, Debug)]
 pub struct Character {
