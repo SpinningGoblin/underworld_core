@@ -29,7 +29,7 @@ impl LifeModifier {
 
 #[cfg(test)]
 mod tests {
-    use crate::{describable::Describable, components::life_modifier::LifeModifier};
+    use crate::{components::life_modifier::LifeModifier, describable::Describable};
 
     #[test]
     fn describe() {
