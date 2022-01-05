@@ -13,13 +13,13 @@ pub enum Species {
 
 impl Describable for Species {
     fn describe(&self) -> String {
-        match self {
-            &Self::BugBear => "Bug Bear".to_string(),
-            &Self::Elf => "Elf".to_string(),
-            &Self::Goblin => "Goblin".to_string(),
-            &Self::Human => "Human".to_string(),
-            &Self::Kobold => "Kobold".to_string(),
-            &Self::Orc => "Orc".to_string(),
+        match *self {
+            Self::BugBear => "Bug Bear".to_string(),
+            Self::Elf => "Elf".to_string(),
+            Self::Goblin => "Goblin".to_string(),
+            Self::Human => "Human".to_string(),
+            Self::Kobold => "Kobold".to_string(),
+            Self::Orc => "Orc".to_string(),
             _ => "Mysterious Entity".to_string()
         }
     }
