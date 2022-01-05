@@ -1,8 +1,9 @@
 pub mod character;
 pub mod dimensions;
 pub mod health;
+pub mod life_modifier;
 pub mod name;
 pub mod non_player;
 pub mod player;
-pub mod stats;
 pub mod species;
+pub mod stats;
