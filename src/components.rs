@@ -5,3 +5,4 @@ pub mod name;
 pub mod non_player;
 pub mod player;
 pub mod stats;
+pub mod species;
