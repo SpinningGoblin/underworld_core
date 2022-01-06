@@ -9,16 +9,18 @@ pub struct Dimensions {
 impl Dimensions {
     pub fn describe_height_for_species(&self, species: &Species) -> String {
         match species {
-            &Species::Goblin => {
-                if self.is_taller_than(1.2) {
-                    "tall".to_string()
-                } else if self.is_shorter_than(0.6) {
-                    "short".to_string()
-                } else {
-                    "".to_string()
-                }
-            }
+            &Species::Goblin => self.goblin_height(),
             _ => "".to_string(),
+        }
+    }
+
+    fn goblin_height(&self) -> String {
+        if self.is_taller_than(1.2) {
+            "tall".to_string()
+        } else if self.is_shorter_than(0.6) {
+            "short".to_string()
+        } else {
+            "".to_string()
         }
     }
 
