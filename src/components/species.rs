@@ -7,6 +7,7 @@ pub enum Species {
     Goblin,
     Human,
     Kobold,
+    Ogre,
     Orc,
     Unknown,
 }
@@ -19,6 +20,7 @@ impl Describable for Species {
             Self::Goblin => "Goblin".to_string(),
             Self::Human => "Human".to_string(),
             Self::Kobold => "Kobold".to_string(),
+            Self::Ogre => "Ogre".to_string(),
             Self::Orc => "Orc".to_string(),
             _ => "Mysterious Entity".to_string(),
         }
