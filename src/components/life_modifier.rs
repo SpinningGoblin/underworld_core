@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 #[derive(Clone, Debug)]
 pub enum LifeModifier {
     Skeleton,
@@ -5,12 +7,12 @@ pub enum LifeModifier {
     Zombie,
 }
 
-impl ToString for LifeModifier {
-    fn to_string(&self) -> String {
+impl Display for LifeModifier {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
-            Self::Skeleton => "skeleton".to_string(),
-            Self::Vampire => "vampire".to_string(),
-            Self::Zombie => "zombie".to_string(),
+            Self::Skeleton => write!(f, "skeleton"),
+            Self::Vampire => write!(f, "vampire"),
+            Self::Zombie => write!(f, "zombie"),
         }
     }
 }

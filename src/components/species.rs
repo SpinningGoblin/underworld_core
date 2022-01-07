@@ -1,4 +1,4 @@
-use std::ops::Range;
+use std::{fmt::Display, ops::Range};
 
 #[derive(Clone, Debug)]
 pub enum Species {
@@ -28,15 +28,15 @@ impl Species {
     }
 }
 
-impl ToString for Species {
-    fn to_string(&self) -> String {
+impl Display for Species {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
-            Self::Bugbear => "Bugbear".to_string(),
-            Self::Goblin => "Goblin".to_string(),
-            Self::Kobold => "Kobold".to_string(),
-            Self::Ogre => "Ogre".to_string(),
-            Self::Orc => "Orc".to_string(),
-            _ => "Mysterious Entity".to_string(),
+            Self::Bugbear => write!(f, "Bugbear"),
+            Self::Goblin => write!(f, "Goblin"),
+            Self::Kobold => write!(f, "Kobold"),
+            Self::Ogre => write!(f, "Ogre"),
+            Self::Orc => write!(f, "Orc"),
+            _ => write!(f, "Mysterious Entity"),
         }
     }
 }

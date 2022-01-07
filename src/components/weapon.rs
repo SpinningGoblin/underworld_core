@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 #[derive(Clone, Debug)]
 pub struct EquippedWeapon {
     pub weapon: Weapon,
@@ -13,15 +15,15 @@ pub struct Weapon {
     pub qualities: Vec<WeaponQuality>,
 }
 
-impl ToString for Weapon {
-    fn to_string(&self) -> String {
+impl Display for Weapon {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut descriptions: Vec<String> = Vec::new();
         for quality in self.qualities.iter() {
             descriptions.push(quality.to_string());
         }
         descriptions.push(self.weapon_type.to_string());
 
-        descriptions.join(" ")
+        write!(f, "{}", descriptions.join(" "))
     }
 }
 
@@ -34,14 +36,14 @@ pub enum WeaponQuality {
     Shiny,
 }
 
-impl ToString for WeaponQuality {
-    fn to_string(&self) -> String {
+impl Display for WeaponQuality {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
-            Self::Broken => "broken".to_string(),
-            Self::Chipped => "chipped".to_string(),
-            Self::Dull => "dull".to_string(),
-            Self::Rusty => "rusty".to_string(),
-            Self::Shiny => "shiny".to_string(),
+            Self::Broken => write!(f, "broken"),
+            Self::Chipped => write!(f, "chipped"),
+            Self::Dull => write!(f, "dull"),
+            Self::Rusty => write!(f, "rusty"),
+            Self::Shiny => write!(f, "shiny"),
         }
     }
 }
@@ -57,16 +59,16 @@ pub enum WeaponType {
     ShortSword,
 }
 
-impl ToString for WeaponType {
-    fn to_string(&self) -> String {
+impl Display for WeaponType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
-            Self::Club => "club".to_string(),
-            Self::Dagger => "dagger".to_string(),
-            Self::Hammer => "hammer".to_string(),
-            Self::Kukri => "kukri".to_string(),
-            Self::LongSword => "long sword".to_string(),
-            Self::Scimitar => "scimitar".to_string(),
-            Self::ShortSword => "short sword".to_string(),
+            Self::Club => write!(f, "club"),
+            Self::Dagger => write!(f, "dagger"),
+            Self::Hammer => write!(f, "hammer"),
+            Self::Kukri => write!(f, "kukri"),
+            Self::LongSword => write!(f, "long sword"),
+            Self::Scimitar => write!(f, "scimitar"),
+            Self::ShortSword => write!(f, "short sword"),
         }
     }
 }

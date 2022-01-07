@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use super::{life_modifier::LifeModifier, name::Name, species::Species, stats::Stats};
 
 #[derive(Clone, Debug)]
@@ -8,9 +10,9 @@ pub struct Character {
     pub life_modifier: Option<LifeModifier>,
 }
 
-impl ToString for Character {
-    fn to_string(&self) -> String {
-        self.describe_species()
+impl Display for Character {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.describe_species())
     }
 }
 
