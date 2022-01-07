@@ -1,5 +1,3 @@
-use crate::describable::Describable;
-
 #[derive(Clone, Debug)]
 pub enum LifeModifier {
     Skeleton,
@@ -7,8 +5,8 @@ pub enum LifeModifier {
     Zombie,
 }
 
-impl Describable for LifeModifier {
-    fn describe(&self) -> String {
+impl ToString for LifeModifier {
+    fn to_string(&self) -> String {
         match *self {
             Self::Skeleton => "skeleton".to_string(),
             Self::Vampire => "vampire".to_string(),
@@ -29,13 +27,13 @@ impl LifeModifier {
 
 #[cfg(test)]
 mod tests {
-    use crate::{components::life_modifier::LifeModifier, describable::Describable};
+    use crate::components::life_modifier::LifeModifier;
 
     #[test]
-    fn describe() {
-        assert_eq!("zombie", LifeModifier::Zombie.describe());
-        assert_eq!("vampire", LifeModifier::Vampire.describe());
-        assert_eq!("skeleton", LifeModifier::Skeleton.describe());
+    fn to_string() {
+        assert_eq!("zombie", LifeModifier::Zombie.to_string());
+        assert_eq!("vampire", LifeModifier::Vampire.to_string());
+        assert_eq!("skeleton", LifeModifier::Skeleton.to_string());
     }
 
     #[test]

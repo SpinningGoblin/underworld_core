@@ -1,5 +1,3 @@
-use crate::describable::Describable;
-
 #[derive(Clone, Debug)]
 pub struct EquippedWeapon {
     pub weapon: Weapon,
@@ -15,13 +13,13 @@ pub struct Weapon {
     pub qualities: Vec<WeaponQuality>,
 }
 
-impl Describable for Weapon {
-    fn describe(&self) -> String {
+impl ToString for Weapon {
+    fn to_string(&self) -> String {
         let mut descriptions: Vec<String> = Vec::new();
         for quality in self.qualities.iter() {
-            descriptions.push(quality.describe());
+            descriptions.push(quality.to_string());
         }
-        descriptions.push(self.weapon_type.describe());
+        descriptions.push(self.weapon_type.to_string());
 
         descriptions.join(" ")
     }
@@ -36,8 +34,8 @@ pub enum WeaponQuality {
     Shiny,
 }
 
-impl Describable for WeaponQuality {
-    fn describe(&self) -> String {
+impl ToString for WeaponQuality {
+    fn to_string(&self) -> String {
         match *self {
             Self::Broken => "broken".to_string(),
             Self::Chipped => "chipped".to_string(),
@@ -59,8 +57,8 @@ pub enum WeaponType {
     ShortSword,
 }
 
-impl Describable for WeaponType {
-    fn describe(&self) -> String {
+impl ToString for WeaponType {
+    fn to_string(&self) -> String {
         match *self {
             Self::Club => "club".to_string(),
             Self::Dagger => "dagger".to_string(),
@@ -75,42 +73,40 @@ impl Describable for WeaponType {
 
 #[cfg(test)]
 mod weapon_type_tests {
-    use crate::{components::weapon::WeaponType, describable::Describable};
+    use crate::components::weapon::WeaponType;
 
     #[test]
-    fn describe() {
-        assert_eq!("club", WeaponType::Club.describe());
-        assert_eq!("dagger", WeaponType::Dagger.describe());
-        assert_eq!("hammer", WeaponType::Hammer.describe());
-        assert_eq!("kukri", WeaponType::Kukri.describe());
-        assert_eq!("long sword", WeaponType::LongSword.describe());
-        assert_eq!("scimitar", WeaponType::Scimitar.describe());
-        assert_eq!("short sword", WeaponType::ShortSword.describe());
+    fn to_string() {
+        assert_eq!("club", WeaponType::Club.to_string());
+        assert_eq!("dagger", WeaponType::Dagger.to_string());
+        assert_eq!("hammer", WeaponType::Hammer.to_string());
+        assert_eq!("kukri", WeaponType::Kukri.to_string());
+        assert_eq!("long sword", WeaponType::LongSword.to_string());
+        assert_eq!("scimitar", WeaponType::Scimitar.to_string());
+        assert_eq!("short sword", WeaponType::ShortSword.to_string());
     }
 }
 
 #[cfg(test)]
 mod weapon_quality_tests {
-    use crate::{components::weapon::WeaponQuality, describable::Describable};
+    use crate::components::weapon::WeaponQuality;
 
     #[test]
-    fn describe() {
-        assert_eq!("broken", WeaponQuality::Broken.describe());
-        assert_eq!("chipped", WeaponQuality::Chipped.describe());
-        assert_eq!("dull", WeaponQuality::Dull.describe());
-        assert_eq!("rusty", WeaponQuality::Rusty.describe());
-        assert_eq!("shiny", WeaponQuality::Shiny.describe());
+    fn to_string() {
+        assert_eq!("broken", WeaponQuality::Broken.to_string());
+        assert_eq!("chipped", WeaponQuality::Chipped.to_string());
+        assert_eq!("dull", WeaponQuality::Dull.to_string());
+        assert_eq!("rusty", WeaponQuality::Rusty.to_string());
+        assert_eq!("shiny", WeaponQuality::Shiny.to_string());
     }
 }
 
 #[cfg(test)]
 mod weapon_tests {
-    use crate::describable::Describable;
-
     use super::Weapon;
 
     #[test]
-    fn describe_without_qualities() {
+    fn to_string_without_qualities() {
         let weapon = Weapon {
             min_damage: 2,
             max_damage: 6,
@@ -118,11 +114,11 @@ mod weapon_tests {
             qualities: Vec::new(),
         };
 
-        assert_eq!("long sword", weapon.describe());
+        assert_eq!("long sword", weapon.to_string());
     }
 
     #[test]
-    fn describe_with_qualities() {
+    fn to_string_with_qualities() {
         let weapon = Weapon {
             min_damage: 2,
             max_damage: 6,
@@ -130,6 +126,6 @@ mod weapon_tests {
             qualities: vec![super::WeaponQuality::Dull, super::WeaponQuality::Chipped],
         };
 
-        assert_eq!("dull chipped long sword", weapon.describe());
+        assert_eq!("dull chipped long sword", weapon.to_string());
     }
 }

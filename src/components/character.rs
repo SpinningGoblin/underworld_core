@@ -1,5 +1,3 @@
-use crate::describable::Describable;
-
 use super::{life_modifier::LifeModifier, name::Name, species::Species, stats::Stats};
 
 #[derive(Clone, Debug)]
@@ -10,8 +8,8 @@ pub struct Character {
     pub life_modifier: Option<LifeModifier>,
 }
 
-impl Describable for Character {
-    fn describe(&self) -> String {
+impl ToString for Character {
+    fn to_string(&self) -> String {
         self.describe_species()
     }
 }
@@ -27,10 +25,10 @@ impl Character {
             }
         }
 
-        descriptions.push(self.species.describe());
+        descriptions.push(self.species.to_string());
 
         if let Some(life_modifier) = &self.life_modifier {
-            descriptions.push(life_modifier.describe());
+            descriptions.push(life_modifier.to_string());
         }
 
         descriptions.join(" ")
@@ -39,17 +37,14 @@ impl Character {
 
 #[cfg(test)]
 mod tests {
-    use crate::{
-        components::{
-            dimensions::Dimensions, life_modifier::LifeModifier, species::Species, stats::Stats,
-        },
-        describable::Describable,
+    use crate::components::{
+        dimensions::Dimensions, life_modifier::LifeModifier, species::Species, stats::Stats,
     };
 
     use super::Character;
 
     #[test]
-    fn describe_a_character() {
+    fn to_string_for_a_character() {
         let character = Character {
             name: None,
             stats: Stats {
@@ -63,12 +58,12 @@ mod tests {
             life_modifier: None,
         };
 
-        let description = character.describe();
+        let description = character.to_string();
         assert_eq!("tall Goblin", description);
     }
 
     #[test]
-    fn describe_a_character_with_life_modifier() {
+    fn to_string_for_a_character_with_life_modifier() {
         let character = Character {
             name: None,
             stats: Stats {
@@ -82,7 +77,7 @@ mod tests {
             life_modifier: Some(LifeModifier::Skeleton),
         };
 
-        let description = character.describe();
+        let description = character.to_string();
         assert_eq!("Goblin skeleton", description);
     }
 }
