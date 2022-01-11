@@ -9,3 +9,4 @@ pub mod player;
 pub mod species;
 pub mod stats;
 pub mod weapon;
+pub mod wearable;
