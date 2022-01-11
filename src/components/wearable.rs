@@ -98,6 +98,13 @@ impl Display for Wearable {
     }
 }
 
+#[derive(Clone, Debug)]
+pub struct EquippedWearable {
+    pub wearable: Wearable,
+    pub hidden: bool,
+    pub equipped_location: String,
+}
+
 #[cfg(test)]
 mod wearable_type_tests {
     use super::WearableType;
