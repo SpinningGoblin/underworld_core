@@ -1,5 +1,7 @@
 use std::fmt::Display;
 
+use super::attack::Attack;
+
 #[derive(Clone, Debug)]
 pub struct EquippedWeapon {
     pub weapon: Weapon,
@@ -9,8 +11,7 @@ pub struct EquippedWeapon {
 
 #[derive(Clone, Debug)]
 pub struct Weapon {
-    pub min_damage: i32,
-    pub max_damage: i32,
+    pub attack: Option<Attack>,
     pub weapon_type: WeaponType,
     pub qualities: Vec<WeaponQuality>,
 }
@@ -110,8 +111,7 @@ mod weapon_tests {
     #[test]
     fn to_string_without_qualities() {
         let weapon = Weapon {
-            min_damage: 2,
-            max_damage: 6,
+            attack: None,
             weapon_type: super::WeaponType::LongSword,
             qualities: Vec::new(),
         };
@@ -122,8 +122,7 @@ mod weapon_tests {
     #[test]
     fn to_string_with_qualities() {
         let weapon = Weapon {
-            min_damage: 2,
-            max_damage: 6,
+            attack: None,
             weapon_type: super::WeaponType::LongSword,
             qualities: vec![super::WeaponQuality::Dull, super::WeaponQuality::Chipped],
         };
