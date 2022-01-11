@@ -1,7 +1,7 @@
-use super::{character::Character, stats::Stats};
+use super::character::Character;
 
 #[derive(Clone, Debug)]
 pub struct NonPlayer {
     pub character: Character,
-    pub stats: Stats,
+
 }
