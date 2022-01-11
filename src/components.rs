@@ -1,3 +1,4 @@
+pub mod attack;
 pub mod character;
 pub mod defense;
 pub mod dimensions;
