@@ -1,6 +1,4 @@
-use std::ops::Range;
-
-use super::species::Species;
+use super::height_descriptor::HeightDescriptor;
 
 #[derive(Clone, Debug)]
 pub struct Dimensions {
@@ -8,22 +6,15 @@ pub struct Dimensions {
     pub width: f32,
 }
 
-const TALL: &str = "tall";
-const SHORT: &str = "short";
-const AVERAGE_HEIGHT: &str = "";
-
 impl Dimensions {
-    pub fn describe_height_for_species(&self, species: &Species) -> String {
-        self.calculate_height(&species.height_range())
-    }
-
-    fn calculate_height(&self, height_range: &Range<f32>) -> String {
+    pub fn describe_height(&self, descriptor: &impl HeightDescriptor) -> String {
+        let height_range = descriptor.height_range();
         if self.is_taller_than(height_range.end) {
-            TALL.to_string()
+            descriptor.bigger_text()
         } else if self.is_shorter_than(height_range.start) {
-            SHORT.to_string()
+            descriptor.smaller_text()
         } else {
-            AVERAGE_HEIGHT.to_string()
+            descriptor.average_text()
         }
     }
 
@@ -48,10 +39,7 @@ mod test {
             height: 1.5,
             width: 0.1,
         };
-        assert_eq!(
-            "tall",
-            dimensions.describe_height_for_species(&Species::Goblin)
-        );
+        assert_eq!("tall", dimensions.describe_height(&Species::Goblin));
     }
 
     #[test]
@@ -60,10 +48,7 @@ mod test {
             height: 0.4,
             width: 0.1,
         };
-        assert_eq!(
-            "short",
-            dimensions.describe_height_for_species(&Species::Goblin)
-        );
+        assert_eq!("short", dimensions.describe_height(&Species::Goblin));
     }
 
     #[test]
@@ -72,6 +57,6 @@ mod test {
             height: 0.7,
             width: 0.1,
         };
-        assert_eq!("", dimensions.describe_height_for_species(&Species::Goblin));
+        assert_eq!("", dimensions.describe_height(&Species::Goblin));
     }
 }

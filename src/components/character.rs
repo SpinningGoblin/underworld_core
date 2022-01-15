@@ -16,7 +16,7 @@ impl Character {
         let mut descriptions: Vec<String> = Vec::new();
 
         if let Some(dimensions) = &self.stats.dimensions {
-            let height_description = dimensions.describe_height_for_species(&self.species);
+            let height_description = dimensions.describe_height(&self.species);
             if !height_description.is_empty() {
                 descriptions.push(height_description);
             }
