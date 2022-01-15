@@ -1,5 +1,3 @@
-use std::fmt::Display;
-
 use super::{
     inventory::Inventory, life_modifier::LifeModifier, name::Name, species::Species, stats::Stats,
 };
@@ -13,14 +11,8 @@ pub struct Character {
     pub inventory: Option<Inventory>,
 }
 
-impl Display for Character {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.describe_species())
-    }
-}
-
 impl Character {
-    fn describe_species(&self) -> String {
+    pub fn describe_species(&self) -> String {
         let mut descriptions: Vec<String> = Vec::new();
 
         if let Some(dimensions) = &self.stats.dimensions {
@@ -37,6 +29,13 @@ impl Character {
         }
 
         descriptions.join(" ")
+    }
+
+    pub fn describe_inventory(&self) -> String {
+        match &self.inventory {
+            Some(inventory) => format!("{}", inventory),
+            _ => "".to_string(),
+        }
     }
 }
 
@@ -64,7 +63,7 @@ mod tests {
             inventory: None,
         };
 
-        let description = character.to_string();
+        let description = character.describe_species();
         assert_eq!("tall Goblin", description);
     }
 
@@ -84,7 +83,7 @@ mod tests {
             inventory: None,
         };
 
-        let description = character.to_string();
+        let description = character.describe_species();
         assert_eq!("Goblin skeleton", description);
     }
 }
