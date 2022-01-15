@@ -1,6 +1,8 @@
 use std::fmt::Display;
 
-use super::{life_modifier::LifeModifier, name::Name, species::Species, stats::Stats};
+use super::{
+    inventory::Inventory, life_modifier::LifeModifier, name::Name, species::Species, stats::Stats,
+};
 
 #[derive(Clone, Debug)]
 pub struct Character {
@@ -8,6 +10,7 @@ pub struct Character {
     pub stats: Stats,
     pub species: Species,
     pub life_modifier: Option<LifeModifier>,
+    pub inventory: Option<Inventory>,
 }
 
 impl Display for Character {
@@ -58,6 +61,7 @@ mod tests {
             },
             species: Species::Goblin,
             life_modifier: None,
+            inventory: None,
         };
 
         let description = character.to_string();
@@ -77,6 +81,7 @@ mod tests {
             },
             species: Species::Goblin,
             life_modifier: Some(LifeModifier::Skeleton),
+            inventory: None,
         };
 
         let description = character.to_string();
