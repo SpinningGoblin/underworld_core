@@ -9,6 +9,7 @@ pub mod life_modifier;
 pub mod name;
 pub mod non_player;
 pub mod player;
+pub mod room;
 pub mod species;
 pub mod stats;
 pub mod weapon;
