@@ -3,6 +3,7 @@ pub mod character;
 pub mod defense;
 pub mod dimensions;
 pub mod health;
+pub mod height_descriptor;
 pub mod inventory;
 pub mod life_modifier;
 pub mod name;
