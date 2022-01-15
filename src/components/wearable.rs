@@ -24,7 +24,7 @@ impl Display for WearableType {
 }
 
 #[derive(Clone, Debug)]
-pub enum WearableQuality {
+pub enum WearableDescriptor {
     Bloodstained,
     Broken,
     Colourful,
@@ -33,12 +33,13 @@ pub enum WearableQuality {
     IllFitting,
     LooseFitting,
     Rusty,
+    SetOf,
     Shimmering,
     Shiny,
     Stained,
 }
 
-impl Display for WearableQuality {
+impl Display for WearableDescriptor {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
             Self::Bloodstained => write!(f, "bloodstained"),
@@ -49,6 +50,7 @@ impl Display for WearableQuality {
             Self::IllFitting => write!(f, "ill fitting"),
             Self::LooseFitting => write!(f, "loose fitting"),
             Self::Rusty => write!(f, "rusty"),
+            Self::SetOf => write!(f, "set of"),
             Self::Shimmering => write!(f, "shimmering"),
             Self::Shiny => write!(f, "shiny"),
             Self::Stained => write!(f, "stained"),
@@ -77,7 +79,7 @@ impl Display for WearableMaterial {
 pub struct Wearable {
     pub wearable_type: WearableType,
     pub material: Option<WearableMaterial>,
-    pub qualities: Vec<WearableQuality>,
+    pub descriptors: Vec<WearableDescriptor>,
     pub defense: Option<Defense>,
 }
 
@@ -85,7 +87,7 @@ impl Display for Wearable {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut descriptions: Vec<String> = Vec::new();
 
-        self.qualities
+        self.descriptors
             .iter()
             .for_each(|quality| descriptions.push(quality.to_string()));
 
@@ -103,6 +105,7 @@ pub struct EquippedWearable {
     pub wearable: Wearable,
     pub hidden: bool,
     pub equipped_location: String,
+    pub multiple: bool,
 }
 
 #[cfg(test)]
@@ -121,24 +124,27 @@ mod wearable_type_tests {
 
 #[cfg(test)]
 mod wearable_quality_tests {
-    use super::WearableQuality;
+    use super::WearableDescriptor;
 
     #[test]
     fn display() {
-        assert_eq!("bloodstained", format!("{}", WearableQuality::Bloodstained));
-        assert_eq!("broken", format!("{}", WearableQuality::Broken));
-        assert_eq!("colourful", format!("{}", WearableQuality::Colourful));
-        assert_eq!("dingy", format!("{}", WearableQuality::Dingy));
-        assert_eq!("drab", format!("{}", WearableQuality::Drab));
-        assert_eq!("ill fitting", format!("{}", WearableQuality::IllFitting));
+        assert_eq!(
+            "bloodstained",
+            format!("{}", WearableDescriptor::Bloodstained)
+        );
+        assert_eq!("broken", format!("{}", WearableDescriptor::Broken));
+        assert_eq!("colourful", format!("{}", WearableDescriptor::Colourful));
+        assert_eq!("dingy", format!("{}", WearableDescriptor::Dingy));
+        assert_eq!("drab", format!("{}", WearableDescriptor::Drab));
+        assert_eq!("ill fitting", format!("{}", WearableDescriptor::IllFitting));
         assert_eq!(
             "loose fitting",
-            format!("{}", WearableQuality::LooseFitting)
+            format!("{}", WearableDescriptor::LooseFitting)
         );
-        assert_eq!("rusty", format!("{}", WearableQuality::Rusty));
-        assert_eq!("shimmering", format!("{}", WearableQuality::Shimmering));
-        assert_eq!("shiny", format!("{}", WearableQuality::Shiny));
-        assert_eq!("stained", format!("{}", WearableQuality::Stained));
+        assert_eq!("rusty", format!("{}", WearableDescriptor::Rusty));
+        assert_eq!("shimmering", format!("{}", WearableDescriptor::Shimmering));
+        assert_eq!("shiny", format!("{}", WearableDescriptor::Shiny));
+        assert_eq!("stained", format!("{}", WearableDescriptor::Stained));
     }
 }
 
@@ -156,14 +162,14 @@ mod weapon_material_tests {
 
 #[cfg(test)]
 mod weapon_tests {
-    use super::{Wearable, WearableMaterial, WearableQuality, WearableType};
+    use super::{Wearable, WearableDescriptor, WearableMaterial, WearableType};
 
     #[test]
     fn display_when_there_is_only_type() {
         let wearable = Wearable {
             wearable_type: WearableType::Armour,
             material: None,
-            qualities: Vec::new(),
+            descriptors: Vec::new(),
             defense: None,
         };
 
@@ -175,7 +181,7 @@ mod weapon_tests {
         let wearable = Wearable {
             wearable_type: WearableType::PlateMail,
             material: Some(WearableMaterial::Steel),
-            qualities: Vec::new(),
+            descriptors: Vec::new(),
             defense: None,
         };
 
@@ -187,7 +193,7 @@ mod weapon_tests {
         let wearable = Wearable {
             wearable_type: WearableType::Shackles,
             material: None,
-            qualities: vec![WearableQuality::Dingy, WearableQuality::Bloodstained],
+            descriptors: vec![WearableDescriptor::Dingy, WearableDescriptor::Bloodstained],
             defense: None,
         };
 
@@ -199,7 +205,7 @@ mod weapon_tests {
         let wearable = Wearable {
             wearable_type: WearableType::Shackles,
             material: Some(WearableMaterial::Iron),
-            qualities: vec![WearableQuality::Bloodstained],
+            descriptors: vec![WearableDescriptor::Bloodstained],
             defense: None,
         };
 

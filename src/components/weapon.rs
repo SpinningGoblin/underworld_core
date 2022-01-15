@@ -7,19 +7,20 @@ pub struct EquippedWeapon {
     pub weapon: Weapon,
     pub hidden: bool,
     pub equipped_location: String,
+    pub multiple: bool,
 }
 
 #[derive(Clone, Debug)]
 pub struct Weapon {
     pub attack: Option<Attack>,
     pub weapon_type: WeaponType,
-    pub qualities: Vec<WeaponQuality>,
+    pub descriptors: Vec<WeaponDescriptor>,
 }
 
 impl Display for Weapon {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut descriptions: Vec<String> = Vec::new();
-        for quality in self.qualities.iter() {
+        for quality in self.descriptors.iter() {
             descriptions.push(quality.to_string());
         }
         descriptions.push(self.weapon_type.to_string());
@@ -29,7 +30,7 @@ impl Display for Weapon {
 }
 
 #[derive(Clone, Debug)]
-pub enum WeaponQuality {
+pub enum WeaponDescriptor {
     Broken,
     Chipped,
     Dull,
@@ -37,7 +38,7 @@ pub enum WeaponQuality {
     Shiny,
 }
 
-impl Display for WeaponQuality {
+impl Display for WeaponDescriptor {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
             Self::Broken => write!(f, "broken"),
@@ -92,15 +93,15 @@ mod weapon_type_tests {
 
 #[cfg(test)]
 mod weapon_quality_tests {
-    use crate::components::weapon::WeaponQuality;
+    use crate::components::weapon::WeaponDescriptor;
 
     #[test]
     fn to_string() {
-        assert_eq!("broken", WeaponQuality::Broken.to_string());
-        assert_eq!("chipped", WeaponQuality::Chipped.to_string());
-        assert_eq!("dull", WeaponQuality::Dull.to_string());
-        assert_eq!("rusty", WeaponQuality::Rusty.to_string());
-        assert_eq!("shiny", WeaponQuality::Shiny.to_string());
+        assert_eq!("broken", WeaponDescriptor::Broken.to_string());
+        assert_eq!("chipped", WeaponDescriptor::Chipped.to_string());
+        assert_eq!("dull", WeaponDescriptor::Dull.to_string());
+        assert_eq!("rusty", WeaponDescriptor::Rusty.to_string());
+        assert_eq!("shiny", WeaponDescriptor::Shiny.to_string());
     }
 }
 
@@ -113,7 +114,7 @@ mod weapon_tests {
         let weapon = Weapon {
             attack: None,
             weapon_type: super::WeaponType::LongSword,
-            qualities: Vec::new(),
+            descriptors: Vec::new(),
         };
 
         assert_eq!("long sword", weapon.to_string());
@@ -124,7 +125,10 @@ mod weapon_tests {
         let weapon = Weapon {
             attack: None,
             weapon_type: super::WeaponType::LongSword,
-            qualities: vec![super::WeaponQuality::Dull, super::WeaponQuality::Chipped],
+            descriptors: vec![
+                super::WeaponDescriptor::Dull,
+                super::WeaponDescriptor::Chipped,
+            ],
         };
 
         assert_eq!("dull chipped long sword", weapon.to_string());
