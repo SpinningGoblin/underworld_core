@@ -2,6 +2,7 @@ pub mod attack;
 pub mod character;
 pub mod defense;
 pub mod dimensions;
+pub mod equipped_item;
 pub mod health;
 pub mod height_descriptor;
 pub mod inventory;

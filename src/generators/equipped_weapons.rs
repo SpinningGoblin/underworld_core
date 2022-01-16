@@ -1,23 +1,13 @@
-use rand::Rng;
+use crate::components::weapon::Weapon;
 
-use crate::components::weapon::EquippedWeapon;
+use super::{equipped_items::EquippedItemPrototype, weapons::WeaponPrototype};
 
-use super::{generator::Generator, weapons::WeaponPrototype};
-
-pub struct EquippedWeaponPrototype {
-    pub weapon_prototype: WeaponPrototype,
-    pub hidden_chance: usize,
-    pub multiple: bool,
-    pub equipped_locations: Vec<String>,
-    pub equipped_location_chance: usize,
-}
-
-impl EquippedWeaponPrototype {
+impl EquippedItemPrototype<Weapon> {
     pub fn dagger(hidden_chance: usize, equipped_location_chance: usize) -> Self {
         Self {
             hidden_chance,
             equipped_location_chance,
-            weapon_prototype: WeaponPrototype::dagger(),
+            generator: Box::new(WeaponPrototype::dagger()),
             multiple: false,
             equipped_locations: vec![
                 "hanging in a moldy sheath".to_string(),
@@ -39,7 +29,7 @@ impl EquippedWeaponPrototype {
         Self {
             hidden_chance,
             equipped_location_chance,
-            weapon_prototype: WeaponPrototype::long_sword(),
+            generator: Box::new(WeaponPrototype::long_sword()),
             multiple: false,
             equipped_locations: vec![
                 "hanging in a moldy sheath".to_string(),
@@ -61,7 +51,7 @@ impl EquippedWeaponPrototype {
         Self {
             hidden_chance,
             equipped_location_chance,
-            weapon_prototype: WeaponPrototype::short_sword(),
+            generator: Box::new(WeaponPrototype::short_sword()),
             multiple: false,
             equipped_locations: vec![
                 "hanging in a moldy sheath".to_string(),
@@ -83,7 +73,7 @@ impl EquippedWeaponPrototype {
         Self {
             hidden_chance,
             equipped_location_chance,
-            weapon_prototype: WeaponPrototype::club(),
+            generator: Box::new(WeaponPrototype::club()),
             multiple: false,
             equipped_locations: vec![
                 "hanging from its hip".to_string(),
@@ -104,7 +94,7 @@ impl EquippedWeaponPrototype {
         Self {
             hidden_chance,
             equipped_location_chance,
-            weapon_prototype: WeaponPrototype::hammer(),
+            generator: Box::new(WeaponPrototype::hammer()),
             multiple: false,
             equipped_locations: vec![
                 "hanging from its hip".to_string(),
@@ -122,51 +112,22 @@ impl EquippedWeaponPrototype {
     }
 }
 
-impl Generator<EquippedWeapon> for EquippedWeaponPrototype {
-    fn generate(&self) -> EquippedWeapon {
-        let weapon = self.weapon_prototype.generate();
-
-        let mut rng = rand::thread_rng();
-        let hidden_roll: usize = rng.gen_range(0..=100);
-
-        let equipped_location_roll: usize = rng.gen_range(0..=100);
-        let equipped_location = if equipped_location_roll <= self.equipped_location_chance {
-            let index = rng.gen_range(0..self.equipped_locations.len());
-            match self.equipped_locations.get(index) {
-                Some(equipped_location) => equipped_location.clone(),
-                _ => "".to_string(),
-            }
-        } else {
-            "".to_string()
-        };
-
-        EquippedWeapon {
-            weapon,
-            equipped_location,
-            hidden: hidden_roll <= self.hidden_chance,
-            multiple: self.multiple,
-        }
-    }
-}
-
 #[cfg(test)]
 mod equipped_weapon_generator_tests {
-    use crate::generators::generator::Generator;
-
-    use super::EquippedWeaponPrototype;
+    use crate::generators::{equipped_items::EquippedItemPrototype, generator::Generator};
 
     #[test]
     fn dagger_generates() {
-        let prototype = EquippedWeaponPrototype::dagger(25, 50);
+        let prototype = EquippedItemPrototype::dagger(25, 50);
         let equipped_dagger = prototype.generate();
 
-        let weapon_description = format!("{}", equipped_dagger.weapon);
+        let weapon_description = format!("{}", equipped_dagger.item);
         assert!(weapon_description.contains("dagger"));
     }
 
     #[test]
     fn dagger_with_guaranteed_equipped_location() {
-        let prototype = EquippedWeaponPrototype::dagger(25, 100);
+        let prototype = EquippedItemPrototype::dagger(25, 100);
         let equipped_dagger = prototype.generate();
 
         assert!(!equipped_dagger.equipped_location.is_empty());
@@ -174,7 +135,7 @@ mod equipped_weapon_generator_tests {
 
     #[test]
     fn dagger_with_guaranteed_hidden() {
-        let prototype = EquippedWeaponPrototype::dagger(100, 50);
+        let prototype = EquippedItemPrototype::dagger(100, 50);
         let equipped_dagger = prototype.generate();
 
         assert!(equipped_dagger.hidden);

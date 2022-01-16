@@ -3,14 +3,6 @@ use std::fmt::Display;
 use super::attack::Attack;
 
 #[derive(Clone, Debug)]
-pub struct EquippedWeapon {
-    pub weapon: Weapon,
-    pub hidden: bool,
-    pub equipped_location: String,
-    pub multiple: bool,
-}
-
-#[derive(Clone, Debug)]
 pub struct Weapon {
     pub attack: Option<Attack>,
     pub weapon_type: WeaponType,

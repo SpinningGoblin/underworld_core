@@ -2,15 +2,12 @@ use std::fmt::Display;
 
 use rand::{thread_rng, Rng};
 
-use super::{
-    weapon::{EquippedWeapon, Weapon},
-    wearable::{EquippedWearable, Wearable},
-};
+use super::{equipped_item::EquippedItem, weapon::Weapon, wearable::Wearable};
 
 #[derive(Clone, Debug)]
 pub struct Inventory {
-    pub equipped_weapons: Vec<EquippedWeapon>,
-    pub equipped_wearables: Vec<EquippedWearable>,
+    pub equipped_weapons: Vec<EquippedItem<Weapon>>,
+    pub equipped_wearables: Vec<EquippedItem<Wearable>>,
     pub carried_weapons: Vec<Weapon>,
     pub carried_wearables: Vec<Wearable>,
 }
@@ -52,11 +49,11 @@ impl Inventory {
                 }
 
                 let weapon_description = if equipped_weapon.equipped_location.is_empty() {
-                    format!("{}", equipped_weapon.weapon)
+                    format!("{}", equipped_weapon.item)
                 } else {
                     format!(
                         "{} {}",
-                        equipped_weapon.weapon, equipped_weapon.equipped_location
+                        equipped_weapon.item, equipped_weapon.equipped_location
                     )
                 };
 
@@ -102,11 +99,11 @@ impl Inventory {
                 }
 
                 let wearable_description = if equipped_wearable.equipped_location.is_empty() {
-                    format!("{}", equipped_wearable.wearable)
+                    format!("{}", equipped_wearable.item)
                 } else {
                     format!(
                         "{} {}",
-                        equipped_wearable.wearable, equipped_wearable.equipped_location
+                        equipped_wearable.item, equipped_wearable.equipped_location
                     )
                 };
 
@@ -209,10 +206,9 @@ impl SentenceJoiners {
 #[cfg(test)]
 mod inventory_tests {
     use crate::components::{
-        weapon::{EquippedWeapon, Weapon, WeaponDescriptor, WeaponType},
-        wearable::{
-            EquippedWearable, Wearable, WearableDescriptor, WearableMaterial, WearableType,
-        },
+        equipped_item::EquippedItem,
+        weapon::{Weapon, WeaponDescriptor, WeaponType},
+        wearable::{Wearable, WearableDescriptor, WearableMaterial, WearableType},
     };
 
     use super::Inventory;
@@ -231,14 +227,14 @@ mod inventory_tests {
         };
         let inventory = Inventory {
             equipped_weapons: vec![
-                EquippedWeapon {
-                    weapon: long_sword,
+                EquippedItem {
+                    item: long_sword,
                     hidden: false,
                     equipped_location: "".to_string(),
                     multiple: false,
                 },
-                EquippedWeapon {
-                    weapon: short_sword,
+                EquippedItem {
+                    item: short_sword,
                     hidden: false,
                     equipped_location: "in a sheath hanging from their hip".to_string(),
                     multiple: false,
@@ -263,8 +259,8 @@ mod inventory_tests {
             descriptors: vec![WeaponDescriptor::Broken],
         };
         let inventory = Inventory {
-            equipped_weapons: vec![EquippedWeapon {
-                weapon: long_sword,
+            equipped_weapons: vec![EquippedItem {
+                item: long_sword,
                 hidden: false,
                 equipped_location: "".to_string(),
                 multiple: false,
@@ -293,14 +289,14 @@ mod inventory_tests {
         };
         let inventory = Inventory {
             equipped_weapons: vec![
-                EquippedWeapon {
-                    weapon: long_sword,
+                EquippedItem {
+                    item: long_sword,
                     hidden: false,
                     equipped_location: "".to_string(),
                     multiple: false,
                 },
-                EquippedWeapon {
-                    weapon: short_sword,
+                EquippedItem {
+                    item: short_sword,
                     hidden: true,
                     equipped_location: "in a sheath hanging from their hip".to_string(),
                     multiple: false,
@@ -327,8 +323,8 @@ mod inventory_tests {
 
         let inventory = Inventory {
             equipped_weapons: Vec::new(),
-            equipped_wearables: vec![EquippedWearable {
-                wearable: chain_mail,
+            equipped_wearables: vec![EquippedItem {
+                item: chain_mail,
                 hidden: false,
                 equipped_location: "".to_string(),
                 multiple: false,
@@ -361,14 +357,14 @@ mod inventory_tests {
         let inventory = Inventory {
             equipped_weapons: Vec::new(),
             equipped_wearables: vec![
-                EquippedWearable {
-                    wearable: chain_mail,
+                EquippedItem {
+                    item: chain_mail,
                     hidden: false,
                     equipped_location: "".to_string(),
                     multiple: false,
                 },
-                EquippedWearable {
-                    wearable: shackles,
+                EquippedItem {
+                    item: shackles,
                     hidden: false,
                     equipped_location: "dangling from their wrists".to_string(),
                     multiple: true,
