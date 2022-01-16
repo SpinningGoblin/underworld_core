@@ -105,8 +105,7 @@ impl Generator<Weapon> for WeaponPrototype {
         let mut rng = rand::thread_rng();
         let mut num_descriptors: usize = rng.gen_range(self.num_descriptors.clone());
 
-        let mut possible_descriptors: Vec<WeaponDescriptor> =
-            self.possible_descriptors.to_vec();
+        let mut possible_descriptors: Vec<WeaponDescriptor> = self.possible_descriptors.to_vec();
         let mut descriptors: Vec<WeaponDescriptor> = Vec::new();
         while num_descriptors > 0 {
             if possible_descriptors.is_empty() {
@@ -115,7 +114,7 @@ impl Generator<Weapon> for WeaponPrototype {
 
             let index = rng.gen_range(0..possible_descriptors.len());
             let descriptor = possible_descriptors.remove(index);
-            descriptors.insert(0, descriptor);
+            descriptors.push(descriptor);
 
             num_descriptors -= 1;
         }
