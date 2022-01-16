@@ -55,9 +55,7 @@ pub enum WeaponType {
     Club,
     Dagger,
     Hammer,
-    Kukri,
     LongSword,
-    Scimitar,
     ShortSword,
 }
 
@@ -67,9 +65,7 @@ impl Display for WeaponType {
             Self::Club => write!(f, "club"),
             Self::Dagger => write!(f, "dagger"),
             Self::Hammer => write!(f, "hammer"),
-            Self::Kukri => write!(f, "kukri"),
             Self::LongSword => write!(f, "long sword"),
-            Self::Scimitar => write!(f, "scimitar"),
             Self::ShortSword => write!(f, "short sword"),
         }
     }
@@ -84,9 +80,7 @@ mod weapon_type_tests {
         assert_eq!("club", WeaponType::Club.to_string());
         assert_eq!("dagger", WeaponType::Dagger.to_string());
         assert_eq!("hammer", WeaponType::Hammer.to_string());
-        assert_eq!("kukri", WeaponType::Kukri.to_string());
         assert_eq!("long sword", WeaponType::LongSword.to_string());
-        assert_eq!("scimitar", WeaponType::Scimitar.to_string());
         assert_eq!("short sword", WeaponType::ShortSword.to_string());
     }
 }
