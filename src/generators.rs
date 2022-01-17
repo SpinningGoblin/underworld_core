@@ -1,3 +1,4 @@
+pub mod characters;
 pub mod equipped_items;
 pub mod equipped_weapons;
 pub mod equipped_wearables;
