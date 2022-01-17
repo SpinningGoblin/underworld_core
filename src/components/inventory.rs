@@ -34,7 +34,7 @@ impl Inventory {
     fn weapon_description(&self) -> String {
         let sentence_starters = SentenceStarters::default();
         let sentence_joiners = SentenceJoiners::default();
-        let mut weapons: Vec<String> = Vec::new();
+        let mut weapons: Vec<String> = vec!["It ".to_string()];
 
         self.equipped_weapons
             .iter()
@@ -68,7 +68,7 @@ impl Inventory {
                 } else {
                     weapons.push(format!(
                         "{} {}",
-                        sentence_joiners.get_joiner(equipped_weapon.multiple),
+                        sentence_joiners.get_weapon_joiner(equipped_weapon.multiple),
                         weapon_description
                     ));
                 }
@@ -84,7 +84,7 @@ impl Inventory {
     fn wearables_description(&self) -> String {
         let sentence_starters = SentenceStarters::default();
         let sentence_joiners = SentenceJoiners::default();
-        let mut wearables: Vec<String> = Vec::new();
+        let mut wearables: Vec<String> = vec!["It is ".to_string()];
 
         self.equipped_wearables
             .iter()
@@ -119,7 +119,7 @@ impl Inventory {
                 } else {
                     wearables.push(format!(
                         "{} {}",
-                        sentence_joiners.get_joiner(equipped_wearable.multiple),
+                        sentence_joiners.get_wearable_joiner(equipped_wearable.multiple),
                         wearable_description
                     ));
                 }
@@ -144,10 +144,10 @@ struct SentenceStarters {
 impl Default for SentenceStarters {
     fn default() -> Self {
         Self {
-            weapon_singular_starters: vec!["Has a".to_string(), "Carries a".to_string()],
-            weapon_plural_starters: vec!["Has some".to_string(), "Carries some".to_string()],
-            wearable_singular_starters: vec!["Wearing a".to_string()],
-            wearable_plural_starters: vec!["Wearing some".to_string()],
+            weapon_singular_starters: vec!["has a".to_string(), "carries a".to_string()],
+            weapon_plural_starters: vec!["has some".to_string(), "carries some".to_string()],
+            wearable_singular_starters: vec!["wearing a".to_string()],
+            wearable_plural_starters: vec!["wearing".to_string()],
         }
     }
 }
@@ -177,28 +177,43 @@ impl SentenceStarters {
 }
 
 struct SentenceJoiners {
-    singular_joiners: Vec<String>,
-    plural_joiners: Vec<String>,
+    weapon_singular_joiners: Vec<String>,
+    weapon_plural_joiners: Vec<String>,
+    wearable_singular_joiners: Vec<String>,
+    wearable_plural_joiners: Vec<String>,
 }
 
 impl Default for SentenceJoiners {
     fn default() -> Self {
         Self {
-            singular_joiners: vec!["a".to_string(), "one".to_string()],
-            plural_joiners: vec!["some".to_string(), "multiple".to_string()],
+            weapon_singular_joiners: vec!["a".to_string(), "one".to_string()],
+            weapon_plural_joiners: vec!["some".to_string()],
+            wearable_singular_joiners: vec!["a".to_string()],
+            wearable_plural_joiners: vec!["some".to_string()]
         }
     }
 }
 
 impl SentenceJoiners {
-    fn get_joiner(&self, plural: bool) -> &String {
+    fn get_weapon_joiner(&self, plural: bool) -> &String {
         let mut rng = thread_rng();
         if plural {
-            let i = rng.gen_range(0..self.plural_joiners.len());
-            self.plural_joiners.get(i).unwrap()
+            let i = rng.gen_range(0..self.weapon_plural_joiners.len());
+            self.weapon_plural_joiners.get(i).unwrap()
         } else {
-            let i = rng.gen_range(0..self.singular_joiners.len());
-            self.singular_joiners.get(i).unwrap()
+            let i = rng.gen_range(0..self.weapon_singular_joiners.len());
+            self.weapon_singular_joiners.get(i).unwrap()
+        }
+    }
+
+    fn get_wearable_joiner(&self, plural: bool) -> &String {
+        let mut rng = thread_rng();
+        if plural {
+            let i = rng.gen_range(0..self.wearable_plural_joiners.len());
+            self.wearable_plural_joiners.get(i).unwrap()
+        } else {
+            let i = rng.gen_range(0..self.wearable_singular_joiners.len());
+            self.wearable_singular_joiners.get(i).unwrap()
         }
     }
 }
