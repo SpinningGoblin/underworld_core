@@ -13,7 +13,7 @@ pub enum Species {
 }
 
 const SMALL_HEIGHT: Range<f32> = 0.6..1.2;
-const MEDIUM_HEIGHT: Range<f32> = 1.2..2.05;
+const MEDIUM_HEIGHT: Range<f32> = 1.2..2.0;
 const LARGE_HEIGHT: Range<f32> = 2.05..4.4;
 const UNKNOWN_HEIGHT: Range<f32> = 0.6..4.4;
 
