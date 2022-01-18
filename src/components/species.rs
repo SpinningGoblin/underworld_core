@@ -62,12 +62,12 @@ impl Species {
 impl Display for Species {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
-            Self::Bugbear => write!(f, "Bugbear"),
-            Self::Goblin => write!(f, "Goblin"),
-            Self::Kobold => write!(f, "Kobold"),
-            Self::Ogre => write!(f, "Ogre"),
-            Self::Orc => write!(f, "Orc"),
-            _ => write!(f, "Mysterious Entity"),
+            Self::Bugbear => write!(f, "bugbear"),
+            Self::Goblin => write!(f, "goblin"),
+            Self::Kobold => write!(f, "kobold"),
+            Self::Ogre => write!(f, "ogre"),
+            Self::Orc => write!(f, "orc"),
+            _ => write!(f, "mysterious entity"),
         }
     }
 }
