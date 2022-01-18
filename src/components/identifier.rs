@@ -5,10 +5,12 @@ use std::fmt::Display;
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
-pub struct Name(pub String);
+pub struct Identifier {
+    pub name: String,
+}
 
-impl Display for Name {
+impl Display for Identifier {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.0)
+        write!(f, "{}", self.name)
     }
 }

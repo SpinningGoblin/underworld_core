@@ -7,7 +7,7 @@ pub mod health;
 pub mod height_descriptor;
 pub mod inventory;
 pub mod life_modifier;
-pub mod name;
+pub mod identifier;
 pub mod non_player;
 pub mod player;
 pub mod room;

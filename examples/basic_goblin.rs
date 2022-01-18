@@ -1,14 +1,14 @@
 use std::env;
 
 use underworld_core::{
-    components::name::Name,
+    components::identifier::Identifier,
     generators::{characters::CharacterPrototype, generator::Generator},
 };
 
 pub fn main() {
     let name_arg = env::args().nth(1);
-    let name = name_arg.map(Name);
-    let goblin_prototype = CharacterPrototype::basic_goblin(name);
+    let identifier = name_arg.map(|name| Identifier { name });
+    let goblin_prototype = CharacterPrototype::basic_goblin(identifier);
     let goblin = goblin_prototype.generate();
 
     if let Some(inventory) = &goblin.inventory {

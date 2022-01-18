@@ -2,13 +2,13 @@
 use bevy_ecs::prelude::Component;
 
 use super::{
-    inventory::Inventory, life_modifier::LifeModifier, name::Name, species::Species, stats::Stats,
+    inventory::Inventory, life_modifier::LifeModifier, identifier::Identifier, species::Species, stats::Stats,
 };
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 pub struct Character {
-    pub name: Option<Name>,
+    pub name: Option<Identifier>,
     pub stats: Stats,
     pub species: Species,
     pub life_modifier: Option<LifeModifier>,

@@ -4,7 +4,7 @@ use rand::Rng;
 
 use crate::components::{
     character::Character, equipped_item::EquippedItem, inventory::Inventory,
-    life_modifier::LifeModifier, name::Name, species::Species, weapon::Weapon, wearable::Wearable,
+    life_modifier::LifeModifier, identifier::Identifier, species::Species, weapon::Weapon, wearable::Wearable,
 };
 
 use super::{
@@ -13,7 +13,7 @@ use super::{
 };
 
 pub struct CharacterPrototype {
-    pub name: Option<Name>,
+    pub identifier: Option<Identifier>,
     pub weapon_generators: Vec<Box<dyn Generator<Weapon>>>,
     pub equipped_weapon_generators: Vec<Box<dyn Generator<EquippedItem<Weapon>>>>,
     pub wearable_generators: Vec<Box<dyn Generator<Wearable>>>,
@@ -28,9 +28,9 @@ pub struct CharacterPrototype {
 }
 
 impl CharacterPrototype {
-    pub fn basic_goblin(name: Option<Name>) -> Self {
+    pub fn basic_goblin(name: Option<Identifier>) -> Self {
         Self {
-            name,
+            identifier: name,
             weapon_generators: vec![
                 Box::new(WeaponPrototype::dagger()),
                 Box::new(WeaponPrototype::club()),
@@ -197,7 +197,7 @@ impl Generator<Character> for CharacterPrototype {
         Character {
             stats,
             inventory,
-            name: self.name.clone(),
+            name: self.identifier.clone(),
             species: self.species.clone(),
             life_modifier: self.life_modifier.clone(),
         }
@@ -206,15 +206,17 @@ impl Generator<Character> for CharacterPrototype {
 
 #[cfg(test)]
 mod goblin_tests {
-    use crate::{components::name::Name, generators::generator::Generator};
+    use crate::{components::identifier::Identifier, generators::generator::Generator};
 
     use super::CharacterPrototype;
 
     #[test]
     fn basic_goblin() {
-        let prototype = CharacterPrototype::basic_goblin(Some(Name("gerblin".to_string())));
+        let prototype = CharacterPrototype::basic_goblin(Some(Identifier {
+            name: "gerblin".to_string()
+        }));
         let goblin = prototype.generate();
-        assert_eq!("gerblin", goblin.name.unwrap().0);
+        assert_eq!("gerblin", goblin.name.unwrap().name);
         assert!(goblin.inventory.is_some());
         println!("{}", goblin.inventory.unwrap());
     }
