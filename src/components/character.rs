@@ -37,6 +37,13 @@ impl Character {
             _ => "".to_string(),
         }
     }
+
+    pub fn describe_name(&self) -> String {
+        match &self.name {
+            Some(name) => format!("It says its name is {}", name),
+            _ => "It has no name.".to_string(),
+        }
+    }
 }
 
 #[cfg(test)]
