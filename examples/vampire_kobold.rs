@@ -1,7 +1,7 @@
 use std::env;
 
 use underworld_core::{
-    components::{life_modifier::LifeModifier, identifier::Identifier},
+    components::{identifier::Identifier, life_modifier::LifeModifier},
     generators::{
         characters::CharacterPrototype, equipped_items::EquippedItemPrototype,
         generator::Generator, weapons::WeaponPrototype, wearables::WearablePrototype,
