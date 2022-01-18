@@ -9,5 +9,6 @@
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
         "target/": true
-    }
+    },
+    "rust-analyzer.cargo.allFeatures": true
 }
