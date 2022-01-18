@@ -1,3 +1,6 @@
+#[cfg(feature = "bevy_components")]
+use bevy_ecs::prelude::Component;
+
 use std::fmt::Display;
 
 use rand::{thread_rng, Rng};
@@ -5,6 +8,7 @@ use rand::{thread_rng, Rng};
 use super::{equipped_item::EquippedItem, weapon::Weapon, wearable::Wearable};
 
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
 pub struct Inventory {
     pub equipped_weapons: Vec<EquippedItem<Weapon>>,
     pub equipped_wearables: Vec<EquippedItem<Wearable>>,

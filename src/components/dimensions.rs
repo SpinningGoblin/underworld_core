@@ -1,6 +1,10 @@
+#[cfg(feature = "bevy_components")]
+use bevy_ecs::prelude::Component;
+
 use super::height_descriptor::HeightDescriptor;
 
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
 pub struct Dimensions {
     pub height: f32,
     pub width: f32,

@@ -1,8 +1,12 @@
+#[cfg(feature = "bevy_components")]
+use bevy_ecs::prelude::Component;
+
 use std::fmt::Display;
 
 use super::attack::Attack;
 
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
 pub struct Weapon {
     pub attack: Option<Attack>,
     pub weapon_type: WeaponType,
@@ -22,6 +26,7 @@ impl Display for Weapon {
 }
 
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
 pub enum WeaponDescriptor {
     Broken,
     Chipped,
@@ -43,6 +48,7 @@ impl Display for WeaponDescriptor {
 }
 
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
 pub enum WeaponType {
     Club,
     Dagger,

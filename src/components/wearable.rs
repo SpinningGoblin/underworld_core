@@ -1,8 +1,12 @@
+#[cfg(feature = "bevy_components")]
+use bevy_ecs::prelude::Component;
+
 use std::fmt::Display;
 
 use super::defense::Defense;
 
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
 pub enum WearableType {
     Armour,
     Cloak,
@@ -24,6 +28,7 @@ impl Display for WearableType {
 }
 
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
 pub enum WearableDescriptor {
     Bloodstained,
     Broken,
@@ -59,6 +64,7 @@ impl Display for WearableDescriptor {
 }
 
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
 pub enum WearableMaterial {
     Iron,
     Leather,
@@ -76,6 +82,7 @@ impl Display for WearableMaterial {
 }
 
 #[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
 pub struct Wearable {
     pub wearable_type: WearableType,
     pub material: Option<WearableMaterial>,
