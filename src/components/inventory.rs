@@ -189,7 +189,7 @@ impl Default for SentenceJoiners {
             weapon_singular_joiners: vec!["a".to_string(), "one".to_string()],
             weapon_plural_joiners: vec!["some".to_string()],
             wearable_singular_joiners: vec!["a".to_string()],
-            wearable_plural_joiners: vec!["some".to_string()]
+            wearable_plural_joiners: vec!["some".to_string()],
         }
     }
 }

@@ -45,7 +45,7 @@ impl CharacterPrototype {
                 Box::new(EquippedItemPrototype::clothing(0, 75)),
                 Box::new(EquippedItemPrototype::armour(0, 75)),
                 Box::new(EquippedItemPrototype::cloak(0, 75)),
-                Box::new(EquippedItemPrototype::shackles(0, 75))
+                Box::new(EquippedItemPrototype::shackles(0, 75)),
             ],
             species: Species::Goblin,
             life_modifier: None,

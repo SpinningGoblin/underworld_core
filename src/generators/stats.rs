@@ -114,7 +114,7 @@ impl Generator<Stats> for StatsPrototype {
         let health = if self.has_health {
             let max_health = match self.max_health {
                 Some(max) => max,
-                _ => rng.gen_range(self.health_range.clone())
+                _ => rng.gen_range(self.health_range.clone()),
             };
             Some(Health {
                 current: max_health,
