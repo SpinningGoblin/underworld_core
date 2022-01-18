@@ -92,7 +92,7 @@ impl WearablePrototype {
 
     pub fn plate_mail() -> Self {
         Self {
-            wearable_type: WearableType::PlateMail,
+            wearable_type: WearableType::PlateMailHelmet,
             descriptors: Vec::new(),
             possible_descriptors: vec![
                 WearableDescriptor::Bloodstained,

@@ -18,7 +18,7 @@ pub enum WearableType {
     Armour,
     Cloak,
     Clothing,
-    PlateMail,
+    PlateMailHelmet,
     Shackles,
 }
 
@@ -28,7 +28,7 @@ impl Display for WearableType {
             Self::Armour => write!(f, "armour"),
             Self::Cloak => write!(f, "cloak"),
             Self::Clothing => write!(f, "clothing"),
-            Self::PlateMail => write!(f, "plate mail"),
+            Self::PlateMailHelmet => write!(f, "plate mail helmet"),
             Self::Shackles => write!(f, "shackles"),
         }
     }
@@ -141,7 +141,10 @@ mod wearable_type_tests {
         assert_eq!("armour", format!("{}", WearableType::Armour));
         assert_eq!("cloak", format!("{}", WearableType::Cloak));
         assert_eq!("clothing", format!("{}", WearableType::Clothing));
-        assert_eq!("plate mail", format!("{}", WearableType::PlateMail));
+        assert_eq!(
+            "plate mail helmet",
+            format!("{}", WearableType::PlateMailHelmet)
+        );
         assert_eq!("shackles", format!("{}", WearableType::Shackles));
     }
 }
@@ -203,13 +206,13 @@ mod weapon_tests {
     #[test]
     fn display_when_there_is_material() {
         let wearable = Wearable {
-            wearable_type: WearableType::PlateMail,
+            wearable_type: WearableType::PlateMailHelmet,
             material: Some(WearableMaterial::Steel),
             descriptors: Vec::new(),
             defense: None,
         };
 
-        assert_eq!("steel plate mail", format!("{}", wearable));
+        assert_eq!("steel plate mail helmet", format!("{}", wearable));
     }
 
     #[test]

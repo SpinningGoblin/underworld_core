@@ -337,7 +337,7 @@ mod inventory_tests {
     #[test]
     fn display_with_one_wearable() {
         let chain_mail = Wearable {
-            wearable_type: WearableType::PlateMail,
+            wearable_type: WearableType::PlateMailHelmet,
             material: Some(WearableMaterial::Steel),
             descriptors: vec![WearableDescriptor::SetOf, WearableDescriptor::Drab],
             defense: None,
@@ -356,14 +356,14 @@ mod inventory_tests {
         };
 
         let description = inventory.to_string();
-        assert!(description.contains("set of drab steel plate mail."));
+        assert!(description.contains("set of drab steel plate mail helmet."));
         assert!(!description.contains(", and"));
     }
 
     #[test]
     fn display_with_two_wearables() {
         let chain_mail = Wearable {
-            wearable_type: WearableType::PlateMail,
+            wearable_type: WearableType::PlateMailHelmet,
             material: Some(WearableMaterial::Steel),
             descriptors: vec![WearableDescriptor::SetOf, WearableDescriptor::Drab],
             defense: None,
