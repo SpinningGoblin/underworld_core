@@ -1,17 +1,24 @@
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
+#[cfg(feature = "serialization")]
+use serde::{Deserialize, Serialize};
 
 use super::{
-    inventory::Inventory, life_modifier::LifeModifier, identifier::Identifier, species::Species, stats::Stats,
+    identifier::Identifier, inventory::Inventory, life_modifier::LifeModifier, species::Species,
+    stats::Stats,
 };
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct Character {
+    #[cfg_attr(feature = "serialization", serde(default))]
     pub name: Option<Identifier>,
     pub stats: Stats,
     pub species: Species,
+    #[cfg_attr(feature = "serialization", serde(default))]
     pub life_modifier: Option<LifeModifier>,
+    #[cfg_attr(feature = "serialization", serde(default))]
     pub inventory: Option<Inventory>,
 }
 

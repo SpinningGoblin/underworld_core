@@ -3,8 +3,9 @@ use std::ops::Range;
 use rand::Rng;
 
 use crate::components::{
-    character::Character, equipped_item::EquippedItem, inventory::Inventory,
-    life_modifier::LifeModifier, identifier::Identifier, species::Species, weapon::Weapon, wearable::Wearable,
+    character::Character, equipped_item::EquippedItem, identifier::Identifier,
+    inventory::Inventory, life_modifier::LifeModifier, species::Species, weapon::Weapon,
+    wearable::Wearable,
 };
 
 use super::{
@@ -213,7 +214,7 @@ mod goblin_tests {
     #[test]
     fn basic_goblin() {
         let prototype = CharacterPrototype::basic_goblin(Some(Identifier {
-            name: "gerblin".to_string()
+            name: "gerblin".to_string(),
         }));
         let goblin = prototype.generate();
         assert_eq!("gerblin", goblin.name.unwrap().name);

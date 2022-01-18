@@ -1,5 +1,7 @@
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
+#[cfg(feature = "serialization")]
+use serde::{Deserialize, Serialize};
 
 use std::fmt::Display;
 
@@ -7,6 +9,11 @@ use super::defense::Defense;
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(
+    feature = "serialization",
+    derive(Deserialize, Serialize),
+    serde(rename_all = "snake_case")
+)]
 pub enum WearableType {
     Armour,
     Cloak,
@@ -29,6 +36,11 @@ impl Display for WearableType {
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(
+    feature = "serialization",
+    derive(Deserialize, Serialize),
+    serde(rename_all = "snake_case")
+)]
 pub enum WearableDescriptor {
     Bloodstained,
     Broken,
@@ -65,6 +77,11 @@ impl Display for WearableDescriptor {
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(
+    feature = "serialization",
+    derive(Deserialize, Serialize),
+    serde(rename_all = "snake_case")
+)]
 pub enum WearableMaterial {
     Iron,
     Leather,
@@ -83,10 +100,18 @@ impl Display for WearableMaterial {
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(
+    feature = "serialization",
+    derive(Deserialize, Serialize),
+    serde(tag = "type", rename_all = "snake_case")
+)]
 pub struct Wearable {
     pub wearable_type: WearableType,
+    #[cfg_attr(feature = "serialization", serde(default))]
     pub material: Option<WearableMaterial>,
+    #[cfg_attr(feature = "serialization", serde(default))]
     pub descriptors: Vec<WearableDescriptor>,
+    #[cfg_attr(feature = "serialization", serde(default))]
     pub defense: Option<Defense>,
 }
 
