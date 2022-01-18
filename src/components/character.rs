@@ -75,7 +75,7 @@ mod tests {
         };
 
         let description = character.describe_species();
-        assert_eq!("tall Goblin", description);
+        assert_eq!("tall goblin", description);
     }
 
     #[test]
@@ -95,6 +95,6 @@ mod tests {
         };
 
         let description = character.describe_species();
-        assert_eq!("Goblin skeleton", description);
+        assert_eq!("goblin skeleton", description);
     }
 }

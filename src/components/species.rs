@@ -82,26 +82,26 @@ mod tests {
 
     #[test]
     fn to_string_when_bugbear() {
-        assert_eq!("Bugbear", Species::Bugbear.to_string());
+        assert_eq!("bugbear", Species::Bugbear.to_string());
     }
 
     #[test]
     fn to_string_when_goblin() {
-        assert_eq!("Goblin", Species::Goblin.to_string());
+        assert_eq!("goblin", Species::Goblin.to_string());
     }
 
     #[test]
     fn to_string_when_kobold() {
-        assert_eq!("Kobold", Species::Kobold.to_string());
+        assert_eq!("kobold", Species::Kobold.to_string());
     }
 
     #[test]
     fn to_string_when_orc() {
-        assert_eq!("Orc", Species::Orc.to_string());
+        assert_eq!("orc", Species::Orc.to_string());
     }
 
     #[test]
     fn to_string_when_unknown() {
-        assert_eq!("Mysterious Entity", Species::Unknown.to_string());
+        assert_eq!("mysterious entity", Species::Unknown.to_string());
     }
 }
