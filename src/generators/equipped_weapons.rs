@@ -9,11 +9,6 @@ impl EquippedItemPrototype<Weapon> {
             equipped_location_chance,
             generator: Box::new(WeaponPrototype::dagger()),
             multiple: false,
-            equipped_locations: vec![
-                "hanging in a moldy sheath".to_string(),
-                "strapped around its thigh".to_string(),
-                "clenched in its fist".to_string(),
-            ],
         }
     }
 
@@ -31,11 +26,6 @@ impl EquippedItemPrototype<Weapon> {
             equipped_location_chance,
             generator: Box::new(WeaponPrototype::long_sword()),
             multiple: false,
-            equipped_locations: vec![
-                "hanging in a moldy sheath".to_string(),
-                "clenched in its fist".to_string(),
-                "strapped to its back".to_string(),
-            ],
         }
     }
 
@@ -53,11 +43,6 @@ impl EquippedItemPrototype<Weapon> {
             equipped_location_chance,
             generator: Box::new(WeaponPrototype::short_sword()),
             multiple: false,
-            equipped_locations: vec![
-                "hanging in a moldy sheath".to_string(),
-                "clenched in its fist".to_string(),
-                "in its fist".to_string(),
-            ],
         }
     }
 
@@ -75,10 +60,6 @@ impl EquippedItemPrototype<Weapon> {
             equipped_location_chance,
             generator: Box::new(WeaponPrototype::club()),
             multiple: false,
-            equipped_locations: vec![
-                "hanging from its hip".to_string(),
-                "clenched in its fist".to_string(),
-            ],
         }
     }
 
@@ -96,10 +77,6 @@ impl EquippedItemPrototype<Weapon> {
             equipped_location_chance,
             generator: Box::new(WeaponPrototype::hammer()),
             multiple: false,
-            equipped_locations: vec![
-                "hanging from its hip".to_string(),
-                "clenched in its fist".to_string(),
-            ],
         }
     }
 
@@ -130,7 +107,7 @@ mod equipped_weapon_generator_tests {
         let prototype = EquippedItemPrototype::dagger(25, 100);
         let equipped_dagger = prototype.generate();
 
-        assert!(!equipped_dagger.equipped_location.is_empty());
+        assert!(equipped_dagger.equipped_location.is_some());
     }
 
     #[test]

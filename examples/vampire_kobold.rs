@@ -16,7 +16,6 @@ pub fn main() {
         generator: Box::new(WeaponPrototype::club()),
         hidden_chance: 0,
         multiple: false,
-        equipped_locations: vec!["almost falling from its grip".to_string()],
         equipped_location_chance: 100,
     };
 

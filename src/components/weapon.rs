@@ -5,7 +5,10 @@ use serde::{Deserialize, Serialize};
 
 use std::fmt::Display;
 
-use super::attack::Attack;
+use super::{
+    attack::Attack,
+    equipped_item::{Equippable, EquippedLocation},
+};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -19,6 +22,12 @@ pub struct Weapon {
     pub attack: Option<Attack>,
     pub weapon_type: WeaponType,
     pub descriptors: Vec<WeaponDescriptor>,
+}
+
+impl Equippable for Weapon {
+    fn possible_equip_locations(&self) -> Vec<EquippedLocation> {
+        self.weapon_type.possible_equip_locations()
+    }
 }
 
 impl Display for Weapon {
@@ -73,6 +82,53 @@ pub enum WeaponType {
     Hammer,
     LongSword,
     ShortSword,
+}
+
+impl Equippable for WeaponType {
+    fn possible_equip_locations(&self) -> Vec<EquippedLocation> {
+        match *self {
+            WeaponType::Club => vec![
+                EquippedLocation::AlmostFallingGrip,
+                EquippedLocation::ClenchedInFist,
+                EquippedLocation::HangingHip,
+                EquippedLocation::HeldLoosely,
+                EquippedLocation::StrappedToBack,
+            ],
+            WeaponType::Dagger => vec![
+                EquippedLocation::AlmostFallingGrip,
+                EquippedLocation::ClenchedInFist,
+                EquippedLocation::HangingHip,
+                EquippedLocation::HeldLoosely,
+                EquippedLocation::SheathedAtHip,
+                EquippedLocation::HangingMoldySheath,
+                EquippedLocation::StrappedToThigh,
+            ],
+            WeaponType::Hammer => vec![
+                EquippedLocation::AlmostFallingGrip,
+                EquippedLocation::ClenchedInFist,
+                EquippedLocation::HangingHip,
+                EquippedLocation::HeldLoosely,
+            ],
+            WeaponType::LongSword => vec![
+                EquippedLocation::AlmostFallingGrip,
+                EquippedLocation::ClenchedInFist,
+                EquippedLocation::HangingHip,
+                EquippedLocation::HeldLoosely,
+                EquippedLocation::SheathedAtHip,
+                EquippedLocation::HangingMoldySheath,
+                EquippedLocation::StrappedToBack,
+            ],
+            WeaponType::ShortSword => vec![
+                EquippedLocation::AlmostFallingGrip,
+                EquippedLocation::ClenchedInFist,
+                EquippedLocation::HangingHip,
+                EquippedLocation::HeldLoosely,
+                EquippedLocation::SheathedAtHip,
+                EquippedLocation::HangingMoldySheath,
+                EquippedLocation::StrappedToBack,
+            ],
+        }
+    }
 }
 
 impl Display for WeaponType {

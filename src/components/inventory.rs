@@ -55,13 +55,9 @@ impl Inventory {
                     ));
                 }
 
-                let weapon_description = if equipped_weapon.equipped_location.is_empty() {
-                    format!("{}", equipped_weapon.item)
-                } else {
-                    format!(
-                        "{} {}",
-                        equipped_weapon.item, equipped_weapon.equipped_location
-                    )
+                let weapon_description = match &equipped_weapon.equipped_location {
+                    Some(location) => format!("{} {}", equipped_weapon.item, location),
+                    None => format!("{}", equipped_weapon.item),
                 };
 
                 if index == self.equipped_weapons.len() - 1 && self.equipped_weapons.len() != 1 {
@@ -105,13 +101,9 @@ impl Inventory {
                     ));
                 }
 
-                let wearable_description = if equipped_wearable.equipped_location.is_empty() {
-                    format!("{}", equipped_wearable.item)
-                } else {
-                    format!(
-                        "{} {}",
-                        equipped_wearable.item, equipped_wearable.equipped_location
-                    )
+                let wearable_description = match &equipped_wearable.equipped_location {
+                    Some(location) => format!("{} {}", equipped_wearable.item, location),
+                    _ => format!("{}", equipped_wearable.item),
                 };
 
                 if index == self.equipped_wearables.len() - 1 && self.equipped_wearables.len() != 1
@@ -228,7 +220,7 @@ impl SentenceJoiners {
 #[cfg(test)]
 mod inventory_tests {
     use crate::components::{
-        equipped_item::EquippedItem,
+        equipped_item::{EquippedItem, EquippedLocation},
         weapon::{Weapon, WeaponDescriptor, WeaponType},
         wearable::{Wearable, WearableDescriptor, WearableMaterial, WearableType},
     };
@@ -252,13 +244,13 @@ mod inventory_tests {
                 EquippedItem {
                     item: long_sword,
                     hidden: false,
-                    equipped_location: "".to_string(),
+                    equipped_location: None,
                     multiple: false,
                 },
                 EquippedItem {
                     item: short_sword,
                     hidden: false,
-                    equipped_location: "in a sheath hanging from their hip".to_string(),
+                    equipped_location: Some(EquippedLocation::SheathedAtHip),
                     multiple: false,
                 },
             ],
@@ -270,7 +262,7 @@ mod inventory_tests {
         let description = inventory.to_string();
         assert!(description.contains("a broken long sword"));
         assert!(description.contains(", and"));
-        assert!(description.contains("rusty dull short sword in a sheath hanging from their hip."));
+        assert!(description.contains("rusty dull short sword sheathed at its hip."));
     }
 
     #[test]
@@ -284,7 +276,7 @@ mod inventory_tests {
             equipped_weapons: vec![EquippedItem {
                 item: long_sword,
                 hidden: false,
-                equipped_location: "".to_string(),
+                equipped_location: None,
                 multiple: false,
             }],
             equipped_wearables: Vec::new(),
@@ -314,13 +306,13 @@ mod inventory_tests {
                 EquippedItem {
                     item: long_sword,
                     hidden: false,
-                    equipped_location: "".to_string(),
+                    equipped_location: None,
                     multiple: false,
                 },
                 EquippedItem {
                     item: short_sword,
                     hidden: true,
-                    equipped_location: "in a sheath hanging from their hip".to_string(),
+                    equipped_location: Some(EquippedLocation::StrappedToThigh),
                     multiple: false,
                 },
             ],
@@ -348,7 +340,7 @@ mod inventory_tests {
             equipped_wearables: vec![EquippedItem {
                 item: chain_mail,
                 hidden: false,
-                equipped_location: "".to_string(),
+                equipped_location: None,
                 multiple: false,
             }],
             carried_weapons: Vec::new(),
@@ -382,13 +374,13 @@ mod inventory_tests {
                 EquippedItem {
                     item: chain_mail,
                     hidden: false,
-                    equipped_location: "".to_string(),
+                    equipped_location: None,
                     multiple: false,
                 },
                 EquippedItem {
                     item: shackles,
                     hidden: false,
-                    equipped_location: "dangling from their wrists".to_string(),
+                    equipped_location: Some(EquippedLocation::DanglingFromWrists),
                     multiple: true,
                 },
             ],
@@ -398,7 +390,7 @@ mod inventory_tests {
 
         let description = inventory.to_string();
         assert!(description.contains("set of drab steel plate mail"));
-        assert!(description.contains("rusty iron shackles dangling from their wrists."));
+        assert!(description.contains("rusty iron shackles dangling from its wrists."));
         assert!(description.contains(", and"));
     }
 }

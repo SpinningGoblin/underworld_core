@@ -8,7 +8,6 @@ impl EquippedItemPrototype<Wearable> {
             hidden_chance,
             equipped_location_chance,
             generator: Box::new(WearablePrototype::armour()),
-            equipped_locations: Vec::new(),
             multiple: true,
         }
     }
@@ -18,7 +17,6 @@ impl EquippedItemPrototype<Wearable> {
             hidden_chance,
             equipped_location_chance,
             generator: Box::new(WearablePrototype::cloak()),
-            equipped_locations: vec!["hanging loosely".to_string()],
             multiple: false,
         }
     }
@@ -28,7 +26,6 @@ impl EquippedItemPrototype<Wearable> {
             hidden_chance,
             equipped_location_chance,
             generator: Box::new(WearablePrototype::clothing()),
-            equipped_locations: vec!["".to_string()],
             multiple: true,
         }
     }
@@ -38,7 +35,6 @@ impl EquippedItemPrototype<Wearable> {
             hidden_chance,
             equipped_location_chance,
             generator: Box::new(WearablePrototype::plate_mail()),
-            equipped_locations: vec!["".to_string()],
             multiple: true,
         }
     }
@@ -48,7 +44,6 @@ impl EquippedItemPrototype<Wearable> {
             hidden_chance,
             equipped_location_chance,
             generator: Box::new(WearablePrototype::shackles()),
-            equipped_locations: vec!["".to_string()],
             multiple: false,
         }
     }

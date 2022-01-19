@@ -5,7 +5,10 @@ use serde::{Deserialize, Serialize};
 
 use std::fmt::Display;
 
-use super::defense::Defense;
+use super::{
+    defense::Defense,
+    equipped_item::{Equippable, EquippedLocation},
+};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -20,6 +23,18 @@ pub enum WearableType {
     Clothing,
     PlateMailHelmet,
     Shackles,
+}
+
+impl Equippable for WearableType {
+    fn possible_equip_locations(&self) -> Vec<EquippedLocation> {
+        match *self {
+            WearableType::Armour => Vec::new(),
+            WearableType::Cloak => vec![EquippedLocation::HangingLooselyShoulders],
+            WearableType::Clothing => Vec::new(),
+            WearableType::PlateMailHelmet => Vec::new(),
+            WearableType::Shackles => Vec::new(),
+        }
+    }
 }
 
 impl Display for WearableType {
@@ -113,6 +128,12 @@ pub struct Wearable {
     pub descriptors: Vec<WearableDescriptor>,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub defense: Option<Defense>,
+}
+
+impl Equippable for Wearable {
+    fn possible_equip_locations(&self) -> Vec<EquippedLocation> {
+        self.wearable_type.possible_equip_locations()
+    }
 }
 
 impl Display for Wearable {
