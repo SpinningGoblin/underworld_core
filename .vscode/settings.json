@@ -10,5 +10,8 @@
         "**/Thumbs.db": true,
         "target/": true
     },
-    "rust-analyzer.cargo.allFeatures": true
+    "rust-analyzer.cargo.allFeatures": true,
+    "cSpell.words": [
+        "Equippable"
+    ]
 }
