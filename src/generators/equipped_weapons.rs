@@ -103,14 +103,6 @@ mod equipped_weapon_generator_tests {
     }
 
     #[test]
-    fn dagger_with_guaranteed_equipped_location() {
-        let prototype = EquippedItemPrototype::dagger(25, 100);
-        let equipped_dagger = prototype.generate();
-
-        assert!(equipped_dagger.equipped_location.is_some());
-    }
-
-    #[test]
     fn dagger_with_guaranteed_hidden() {
         let prototype = EquippedItemPrototype::dagger(100, 50);
         let equipped_dagger = prototype.generate();

@@ -35,6 +35,16 @@ impl Equippable for WearableType {
             WearableType::Shackles => Vec::new(),
         }
     }
+
+    fn is_multiple(&self) -> bool {
+        match *self {
+            WearableType::Armour => true,
+            WearableType::Cloak => false,
+            WearableType::Clothing => true,
+            WearableType::PlateMailHelmet => false,
+            WearableType::Shackles => false,
+        }
+    }
 }
 
 impl Display for WearableType {
@@ -133,6 +143,10 @@ pub struct Wearable {
 impl Equippable for Wearable {
     fn possible_equip_locations(&self) -> Vec<EquippedLocation> {
         self.wearable_type.possible_equip_locations()
+    }
+
+    fn is_multiple(&self) -> bool {
+        self.wearable_type.is_multiple()
     }
 }
 

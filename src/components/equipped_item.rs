@@ -11,12 +11,13 @@ use std::fmt::{Debug, Display};
 pub struct EquippedItem<T: Display + Clone + Debug + Equippable> {
     pub item: T,
     pub hidden: bool,
-    pub equipped_location: Option<EquippedLocation>,
+    pub equipped_location: EquippedLocation,
     pub multiple: bool,
 }
 
 pub trait Equippable {
     fn possible_equip_locations(&self) -> Vec<EquippedLocation>;
+    fn is_multiple(&self) -> bool;
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -38,6 +39,13 @@ pub enum EquippedLocation {
     StrappedToBack,
     StrappedToThigh,
     ClenchedInFists,
+    None,
+}
+
+impl Default for EquippedLocation {
+    fn default() -> Self {
+        EquippedLocation::None
+    }
 }
 
 impl EquippedLocation {
@@ -54,17 +62,18 @@ impl EquippedLocation {
             EquippedLocation::StrappedToBack => false,
             EquippedLocation::StrappedToThigh => false,
             EquippedLocation::ClenchedInFists => other.is_in_hand(),
+            EquippedLocation::None => false,
         }
     }
 
     fn is_in_hand(&self) -> bool {
-        match *self {
-            EquippedLocation::AlmostFallingGrip => true,
-            EquippedLocation::ClenchedInFist => true,
-            EquippedLocation::ClenchedInFists => true,
-            EquippedLocation::HeldLoosely => true,
-            _ => false,
-        }
+        matches!(
+            *self,
+            EquippedLocation::AlmostFallingGrip
+                | EquippedLocation::ClenchedInFist
+                | EquippedLocation::ClenchedInFists
+                | EquippedLocation::HeldLoosely
+        )
     }
 }
 
@@ -78,12 +87,13 @@ impl Display for EquippedLocation {
             EquippedLocation::SheathedAtHip => write!(f, "sheathed at its hip"),
             EquippedLocation::HangingMoldySheath => write!(f, "hanging in a moldy sheath"),
             EquippedLocation::HangingLooselyShoulders => {
-                write!(f, "hanging loosely around its shoulders")
+                write!(f, "which hangs loosely around its shoulders")
             }
             EquippedLocation::DanglingFromWrists => write!(f, "dangling from its wrists"),
             EquippedLocation::HangingHip => write!(f, "hanging at its hip"),
             EquippedLocation::AlmostFallingGrip => write!(f, "almost falling from its grip"),
             EquippedLocation::ClenchedInFists => write!(f, "clenched in its fists"),
+            EquippedLocation::None => write!(f, ""),
         }
     }
 }
@@ -109,7 +119,7 @@ mod serialization_tests {
         let equipped_item = EquippedItem {
             item: weapon,
             hidden: false,
-            equipped_location: Some(EquippedLocation::StrappedToThigh),
+            equipped_location: EquippedLocation::StrappedToThigh,
             multiple: false,
         };
         let serialized = serde_json::to_string(&equipped_item).unwrap();

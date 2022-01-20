@@ -14,20 +14,23 @@ pub struct EquippedItemPrototype<T: Display + Clone + Debug + Equippable> {
 }
 
 impl<T: Display + Clone + Debug + Equippable> EquippedItemPrototype<T> {
-    fn equipped_location(&self, item: &T) -> Option<EquippedLocation> {
+    fn equipped_location(&self, item: &T) -> EquippedLocation {
         let mut rng = rand::thread_rng();
 
         if item.possible_equip_locations().is_empty() {
-            return None;
+            return EquippedLocation::None;
         }
 
         let equipped_location_roll: usize = rng.gen_range(0..=100);
         if equipped_location_roll > self.equipped_location_chance {
-            return None;
+            return EquippedLocation::None;
         }
 
         let index = rng.gen_range(0..item.possible_equip_locations().len());
-        item.possible_equip_locations().get(index).cloned()
+        item.possible_equip_locations()
+            .get(index)
+            .cloned()
+            .unwrap_or_default()
     }
 }
 

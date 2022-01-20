@@ -55,10 +55,12 @@ impl Inventory {
                     ));
                 }
 
-                let weapon_description = match &equipped_weapon.equipped_location {
-                    Some(location) => format!("{} {}", equipped_weapon.item, location),
-                    None => format!("{}", equipped_weapon.item),
-                };
+                let weapon_description = format!(
+                    "{} {}",
+                    equipped_weapon.item, equipped_weapon.equipped_location
+                )
+                .trim_end()
+                .to_string();
 
                 if index == self.equipped_weapons.len() - 1 && self.equipped_weapons.len() != 1 {
                     weapons.push(", and ".to_string());
@@ -101,10 +103,12 @@ impl Inventory {
                     ));
                 }
 
-                let wearable_description = match &equipped_wearable.equipped_location {
-                    Some(location) => format!("{} {}", equipped_wearable.item, location),
-                    _ => format!("{}", equipped_wearable.item),
-                };
+                let wearable_description = format!(
+                    "{} {}",
+                    equipped_wearable.item, equipped_wearable.equipped_location
+                )
+                .trim_end()
+                .to_string();
 
                 if index == self.equipped_wearables.len() - 1 && self.equipped_wearables.len() != 1
                 {
@@ -244,13 +248,13 @@ mod inventory_tests {
                 EquippedItem {
                     item: long_sword,
                     hidden: false,
-                    equipped_location: None,
+                    equipped_location: EquippedLocation::None,
                     multiple: false,
                 },
                 EquippedItem {
                     item: short_sword,
                     hidden: false,
-                    equipped_location: Some(EquippedLocation::SheathedAtHip),
+                    equipped_location: EquippedLocation::SheathedAtHip,
                     multiple: false,
                 },
             ],
@@ -276,7 +280,7 @@ mod inventory_tests {
             equipped_weapons: vec![EquippedItem {
                 item: long_sword,
                 hidden: false,
-                equipped_location: None,
+                equipped_location: EquippedLocation::None,
                 multiple: false,
             }],
             equipped_wearables: Vec::new(),
@@ -306,13 +310,13 @@ mod inventory_tests {
                 EquippedItem {
                     item: long_sword,
                     hidden: false,
-                    equipped_location: None,
+                    equipped_location: EquippedLocation::None,
                     multiple: false,
                 },
                 EquippedItem {
                     item: short_sword,
                     hidden: true,
-                    equipped_location: Some(EquippedLocation::StrappedToThigh),
+                    equipped_location: EquippedLocation::StrappedToThigh,
                     multiple: false,
                 },
             ],
@@ -340,7 +344,7 @@ mod inventory_tests {
             equipped_wearables: vec![EquippedItem {
                 item: chain_mail,
                 hidden: false,
-                equipped_location: None,
+                equipped_location: EquippedLocation::None,
                 multiple: false,
             }],
             carried_weapons: Vec::new(),
@@ -374,13 +378,13 @@ mod inventory_tests {
                 EquippedItem {
                     item: chain_mail,
                     hidden: false,
-                    equipped_location: None,
+                    equipped_location: EquippedLocation::None,
                     multiple: false,
                 },
                 EquippedItem {
                     item: shackles,
                     hidden: false,
-                    equipped_location: Some(EquippedLocation::DanglingFromWrists),
+                    equipped_location: EquippedLocation::DanglingFromWrists,
                     multiple: true,
                 },
             ],

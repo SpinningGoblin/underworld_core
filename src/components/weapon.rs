@@ -28,6 +28,10 @@ impl Equippable for Weapon {
     fn possible_equip_locations(&self) -> Vec<EquippedLocation> {
         self.weapon_type.possible_equip_locations()
     }
+
+    fn is_multiple(&self) -> bool {
+        self.weapon_type.is_multiple()
+    }
 }
 
 impl Display for Weapon {
@@ -127,6 +131,16 @@ impl Equippable for WeaponType {
                 EquippedLocation::HangingMoldySheath,
                 EquippedLocation::StrappedToBack,
             ],
+        }
+    }
+
+    fn is_multiple(&self) -> bool {
+        match *self {
+            WeaponType::Club => false,
+            WeaponType::Dagger => false,
+            WeaponType::Hammer => false,
+            WeaponType::LongSword => false,
+            WeaponType::ShortSword => false,
         }
     }
 }

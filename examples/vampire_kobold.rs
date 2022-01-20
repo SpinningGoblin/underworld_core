@@ -3,8 +3,8 @@ use std::env;
 use underworld_core::{
     components::{identifier::Identifier, life_modifier::LifeModifier},
     generators::{
-        characters::CharacterPrototype, equipped_items::EquippedItemPrototype,
-        generator::Generator, weapons::WeaponPrototype, wearables::WearablePrototype,
+        characters::CharacterPrototype, generator::Generator, inventory::InventoryPrototype,
+        weapons::WeaponPrototype, wearables::WearablePrototype,
     },
 };
 
@@ -12,38 +12,31 @@ pub fn main() {
     let name_arg = env::args().nth(1);
     let identifier = name_arg.map(|name| Identifier { name });
 
-    let other_item = EquippedItemPrototype {
-        generator: Box::new(WeaponPrototype::club()),
-        hidden_chance: 0,
-        multiple: false,
-        equipped_location_chance: 100,
-    };
-
-    let kobold_prototype = CharacterPrototype {
-        identifier,
+    let inventory_prototype = InventoryPrototype {
         weapon_generators: vec![
             Box::new(WeaponPrototype::dagger()),
             Box::new(WeaponPrototype::long_sword()),
         ],
-        equipped_weapon_generators: vec![
-            Box::new(EquippedItemPrototype::visible_dagger(100)),
-            Box::new(EquippedItemPrototype::visible_long_sword(100)),
-            Box::new(EquippedItemPrototype::visible_short_sword(100)),
-            Box::new(EquippedItemPrototype::visible_hammer(100)),
-            Box::new(other_item),
+        wearable_generators: vec![
+            Box::new(WearablePrototype::clothing()),
+            Box::new(WearablePrototype::cloak()),
+            Box::new(WearablePrototype::armour()),
+            Box::new(WearablePrototype::plate_mail()),
         ],
-        wearable_generators: vec![Box::new(WearablePrototype::armour())],
-        equipped_wearable_generators: vec![
-            Box::new(EquippedItemPrototype::armour(0, 100)),
-            Box::new(EquippedItemPrototype::plate_mail(0, 100)),
-        ],
+        num_equipped_weapons: 1..3,
+        num_equipped_wearables: 1..3,
+        num_carried_weapons: 1..2,
+        num_carried_wearables: 1..2,
+        hidden_weapon_chance: 0,
+        hidden_wearable_chance: 0,
+    };
+
+    let kobold_prototype = CharacterPrototype {
+        identifier,
+        inventory_generator: Box::new(inventory_prototype),
         species: underworld_core::components::species::Species::Kobold,
         life_modifier: Some(LifeModifier::Vampire),
         has_inventory: true,
-        num_weapons: 1..2,
-        num_equipped_weapons: 1..3,
-        num_wearables: 1..3,
-        num_equipped_wearables: 1..3,
     };
 
     let kobold = kobold_prototype.generate();
