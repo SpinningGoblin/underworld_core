@@ -19,6 +19,16 @@ pub struct WearablePrototype {
 }
 
 impl WearablePrototype {
+    pub fn all() -> Vec<Box<dyn Generator<Wearable>>> {
+        return vec![
+            Box::new(Self::armour()),
+            Box::new(Self::cloak()),
+            Box::new(Self::clothing()),
+            Box::new(Self::plate_mail()),
+            Box::new(Self::shackles()),
+        ];
+    }
+
     pub fn armour() -> Self {
         Self {
             wearable_type: WearableType::Armour,

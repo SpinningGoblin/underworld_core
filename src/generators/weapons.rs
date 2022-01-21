@@ -17,6 +17,16 @@ pub struct WeaponPrototype {
 }
 
 impl WeaponPrototype {
+    pub fn all() -> Vec<Box<dyn Generator<Weapon>>> {
+        vec![
+            Box::new(Self::dagger()),
+            Box::new(Self::club()),
+            Box::new(Self::hammer()),
+            Box::new(Self::long_sword()),
+            Box::new(Self::short_sword()),
+        ]
+    }
+
     pub fn dagger() -> Self {
         Self {
             weapon_type: WeaponType::Dagger,
