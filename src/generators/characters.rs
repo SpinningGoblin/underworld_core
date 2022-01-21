@@ -1,12 +1,15 @@
+mod prototypes;
+
+use rand::Rng;
+
 use crate::components::{
     character::Character, identifier::Identifier, inventory::Inventory,
     life_modifier::LifeModifier, species::Species,
 };
 
-use super::{
-    generator::Generator, inventory::InventoryPrototype, stats::StatsPrototype,
-    weapons::WeaponPrototype, wearables::WearablePrototype,
-};
+use self::prototypes::{basic_character, overloaded_character, undead_character};
+
+use super::{generator::Generator, stats::StatsPrototype};
 
 pub struct CharacterPrototype {
     pub identifier: Option<Identifier>,
@@ -17,33 +20,70 @@ pub struct CharacterPrototype {
 }
 
 impl CharacterPrototype {
-    pub fn basic_goblin(name: Option<Identifier>) -> Self {
-        let inventory_prototype = InventoryPrototype {
-            weapon_generators: vec![
-                Box::new(WeaponPrototype::dagger()),
-                Box::new(WeaponPrototype::club()),
-            ],
-            wearable_generators: vec![
-                Box::new(WearablePrototype::clothing()),
-                Box::new(WearablePrototype::cloak()),
-                Box::new(WearablePrototype::armour()),
-                Box::new(WearablePrototype::shackles()),
-            ],
-            num_equipped_weapons: 1..3,
-            num_equipped_wearables: 1..3,
-            num_carried_weapons: 0..2,
-            num_carried_wearables: 0..2,
-            hidden_weapon_chance: 0,
-            hidden_wearable_chance: 0,
-        };
+    pub fn basic_goblin(identifier: Option<Identifier>) -> Self {
+        basic_character(identifier, Species::Goblin)
+    }
 
-        Self {
-            identifier: name,
-            inventory_generator: Box::new(inventory_prototype),
-            species: Species::Goblin,
-            life_modifier: None,
-            has_inventory: true,
-        }
+    pub fn undead_goblin(identifier: Option<Identifier>) -> Self {
+        undead_character(identifier, Species::Goblin)
+    }
+
+    pub fn overloaded_goblin(identifier: Option<Identifier>) -> Self {
+        overloaded_character(identifier, Species::Goblin)
+    }
+
+    pub fn basic_kobold(identifier: Option<Identifier>) -> Self {
+        basic_character(identifier, Species::Kobold)
+    }
+
+    pub fn undead_kobold(identifier: Option<Identifier>) -> Self {
+        undead_character(identifier, Species::Kobold)
+    }
+
+    pub fn overloaded_kobold(identifier: Option<Identifier>) -> Self {
+        overloaded_character(identifier, Species::Kobold)
+    }
+
+    pub fn overloaded_character(identifier: Option<Identifier>, species: Species) -> Self {
+        overloaded_character(identifier, species)
+    }
+
+    pub fn random_species_character(identifier: Option<Identifier>) -> Self {
+        let mut rng = rand::thread_rng();
+        let all_species = vec![
+            Species::Bugbear,
+            Species::Goblin,
+            Species::Kobold,
+            Species::Ogre,
+            Species::Orc,
+            Species::Unknown,
+        ];
+        let index = rng.gen_range(0..all_species.len());
+        let species = all_species
+            .get(index)
+            .map(|s| s.clone())
+            .unwrap_or(Species::Unknown);
+
+        basic_character(identifier, species)
+    }
+
+    pub fn random_species_overloaded(identifier: Option<Identifier>) -> Self {
+        let mut rng = rand::thread_rng();
+        let all_species = vec![
+            Species::Bugbear,
+            Species::Goblin,
+            Species::Kobold,
+            Species::Ogre,
+            Species::Orc,
+            Species::Unknown,
+        ];
+        let index = rng.gen_range(0..all_species.len());
+        let species = all_species
+            .get(index)
+            .map(|s| s.clone())
+            .unwrap_or(Species::Unknown);
+
+        overloaded_character(identifier, species)
     }
 }
 
