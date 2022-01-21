@@ -10,7 +10,7 @@ use super::{
     equipped_item::{Equippable, EquippedLocation},
 };
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
     feature = "serialization",

@@ -7,7 +7,11 @@ use std::fmt::Display;
 
 use rand::{thread_rng, Rng};
 
-use super::{equipped_item::EquippedItem, weapon::Weapon, wearable::Wearable};
+use super::{
+    equipped_item::EquippedItem,
+    weapon::Weapon,
+    wearable::{Wearable, WearableType},
+};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -132,6 +136,16 @@ impl Inventory {
                     wearables.push(".".to_string());
                 }
             });
+
+        if self
+            .equipped_wearables
+            .iter()
+            .filter(|e| e.item.wearable_type == WearableType::Cloak)
+            .count()
+            > 1
+        {
+            wearables.push(" Two cloaks...?".to_string());
+        }
 
         wearables.join("")
     }
