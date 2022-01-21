@@ -52,8 +52,8 @@ pub fn overloaded_character(
     let args = CharacterArgs {
         identifier,
         species,
-        num_equipped_weapons: 1..3,
-        num_equipped_wearables: 1..3,
+        num_equipped_weapons: 2..4,
+        num_equipped_wearables: 2..5,
         num_carried_weapons: 2..6,
         num_carried_wearables: 2..6,
         weapon_generators: WeaponPrototype::all(),
