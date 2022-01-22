@@ -54,11 +54,11 @@ impl EquippedLocation {
             EquippedLocation::AlmostFallingGrip => other.is_in_hand(),
             EquippedLocation::ClenchedInFist => other.is_in_hand(),
             EquippedLocation::DanglingFromWrists => false,
-            EquippedLocation::HangingHip => false,
+            EquippedLocation::HangingHip => other.is_at_hip(),
             EquippedLocation::HangingLooselyShoulders => false,
             EquippedLocation::HeldLoosely => other.is_in_hand(),
-            EquippedLocation::HangingMoldySheath => false,
-            EquippedLocation::SheathedAtHip => false,
+            EquippedLocation::HangingMoldySheath => other.is_at_hip(),
+            EquippedLocation::SheathedAtHip => other.is_at_hip(),
             EquippedLocation::StrappedToBack => false,
             EquippedLocation::StrappedToThigh => false,
             EquippedLocation::ClenchedInFists => other.is_in_hand(),
@@ -73,6 +73,15 @@ impl EquippedLocation {
                 | EquippedLocation::ClenchedInFist
                 | EquippedLocation::ClenchedInFists
                 | EquippedLocation::HeldLoosely
+        )
+    }
+
+    fn is_at_hip(&self) -> bool {
+        matches!(
+            *self,
+            EquippedLocation::HangingHip
+                | EquippedLocation::HangingMoldySheath
+                | EquippedLocation::SheathedAtHip
         )
     }
 }
