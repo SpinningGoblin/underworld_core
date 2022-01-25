@@ -1,5 +1,3 @@
-use underworld_core::generators::inventory::InventoryPrototype;
-
 pub fn main() {
     #[cfg(feature = "serialization")]
     #[cfg(feature = "json")]
@@ -7,7 +5,8 @@ pub fn main() {
         use underworld_core::{
             components::life_modifier::LifeModifier,
             generators::{
-                characters::CharacterPrototype, generator::Generator, weapons::WeaponPrototype,
+                characters::CharacterPrototype, generator::Generator,
+                inventory::InventoryPrototype, weapons::WeaponPrototype,
                 wearables::WearablePrototype,
             },
         };
