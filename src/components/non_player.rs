@@ -9,8 +9,8 @@ use super::{character::Character, identifier::Identifier};
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct NonPlayer {
-    pub identifier: Identifier,
     pub character: Character,
+    pub identifier: Identifier,
 }
 
 impl NonPlayer {
