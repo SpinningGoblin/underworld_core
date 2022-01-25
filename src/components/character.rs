@@ -3,17 +3,12 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use super::{
-    identifier::Identifier, inventory::Inventory, life_modifier::LifeModifier, species::Species,
-    stats::Stats,
-};
+use super::{inventory::Inventory, life_modifier::LifeModifier, species::Species, stats::Stats};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct Character {
-    #[cfg_attr(feature = "serialization", serde(default))]
-    pub name: Option<Identifier>,
     pub stats: Stats,
     pub species: Species,
     #[cfg_attr(feature = "serialization", serde(default))]
@@ -48,13 +43,6 @@ impl Character {
             _ => "".to_string(),
         }
     }
-
-    pub fn describe_name(&self) -> String {
-        match &self.name {
-            Some(name) => format!("It says its name is {}", name),
-            _ => "It has no name.".to_string(),
-        }
-    }
 }
 
 #[cfg(test)]
@@ -68,7 +56,6 @@ mod tests {
     #[test]
     fn to_string_for_a_character() {
         let character = Character {
-            name: None,
             stats: Stats {
                 health: None,
                 dimensions: Some(Dimensions {
@@ -88,7 +75,6 @@ mod tests {
     #[test]
     fn to_string_for_a_character_with_life_modifier() {
         let character = Character {
-            name: None,
             stats: Stats {
                 health: None,
                 dimensions: Some(Dimensions {

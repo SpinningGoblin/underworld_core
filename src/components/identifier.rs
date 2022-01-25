@@ -9,11 +9,16 @@ use std::fmt::Display;
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct Identifier {
-    pub name: String,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub name: Option<String>,
 }
 
 impl Display for Identifier {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.name)
+        if let Some(name) = &self.name {
+            write!(f, "{}", name)
+        } else {
+            write!(f, "")
+        }
     }
 }

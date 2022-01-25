@@ -10,5 +10,5 @@ use super::{character::Character, identifier::Identifier};
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct Player {
     pub character: Character,
-    pub player_name: Identifier,
+    pub identifier: Identifier,
 }

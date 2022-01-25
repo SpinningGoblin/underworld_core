@@ -4,8 +4,7 @@ use rand::Rng;
 
 use crate::{
     components::{
-        identifier::Identifier, life_modifier::LifeModifier, species::Species, weapon::Weapon,
-        wearable::Wearable,
+        life_modifier::LifeModifier, species::Species, weapon::Weapon, wearable::Wearable,
     },
     generators::{
         generator::Generator, inventory::InventoryPrototype, weapons::WeaponPrototype,
@@ -16,7 +15,6 @@ use crate::{
 use super::CharacterPrototype;
 
 struct CharacterArgs {
-    identifier: Option<Identifier>,
     num_equipped_weapons: Range<usize>,
     num_equipped_wearables: Range<usize>,
     num_carried_weapons: Range<usize>,
@@ -28,9 +26,8 @@ struct CharacterArgs {
     has_inventory: bool,
 }
 
-pub fn basic_character(identifier: Option<Identifier>, species: Species) -> CharacterPrototype {
+pub fn basic_character(species: Species) -> CharacterPrototype {
     let args = CharacterArgs {
-        identifier,
         species,
         num_equipped_weapons: 1..3,
         num_equipped_wearables: 1..3,
@@ -45,12 +42,8 @@ pub fn basic_character(identifier: Option<Identifier>, species: Species) -> Char
     character(args)
 }
 
-pub fn overloaded_character(
-    identifier: Option<Identifier>,
-    species: Species,
-) -> CharacterPrototype {
+pub fn overloaded_character(species: Species) -> CharacterPrototype {
     let args = CharacterArgs {
-        identifier,
         species,
         num_equipped_weapons: 2..4,
         num_equipped_wearables: 2..5,
@@ -65,7 +58,7 @@ pub fn overloaded_character(
     character(args)
 }
 
-pub fn undead_character(identifier: Option<Identifier>, species: Species) -> CharacterPrototype {
+pub fn undead_character(species: Species) -> CharacterPrototype {
     let mut rng = rand::thread_rng();
     let index: usize = rng.gen_range(0..2);
     let life_modifier = vec![LifeModifier::Vampire, LifeModifier::Zombie]
@@ -73,7 +66,6 @@ pub fn undead_character(identifier: Option<Identifier>, species: Species) -> Cha
         .cloned();
 
     let args = CharacterArgs {
-        identifier,
         life_modifier,
         species,
         num_equipped_weapons: 1..3,
@@ -101,7 +93,6 @@ fn character(args: CharacterArgs) -> CharacterPrototype {
     };
 
     CharacterPrototype {
-        identifier: args.identifier,
         inventory_generator: Box::new(inventory_prototype),
         species: args.species,
         life_modifier: args.life_modifier,

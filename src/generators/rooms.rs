@@ -3,9 +3,7 @@ use std::ops::Range;
 use rand::Rng;
 
 use crate::components::{
-    character::Character,
     dimensions::Dimensions,
-    identifier::Identifier,
     non_player::NonPlayer,
     room::{Room, RoomDescriptor, RoomType},
 };
@@ -16,7 +14,7 @@ use super::{
 };
 
 pub struct RoomPrototype {
-    pub non_player_generator: Box<dyn Generator<NonPlayer>>,
+    pub non_player_generators: Vec<Box<dyn Generator<NonPlayer>>>,
     pub num_non_players: Range<usize>,
     pub num_descriptors: Range<usize>,
     pub room_type: RoomType,
@@ -34,7 +32,9 @@ impl Generator<Room> for RoomPrototype {
 
         if !non_player_range.is_empty() {
             for _ in 0..num_non_players {
-                let non_player = self.non_player_generator.generate();
+                let npc_generator_index = rng.gen_range(0..self.non_player_generators.len());
+                let npc_generator = self.non_player_generators.get(npc_generator_index).unwrap();
+                let non_player = npc_generator.generate();
                 non_players.push(non_player);
             }
         }
@@ -66,22 +66,23 @@ impl Generator<Room> for RoomPrototype {
 }
 
 impl RoomPrototype {
-    pub fn build_random_type(npc_identifiers: Vec<Identifier>) -> RoomPrototype {
-        let npc_generator = if npc_identifiers.is_empty() {
-            let character_prototype = CharacterPrototype::random_species_character(None);
-            NonPlayerPrototype {
-                character_generators: vec![Box::new(character_prototype)],
-            }
+    pub fn build_random_type(npc_names: Vec<String>) -> RoomPrototype {
+        let npc_generators: Vec<Box<dyn Generator<NonPlayer>>> = if npc_names.is_empty() {
+            let character_prototype = CharacterPrototype::random_species_character();
+            vec![Box::new(NonPlayerPrototype {
+                name: None,
+                character_generator: Box::new(character_prototype),
+            })]
         } else {
-            let mut character_generators: Vec<Box<dyn Generator<Character>>> = Vec::new();
-            for identifier in npc_identifiers.iter() {
-                character_generators.push(Box::new(CharacterPrototype::random_species_character(
-                    Some(identifier.clone()),
-                )))
+            let mut generators: Vec<Box<dyn Generator<NonPlayer>>> = Vec::new();
+            for name in npc_names.iter() {
+                generators.push(Box::new(NonPlayerPrototype {
+                    name: Some(name.clone()),
+                    character_generator: Box::new(CharacterPrototype::random_species_character()),
+                }));
             }
-            NonPlayerPrototype {
-                character_generators,
-            }
+
+            generators
         };
 
         let room_types = vec![
@@ -98,7 +99,7 @@ impl RoomPrototype {
 
         RoomPrototype {
             room_type: room_type.clone(),
-            non_player_generator: Box::new(npc_generator),
+            non_player_generators: npc_generators,
             num_non_players: 1..3,
             num_descriptors: 1..3,
             dimensions_generator: Box::new(DimensionsPrototype::for_room_type(&room_type)),

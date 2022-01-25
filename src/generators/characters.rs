@@ -3,8 +3,7 @@ mod prototypes;
 use rand::Rng;
 
 use crate::components::{
-    character::Character, identifier::Identifier, inventory::Inventory,
-    life_modifier::LifeModifier, species::Species,
+    character::Character, inventory::Inventory, life_modifier::LifeModifier, species::Species,
 };
 
 use self::prototypes::{basic_character, overloaded_character, undead_character};
@@ -12,7 +11,6 @@ use self::prototypes::{basic_character, overloaded_character, undead_character};
 use super::{generator::Generator, stats::StatsPrototype};
 
 pub struct CharacterPrototype {
-    pub identifier: Option<Identifier>,
     pub inventory_generator: Box<dyn Generator<Inventory>>,
     pub species: Species,
     pub life_modifier: Option<LifeModifier>,
@@ -20,35 +18,35 @@ pub struct CharacterPrototype {
 }
 
 impl CharacterPrototype {
-    pub fn basic_goblin(identifier: Option<Identifier>) -> Self {
-        basic_character(identifier, Species::Goblin)
+    pub fn basic_goblin() -> Self {
+        basic_character(Species::Goblin)
     }
 
-    pub fn undead_goblin(identifier: Option<Identifier>) -> Self {
-        undead_character(identifier, Species::Goblin)
+    pub fn undead_goblin() -> Self {
+        undead_character(Species::Goblin)
     }
 
-    pub fn overloaded_goblin(identifier: Option<Identifier>) -> Self {
-        overloaded_character(identifier, Species::Goblin)
+    pub fn overloaded_goblin() -> Self {
+        overloaded_character(Species::Goblin)
     }
 
-    pub fn basic_kobold(identifier: Option<Identifier>) -> Self {
-        basic_character(identifier, Species::Kobold)
+    pub fn basic_kobold() -> Self {
+        basic_character(Species::Kobold)
     }
 
-    pub fn undead_kobold(identifier: Option<Identifier>) -> Self {
-        undead_character(identifier, Species::Kobold)
+    pub fn undead_kobold() -> Self {
+        undead_character(Species::Kobold)
     }
 
-    pub fn overloaded_kobold(identifier: Option<Identifier>) -> Self {
-        overloaded_character(identifier, Species::Kobold)
+    pub fn overloaded_kobold() -> Self {
+        overloaded_character(Species::Kobold)
     }
 
-    pub fn overloaded_character(identifier: Option<Identifier>, species: Species) -> Self {
-        overloaded_character(identifier, species)
+    pub fn overloaded_character(species: Species) -> Self {
+        overloaded_character(species)
     }
 
-    pub fn random_species_character(identifier: Option<Identifier>) -> Self {
+    pub fn random_species_character() -> Self {
         let mut rng = rand::thread_rng();
         let all_species = vec![
             Species::Bugbear,
@@ -64,10 +62,10 @@ impl CharacterPrototype {
             .map(|s| s.clone())
             .unwrap_or(Species::Unknown);
 
-        basic_character(identifier, species)
+        basic_character(species)
     }
 
-    pub fn random_species_overloaded(identifier: Option<Identifier>) -> Self {
+    pub fn random_species_overloaded() -> Self {
         let mut rng = rand::thread_rng();
         let all_species = vec![
             Species::Bugbear,
@@ -83,7 +81,7 @@ impl CharacterPrototype {
             .map(|s| s.clone())
             .unwrap_or(Species::Unknown);
 
-        overloaded_character(identifier, species)
+        overloaded_character(species)
     }
 }
 
@@ -101,7 +99,6 @@ impl Generator<Character> for CharacterPrototype {
         Character {
             stats,
             inventory,
-            name: self.identifier.clone(),
             species: self.species.clone(),
             life_modifier: self.life_modifier.clone(),
         }
@@ -110,17 +107,14 @@ impl Generator<Character> for CharacterPrototype {
 
 #[cfg(test)]
 mod goblin_tests {
-    use crate::{components::identifier::Identifier, generators::generator::Generator};
+    use crate::generators::generator::Generator;
 
     use super::CharacterPrototype;
 
     #[test]
     fn basic_goblin() {
-        let prototype = CharacterPrototype::basic_goblin(Some(Identifier {
-            name: "gerblin".to_string(),
-        }));
+        let prototype = CharacterPrototype::basic_goblin();
         let goblin = prototype.generate();
-        assert_eq!("gerblin", goblin.name.unwrap().name);
         assert!(goblin.inventory.is_some());
         println!("{}", goblin.inventory.unwrap());
     }

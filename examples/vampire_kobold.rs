@@ -1,7 +1,5 @@
-use std::env;
-
 use underworld_core::{
-    components::{identifier::Identifier, life_modifier::LifeModifier},
+    components::life_modifier::LifeModifier,
     generators::{
         characters::CharacterPrototype, generator::Generator, inventory::InventoryPrototype,
         weapons::WeaponPrototype, wearables::WearablePrototype,
@@ -9,9 +7,6 @@ use underworld_core::{
 };
 
 pub fn main() {
-    let name_arg = env::args().nth(1);
-    let identifier = name_arg.map(|name| Identifier { name });
-
     let inventory_prototype = InventoryPrototype {
         weapon_generators: vec![
             Box::new(WeaponPrototype::dagger()),
@@ -32,7 +27,6 @@ pub fn main() {
     };
 
     let kobold_prototype = CharacterPrototype {
-        identifier,
         inventory_generator: Box::new(inventory_prototype),
         species: underworld_core::components::species::Species::Kobold,
         life_modifier: Some(LifeModifier::Vampire),
@@ -44,5 +38,4 @@ pub fn main() {
         println!("{}", inventory);
     }
     println!("{}", &kobold.describe_species());
-    println!("{}", &kobold.describe_name());
 }
