@@ -1,5 +1,3 @@
-use underworld_core::generators::non_players::NonPlayerPrototype;
-
 pub fn main() {
     #[cfg(feature = "serialization")]
     #[cfg(feature = "json")]
@@ -9,7 +7,7 @@ pub fn main() {
             generators::{
                 characters::CharacterPrototype, generator::Generator,
                 inventory::InventoryPrototype, weapons::WeaponPrototype,
-                wearables::WearablePrototype,
+                wearables::WearablePrototype, non_players::NonPlayerPrototype,
             },
         };
 
