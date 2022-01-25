@@ -12,6 +12,7 @@ use super::{dimensions::Dimensions, height_descriptor::HeightDescriptor, non_pla
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct Room {
     pub dimensions: Dimensions,
+    pub descriptors: Vec<RoomDescriptor>,
     pub room_type: RoomType,
     pub non_players: Vec<NonPlayer>,
 }
@@ -72,6 +73,75 @@ impl Display for RoomType {
             Self::EntryWay => write!(f, "entryway"),
             Self::PrisonCell => write!(f, "prison cell"),
             Self::Room => write!(f, "room"),
+        }
+    }
+}
+
+impl RoomType {
+    pub fn possible_descriptors(&self) -> Vec<RoomDescriptor> {
+        match *self {
+            RoomType::Cave => vec![
+                RoomDescriptor::Chill,
+                RoomDescriptor::Dark,
+                RoomDescriptor::Dim,
+                RoomDescriptor::Grimy,
+                RoomDescriptor::Moist,
+            ],
+            RoomType::Cavern => vec![
+                RoomDescriptor::Chill,
+                RoomDescriptor::Dark,
+                RoomDescriptor::Dim,
+                RoomDescriptor::Grimy,
+                RoomDescriptor::Moist,
+            ],
+            RoomType::PrisonCell => vec![
+                RoomDescriptor::Chill,
+                RoomDescriptor::Dark,
+                RoomDescriptor::Dim,
+                RoomDescriptor::Grimy,
+                RoomDescriptor::Moist,
+            ],
+            RoomType::Room => vec![
+                RoomDescriptor::Chill,
+                RoomDescriptor::Dark,
+                RoomDescriptor::Dim,
+                RoomDescriptor::Grimy,
+                RoomDescriptor::Moist,
+            ],
+            RoomType::EntryWay => vec![
+                RoomDescriptor::Chill,
+                RoomDescriptor::Dark,
+                RoomDescriptor::Dim,
+                RoomDescriptor::Grimy,
+                RoomDescriptor::Moist,
+            ],
+        }
+    }
+}
+
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(
+    feature = "serialization",
+    derive(Deserialize, Serialize),
+    serde(rename_all = "snake_case")
+)]
+pub enum RoomDescriptor {
+    Chill,
+    Dark,
+    Dim,
+    Grimy,
+    Moist,
+}
+
+impl Display for RoomDescriptor {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match *self {
+            RoomDescriptor::Chill => write!(f, "chill"),
+            RoomDescriptor::Dark => write!(f, "dark"),
+            RoomDescriptor::Dim => write!(f, "dim"),
+            RoomDescriptor::Grimy => write!(f, "grimy"),
+            RoomDescriptor::Moist => write!(f, "moist"),
         }
     }
 }
