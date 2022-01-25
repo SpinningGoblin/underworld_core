@@ -1,3 +1,5 @@
+use underworld_core::generators::non_players::NonPlayerPrototype;
+
 pub fn main() {
     #[cfg(feature = "serialization")]
     #[cfg(feature = "json")]
@@ -37,7 +39,12 @@ pub fn main() {
             has_inventory: true,
         };
 
-        let kobold = kobold_prototype.generate();
+        let npc_prototype = NonPlayerPrototype {
+            name: None,
+            character_generator: Box::new(kobold_prototype),
+        };
+
+        let kobold = npc_prototype.generate();
         let serialized = serde_json::to_string(&kobold);
 
         match serialized {
