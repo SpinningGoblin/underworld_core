@@ -6,6 +6,7 @@ pub mod equipped_wearables;
 pub mod generator;
 pub mod inventory;
 pub mod non_players;
+pub mod rooms;
 pub mod stats;
 pub mod weapons;
 pub mod wearables;
