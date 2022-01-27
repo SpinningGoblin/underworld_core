@@ -18,7 +18,7 @@ use super::{
     serde(rename_all = "snake_case")
 )]
 pub enum WearableType {
-    Armour,
+    Breastplate,
     Mask,
     Cloak,
     Shirt,
@@ -37,7 +37,7 @@ pub enum WearableType {
 impl WearableType {
     pub fn all() -> Vec<WearableType> {
         vec![
-            WearableType::Armour,
+            WearableType::Breastplate,
             WearableType::Boots,
             WearableType::Cloak,
             WearableType::Crown,
@@ -56,7 +56,7 @@ impl WearableType {
 
     pub fn unable_to_be_used_with(&self, other: &WearableType) -> bool {
         match *self {
-            WearableType::Armour => other.is_upper_body(),
+            WearableType::Breastplate => other.is_upper_body(),
             WearableType::Boots => other.is_footwear(),
             WearableType::Cloak => other == &WearableType::Cloak,
             WearableType::Crown => other.is_headgear(),
@@ -74,10 +74,7 @@ impl WearableType {
     }
 
     pub fn is_lower_body(&self) -> bool {
-        matches!(
-            *self,
-            WearableType::LoinCloth | WearableType::Trousers
-        )
+        matches!(*self, WearableType::LoinCloth | WearableType::Trousers)
     }
 
     pub fn is_headgear(&self) -> bool {
@@ -90,15 +87,12 @@ impl WearableType {
     pub fn is_upper_body(&self) -> bool {
         matches!(
             *self,
-            WearableType::Armour | WearableType::Shirt | WearableType::Vest
+            WearableType::Breastplate | WearableType::Shirt | WearableType::Vest
         )
     }
 
     pub fn is_footwear(&self) -> bool {
-        matches!(
-            *self,
-            WearableType::Boots | WearableType::PlateBoots
-        )
+        matches!(*self, WearableType::Boots | WearableType::PlateBoots)
     }
 
     pub fn is_for_hands(&self) -> bool {
@@ -110,7 +104,7 @@ impl WearableType {
 
     pub fn necessary_descriptors(&self) -> Vec<WearableDescriptor> {
         match *self {
-            WearableType::Armour => Vec::new(),
+            WearableType::Breastplate => Vec::new(),
             WearableType::Cloak => Vec::new(),
             WearableType::Shirt => Vec::new(),
             WearableType::PlateHelmet => Vec::new(),
@@ -129,7 +123,7 @@ impl WearableType {
 
     pub fn possible_descriptors(&self) -> Vec<WearableDescriptor> {
         match *self {
-            WearableType::Armour => vec![
+            WearableType::Breastplate => vec![
                 WearableDescriptor::Bloodstained,
                 WearableDescriptor::Dingy,
                 WearableDescriptor::Drab,
@@ -240,7 +234,7 @@ impl WearableType {
 impl Equippable for WearableType {
     fn possible_equip_locations(&self) -> Vec<EquippedLocation> {
         match *self {
-            WearableType::Armour => Vec::new(),
+            WearableType::Breastplate => Vec::new(),
             WearableType::Cloak => vec![EquippedLocation::HangingLooselyShoulders],
             WearableType::Shirt => Vec::new(),
             WearableType::PlateHelmet => Vec::new(),
@@ -259,7 +253,7 @@ impl Equippable for WearableType {
 
     fn is_multiple(&self) -> bool {
         match *self {
-            WearableType::Armour => true,
+            WearableType::Breastplate => true,
             WearableType::Cloak => false,
             WearableType::Shirt => false,
             WearableType::PlateHelmet => false,
@@ -280,7 +274,7 @@ impl Equippable for WearableType {
 impl Display for WearableType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
-            Self::Armour => write!(f, "armour"),
+            Self::Breastplate => write!(f, "armour"),
             Self::Cloak => write!(f, "cloak"),
             Self::Shirt => write!(f, "shirt"),
             Self::PlateHelmet => write!(f, "plate helmet"),
@@ -418,7 +412,7 @@ mod wearable_type_tests {
 
     #[test]
     fn display() {
-        assert_eq!("armour", format!("{}", WearableType::Armour));
+        assert_eq!("armour", format!("{}", WearableType::Breastplate));
         assert_eq!("cloak", format!("{}", WearableType::Cloak));
         assert_eq!("shirt", format!("{}", WearableType::Shirt));
         assert_eq!("plate helmet", format!("{}", WearableType::PlateHelmet));
@@ -477,7 +471,7 @@ mod wearable_tests {
     #[test]
     fn display_when_there_is_only_type() {
         let wearable = Wearable {
-            wearable_type: WearableType::Armour,
+            wearable_type: WearableType::Breastplate,
             material: None,
             descriptors: Vec::new(),
             defense: None,

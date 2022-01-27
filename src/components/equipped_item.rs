@@ -124,6 +124,7 @@ mod serialization_tests {
             attack: None,
             weapon_type: crate::components::weapon::WeaponType::LongSword,
             descriptors: vec![WeaponDescriptor::Dull],
+            material: None,
         };
         let equipped_item = EquippedItem {
             item: weapon,

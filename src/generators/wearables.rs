@@ -21,7 +21,7 @@ pub struct WearableGenerator;
 impl WearableGenerator {
     pub fn for_wearable_type(wearable_type: &WearableType) -> impl Generator<Wearable> {
         match *wearable_type {
-            WearableType::Armour => WearablePrototype::armour(),
+            WearableType::Breastplate => WearablePrototype::breastplate(),
             WearableType::Cloak => WearablePrototype::cloak(),
             WearableType::Shirt => WearablePrototype::shirt(),
             WearableType::PlateHelmet => WearablePrototype::plate_helmet(),
@@ -40,9 +40,9 @@ impl WearableGenerator {
 }
 
 impl WearablePrototype {
-    pub fn armour() -> Self {
+    pub fn breastplate() -> Self {
         Self {
-            wearable_type: WearableType::Armour,
+            wearable_type: WearableType::Breastplate,
             num_descriptors: 0..3,
             defense: Some(Defense {
                 minimum: 1,
@@ -108,10 +108,7 @@ impl WearablePrototype {
                 minimum: 1,
                 maximum: 3,
             }),
-            possible_materials: vec![
-                WearableMaterial::Gold,
-                WearableMaterial::Leather,
-            ],
+            possible_materials: vec![WearableMaterial::Gold, WearableMaterial::Leather],
         }
     }
 
@@ -135,7 +132,11 @@ impl WearablePrototype {
                 minimum: 0,
                 maximum: 1,
             }),
-            possible_materials: vec![WearableMaterial::Bone, WearableMaterial::Iron, WearableMaterial::Gold],
+            possible_materials: vec![
+                WearableMaterial::Bone,
+                WearableMaterial::Iron,
+                WearableMaterial::Gold,
+            ],
         }
     }
 
@@ -147,7 +148,11 @@ impl WearablePrototype {
                 minimum: 0,
                 maximum: 1,
             }),
-            possible_materials: vec![WearableMaterial::Bone, WearableMaterial::Iron, WearableMaterial::Steel],
+            possible_materials: vec![
+                WearableMaterial::Bone,
+                WearableMaterial::Iron,
+                WearableMaterial::Steel,
+            ],
         }
     }
 

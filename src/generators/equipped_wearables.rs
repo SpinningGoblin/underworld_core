@@ -3,11 +3,11 @@ use crate::components::wearable::{Wearable, WearableType};
 use super::{equipped_items::EquippedItemPrototype, wearables::WearableGenerator};
 
 impl EquippedItemPrototype<Wearable> {
-    pub fn armour(hidden_chance: usize, equipped_location_chance: usize) -> Self {
+    pub fn breastplate(hidden_chance: usize, equipped_location_chance: usize) -> Self {
         Self {
             hidden_chance,
             equipped_location_chance,
-            generator: Box::new(WearableGenerator::for_wearable_type(&WearableType::Armour)),
+            generator: Box::new(WearableGenerator::for_wearable_type(&WearableType::Breastplate)),
             multiple: true,
         }
     }
@@ -25,9 +25,7 @@ impl EquippedItemPrototype<Wearable> {
         Self {
             hidden_chance,
             equipped_location_chance,
-            generator: Box::new(WearableGenerator::for_wearable_type(
-                &WearableType::Shirt,
-            )),
+            generator: Box::new(WearableGenerator::for_wearable_type(&WearableType::Shirt)),
             multiple: true,
         }
     }

@@ -4,7 +4,7 @@ use rand::Rng;
 
 use crate::components::{
     attack::Attack,
-    weapon::{Weapon, WeaponDescriptor, WeaponType},
+    weapon::{Weapon, WeaponDescriptor, WeaponMaterial, WeaponType},
 };
 
 use super::generator::Generator;
@@ -19,6 +19,13 @@ impl WeaponGenerator {
             WeaponType::Hammer => WeaponPrototype::hammer(),
             WeaponType::LongSword => WeaponPrototype::long_sword(),
             WeaponType::ShortSword => WeaponPrototype::short_sword(),
+            WeaponType::Buckler => WeaponPrototype::buckler(),
+            WeaponType::Dirk => WeaponPrototype::dirk(),
+            WeaponType::GreatSword => WeaponPrototype::great_sword(),
+            WeaponType::Mace => WeaponPrototype::mace(),
+            WeaponType::Morningstar => WeaponPrototype::morningstar(),
+            WeaponType::Shield => WeaponPrototype::shield(),
+            WeaponType::Whip => WeaponPrototype::whip(),
         }
     }
 }
@@ -27,9 +34,22 @@ struct WeaponPrototype {
     pub weapon_type: WeaponType,
     pub num_descriptors: Range<usize>,
     pub attack: Option<Attack>,
+    pub possible_materials: Vec<WeaponMaterial>,
 }
 
 impl WeaponPrototype {
+    pub fn buckler() -> Self {
+        Self {
+            weapon_type: WeaponType::Buckler,
+            num_descriptors: 0..3,
+            attack: Some(Attack {
+                minimum: 0,
+                maximum: 2,
+            }),
+            possible_materials: vec![WeaponMaterial::Steel, WeaponMaterial::Iron],
+        }
+    }
+
     pub fn dagger() -> Self {
         Self {
             weapon_type: WeaponType::Dagger,
@@ -38,6 +58,31 @@ impl WeaponPrototype {
                 minimum: 1,
                 maximum: 3,
             }),
+            possible_materials: vec![
+                WeaponMaterial::Bone,
+                WeaponMaterial::Steel,
+                WeaponMaterial::Stone,
+                WeaponMaterial::Gold,
+                WeaponMaterial::Iron,
+            ],
+        }
+    }
+
+    pub fn dirk() -> Self {
+        Self {
+            weapon_type: WeaponType::Dirk,
+            num_descriptors: 0..3,
+            attack: Some(Attack {
+                minimum: 1,
+                maximum: 3,
+            }),
+            possible_materials: vec![
+                WeaponMaterial::Bone,
+                WeaponMaterial::Steel,
+                WeaponMaterial::Stone,
+                WeaponMaterial::Gold,
+                WeaponMaterial::Iron,
+            ],
         }
     }
 
@@ -49,6 +94,29 @@ impl WeaponPrototype {
                 minimum: 1,
                 maximum: 3,
             }),
+            possible_materials: vec![
+                WeaponMaterial::Bone,
+                WeaponMaterial::Stone,
+                WeaponMaterial::Iron,
+            ],
+        }
+    }
+
+    pub fn great_sword() -> Self {
+        Self {
+            weapon_type: WeaponType::LongSword,
+            num_descriptors: 0..3,
+            attack: Some(Attack {
+                minimum: 1,
+                maximum: 12,
+            }),
+            possible_materials: vec![
+                WeaponMaterial::Bone,
+                WeaponMaterial::Steel,
+                WeaponMaterial::Stone,
+                WeaponMaterial::Gold,
+                WeaponMaterial::Iron,
+            ],
         }
     }
 
@@ -60,6 +128,12 @@ impl WeaponPrototype {
                 minimum: 1,
                 maximum: 3,
             }),
+            possible_materials: vec![
+                WeaponMaterial::Bone,
+                WeaponMaterial::Steel,
+                WeaponMaterial::Stone,
+                WeaponMaterial::Iron,
+            ],
         }
     }
 
@@ -71,6 +145,49 @@ impl WeaponPrototype {
                 minimum: 2,
                 maximum: 6,
             }),
+            possible_materials: vec![
+                WeaponMaterial::Bone,
+                WeaponMaterial::Steel,
+                WeaponMaterial::Stone,
+                WeaponMaterial::Gold,
+                WeaponMaterial::Iron,
+            ],
+        }
+    }
+
+    pub fn mace() -> Self {
+        Self {
+            weapon_type: WeaponType::Mace,
+            num_descriptors: 0..3,
+            attack: Some(Attack {
+                minimum: 2,
+                maximum: 6,
+            }),
+            possible_materials: vec![
+                WeaponMaterial::Bone,
+                WeaponMaterial::Steel,
+                WeaponMaterial::Stone,
+                WeaponMaterial::Gold,
+                WeaponMaterial::Iron,
+            ],
+        }
+    }
+
+    pub fn morningstar() -> Self {
+        Self {
+            weapon_type: WeaponType::Morningstar,
+            num_descriptors: 0..3,
+            attack: Some(Attack {
+                minimum: 2,
+                maximum: 6,
+            }),
+            possible_materials: vec![
+                WeaponMaterial::Bone,
+                WeaponMaterial::Steel,
+                WeaponMaterial::Stone,
+                WeaponMaterial::Gold,
+                WeaponMaterial::Iron,
+            ],
         }
     }
 
@@ -82,6 +199,42 @@ impl WeaponPrototype {
                 minimum: 2,
                 maximum: 4,
             }),
+            possible_materials: vec![
+                WeaponMaterial::Bone,
+                WeaponMaterial::Steel,
+                WeaponMaterial::Stone,
+                WeaponMaterial::Gold,
+                WeaponMaterial::Iron,
+            ],
+        }
+    }
+
+    pub fn shield() -> Self {
+        Self {
+            weapon_type: WeaponType::Shield,
+            num_descriptors: 0..3,
+            attack: Some(Attack {
+                minimum: 2,
+                maximum: 4,
+            }),
+            possible_materials: vec![
+                WeaponMaterial::Bone,
+                WeaponMaterial::Steel,
+                WeaponMaterial::Wooden,
+                WeaponMaterial::Iron,
+            ],
+        }
+    }
+
+    pub fn whip() -> Self {
+        Self {
+            weapon_type: WeaponType::Whip,
+            num_descriptors: 0..3,
+            attack: Some(Attack {
+                minimum: 1,
+                maximum: 6,
+            }),
+            possible_materials: vec![WeaponMaterial::Steel, WeaponMaterial::Leather],
         }
     }
 }
@@ -106,10 +259,18 @@ impl Generator<Weapon> for WeaponPrototype {
             num_descriptors -= 1;
         }
 
+        let material = if !self.possible_materials.is_empty() {
+            let index = rng.gen_range(0..self.possible_materials.len());
+            self.possible_materials.get(index).cloned()
+        } else {
+            None
+        };
+
         Weapon {
             attack: self.attack.clone(),
             weapon_type: self.weapon_type.clone(),
             descriptors,
+            material,
         }
     }
 }

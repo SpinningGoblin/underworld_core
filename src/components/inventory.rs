@@ -10,7 +10,7 @@ use rand::{thread_rng, Rng};
 use super::{
     equipped_item::EquippedItem,
     weapon::Weapon,
-    wearable::{Wearable, WearableType},
+    wearable::Wearable,
 };
 
 #[derive(Clone, Debug)]
@@ -43,13 +43,21 @@ impl Display for Inventory {
 
 impl Inventory {
     fn weapon_description(&self) -> String {
+        let visible_weapons: Vec<&EquippedItem<Weapon>> = self
+            .equipped_weapons
+            .iter()
+            .filter(|equipped_weapon| !equipped_weapon.hidden)
+            .collect();
+        if visible_weapons.is_empty() {
+            return "It has no visible weapons".to_string();
+        }
+
         let sentence_starters = SentenceStarters::default();
         let sentence_joiners = SentenceJoiners::default();
         let mut weapons: Vec<String> = vec!["It ".to_string()];
 
-        self.equipped_weapons
+        visible_weapons
             .iter()
-            .filter(|equipped_weapon| !equipped_weapon.hidden)
             .enumerate()
             .for_each(|(index, equipped_weapon)| {
                 if index == 0 {
@@ -81,23 +89,28 @@ impl Inventory {
                         weapon_description
                     ));
                 }
-
-                if index == self.equipped_weapons.len() - 1 || self.equipped_weapons.len() == 1 {
-                    weapons.push(".".to_string());
-                }
             });
-
+        weapons.push(".".to_string());
         weapons.join("")
     }
 
     fn wearables_description(&self) -> String {
+        let visible_wearables: Vec<&EquippedItem<Wearable>> = self
+            .equipped_wearables
+            .iter()
+            .filter(|equipped_wearable| !equipped_wearable.hidden)
+            .collect();
+
+        if visible_wearables.is_empty() {
+            return "It is wearing... nothing?".to_string();
+        }
+
         let sentence_starters = SentenceStarters::default();
         let sentence_joiners = SentenceJoiners::default();
         let mut wearables: Vec<String> = vec!["It is ".to_string()];
 
-        self.equipped_wearables
+        visible_wearables
             .iter()
-            .filter(|equipped_wearable| !equipped_wearable.hidden)
             .enumerate()
             .for_each(|(index, equipped_wearable)| {
                 if index == 0 {
@@ -130,22 +143,9 @@ impl Inventory {
                         wearable_description
                     ));
                 }
-
-                if index == self.equipped_wearables.len() - 1 || self.equipped_wearables.len() == 1
-                {
-                    wearables.push(".".to_string());
-                }
             });
 
-        if self
-            .equipped_wearables
-            .iter()
-            .filter(|e| e.item.wearable_type == WearableType::Cloak)
-            .count()
-            > 1
-        {
-            wearables.push(" Two cloaks...?".to_string());
-        }
+        wearables.push(".".to_string());
 
         wearables.join("")
     }
@@ -251,11 +251,13 @@ mod inventory_tests {
             attack: None,
             weapon_type: WeaponType::LongSword,
             descriptors: vec![WeaponDescriptor::Broken],
+            material: None,
         };
         let short_sword = Weapon {
             attack: None,
             weapon_type: WeaponType::ShortSword,
             descriptors: vec![WeaponDescriptor::Rusty, WeaponDescriptor::Dull],
+            material: None,
         };
         let inventory = Inventory {
             equipped_weapons: vec![
@@ -289,6 +291,7 @@ mod inventory_tests {
             attack: None,
             weapon_type: WeaponType::LongSword,
             descriptors: vec![WeaponDescriptor::Broken],
+            material: None,
         };
         let inventory = Inventory {
             equipped_weapons: vec![EquippedItem {
@@ -313,11 +316,13 @@ mod inventory_tests {
             attack: None,
             weapon_type: WeaponType::LongSword,
             descriptors: vec![WeaponDescriptor::Broken],
+            material: None,
         };
         let short_sword = Weapon {
             attack: None,
             weapon_type: WeaponType::ShortSword,
             descriptors: vec![WeaponDescriptor::Rusty, WeaponDescriptor::Dull],
+            material: None,
         };
         let inventory = Inventory {
             equipped_weapons: vec![

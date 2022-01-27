@@ -22,6 +22,39 @@ pub struct Weapon {
     pub attack: Option<Attack>,
     pub weapon_type: WeaponType,
     pub descriptors: Vec<WeaponDescriptor>,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub material: Option<WeaponMaterial>,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(
+    feature = "serialization",
+    derive(Deserialize, Serialize),
+    serde(rename_all = "snake_case")
+)]
+pub enum WeaponMaterial {
+    Bone,
+    Gold,
+    Iron,
+    Leather,
+    Steel,
+    Stone,
+    Wooden,
+}
+
+impl Display for WeaponMaterial {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match *self {
+            WeaponMaterial::Bone => write!(f, "bone"),
+            WeaponMaterial::Gold => write!(f, "gold"),
+            WeaponMaterial::Iron => write!(f, "iron"),
+            WeaponMaterial::Leather => write!(f, "leather"),
+            WeaponMaterial::Steel => write!(f, "steel"),
+            WeaponMaterial::Stone => write!(f, "stone"),
+            WeaponMaterial::Wooden => write!(f, "wooden"),
+        }
+    }
 }
 
 impl Equippable for Weapon {
@@ -40,6 +73,11 @@ impl Display for Weapon {
         for quality in self.descriptors.iter() {
             descriptions.push(quality.to_string());
         }
+
+        if let Some(material) = &self.material {
+            descriptions.push(material.to_string());
+        }
+
         descriptions.push(self.weapon_type.to_string());
 
         write!(f, "{}", descriptions.join(" "))
@@ -81,14 +119,38 @@ impl Display for WeaponDescriptor {
     serde(rename_all = "snake_case")
 )]
 pub enum WeaponType {
+    Buckler,
     Club,
     Dagger,
+    Dirk,
+    GreatSword,
     Hammer,
     LongSword,
+    Mace,
+    Morningstar,
+    Shield,
     ShortSword,
+    Whip,
 }
 
 impl WeaponType {
+    pub fn all() -> Vec<WeaponType> {
+        vec![
+            WeaponType::Buckler,
+            WeaponType::Club,
+            WeaponType::Dagger,
+            WeaponType::Dirk,
+            WeaponType::GreatSword,
+            WeaponType::Hammer,
+            WeaponType::LongSword,
+            WeaponType::Mace,
+            WeaponType::Morningstar,
+            WeaponType::Shield,
+            WeaponType::ShortSword,
+            WeaponType::Whip,
+        ]
+    }
+
     pub fn possible_descriptors(&self) -> Vec<WeaponDescriptor> {
         match *self {
             WeaponType::Club => vec![WeaponDescriptor::Broken],
@@ -118,6 +180,41 @@ impl WeaponType {
                 WeaponDescriptor::Rusty,
                 WeaponDescriptor::Shiny,
             ],
+            WeaponType::Buckler => vec![
+                WeaponDescriptor::Rusty,
+                WeaponDescriptor::Shiny,
+                WeaponDescriptor::Broken,
+            ],
+            WeaponType::Dirk => vec![
+                WeaponDescriptor::Broken,
+                WeaponDescriptor::Chipped,
+                WeaponDescriptor::Dull,
+                WeaponDescriptor::Rusty,
+                WeaponDescriptor::Shiny,
+            ],
+            WeaponType::GreatSword => vec![
+                WeaponDescriptor::Broken,
+                WeaponDescriptor::Chipped,
+                WeaponDescriptor::Dull,
+                WeaponDescriptor::Rusty,
+                WeaponDescriptor::Shiny,
+            ],
+            WeaponType::Mace => vec![
+                WeaponDescriptor::Broken,
+                WeaponDescriptor::Chipped,
+                WeaponDescriptor::Rusty,
+            ],
+            WeaponType::Morningstar => vec![
+                WeaponDescriptor::Broken,
+                WeaponDescriptor::Chipped,
+                WeaponDescriptor::Rusty,
+            ],
+            WeaponType::Shield => vec![
+                WeaponDescriptor::Broken,
+                WeaponDescriptor::Rusty,
+                WeaponDescriptor::Shiny,
+            ],
+            WeaponType::Whip => Vec::new(),
         }
     }
 }
@@ -165,6 +262,46 @@ impl Equippable for WeaponType {
                 EquippedLocation::HangingMoldySheath,
                 EquippedLocation::StrappedToBack,
             ],
+            WeaponType::Buckler => vec![EquippedLocation::AlmostFallingGrip],
+            WeaponType::Dirk => vec![
+                EquippedLocation::AlmostFallingGrip,
+                EquippedLocation::ClenchedInFist,
+                EquippedLocation::HangingHip,
+                EquippedLocation::HeldLoosely,
+                EquippedLocation::SheathedAtHip,
+                EquippedLocation::HangingMoldySheath,
+                EquippedLocation::StrappedToBack,
+            ],
+            WeaponType::GreatSword => vec![
+                EquippedLocation::AlmostFallingGrip,
+                EquippedLocation::ClenchedInFist,
+                EquippedLocation::HangingHip,
+                EquippedLocation::HeldLoosely,
+                EquippedLocation::SheathedAtHip,
+                EquippedLocation::HangingMoldySheath,
+                EquippedLocation::StrappedToBack,
+            ],
+            WeaponType::Mace => vec![
+                EquippedLocation::AlmostFallingGrip,
+                EquippedLocation::ClenchedInFist,
+                EquippedLocation::HeldLoosely,
+            ],
+            WeaponType::Morningstar => vec![
+                EquippedLocation::AlmostFallingGrip,
+                EquippedLocation::ClenchedInFist,
+                EquippedLocation::HeldLoosely,
+            ],
+            WeaponType::Shield => vec![
+                EquippedLocation::AlmostFallingGrip,
+                EquippedLocation::HeldLoosely,
+                EquippedLocation::StrappedToBack,
+            ],
+            WeaponType::Whip => vec![
+                EquippedLocation::AlmostFallingGrip,
+                EquippedLocation::ClenchedInFist,
+                EquippedLocation::HangingHip,
+                EquippedLocation::HeldLoosely,
+            ],
         }
     }
 
@@ -175,6 +312,13 @@ impl Equippable for WeaponType {
             WeaponType::Hammer => false,
             WeaponType::LongSword => false,
             WeaponType::ShortSword => false,
+            WeaponType::Buckler => false,
+            WeaponType::Dirk => false,
+            WeaponType::GreatSword => false,
+            WeaponType::Mace => false,
+            WeaponType::Morningstar => false,
+            WeaponType::Shield => false,
+            WeaponType::Whip => false,
         }
     }
 }
@@ -182,11 +326,18 @@ impl Equippable for WeaponType {
 impl Display for WeaponType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
-            Self::Club => write!(f, "club"),
-            Self::Dagger => write!(f, "dagger"),
-            Self::Hammer => write!(f, "hammer"),
-            Self::LongSword => write!(f, "long sword"),
-            Self::ShortSword => write!(f, "short sword"),
+            WeaponType::Buckler => write!(f, "buckler"),
+            WeaponType::Club => write!(f, "club"),
+            WeaponType::Dagger => write!(f, "dagger"),
+            WeaponType::Dirk => write!(f, "dirk"),
+            WeaponType::GreatSword => write!(f, "great sword"),
+            WeaponType::Hammer => write!(f, "hammer"),
+            WeaponType::LongSword => write!(f, "long sword"),
+            WeaponType::Mace => write!(f, "mace"),
+            WeaponType::Morningstar => write!(f, "morningstar"),
+            WeaponType::Shield => write!(f, "shield"),
+            WeaponType::ShortSword => write!(f, "short sword"),
+            WeaponType::Whip => write!(f, "whip"),
         }
     }
 }
@@ -229,6 +380,7 @@ mod weapon_tests {
             attack: None,
             weapon_type: super::WeaponType::LongSword,
             descriptors: Vec::new(),
+            material: None,
         };
 
         assert_eq!("long sword", weapon.to_string());
@@ -243,6 +395,7 @@ mod weapon_tests {
                 super::WeaponDescriptor::Dull,
                 super::WeaponDescriptor::Chipped,
             ],
+            material: None,
         };
 
         assert_eq!("dull chipped long sword", weapon.to_string());
