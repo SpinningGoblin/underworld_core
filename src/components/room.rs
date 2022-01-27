@@ -35,12 +35,12 @@ impl Room {
     fn describe_room(&self) -> String {
         let mut parts: Vec<String> = vec!["It is a".to_string()];
 
-        let height_description = self.dimensions.describe_height(&self.room_type).clone();
+        let height_description = self.dimensions.describe_height(&self.room_type);
         if !height_description.is_empty() {
             parts.push(format!(" {}", height_description));
         }
 
-        let width_description = self.dimensions.describe_width(&self.room_type).clone();
+        let width_description = self.dimensions.describe_width(&self.room_type);
         if !width_description.is_empty() {
             parts.push(format!(" {}", width_description));
         }

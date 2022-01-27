@@ -109,7 +109,7 @@ impl RoomPrototype {
             num_non_players: 1..3,
             num_descriptors: 1..3,
             dimensions_generator: Box::new(DimensionsPrototype::for_room_type(&room_type)),
-            possible_descriptors: room_type.possible_descriptors().clone(),
+            possible_descriptors: room_type.possible_descriptors(),
         }
     }
 }
