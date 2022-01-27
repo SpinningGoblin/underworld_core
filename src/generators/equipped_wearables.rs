@@ -1,13 +1,13 @@
-use crate::components::wearable::Wearable;
+use crate::components::wearable::{Wearable, WearableType};
 
-use super::{equipped_items::EquippedItemPrototype, wearables::WearablePrototype};
+use super::{equipped_items::EquippedItemPrototype, wearables::WearableGenerator};
 
 impl EquippedItemPrototype<Wearable> {
     pub fn armour(hidden_chance: usize, equipped_location_chance: usize) -> Self {
         Self {
             hidden_chance,
             equipped_location_chance,
-            generator: Box::new(WearablePrototype::armour()),
+            generator: Box::new(WearableGenerator::for_wearable_type(&WearableType::Armour)),
             multiple: true,
         }
     }
@@ -16,7 +16,7 @@ impl EquippedItemPrototype<Wearable> {
         Self {
             hidden_chance,
             equipped_location_chance,
-            generator: Box::new(WearablePrototype::cloak()),
+            generator: Box::new(WearableGenerator::for_wearable_type(&WearableType::Cloak)),
             multiple: false,
         }
     }
@@ -25,7 +25,9 @@ impl EquippedItemPrototype<Wearable> {
         Self {
             hidden_chance,
             equipped_location_chance,
-            generator: Box::new(WearablePrototype::clothing()),
+            generator: Box::new(WearableGenerator::for_wearable_type(
+                &WearableType::Clothing,
+            )),
             multiple: true,
         }
     }
@@ -34,7 +36,9 @@ impl EquippedItemPrototype<Wearable> {
         Self {
             hidden_chance,
             equipped_location_chance,
-            generator: Box::new(WearablePrototype::plate_mail()),
+            generator: Box::new(WearableGenerator::for_wearable_type(
+                &WearableType::PlateMailHelmet,
+            )),
             multiple: true,
         }
     }
@@ -43,7 +47,9 @@ impl EquippedItemPrototype<Wearable> {
         Self {
             hidden_chance,
             equipped_location_chance,
-            generator: Box::new(WearablePrototype::shackles()),
+            generator: Box::new(WearableGenerator::for_wearable_type(
+                &WearableType::Shackles,
+            )),
             multiple: false,
         }
     }

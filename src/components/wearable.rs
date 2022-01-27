@@ -25,6 +25,63 @@ pub enum WearableType {
     Shackles,
 }
 
+impl WearableType {
+    pub fn necessary_descriptors(&self) -> Vec<WearableDescriptor> {
+        match *self {
+            WearableType::Armour => Vec::new(),
+            WearableType::Cloak => Vec::new(),
+            WearableType::Clothing => Vec::new(),
+            WearableType::PlateMailHelmet => Vec::new(),
+            WearableType::Shackles => vec![WearableDescriptor::SetOf],
+        }
+    }
+
+    pub fn possible_descriptors(&self) -> Vec<WearableDescriptor> {
+        match *self {
+            WearableType::Armour => vec![
+                WearableDescriptor::Bloodstained,
+                WearableDescriptor::Dingy,
+                WearableDescriptor::Drab,
+                WearableDescriptor::IllFitting,
+                WearableDescriptor::Rusty,
+                WearableDescriptor::Stained,
+            ],
+            WearableType::Cloak => vec![
+                WearableDescriptor::Bloodstained,
+                WearableDescriptor::Colourful,
+                WearableDescriptor::Dingy,
+                WearableDescriptor::Drab,
+                WearableDescriptor::IllFitting,
+                WearableDescriptor::Shimmering,
+                WearableDescriptor::Shiny,
+                WearableDescriptor::Stained,
+            ],
+            WearableType::Clothing => vec![
+                WearableDescriptor::Bloodstained,
+                WearableDescriptor::Colourful,
+                WearableDescriptor::Dingy,
+                WearableDescriptor::Drab,
+                WearableDescriptor::IllFitting,
+                WearableDescriptor::Shimmering,
+                WearableDescriptor::Shiny,
+                WearableDescriptor::Stained,
+            ],
+            WearableType::PlateMailHelmet => vec![
+                WearableDescriptor::Bloodstained,
+                WearableDescriptor::Rusty,
+                WearableDescriptor::Shiny,
+                WearableDescriptor::Stained,
+            ],
+            WearableType::Shackles => vec![
+                WearableDescriptor::Bloodstained,
+                WearableDescriptor::Rusty,
+                WearableDescriptor::Shiny,
+                WearableDescriptor::Stained,
+            ],
+        }
+    }
+}
+
 impl Equippable for WearableType {
     fn possible_equip_locations(&self) -> Vec<EquippedLocation> {
         match *self {

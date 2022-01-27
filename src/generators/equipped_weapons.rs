@@ -1,13 +1,13 @@
-use crate::components::weapon::Weapon;
+use crate::components::weapon::{Weapon, WeaponType};
 
-use super::{equipped_items::EquippedItemPrototype, weapons::WeaponPrototype};
+use super::{equipped_items::EquippedItemPrototype, weapons::WeaponGenerator};
 
 impl EquippedItemPrototype<Weapon> {
     pub fn dagger(hidden_chance: usize, equipped_location_chance: usize) -> Self {
         Self {
             hidden_chance,
             equipped_location_chance,
-            generator: Box::new(WeaponPrototype::dagger()),
+            generator: Box::new(WeaponGenerator::for_weapon_type(&WeaponType::Dagger)),
             multiple: false,
         }
     }
@@ -24,7 +24,7 @@ impl EquippedItemPrototype<Weapon> {
         Self {
             hidden_chance,
             equipped_location_chance,
-            generator: Box::new(WeaponPrototype::long_sword()),
+            generator: Box::new(WeaponGenerator::for_weapon_type(&WeaponType::LongSword)),
             multiple: false,
         }
     }
@@ -41,7 +41,7 @@ impl EquippedItemPrototype<Weapon> {
         Self {
             hidden_chance,
             equipped_location_chance,
-            generator: Box::new(WeaponPrototype::short_sword()),
+            generator: Box::new(WeaponGenerator::for_weapon_type(&WeaponType::ShortSword)),
             multiple: false,
         }
     }
@@ -58,7 +58,7 @@ impl EquippedItemPrototype<Weapon> {
         Self {
             hidden_chance,
             equipped_location_chance,
-            generator: Box::new(WeaponPrototype::club()),
+            generator: Box::new(WeaponGenerator::for_weapon_type(&WeaponType::Club)),
             multiple: false,
         }
     }
@@ -75,7 +75,7 @@ impl EquippedItemPrototype<Weapon> {
         Self {
             hidden_chance,
             equipped_location_chance,
-            generator: Box::new(WeaponPrototype::hammer()),
+            generator: Box::new(WeaponGenerator::for_weapon_type(&WeaponType::Hammer)),
             multiple: false,
         }
     }

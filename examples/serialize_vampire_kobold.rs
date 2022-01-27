@@ -1,3 +1,5 @@
+use underworld_core::components::{weapon::WeaponType, wearable::WearableType};
+
 pub fn main() {
     #[cfg(feature = "serialization")]
     #[cfg(feature = "json")]
@@ -7,20 +9,17 @@ pub fn main() {
             generators::{
                 characters::CharacterPrototype, generator::Generator,
                 inventory::InventoryPrototype, non_players::NonPlayerPrototype,
-                weapons::WeaponPrototype, wearables::WearablePrototype,
             },
         };
 
         let inventory_prototype = InventoryPrototype {
-            weapon_generators: vec![
-                Box::new(WeaponPrototype::dagger()),
-                Box::new(WeaponPrototype::long_sword()),
-            ],
-            wearable_generators: vec![
-                Box::new(WearablePrototype::clothing()),
-                Box::new(WearablePrototype::cloak()),
-                Box::new(WearablePrototype::armour()),
-                Box::new(WearablePrototype::plate_mail()),
+            weapon_types: vec![WeaponType::Club, WeaponType::Dagger],
+            wearable_types: vec![
+                WearableType::Armour,
+                WearableType::Cloak,
+                WearableType::Clothing,
+                WearableType::PlateMailHelmet,
+                WearableType::Shackles,
             ],
             num_equipped_weapons: 1..3,
             num_equipped_wearables: 1..3,

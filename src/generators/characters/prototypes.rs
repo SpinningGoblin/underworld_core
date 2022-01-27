@@ -4,12 +4,9 @@ use rand::Rng;
 
 use crate::{
     components::{
-        life_modifier::LifeModifier, species::Species, weapon::Weapon, wearable::Wearable,
+        life_modifier::LifeModifier, species::Species, weapon::WeaponType, wearable::WearableType,
     },
-    generators::{
-        generator::Generator, inventory::InventoryPrototype, weapons::WeaponPrototype,
-        wearables::WearablePrototype,
-    },
+    generators::inventory::InventoryPrototype,
 };
 
 use super::CharacterPrototype;
@@ -20,8 +17,8 @@ struct CharacterArgs {
     num_carried_weapons: Range<usize>,
     num_carried_wearables: Range<usize>,
     species: Species,
-    weapon_generators: Vec<Box<dyn Generator<Weapon>>>,
-    wearable_generators: Vec<Box<dyn Generator<Wearable>>>,
+    weapon_types: Vec<WeaponType>,
+    wearable_types: Vec<WearableType>,
     life_modifier: Option<LifeModifier>,
     has_inventory: bool,
 }
@@ -33,8 +30,20 @@ pub fn basic_character(species: Species) -> CharacterPrototype {
         num_equipped_wearables: 1..3,
         num_carried_weapons: 0..2,
         num_carried_wearables: 0..2,
-        weapon_generators: WeaponPrototype::all(),
-        wearable_generators: WearablePrototype::all(),
+        weapon_types: vec![
+            WeaponType::Club,
+            WeaponType::Dagger,
+            WeaponType::Hammer,
+            WeaponType::LongSword,
+            WeaponType::ShortSword,
+        ],
+        wearable_types: vec![
+            WearableType::Armour,
+            WearableType::Cloak,
+            WearableType::Clothing,
+            WearableType::PlateMailHelmet,
+            WearableType::Shackles,
+        ],
         life_modifier: None,
         has_inventory: true,
     };
@@ -49,8 +58,20 @@ pub fn overloaded_character(species: Species) -> CharacterPrototype {
         num_equipped_wearables: 2..5,
         num_carried_weapons: 2..6,
         num_carried_wearables: 2..6,
-        weapon_generators: WeaponPrototype::all(),
-        wearable_generators: WearablePrototype::all(),
+        weapon_types: vec![
+            WeaponType::Club,
+            WeaponType::Dagger,
+            WeaponType::Hammer,
+            WeaponType::LongSword,
+            WeaponType::ShortSword,
+        ],
+        wearable_types: vec![
+            WearableType::Armour,
+            WearableType::Cloak,
+            WearableType::Clothing,
+            WearableType::PlateMailHelmet,
+            WearableType::Shackles,
+        ],
         life_modifier: None,
         has_inventory: true,
     };
@@ -72,8 +93,20 @@ pub fn undead_character(species: Species) -> CharacterPrototype {
         num_equipped_wearables: 1..3,
         num_carried_weapons: 0..2,
         num_carried_wearables: 0..2,
-        weapon_generators: WeaponPrototype::all(),
-        wearable_generators: WearablePrototype::all(),
+        weapon_types: vec![
+            WeaponType::Club,
+            WeaponType::Dagger,
+            WeaponType::Hammer,
+            WeaponType::LongSword,
+            WeaponType::ShortSword,
+        ],
+        wearable_types: vec![
+            WearableType::Armour,
+            WearableType::Cloak,
+            WearableType::Clothing,
+            WearableType::PlateMailHelmet,
+            WearableType::Shackles,
+        ],
         has_inventory: true,
     };
 
@@ -82,8 +115,8 @@ pub fn undead_character(species: Species) -> CharacterPrototype {
 
 fn character(args: CharacterArgs) -> CharacterPrototype {
     let inventory_prototype = InventoryPrototype {
-        weapon_generators: args.weapon_generators,
-        wearable_generators: args.wearable_generators,
+        weapon_types: args.weapon_types,
+        wearable_types: args.wearable_types,
         num_equipped_weapons: args.num_equipped_weapons,
         num_equipped_wearables: args.num_equipped_wearables,
         num_carried_weapons: args.num_carried_weapons,

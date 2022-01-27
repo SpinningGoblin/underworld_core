@@ -88,6 +88,40 @@ pub enum WeaponType {
     ShortSword,
 }
 
+impl WeaponType {
+    pub fn possible_descriptors(&self) -> Vec<WeaponDescriptor> {
+        match *self {
+            WeaponType::Club => vec![WeaponDescriptor::Broken],
+            WeaponType::Dagger => vec![
+                WeaponDescriptor::Broken,
+                WeaponDescriptor::Chipped,
+                WeaponDescriptor::Dull,
+                WeaponDescriptor::Rusty,
+                WeaponDescriptor::Shiny,
+            ],
+            WeaponType::Hammer => vec![
+                WeaponDescriptor::Broken,
+                WeaponDescriptor::Chipped,
+                WeaponDescriptor::Rusty,
+            ],
+            WeaponType::LongSword => vec![
+                WeaponDescriptor::Broken,
+                WeaponDescriptor::Chipped,
+                WeaponDescriptor::Dull,
+                WeaponDescriptor::Rusty,
+                WeaponDescriptor::Shiny,
+            ],
+            WeaponType::ShortSword => vec![
+                WeaponDescriptor::Broken,
+                WeaponDescriptor::Chipped,
+                WeaponDescriptor::Dull,
+                WeaponDescriptor::Rusty,
+                WeaponDescriptor::Shiny,
+            ],
+        }
+    }
+}
+
 impl Equippable for WeaponType {
     fn possible_equip_locations(&self) -> Vec<EquippedLocation> {
         match *self {

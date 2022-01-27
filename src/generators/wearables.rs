@@ -9,38 +9,31 @@ use crate::components::{
 
 use super::generator::Generator;
 
-pub struct WearablePrototype {
+struct WearablePrototype {
     pub wearable_type: WearableType,
-    pub descriptors: Vec<WearableDescriptor>,
-    pub possible_descriptors: Vec<WearableDescriptor>,
     pub num_descriptors: Range<usize>,
     pub defense: Option<Defense>,
     pub possible_materials: Vec<WearableMaterial>,
 }
 
-impl WearablePrototype {
-    pub fn all() -> Vec<Box<dyn Generator<Wearable>>> {
-        return vec![
-            Box::new(Self::armour()),
-            Box::new(Self::cloak()),
-            Box::new(Self::clothing()),
-            Box::new(Self::plate_mail()),
-            Box::new(Self::shackles()),
-        ];
-    }
+pub struct WearableGenerator;
 
+impl WearableGenerator {
+    pub fn for_wearable_type(wearable_type: &WearableType) -> impl Generator<Wearable> {
+        match *wearable_type {
+            WearableType::Armour => WearablePrototype::armour(),
+            WearableType::Cloak => WearablePrototype::cloak(),
+            WearableType::Clothing => WearablePrototype::clothing(),
+            WearableType::PlateMailHelmet => WearablePrototype::plate_mail(),
+            WearableType::Shackles => WearablePrototype::shackles(),
+        }
+    }
+}
+
+impl WearablePrototype {
     pub fn armour() -> Self {
         Self {
             wearable_type: WearableType::Armour,
-            descriptors: Vec::new(),
-            possible_descriptors: vec![
-                WearableDescriptor::Bloodstained,
-                WearableDescriptor::Dingy,
-                WearableDescriptor::Drab,
-                WearableDescriptor::IllFitting,
-                WearableDescriptor::Rusty,
-                WearableDescriptor::Stained,
-            ],
             num_descriptors: 0..3,
             defense: Some(Defense {
                 minimum: 1,
@@ -57,18 +50,7 @@ impl WearablePrototype {
     pub fn cloak() -> Self {
         Self {
             wearable_type: WearableType::Cloak,
-            descriptors: Vec::new(),
             num_descriptors: 0..3,
-            possible_descriptors: vec![
-                WearableDescriptor::Bloodstained,
-                WearableDescriptor::Colourful,
-                WearableDescriptor::Dingy,
-                WearableDescriptor::Drab,
-                WearableDescriptor::IllFitting,
-                WearableDescriptor::Shimmering,
-                WearableDescriptor::Shiny,
-                WearableDescriptor::Stained,
-            ],
             defense: Some(Defense {
                 minimum: 0,
                 maximum: 2,
@@ -80,18 +62,7 @@ impl WearablePrototype {
     pub fn clothing() -> Self {
         Self {
             wearable_type: WearableType::Clothing,
-            descriptors: Vec::new(),
             num_descriptors: 0..3,
-            possible_descriptors: vec![
-                WearableDescriptor::Bloodstained,
-                WearableDescriptor::Colourful,
-                WearableDescriptor::Dingy,
-                WearableDescriptor::Drab,
-                WearableDescriptor::IllFitting,
-                WearableDescriptor::Shimmering,
-                WearableDescriptor::Shiny,
-                WearableDescriptor::Stained,
-            ],
             defense: Some(Defense {
                 minimum: 0,
                 maximum: 1,
@@ -103,13 +74,6 @@ impl WearablePrototype {
     pub fn plate_mail() -> Self {
         Self {
             wearable_type: WearableType::PlateMailHelmet,
-            descriptors: Vec::new(),
-            possible_descriptors: vec![
-                WearableDescriptor::Bloodstained,
-                WearableDescriptor::Rusty,
-                WearableDescriptor::Shiny,
-                WearableDescriptor::Stained,
-            ],
             num_descriptors: 0..3,
             defense: Some(Defense {
                 minimum: 3,
@@ -122,13 +86,6 @@ impl WearablePrototype {
     pub fn shackles() -> Self {
         Self {
             wearable_type: WearableType::Shackles,
-            descriptors: vec![WearableDescriptor::SetOf],
-            possible_descriptors: vec![
-                WearableDescriptor::Bloodstained,
-                WearableDescriptor::Rusty,
-                WearableDescriptor::Shiny,
-                WearableDescriptor::Stained,
-            ],
             num_descriptors: 0..2,
             defense: None,
             possible_materials: vec![WearableMaterial::Iron, WearableMaterial::Steel],
@@ -148,8 +105,10 @@ impl Generator<Wearable> for WearablePrototype {
             None
         };
 
-        let mut possible_descriptors: Vec<WearableDescriptor> = self.possible_descriptors.to_vec();
-        let mut descriptors: Vec<WearableDescriptor> = self.descriptors.to_vec();
+        let mut possible_descriptors: Vec<WearableDescriptor> =
+            self.wearable_type.possible_descriptors().to_vec();
+        let mut descriptors: Vec<WearableDescriptor> =
+            self.wearable_type.necessary_descriptors().to_vec();
         while num_descriptors > 0 {
             if possible_descriptors.is_empty() {
                 break;

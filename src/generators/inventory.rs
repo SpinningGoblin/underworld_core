@@ -5,15 +5,15 @@ use rand::Rng;
 use crate::components::{
     equipped_item::{Equippable, EquippedItem, EquippedLocation},
     inventory::Inventory,
-    weapon::Weapon,
-    wearable::Wearable,
+    weapon::{Weapon, WeaponType},
+    wearable::{Wearable, WearableType},
 };
 
-use super::generator::Generator;
+use super::{generator::Generator, weapons::WeaponGenerator, wearables::WearableGenerator};
 
 pub struct InventoryPrototype {
-    pub weapon_generators: Vec<Box<dyn Generator<Weapon>>>,
-    pub wearable_generators: Vec<Box<dyn Generator<Wearable>>>,
+    pub weapon_types: Vec<WeaponType>,
+    pub wearable_types: Vec<WearableType>,
     pub num_equipped_weapons: Range<usize>,
     pub num_equipped_wearables: Range<usize>,
     pub num_carried_weapons: Range<usize>,
@@ -34,11 +34,12 @@ impl InventoryPrototype {
         let mut used_locations: Vec<EquippedLocation> = Vec::new();
         let mut equipped_weapons: Vec<EquippedItem<Weapon>> = Vec::new();
         for _ in 0..count {
-            let index = rng.gen_range(0..self.weapon_generators.len());
-            let generator = match &self.weapon_generators.get(index) {
+            let index = rng.gen_range(0..self.weapon_types.len());
+            let weapon_type = match &self.weapon_types.get(index) {
                 Some(it) => *it,
                 None => continue,
             };
+            let generator = WeaponGenerator::for_weapon_type(weapon_type);
             let weapon = generator.generate();
             let possible_locations: Vec<EquippedLocation> = weapon
                 .possible_equip_locations()
@@ -95,11 +96,12 @@ impl InventoryPrototype {
 
         let mut equipped_weapons: Vec<Weapon> = Vec::new();
         for _ in 0..count {
-            let index = rng.gen_range(0..self.weapon_generators.len());
-            let generator = match &self.weapon_generators.get(index) {
+            let index = rng.gen_range(0..self.weapon_types.len());
+            let weapon_type = match &self.weapon_types.get(index) {
                 Some(it) => *it,
                 None => continue,
             };
+            let generator = WeaponGenerator::for_weapon_type(weapon_type);
             let weapon = generator.generate();
 
             equipped_weapons.push(weapon);
@@ -118,12 +120,15 @@ impl InventoryPrototype {
 
         let mut used_locations: Vec<EquippedLocation> = Vec::new();
         let mut equipped_wearables: Vec<EquippedItem<Wearable>> = Vec::new();
+        let mut wearable_types = self.wearable_types.clone();
         for _ in 0..count {
-            let index = rng.gen_range(0..self.wearable_generators.len());
-            let generator = match &self.wearable_generators.get(index) {
-                Some(it) => *it,
-                None => continue,
-            };
+            if wearable_types.is_empty() {
+                break;
+            }
+
+            let index = rng.gen_range(0..wearable_types.len());
+            let wearable_type = wearable_types.remove(index);
+            let generator = WearableGenerator::for_wearable_type(&wearable_type);
             let wearable = generator.generate();
             let possible_locations: Vec<EquippedLocation> = wearable
                 .possible_equip_locations()
@@ -180,11 +185,12 @@ impl InventoryPrototype {
 
         let mut wearables: Vec<Wearable> = Vec::new();
         for _ in 0..count {
-            let index = rng.gen_range(0..self.wearable_generators.len());
-            let generator = match &self.wearable_generators.get(index) {
+            let index = rng.gen_range(0..self.wearable_types.len());
+            let wearable_type = match &self.wearable_types.get(index) {
                 Some(it) => *it,
                 None => continue,
             };
+            let generator = WearableGenerator::for_wearable_type(wearable_type);
             let wearable = generator.generate();
             wearables.push(wearable);
         }
