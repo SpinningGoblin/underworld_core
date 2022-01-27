@@ -50,7 +50,7 @@ impl InventoryPrototype {
                     } else {
                         used_locations
                             .iter()
-                            .any(|l| !l.unable_to_be_used_with(location))
+                            .all(|l| !l.unable_to_be_used_with(location))
                     }
                 })
                 .cloned()
@@ -120,15 +120,30 @@ impl InventoryPrototype {
 
         let mut used_locations: Vec<EquippedLocation> = Vec::new();
         let mut equipped_wearables: Vec<EquippedItem<Wearable>> = Vec::new();
-        let mut wearable_types = self.wearable_types.clone();
+        let mut used_types: Vec<WearableType> = Vec::new();
         for _ in 0..count {
-            if wearable_types.is_empty() {
+            let possible_types: Vec<WearableType> = self
+                .wearable_types
+                .iter()
+                .filter(|w_t| {
+                    // Return true only if it can be used with all of the used_types
+                    if used_types.is_empty() {
+                        true
+                    } else {
+                        used_types.iter().all(|w| !w.unable_to_be_used_with(w_t))
+                    }
+                })
+                .cloned()
+                .collect();
+
+            if possible_types.is_empty() {
                 break;
             }
 
-            let index = rng.gen_range(0..wearable_types.len());
-            let wearable_type = wearable_types.remove(index);
-            let generator = WearableGenerator::for_wearable_type(&wearable_type);
+            let index = rng.gen_range(0..possible_types.len());
+            let wearable_type = possible_types.get(index).unwrap();
+            used_types.push(wearable_type.clone());
+            let generator = WearableGenerator::for_wearable_type(wearable_type);
             let wearable = generator.generate();
             let possible_locations: Vec<EquippedLocation> = wearable
                 .possible_equip_locations()
@@ -139,7 +154,7 @@ impl InventoryPrototype {
                     } else {
                         used_locations
                             .iter()
-                            .any(|l| !l.unable_to_be_used_with(location))
+                            .all(|l| !l.unable_to_be_used_with(location))
                     }
                 })
                 .cloned()

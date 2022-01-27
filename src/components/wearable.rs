@@ -19,20 +19,111 @@ use super::{
 )]
 pub enum WearableType {
     Armour,
+    Mask,
     Cloak,
-    Clothing,
-    PlateMailHelmet,
+    Shirt,
+    Trousers,
+    Crown,
+    Boots,
+    Gloves,
+    LoinCloth,
+    PlateBoots,
+    PlateGauntlets,
+    PlateHelmet,
     Shackles,
+    Vest,
 }
 
 impl WearableType {
+    pub fn all() -> Vec<WearableType> {
+        vec![
+            WearableType::Armour,
+            WearableType::Boots,
+            WearableType::Cloak,
+            WearableType::Crown,
+            WearableType::Gloves,
+            WearableType::LoinCloth,
+            WearableType::Mask,
+            WearableType::PlateBoots,
+            WearableType::PlateGauntlets,
+            WearableType::PlateHelmet,
+            WearableType::Shackles,
+            WearableType::Shirt,
+            WearableType::Trousers,
+            WearableType::Vest,
+        ]
+    }
+
+    pub fn unable_to_be_used_with(&self, other: &WearableType) -> bool {
+        match *self {
+            WearableType::Armour => other.is_upper_body(),
+            WearableType::Boots => other.is_footwear(),
+            WearableType::Cloak => other == &WearableType::Cloak,
+            WearableType::Crown => other.is_headgear(),
+            WearableType::Gloves => other.is_for_hands(),
+            WearableType::LoinCloth => other.is_lower_body(),
+            WearableType::Mask => other.is_headgear(),
+            WearableType::PlateBoots => other.is_footwear(),
+            WearableType::PlateGauntlets => other.is_footwear(),
+            WearableType::PlateHelmet => other.is_headgear(),
+            WearableType::Shackles => other.is_for_hands(),
+            WearableType::Shirt => other.is_upper_body(),
+            WearableType::Trousers => other.is_lower_body(),
+            WearableType::Vest => other.is_upper_body(),
+        }
+    }
+
+    pub fn is_lower_body(&self) -> bool {
+        matches!(
+            *self,
+            WearableType::LoinCloth | WearableType::Trousers
+        )
+    }
+
+    pub fn is_headgear(&self) -> bool {
+        matches!(
+            *self,
+            WearableType::Crown | WearableType::Mask | WearableType::PlateHelmet
+        )
+    }
+
+    pub fn is_upper_body(&self) -> bool {
+        matches!(
+            *self,
+            WearableType::Armour | WearableType::Shirt | WearableType::Vest
+        )
+    }
+
+    pub fn is_footwear(&self) -> bool {
+        matches!(
+            *self,
+            WearableType::Boots | WearableType::PlateBoots
+        )
+    }
+
+    pub fn is_for_hands(&self) -> bool {
+        matches!(
+            *self,
+            WearableType::Shackles | WearableType::Boots | WearableType::PlateBoots
+        )
+    }
+
     pub fn necessary_descriptors(&self) -> Vec<WearableDescriptor> {
         match *self {
             WearableType::Armour => Vec::new(),
             WearableType::Cloak => Vec::new(),
-            WearableType::Clothing => Vec::new(),
-            WearableType::PlateMailHelmet => Vec::new(),
+            WearableType::Shirt => Vec::new(),
+            WearableType::PlateHelmet => Vec::new(),
             WearableType::Shackles => vec![WearableDescriptor::SetOf],
+            WearableType::Mask => Vec::new(),
+            WearableType::Trousers => Vec::new(),
+            WearableType::Crown => Vec::new(),
+            WearableType::Boots => Vec::new(),
+            WearableType::Gloves => Vec::new(),
+            WearableType::LoinCloth => Vec::new(),
+            WearableType::PlateBoots => Vec::new(),
+            WearableType::PlateGauntlets => Vec::new(),
+            WearableType::Vest => Vec::new(),
         }
     }
 
@@ -56,7 +147,7 @@ impl WearableType {
                 WearableDescriptor::Shiny,
                 WearableDescriptor::Stained,
             ],
-            WearableType::Clothing => vec![
+            WearableType::Shirt => vec![
                 WearableDescriptor::Bloodstained,
                 WearableDescriptor::Colourful,
                 WearableDescriptor::Dingy,
@@ -66,7 +157,7 @@ impl WearableType {
                 WearableDescriptor::Shiny,
                 WearableDescriptor::Stained,
             ],
-            WearableType::PlateMailHelmet => vec![
+            WearableType::PlateHelmet => vec![
                 WearableDescriptor::Bloodstained,
                 WearableDescriptor::Rusty,
                 WearableDescriptor::Shiny,
@@ -75,6 +166,70 @@ impl WearableType {
             WearableType::Shackles => vec![
                 WearableDescriptor::Bloodstained,
                 WearableDescriptor::Rusty,
+                WearableDescriptor::Shiny,
+                WearableDescriptor::Stained,
+            ],
+            WearableType::Mask => vec![
+                WearableDescriptor::Bloodstained,
+                WearableDescriptor::IllFitting,
+                WearableDescriptor::Stained,
+            ],
+            WearableType::Trousers => vec![
+                WearableDescriptor::Bloodstained,
+                WearableDescriptor::Colourful,
+                WearableDescriptor::Dingy,
+                WearableDescriptor::Drab,
+                WearableDescriptor::IllFitting,
+                WearableDescriptor::Shimmering,
+                WearableDescriptor::Shiny,
+                WearableDescriptor::Stained,
+            ],
+            WearableType::Crown => vec![
+                WearableDescriptor::Bloodstained,
+                WearableDescriptor::Rusty,
+                WearableDescriptor::Shiny,
+            ],
+            WearableType::Boots => vec![
+                WearableDescriptor::Bloodstained,
+                WearableDescriptor::Dingy,
+                WearableDescriptor::Drab,
+                WearableDescriptor::Shiny,
+                WearableDescriptor::Stained,
+            ],
+            WearableType::Gloves => vec![
+                WearableDescriptor::Dingy,
+                WearableDescriptor::IllFitting,
+                WearableDescriptor::Stained,
+            ],
+            WearableType::LoinCloth => vec![
+                WearableDescriptor::Bloodstained,
+                WearableDescriptor::Colourful,
+                WearableDescriptor::Dingy,
+                WearableDescriptor::Drab,
+                WearableDescriptor::IllFitting,
+                WearableDescriptor::Shimmering,
+                WearableDescriptor::Shiny,
+                WearableDescriptor::Stained,
+            ],
+            WearableType::PlateBoots => vec![
+                WearableDescriptor::Bloodstained,
+                WearableDescriptor::Rusty,
+                WearableDescriptor::Shiny,
+                WearableDescriptor::Stained,
+            ],
+            WearableType::PlateGauntlets => vec![
+                WearableDescriptor::Bloodstained,
+                WearableDescriptor::Rusty,
+                WearableDescriptor::Shiny,
+                WearableDescriptor::Stained,
+            ],
+            WearableType::Vest => vec![
+                WearableDescriptor::Bloodstained,
+                WearableDescriptor::Colourful,
+                WearableDescriptor::Dingy,
+                WearableDescriptor::Drab,
+                WearableDescriptor::IllFitting,
+                WearableDescriptor::Shimmering,
                 WearableDescriptor::Shiny,
                 WearableDescriptor::Stained,
             ],
@@ -87,9 +242,18 @@ impl Equippable for WearableType {
         match *self {
             WearableType::Armour => Vec::new(),
             WearableType::Cloak => vec![EquippedLocation::HangingLooselyShoulders],
-            WearableType::Clothing => Vec::new(),
-            WearableType::PlateMailHelmet => Vec::new(),
+            WearableType::Shirt => Vec::new(),
+            WearableType::PlateHelmet => Vec::new(),
             WearableType::Shackles => Vec::new(),
+            WearableType::Mask => Vec::new(),
+            WearableType::Trousers => Vec::new(),
+            WearableType::Crown => Vec::new(),
+            WearableType::Boots => Vec::new(),
+            WearableType::Gloves => Vec::new(),
+            WearableType::LoinCloth => Vec::new(),
+            WearableType::PlateBoots => Vec::new(),
+            WearableType::PlateGauntlets => Vec::new(),
+            WearableType::Vest => Vec::new(),
         }
     }
 
@@ -97,9 +261,18 @@ impl Equippable for WearableType {
         match *self {
             WearableType::Armour => true,
             WearableType::Cloak => false,
-            WearableType::Clothing => true,
-            WearableType::PlateMailHelmet => false,
+            WearableType::Shirt => false,
+            WearableType::PlateHelmet => false,
             WearableType::Shackles => false,
+            WearableType::Mask => false,
+            WearableType::Trousers => true,
+            WearableType::Crown => false,
+            WearableType::Boots => true,
+            WearableType::Gloves => true,
+            WearableType::LoinCloth => false,
+            WearableType::PlateBoots => true,
+            WearableType::PlateGauntlets => true,
+            WearableType::Vest => false,
         }
     }
 }
@@ -109,9 +282,18 @@ impl Display for WearableType {
         match *self {
             Self::Armour => write!(f, "armour"),
             Self::Cloak => write!(f, "cloak"),
-            Self::Clothing => write!(f, "clothing"),
-            Self::PlateMailHelmet => write!(f, "plate mail helmet"),
+            Self::Shirt => write!(f, "shirt"),
+            Self::PlateHelmet => write!(f, "plate helmet"),
             Self::Shackles => write!(f, "shackles"),
+            Self::Mask => write!(f, "mask"),
+            Self::Trousers => write!(f, "trousers"),
+            Self::Crown => write!(f, "crown"),
+            Self::Boots => write!(f, "boots"),
+            Self::Gloves => write!(f, "gloves"),
+            Self::LoinCloth => write!(f, "loin cloth"),
+            Self::PlateBoots => write!(f, "plate boots"),
+            Self::PlateGauntlets => write!(f, "plate gauntlets"),
+            Self::Vest => write!(f, "vest"),
         }
     }
 }
@@ -165,6 +347,9 @@ impl Display for WearableDescriptor {
     serde(rename_all = "snake_case")
 )]
 pub enum WearableMaterial {
+    Bone,
+    Cloth,
+    Gold,
     Iron,
     Leather,
     Steel,
@@ -173,9 +358,12 @@ pub enum WearableMaterial {
 impl Display for WearableMaterial {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
-            Self::Iron => write!(f, "iron"),
-            Self::Leather => write!(f, "leather"),
-            Self::Steel => write!(f, "steel"),
+            WearableMaterial::Bone => write!(f, "bone"),
+            WearableMaterial::Cloth => write!(f, "cloth"),
+            WearableMaterial::Iron => write!(f, "iron"),
+            WearableMaterial::Leather => write!(f, "leather"),
+            WearableMaterial::Steel => write!(f, "steel"),
+            WearableMaterial::Gold => write!(f, "gold"),
         }
     }
 }
@@ -232,12 +420,15 @@ mod wearable_type_tests {
     fn display() {
         assert_eq!("armour", format!("{}", WearableType::Armour));
         assert_eq!("cloak", format!("{}", WearableType::Cloak));
-        assert_eq!("clothing", format!("{}", WearableType::Clothing));
-        assert_eq!(
-            "plate mail helmet",
-            format!("{}", WearableType::PlateMailHelmet)
-        );
+        assert_eq!("shirt", format!("{}", WearableType::Shirt));
+        assert_eq!("plate helmet", format!("{}", WearableType::PlateHelmet));
         assert_eq!("shackles", format!("{}", WearableType::Shackles));
+    }
+
+    #[test]
+    fn unable_to_be_used_with() {
+        let wearable_type = WearableType::Shirt;
+        assert!(wearable_type.unable_to_be_used_with(&WearableType::Vest));
     }
 }
 
@@ -268,7 +459,7 @@ mod wearable_quality_tests {
 }
 
 #[cfg(test)]
-mod weapon_material_tests {
+mod wearable_material_tests {
     use crate::components::wearable::WearableMaterial;
 
     #[test]
@@ -280,7 +471,7 @@ mod weapon_material_tests {
 }
 
 #[cfg(test)]
-mod weapon_tests {
+mod wearable_tests {
     use super::{Wearable, WearableDescriptor, WearableMaterial, WearableType};
 
     #[test]
@@ -298,13 +489,13 @@ mod weapon_tests {
     #[test]
     fn display_when_there_is_material() {
         let wearable = Wearable {
-            wearable_type: WearableType::PlateMailHelmet,
+            wearable_type: WearableType::PlateHelmet,
             material: Some(WearableMaterial::Steel),
             descriptors: Vec::new(),
             defense: None,
         };
 
-        assert_eq!("steel plate mail helmet", format!("{}", wearable));
+        assert_eq!("steel plate helmet", format!("{}", wearable));
     }
 
     #[test]

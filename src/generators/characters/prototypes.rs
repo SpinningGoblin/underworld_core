@@ -37,13 +37,7 @@ pub fn basic_character(species: Species) -> CharacterPrototype {
             WeaponType::LongSword,
             WeaponType::ShortSword,
         ],
-        wearable_types: vec![
-            WearableType::Armour,
-            WearableType::Cloak,
-            WearableType::Clothing,
-            WearableType::PlateMailHelmet,
-            WearableType::Shackles,
-        ],
+        wearable_types: WearableType::all(),
         life_modifier: None,
         has_inventory: true,
     };
@@ -65,13 +59,7 @@ pub fn overloaded_character(species: Species) -> CharacterPrototype {
             WeaponType::LongSword,
             WeaponType::ShortSword,
         ],
-        wearable_types: vec![
-            WearableType::Armour,
-            WearableType::Cloak,
-            WearableType::Clothing,
-            WearableType::PlateMailHelmet,
-            WearableType::Shackles,
-        ],
+        wearable_types: WearableType::all(),
         life_modifier: None,
         has_inventory: true,
     };
@@ -100,13 +88,7 @@ pub fn undead_character(species: Species) -> CharacterPrototype {
             WeaponType::LongSword,
             WeaponType::ShortSword,
         ],
-        wearable_types: vec![
-            WearableType::Armour,
-            WearableType::Cloak,
-            WearableType::Clothing,
-            WearableType::PlateMailHelmet,
-            WearableType::Shackles,
-        ],
+        wearable_types: WearableType::all(),
         has_inventory: true,
     };
 

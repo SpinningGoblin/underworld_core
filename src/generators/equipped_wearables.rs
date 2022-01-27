@@ -21,12 +21,12 @@ impl EquippedItemPrototype<Wearable> {
         }
     }
 
-    pub fn clothing(hidden_chance: usize, equipped_location_chance: usize) -> Self {
+    pub fn shirt(hidden_chance: usize, equipped_location_chance: usize) -> Self {
         Self {
             hidden_chance,
             equipped_location_chance,
             generator: Box::new(WearableGenerator::for_wearable_type(
-                &WearableType::Clothing,
+                &WearableType::Shirt,
             )),
             multiple: true,
         }
@@ -37,7 +37,7 @@ impl EquippedItemPrototype<Wearable> {
             hidden_chance,
             equipped_location_chance,
             generator: Box::new(WearableGenerator::for_wearable_type(
-                &WearableType::PlateMailHelmet,
+                &WearableType::PlateHelmet,
             )),
             multiple: true,
         }

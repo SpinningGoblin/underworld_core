@@ -57,9 +57,7 @@ impl CharacterPrototype {
             Species::Unknown,
         ];
         let index = rng.gen_range(0..all_species.len());
-        let species = all_species
-            .get(index).cloned()
-            .unwrap_or(Species::Unknown);
+        let species = all_species.get(index).cloned().unwrap_or(Species::Unknown);
 
         basic_character(species)
     }
@@ -75,9 +73,7 @@ impl CharacterPrototype {
             Species::Unknown,
         ];
         let index = rng.gen_range(0..all_species.len());
-        let species = all_species
-            .get(index).cloned()
-            .unwrap_or(Species::Unknown);
+        let species = all_species.get(index).cloned().unwrap_or(Species::Unknown);
 
         overloaded_character(species)
     }

@@ -8,13 +8,7 @@ use underworld_core::{
 pub fn main() {
     let inventory_prototype = InventoryPrototype {
         weapon_types: vec![WeaponType::Club, WeaponType::Dagger],
-        wearable_types: vec![
-            WearableType::Armour,
-            WearableType::Cloak,
-            WearableType::Clothing,
-            WearableType::PlateMailHelmet,
-            WearableType::Shackles,
-        ],
+        wearable_types: WearableType::all(),
         num_equipped_weapons: 1..3,
         num_equipped_wearables: 1..3,
         num_carried_weapons: 1..2,

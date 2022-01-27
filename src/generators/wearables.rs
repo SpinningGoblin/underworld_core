@@ -23,9 +23,18 @@ impl WearableGenerator {
         match *wearable_type {
             WearableType::Armour => WearablePrototype::armour(),
             WearableType::Cloak => WearablePrototype::cloak(),
-            WearableType::Clothing => WearablePrototype::clothing(),
-            WearableType::PlateMailHelmet => WearablePrototype::plate_mail(),
+            WearableType::Shirt => WearablePrototype::shirt(),
+            WearableType::PlateHelmet => WearablePrototype::plate_helmet(),
             WearableType::Shackles => WearablePrototype::shackles(),
+            WearableType::Mask => WearablePrototype::mask(),
+            WearableType::Trousers => WearablePrototype::trousers(),
+            WearableType::Crown => WearablePrototype::crown(),
+            WearableType::Boots => WearablePrototype::boots(),
+            WearableType::Gloves => WearablePrototype::gloves(),
+            WearableType::LoinCloth => WearablePrototype::loin_cloth(),
+            WearableType::PlateBoots => WearablePrototype::plate_boots(),
+            WearableType::PlateGauntlets => WearablePrototype::plate_gauntlets(),
+            WearableType::Vest => WearablePrototype::vest(),
         }
     }
 }
@@ -47,6 +56,65 @@ impl WearablePrototype {
         }
     }
 
+    pub fn boots() -> Self {
+        Self {
+            wearable_type: WearableType::Boots,
+            num_descriptors: 0..3,
+            defense: Some(Defense {
+                minimum: 1,
+                maximum: 3,
+            }),
+            possible_materials: vec![
+                WearableMaterial::Iron,
+                WearableMaterial::Leather,
+                WearableMaterial::Steel,
+            ],
+        }
+    }
+
+    pub fn gloves() -> Self {
+        Self {
+            wearable_type: WearableType::Gloves,
+            num_descriptors: 0..3,
+            defense: Some(Defense {
+                minimum: 1,
+                maximum: 3,
+            }),
+            possible_materials: vec![
+                WearableMaterial::Iron,
+                WearableMaterial::Leather,
+                WearableMaterial::Steel,
+            ],
+        }
+    }
+
+    pub fn loin_cloth() -> Self {
+        Self {
+            wearable_type: WearableType::LoinCloth,
+            num_descriptors: 0..3,
+            defense: Some(Defense {
+                minimum: 1,
+                maximum: 3,
+            }),
+            possible_materials: Vec::new(),
+        }
+    }
+
+    pub fn vest() -> Self {
+        Self {
+            wearable_type: WearableType::Vest,
+            num_descriptors: 0..3,
+            defense: Some(Defense {
+                minimum: 1,
+                maximum: 3,
+            }),
+            possible_materials: vec![
+                WearableMaterial::Gold,
+                WearableMaterial::Leather,
+            ],
+        }
+    }
+
     pub fn cloak() -> Self {
         Self {
             wearable_type: WearableType::Cloak,
@@ -59,21 +127,81 @@ impl WearablePrototype {
         }
     }
 
-    pub fn clothing() -> Self {
+    pub fn crown() -> Self {
         Self {
-            wearable_type: WearableType::Clothing,
+            wearable_type: WearableType::Crown,
             num_descriptors: 0..3,
             defense: Some(Defense {
                 minimum: 0,
                 maximum: 1,
             }),
-            possible_materials: Vec::new(),
+            possible_materials: vec![WearableMaterial::Bone, WearableMaterial::Iron, WearableMaterial::Gold],
         }
     }
 
-    pub fn plate_mail() -> Self {
+    pub fn mask() -> Self {
         Self {
-            wearable_type: WearableType::PlateMailHelmet,
+            wearable_type: WearableType::Mask,
+            num_descriptors: 0..3,
+            defense: Some(Defense {
+                minimum: 0,
+                maximum: 1,
+            }),
+            possible_materials: vec![WearableMaterial::Bone, WearableMaterial::Iron, WearableMaterial::Steel],
+        }
+    }
+
+    pub fn shirt() -> Self {
+        Self {
+            wearable_type: WearableType::Shirt,
+            num_descriptors: 0..3,
+            defense: Some(Defense {
+                minimum: 0,
+                maximum: 1,
+            }),
+            possible_materials: vec![WearableMaterial::Cloth, WearableMaterial::Leather],
+        }
+    }
+
+    pub fn trousers() -> Self {
+        Self {
+            wearable_type: WearableType::Trousers,
+            num_descriptors: 0..3,
+            defense: Some(Defense {
+                minimum: 0,
+                maximum: 1,
+            }),
+            possible_materials: vec![WearableMaterial::Cloth, WearableMaterial::Leather],
+        }
+    }
+
+    pub fn plate_helmet() -> Self {
+        Self {
+            wearable_type: WearableType::PlateHelmet,
+            num_descriptors: 0..3,
+            defense: Some(Defense {
+                minimum: 3,
+                maximum: 6,
+            }),
+            possible_materials: vec![WearableMaterial::Iron, WearableMaterial::Steel],
+        }
+    }
+
+    pub fn plate_boots() -> Self {
+        Self {
+            wearable_type: WearableType::PlateBoots,
+            num_descriptors: 0..3,
+            defense: Some(Defense {
+                minimum: 3,
+                maximum: 6,
+            }),
+            possible_materials: vec![WearableMaterial::Iron, WearableMaterial::Steel],
+        }
+    }
+
+    pub fn plate_gauntlets() -> Self {
+        Self {
+            wearable_type: WearableType::PlateGauntlets,
             num_descriptors: 0..3,
             defense: Some(Defense {
                 minimum: 3,
