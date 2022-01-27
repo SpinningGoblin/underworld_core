@@ -3,7 +3,7 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use super::height_descriptor::HeightDescriptor;
+use super::dimension_descriptors::{HeightDescriptor, WidthDescriptor};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -16,20 +16,31 @@ pub struct Dimensions {
 impl Dimensions {
     pub fn describe_height(&self, descriptor: &impl HeightDescriptor) -> String {
         let height_range = descriptor.height_range();
-        if self.is_taller_than(height_range.end) {
+        if self.is_larger_than(height_range.end) {
             descriptor.bigger_text()
-        } else if self.is_shorter_than(height_range.start) {
+        } else if self.is_smaller_than(height_range.start) {
             descriptor.smaller_text()
         } else {
             descriptor.average_text()
         }
     }
 
-    fn is_taller_than(&self, height: f32) -> bool {
+    pub fn describe_width(&self, descriptor: &impl WidthDescriptor) -> String {
+        let width_range = descriptor.width_range();
+        if self.is_larger_than(width_range.end) {
+            descriptor.bigger_text()
+        } else if self.is_smaller_than(width_range.start) {
+            descriptor.smaller_text()
+        } else {
+            descriptor.average_text()
+        }
+    }
+
+    fn is_larger_than(&self, height: f32) -> bool {
         self.height > height
     }
 
-    fn is_shorter_than(&self, height: f32) -> bool {
+    fn is_smaller_than(&self, height: f32) -> bool {
         self.height < height
     }
 }

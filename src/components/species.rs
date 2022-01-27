@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 
 use std::{fmt::Display, ops::Range};
 
-use super::height_descriptor::HeightDescriptor;
+use super::dimension_descriptors::HeightDescriptor;
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]

@@ -6,8 +6,8 @@ pub fn main() {
             components::life_modifier::LifeModifier,
             generators::{
                 characters::CharacterPrototype, generator::Generator,
-                inventory::InventoryPrototype, weapons::WeaponPrototype,
-                wearables::WearablePrototype, non_players::NonPlayerPrototype,
+                inventory::InventoryPrototype, non_players::NonPlayerPrototype,
+                weapons::WeaponPrototype, wearables::WearablePrototype,
             },
         };
 

@@ -1,9 +1,11 @@
 use std::ops::Range;
 
 use rand::Rng;
+use uuid::Uuid;
 
 use crate::components::{
     dimensions::Dimensions,
+    identifier::Identifier,
     non_player::NonPlayer,
     room::{Room, RoomDescriptor, RoomType},
 };
@@ -60,13 +62,17 @@ impl Generator<Room> for RoomPrototype {
             dimensions,
             descriptors,
             non_players,
+            identifier: Identifier {
+                id: Uuid::new_v4(),
+                name: None,
+            },
             room_type: self.room_type.clone(),
         }
     }
 }
 
 impl RoomPrototype {
-    pub fn build_random_type(npc_names: Vec<String>) -> RoomPrototype {
+    pub fn build_random(npc_names: Vec<String>) -> RoomPrototype {
         let npc_generators: Vec<Box<dyn Generator<NonPlayer>>> = if npc_names.is_empty() {
             let character_prototype = CharacterPrototype::random_species_character();
             vec![Box::new(NonPlayerPrototype {
