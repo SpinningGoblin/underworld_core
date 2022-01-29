@@ -31,6 +31,7 @@ pub enum ItemDescriptor {
     IllFitting,
     LooseFitting,
     Ripped,
+    Rotting,
     Rusty,
     Scuffed,
     SetOf,
@@ -77,6 +78,7 @@ impl Display for ItemDescriptor {
             ItemDescriptor::Torn => write!(f, "torn"),
             ItemDescriptor::WaterLogged => write!(f, "water logged"),
             ItemDescriptor::Weathered => write!(f, "weathered"),
+            ItemDescriptor::Rotting => write!(f, "rotting"),
         }
     }
 }
@@ -149,6 +151,10 @@ impl ItemDescriptor {
                 DescriptorTag::Bone,
                 DescriptorTag::Leather,
                 DescriptorTag::Wood,
+            ],
+            ItemDescriptor::Rotting => vec![
+                DescriptorTag::Cloth,
+                DescriptorTag::Clothing,
             ],
         }
     }
