@@ -33,7 +33,7 @@ impl InventoryPrototype {
 
         let mut used_locations: Vec<EquipLocationDescriptor> = Vec::new();
         let mut equipped_weapons: Vec<EquippedItem<Weapon>> = Vec::new();
-        for _ in 1..count {
+        for _ in 1..=count {
             let index = rng.gen_range(0..self.weapon_types.len());
             let weapon_type = match &self.weapon_types.get(index) {
                 Some(it) => *it,
@@ -95,7 +95,7 @@ impl InventoryPrototype {
         }
 
         let mut equipped_weapons: Vec<Weapon> = Vec::new();
-        for _ in 0..count {
+        for _ in 1..=count {
             let index = rng.gen_range(0..self.weapon_types.len());
             let weapon_type = match &self.weapon_types.get(index) {
                 Some(it) => *it,
@@ -121,7 +121,7 @@ impl InventoryPrototype {
         let mut used_locations: Vec<EquipLocationDescriptor> = Vec::new();
         let mut equipped_wearables: Vec<EquippedItem<Wearable>> = Vec::new();
         let mut used_types: Vec<WearableType> = Vec::new();
-        for _ in 0..count {
+        for _ in 1..=count {
             let possible_types: Vec<WearableType> = self
                 .wearable_types
                 .iter()
@@ -199,7 +199,7 @@ impl InventoryPrototype {
         }
 
         let mut wearables: Vec<Wearable> = Vec::new();
-        for _ in 0..count {
+        for _ in 1..=count {
             let index = rng.gen_range(0..self.wearable_types.len());
             let wearable_type = match &self.wearable_types.get(index) {
                 Some(it) => *it,
