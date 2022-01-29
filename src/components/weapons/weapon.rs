@@ -7,7 +7,7 @@ use std::fmt::Display;
 
 use crate::components::{
     attack::Attack,
-    equipped_item::{Equippable, EquipLocationDescriptor},
+    equipped_item::{EquipLocationDescriptor, Equippable},
     item_descriptor::ItemDescriptor,
     item_material::ItemMaterial,
 };

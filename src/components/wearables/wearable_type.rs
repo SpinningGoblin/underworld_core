@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::components::{
     descriptor_tags::{DescriptorTag, DescriptorTagged},
-    equipped_item::{Equippable, EquipLocationDescriptor},
+    equipped_item::{EquipLocationDescriptor, Equippable},
     item_descriptor::ItemDescriptor,
     item_material::{BuiltWithMaterial, ItemMaterial},
 };
@@ -118,13 +118,21 @@ impl BuiltWithMaterial for WearableType {
                 ItemMaterial::Leather,
                 ItemMaterial::Steel,
             ],
-            WearableType::Mask => vec![ItemMaterial::Bone, ItemMaterial::Cloth, ItemMaterial::Iron],
-            WearableType::Cloak => vec![ItemMaterial::Cloth],
-            WearableType::Shirt => vec![ItemMaterial::Cloth],
+            WearableType::Mask => vec![ItemMaterial::Bone, ItemMaterial::Iron],
+            WearableType::Cloak => {
+                vec![ItemMaterial::Linen, ItemMaterial::Hide, ItemMaterial::Wool]
+            }
+            WearableType::Shirt => vec![
+                ItemMaterial::Wool,
+                ItemMaterial::Linen,
+                ItemMaterial::Cotton,
+                ItemMaterial::Silk,
+            ],
             WearableType::Trousers => vec![
-                ItemMaterial::Cloth,
                 ItemMaterial::Hide,
                 ItemMaterial::Leather,
+                ItemMaterial::Wool,
+                ItemMaterial::Linen,
             ],
             WearableType::Crown => {
                 vec![ItemMaterial::Bone, ItemMaterial::Gold, ItemMaterial::Stone]
@@ -136,7 +144,14 @@ impl BuiltWithMaterial for WearableType {
                 ItemMaterial::Steel,
             ],
             WearableType::Gloves => vec![ItemMaterial::Hide, ItemMaterial::Leather],
-            WearableType::LoinCloth => vec![ItemMaterial::Hide, ItemMaterial::Cloth],
+            WearableType::LoinCloth => vec![
+                ItemMaterial::Hide,
+                ItemMaterial::Wool,
+                ItemMaterial::Leather,
+                ItemMaterial::Silk,
+                ItemMaterial::Linen,
+                ItemMaterial::Cotton,
+            ],
             WearableType::PlateBoots => vec![ItemMaterial::Iron, ItemMaterial::Steel],
             WearableType::PlateGauntlets => vec![ItemMaterial::Iron, ItemMaterial::Steel],
             WearableType::PlateHelmet => vec![ItemMaterial::Iron, ItemMaterial::Steel],
@@ -145,11 +160,9 @@ impl BuiltWithMaterial for WearableType {
                 ItemMaterial::Leather,
                 ItemMaterial::Steel,
             ],
-            WearableType::Vest => vec![
-                ItemMaterial::Cloth,
-                ItemMaterial::Hide,
-                ItemMaterial::Leather,
-            ],
+            WearableType::Vest => {
+                vec![ItemMaterial::Fur, ItemMaterial::Hide, ItemMaterial::Leather]
+            }
         }
     }
 }

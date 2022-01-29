@@ -2,7 +2,7 @@ use std::fmt::{Debug, Display};
 
 use rand::Rng;
 
-use crate::components::equipped_item::{Equippable, EquippedItem, EquipLocationDescriptor};
+use crate::components::equipped_item::{EquipLocationDescriptor, Equippable, EquippedItem};
 
 use super::generator::Generator;
 

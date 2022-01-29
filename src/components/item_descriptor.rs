@@ -200,7 +200,7 @@ mod tests {
     #[test]
     fn get_descriptors_for_wearable() {
         let descriptors =
-            ItemDescriptor::matches_two_tagged(&WearableType::LoinCloth, &ItemMaterial::Cloth);
+            ItemDescriptor::matches_two_tagged(&WearableType::LoinCloth, &ItemMaterial::Wool);
         assert!(!descriptors.is_empty());
     }
 

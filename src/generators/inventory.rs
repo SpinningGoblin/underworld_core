@@ -3,7 +3,7 @@ use std::ops::Range;
 use rand::Rng;
 
 use crate::components::{
-    equipped_item::{Equippable, EquippedItem, EquipLocationDescriptor},
+    equipped_item::{EquipLocationDescriptor, Equippable, EquippedItem},
     inventory::Inventory,
     weapons::{weapon::Weapon, weapon_type::WeaponType},
     wearables::{wearable::Wearable, wearable_type::WearableType},

@@ -1,4 +1,6 @@
-use underworld_core::generators::{characters::CharacterPrototype, generator::Generator, non_players::NonPlayerPrototype};
+use underworld_core::generators::{
+    characters::CharacterPrototype, generator::Generator, non_players::NonPlayerPrototype,
+};
 
 pub fn main() {
     let prototype = NonPlayerPrototype {

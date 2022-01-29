@@ -234,7 +234,7 @@ impl SentenceJoiners {
 #[cfg(test)]
 mod inventory_tests {
     use crate::components::{
-        equipped_item::{EquippedItem, EquipLocationDescriptor},
+        equipped_item::{EquipLocationDescriptor, EquippedItem},
         item_descriptor::ItemDescriptor,
         item_material::ItemMaterial,
         weapons::{weapon::Weapon, weapon_type::WeaponType},

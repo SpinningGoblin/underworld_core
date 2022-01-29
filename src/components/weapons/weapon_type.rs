@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::components::{
     descriptor_tags::{DescriptorTag, DescriptorTagged},
-    equipped_item::{Equippable, EquipLocationDescriptor},
+    equipped_item::{EquipLocationDescriptor, Equippable},
     item_material::{BuiltWithMaterial, ItemMaterial},
 };
 
