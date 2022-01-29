@@ -113,7 +113,8 @@ impl Display for EquippedLocation {
 mod serialization_tests {
     use crate::components::{
         equipped_item::EquippedLocation,
-        weapon::{Weapon, WeaponDescriptor, WeaponType},
+        item_descriptor::ItemDescriptor,
+        weapon::{Weapon, WeaponType},
     };
 
     use super::EquippedItem;
@@ -123,7 +124,7 @@ mod serialization_tests {
         let weapon = Weapon {
             attack: None,
             weapon_type: crate::components::weapon::WeaponType::LongSword,
-            descriptors: vec![WeaponDescriptor::Dull],
+            descriptors: vec![ItemDescriptor::Dull],
             material: None,
         };
         let equipped_item = EquippedItem {

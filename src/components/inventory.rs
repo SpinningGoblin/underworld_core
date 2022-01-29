@@ -7,11 +7,7 @@ use std::fmt::Display;
 
 use rand::{thread_rng, Rng};
 
-use super::{
-    equipped_item::EquippedItem,
-    weapon::Weapon,
-    wearable::Wearable,
-};
+use super::{equipped_item::EquippedItem, weapon::Weapon, wearable::Wearable};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -239,8 +235,10 @@ impl SentenceJoiners {
 mod inventory_tests {
     use crate::components::{
         equipped_item::{EquippedItem, EquippedLocation},
-        weapon::{Weapon, WeaponDescriptor, WeaponType},
-        wearable::{Wearable, WearableDescriptor, WearableMaterial, WearableType},
+        item_descriptor::ItemDescriptor,
+        item_material::ItemMaterial,
+        weapon::{Weapon, WeaponType},
+        wearable::{Wearable, WearableType},
     };
 
     use super::Inventory;
@@ -250,13 +248,13 @@ mod inventory_tests {
         let long_sword = Weapon {
             attack: None,
             weapon_type: WeaponType::LongSword,
-            descriptors: vec![WeaponDescriptor::Broken],
+            descriptors: vec![ItemDescriptor::Broken],
             material: None,
         };
         let short_sword = Weapon {
             attack: None,
             weapon_type: WeaponType::ShortSword,
-            descriptors: vec![WeaponDescriptor::Rusty, WeaponDescriptor::Dull],
+            descriptors: vec![ItemDescriptor::Rusty, ItemDescriptor::Dull],
             material: None,
         };
         let inventory = Inventory {
@@ -290,7 +288,7 @@ mod inventory_tests {
         let long_sword = Weapon {
             attack: None,
             weapon_type: WeaponType::LongSword,
-            descriptors: vec![WeaponDescriptor::Broken],
+            descriptors: vec![ItemDescriptor::Broken],
             material: None,
         };
         let inventory = Inventory {
@@ -315,13 +313,13 @@ mod inventory_tests {
         let long_sword = Weapon {
             attack: None,
             weapon_type: WeaponType::LongSword,
-            descriptors: vec![WeaponDescriptor::Broken],
+            descriptors: vec![ItemDescriptor::Broken],
             material: None,
         };
         let short_sword = Weapon {
             attack: None,
             weapon_type: WeaponType::ShortSword,
-            descriptors: vec![WeaponDescriptor::Rusty, WeaponDescriptor::Dull],
+            descriptors: vec![ItemDescriptor::Rusty, ItemDescriptor::Dull],
             material: None,
         };
         let inventory = Inventory {
@@ -353,8 +351,8 @@ mod inventory_tests {
     fn display_with_one_wearable() {
         let chain_mail = Wearable {
             wearable_type: WearableType::PlateHelmet,
-            material: Some(WearableMaterial::Steel),
-            descriptors: vec![WearableDescriptor::SetOf, WearableDescriptor::Drab],
+            material: Some(ItemMaterial::Steel),
+            descriptors: vec![ItemDescriptor::SetOf, ItemDescriptor::Drab],
             defense: None,
         };
 
@@ -379,15 +377,15 @@ mod inventory_tests {
     fn display_with_two_wearables() {
         let chain_mail = Wearable {
             wearable_type: WearableType::PlateHelmet,
-            material: Some(WearableMaterial::Steel),
-            descriptors: vec![WearableDescriptor::SetOf, WearableDescriptor::Drab],
+            material: Some(ItemMaterial::Steel),
+            descriptors: vec![ItemDescriptor::SetOf, ItemDescriptor::Drab],
             defense: None,
         };
 
         let shackles = Wearable {
             wearable_type: WearableType::Shackles,
-            material: Some(WearableMaterial::Iron),
-            descriptors: vec![WearableDescriptor::Rusty],
+            material: Some(ItemMaterial::Iron),
+            descriptors: vec![ItemDescriptor::Rusty],
             defense: None,
         };
 

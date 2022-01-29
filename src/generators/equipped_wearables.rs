@@ -7,7 +7,9 @@ impl EquippedItemPrototype<Wearable> {
         Self {
             hidden_chance,
             equipped_location_chance,
-            generator: Box::new(WearableGenerator::for_wearable_type(&WearableType::Breastplate)),
+            generator: Box::new(WearableGenerator::for_wearable_type(
+                &WearableType::Breastplate,
+            )),
             multiple: true,
         }
     }

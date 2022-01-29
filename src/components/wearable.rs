@@ -8,6 +8,8 @@ use std::fmt::Display;
 use super::{
     defense::Defense,
     equipped_item::{Equippable, EquippedLocation},
+    item_descriptor::ItemDescriptor,
+    item_material::{BuiltWithMaterial, ItemMaterial}, descriptor_tags::{DescriptorTag, DescriptorTagged},
 };
 
 #[derive(Clone, Debug, PartialEq)]
@@ -102,13 +104,13 @@ impl WearableType {
         )
     }
 
-    pub fn necessary_descriptors(&self) -> Vec<WearableDescriptor> {
+    pub fn necessary_descriptors(&self) -> Vec<ItemDescriptor> {
         match *self {
             WearableType::Breastplate => Vec::new(),
             WearableType::Cloak => Vec::new(),
             WearableType::Shirt => Vec::new(),
             WearableType::PlateHelmet => Vec::new(),
-            WearableType::Shackles => vec![WearableDescriptor::SetOf],
+            WearableType::Shackles => vec![ItemDescriptor::SetOf],
             WearableType::Mask => Vec::new(),
             WearableType::Trousers => Vec::new(),
             WearableType::Crown => Vec::new(),
@@ -120,113 +122,69 @@ impl WearableType {
             WearableType::Vest => Vec::new(),
         }
     }
+}
 
-    pub fn possible_descriptors(&self) -> Vec<WearableDescriptor> {
+impl BuiltWithMaterial for WearableType {
+    fn possible_materials(&self) -> Vec<ItemMaterial> {
         match *self {
             WearableType::Breastplate => vec![
-                WearableDescriptor::Bloodstained,
-                WearableDescriptor::Dingy,
-                WearableDescriptor::Drab,
-                WearableDescriptor::IllFitting,
-                WearableDescriptor::Rusty,
-                WearableDescriptor::Stained,
+                ItemMaterial::Iron,
+                ItemMaterial::Leather,
+                ItemMaterial::Steel,
             ],
-            WearableType::Cloak => vec![
-                WearableDescriptor::Bloodstained,
-                WearableDescriptor::Colourful,
-                WearableDescriptor::Dingy,
-                WearableDescriptor::Drab,
-                WearableDescriptor::IllFitting,
-                WearableDescriptor::Shimmering,
-                WearableDescriptor::Shiny,
-                WearableDescriptor::Stained,
-            ],
-            WearableType::Shirt => vec![
-                WearableDescriptor::Bloodstained,
-                WearableDescriptor::Colourful,
-                WearableDescriptor::Dingy,
-                WearableDescriptor::Drab,
-                WearableDescriptor::IllFitting,
-                WearableDescriptor::Shimmering,
-                WearableDescriptor::Shiny,
-                WearableDescriptor::Stained,
-            ],
-            WearableType::PlateHelmet => vec![
-                WearableDescriptor::Bloodstained,
-                WearableDescriptor::Rusty,
-                WearableDescriptor::Shiny,
-                WearableDescriptor::Stained,
-            ],
-            WearableType::Shackles => vec![
-                WearableDescriptor::Bloodstained,
-                WearableDescriptor::Rusty,
-                WearableDescriptor::Shiny,
-                WearableDescriptor::Stained,
-            ],
-            WearableType::Mask => vec![
-                WearableDescriptor::Bloodstained,
-                WearableDescriptor::IllFitting,
-                WearableDescriptor::Stained,
-            ],
+            WearableType::Mask => vec![ItemMaterial::Bone, ItemMaterial::Cloth, ItemMaterial::Iron],
+            WearableType::Cloak => vec![ItemMaterial::Cloth],
+            WearableType::Shirt => vec![ItemMaterial::Cloth],
             WearableType::Trousers => vec![
-                WearableDescriptor::Bloodstained,
-                WearableDescriptor::Colourful,
-                WearableDescriptor::Dingy,
-                WearableDescriptor::Drab,
-                WearableDescriptor::IllFitting,
-                WearableDescriptor::Shimmering,
-                WearableDescriptor::Shiny,
-                WearableDescriptor::Stained,
+                ItemMaterial::Cloth,
+                ItemMaterial::Hide,
+                ItemMaterial::Leather,
             ],
-            WearableType::Crown => vec![
-                WearableDescriptor::Bloodstained,
-                WearableDescriptor::Rusty,
-                WearableDescriptor::Shiny,
-            ],
+            WearableType::Crown => {
+                vec![ItemMaterial::Bone, ItemMaterial::Gold, ItemMaterial::Stone]
+            }
             WearableType::Boots => vec![
-                WearableDescriptor::Bloodstained,
-                WearableDescriptor::Dingy,
-                WearableDescriptor::Drab,
-                WearableDescriptor::Shiny,
-                WearableDescriptor::Stained,
+                ItemMaterial::Hide,
+                ItemMaterial::Iron,
+                ItemMaterial::Leather,
+                ItemMaterial::Steel,
             ],
-            WearableType::Gloves => vec![
-                WearableDescriptor::Dingy,
-                WearableDescriptor::IllFitting,
-                WearableDescriptor::Stained,
-            ],
-            WearableType::LoinCloth => vec![
-                WearableDescriptor::Bloodstained,
-                WearableDescriptor::Colourful,
-                WearableDescriptor::Dingy,
-                WearableDescriptor::Drab,
-                WearableDescriptor::IllFitting,
-                WearableDescriptor::Shimmering,
-                WearableDescriptor::Shiny,
-                WearableDescriptor::Stained,
-            ],
-            WearableType::PlateBoots => vec![
-                WearableDescriptor::Bloodstained,
-                WearableDescriptor::Rusty,
-                WearableDescriptor::Shiny,
-                WearableDescriptor::Stained,
-            ],
-            WearableType::PlateGauntlets => vec![
-                WearableDescriptor::Bloodstained,
-                WearableDescriptor::Rusty,
-                WearableDescriptor::Shiny,
-                WearableDescriptor::Stained,
+            WearableType::Gloves => vec![ItemMaterial::Hide, ItemMaterial::Leather],
+            WearableType::LoinCloth => vec![ItemMaterial::Hide, ItemMaterial::Cloth],
+            WearableType::PlateBoots => vec![ItemMaterial::Iron, ItemMaterial::Steel],
+            WearableType::PlateGauntlets => vec![ItemMaterial::Iron, ItemMaterial::Steel],
+            WearableType::PlateHelmet => vec![ItemMaterial::Iron, ItemMaterial::Steel],
+            WearableType::Shackles => vec![
+                ItemMaterial::Iron,
+                ItemMaterial::Leather,
+                ItemMaterial::Steel,
             ],
             WearableType::Vest => vec![
-                WearableDescriptor::Bloodstained,
-                WearableDescriptor::Colourful,
-                WearableDescriptor::Dingy,
-                WearableDescriptor::Drab,
-                WearableDescriptor::IllFitting,
-                WearableDescriptor::Shimmering,
-                WearableDescriptor::Shiny,
-                WearableDescriptor::Stained,
+                ItemMaterial::Cloth,
+                ItemMaterial::Hide,
+                ItemMaterial::Leather,
             ],
+        }
+    }
+}
+
+impl DescriptorTagged for WearableType {
+    fn descriptor_tag(&self) -> DescriptorTag {
+        match *self {
+            WearableType::Breastplate => DescriptorTag::Armour,
+            WearableType::Mask => DescriptorTag::Accessory,
+            WearableType::Cloak => DescriptorTag::Clothing,
+            WearableType::Shirt => DescriptorTag::Clothing,
+            WearableType::Trousers => DescriptorTag::Clothing,
+            WearableType::Crown => DescriptorTag::Accessory,
+            WearableType::Boots => DescriptorTag::Armour,
+            WearableType::Gloves => DescriptorTag::Clothing,
+            WearableType::LoinCloth => DescriptorTag::Clothing,
+            WearableType::PlateBoots => DescriptorTag::Armour,
+            WearableType::PlateGauntlets => DescriptorTag::Armour,
+            WearableType::PlateHelmet => DescriptorTag::Armour,
+            WearableType::Shackles => DescriptorTag::Accessory,
+            WearableType::Vest => DescriptorTag::Clothing,
         }
     }
 }
@@ -297,84 +255,14 @@ impl Display for WearableType {
 #[cfg_attr(
     feature = "serialization",
     derive(Deserialize, Serialize),
-    serde(rename_all = "snake_case")
-)]
-pub enum WearableDescriptor {
-    Bloodstained,
-    Broken,
-    Colourful,
-    Dingy,
-    Drab,
-    IllFitting,
-    LooseFitting,
-    Rusty,
-    SetOf,
-    Shimmering,
-    Shiny,
-    Stained,
-}
-
-impl Display for WearableDescriptor {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match *self {
-            Self::Bloodstained => write!(f, "bloodstained"),
-            Self::Broken => write!(f, "broken"),
-            Self::Colourful => write!(f, "colourful"),
-            Self::Dingy => write!(f, "dingy"),
-            Self::Drab => write!(f, "drab"),
-            Self::IllFitting => write!(f, "ill fitting"),
-            Self::LooseFitting => write!(f, "loose fitting"),
-            Self::Rusty => write!(f, "rusty"),
-            Self::SetOf => write!(f, "set of"),
-            Self::Shimmering => write!(f, "shimmering"),
-            Self::Shiny => write!(f, "shiny"),
-            Self::Stained => write!(f, "stained"),
-        }
-    }
-}
-
-#[derive(Clone, Debug)]
-#[cfg_attr(feature = "bevy_components", derive(Component))]
-#[cfg_attr(
-    feature = "serialization",
-    derive(Deserialize, Serialize),
-    serde(rename_all = "snake_case")
-)]
-pub enum WearableMaterial {
-    Bone,
-    Cloth,
-    Gold,
-    Iron,
-    Leather,
-    Steel,
-}
-
-impl Display for WearableMaterial {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match *self {
-            WearableMaterial::Bone => write!(f, "bone"),
-            WearableMaterial::Cloth => write!(f, "cloth"),
-            WearableMaterial::Iron => write!(f, "iron"),
-            WearableMaterial::Leather => write!(f, "leather"),
-            WearableMaterial::Steel => write!(f, "steel"),
-            WearableMaterial::Gold => write!(f, "gold"),
-        }
-    }
-}
-
-#[derive(Clone, Debug)]
-#[cfg_attr(feature = "bevy_components", derive(Component))]
-#[cfg_attr(
-    feature = "serialization",
-    derive(Deserialize, Serialize),
     serde(tag = "type", rename_all = "snake_case")
 )]
 pub struct Wearable {
     pub wearable_type: WearableType,
     #[cfg_attr(feature = "serialization", serde(default))]
-    pub material: Option<WearableMaterial>,
+    pub material: Option<ItemMaterial>,
     #[cfg_attr(feature = "serialization", serde(default))]
-    pub descriptors: Vec<WearableDescriptor>,
+    pub descriptors: Vec<ItemDescriptor>,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub defense: Option<Defense>,
 }
@@ -428,45 +316,29 @@ mod wearable_type_tests {
 
 #[cfg(test)]
 mod wearable_quality_tests {
-    use super::WearableDescriptor;
+    use crate::components::item_descriptor::ItemDescriptor;
 
     #[test]
     fn display() {
-        assert_eq!(
-            "bloodstained",
-            format!("{}", WearableDescriptor::Bloodstained)
-        );
-        assert_eq!("broken", format!("{}", WearableDescriptor::Broken));
-        assert_eq!("colourful", format!("{}", WearableDescriptor::Colourful));
-        assert_eq!("dingy", format!("{}", WearableDescriptor::Dingy));
-        assert_eq!("drab", format!("{}", WearableDescriptor::Drab));
-        assert_eq!("ill fitting", format!("{}", WearableDescriptor::IllFitting));
-        assert_eq!(
-            "loose fitting",
-            format!("{}", WearableDescriptor::LooseFitting)
-        );
-        assert_eq!("rusty", format!("{}", WearableDescriptor::Rusty));
-        assert_eq!("shimmering", format!("{}", WearableDescriptor::Shimmering));
-        assert_eq!("shiny", format!("{}", WearableDescriptor::Shiny));
-        assert_eq!("stained", format!("{}", WearableDescriptor::Stained));
-    }
-}
-
-#[cfg(test)]
-mod wearable_material_tests {
-    use crate::components::wearable::WearableMaterial;
-
-    #[test]
-    fn display() {
-        assert_eq!("iron", format!("{}", WearableMaterial::Iron));
-        assert_eq!("leather", format!("{}", WearableMaterial::Leather));
-        assert_eq!("steel", format!("{}", WearableMaterial::Steel));
+        assert_eq!("bloodstained", format!("{}", ItemDescriptor::Bloodstained));
+        assert_eq!("broken", format!("{}", ItemDescriptor::Broken));
+        assert_eq!("colourful", format!("{}", ItemDescriptor::Colourful));
+        assert_eq!("dingy", format!("{}", ItemDescriptor::Dingy));
+        assert_eq!("drab", format!("{}", ItemDescriptor::Drab));
+        assert_eq!("ill fitting", format!("{}", ItemDescriptor::IllFitting));
+        assert_eq!("loose fitting", format!("{}", ItemDescriptor::LooseFitting));
+        assert_eq!("rusty", format!("{}", ItemDescriptor::Rusty));
+        assert_eq!("shimmering", format!("{}", ItemDescriptor::Shimmering));
+        assert_eq!("shiny", format!("{}", ItemDescriptor::Shiny));
+        assert_eq!("stained", format!("{}", ItemDescriptor::Stained));
     }
 }
 
 #[cfg(test)]
 mod wearable_tests {
-    use super::{Wearable, WearableDescriptor, WearableMaterial, WearableType};
+    use crate::components::item_material::ItemMaterial;
+
+    use super::{ItemDescriptor, Wearable, WearableType};
 
     #[test]
     fn display_when_there_is_only_type() {
@@ -484,7 +356,7 @@ mod wearable_tests {
     fn display_when_there_is_material() {
         let wearable = Wearable {
             wearable_type: WearableType::PlateHelmet,
-            material: Some(WearableMaterial::Steel),
+            material: Some(ItemMaterial::Steel),
             descriptors: Vec::new(),
             defense: None,
         };
@@ -497,7 +369,7 @@ mod wearable_tests {
         let wearable = Wearable {
             wearable_type: WearableType::Shackles,
             material: None,
-            descriptors: vec![WearableDescriptor::Dingy, WearableDescriptor::Bloodstained],
+            descriptors: vec![ItemDescriptor::Dingy, ItemDescriptor::Bloodstained],
             defense: None,
         };
 
@@ -508,8 +380,8 @@ mod wearable_tests {
     fn display_when_there_are_qualities_and_material() {
         let wearable = Wearable {
             wearable_type: WearableType::Shackles,
-            material: Some(WearableMaterial::Iron),
-            descriptors: vec![WearableDescriptor::Bloodstained],
+            material: Some(ItemMaterial::Iron),
+            descriptors: vec![ItemDescriptor::Bloodstained],
             defense: None,
         };
 

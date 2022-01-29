@@ -8,6 +8,8 @@ use std::fmt::Display;
 use super::{
     attack::Attack,
     equipped_item::{Equippable, EquippedLocation},
+    item_descriptor::ItemDescriptor,
+    item_material::{BuiltWithMaterial, ItemMaterial}, descriptor_tags::{DescriptorTagged, DescriptorTag},
 };
 
 #[derive(Clone, Debug)]
@@ -21,40 +23,9 @@ pub struct Weapon {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub attack: Option<Attack>,
     pub weapon_type: WeaponType,
-    pub descriptors: Vec<WeaponDescriptor>,
+    pub descriptors: Vec<ItemDescriptor>,
     #[cfg_attr(feature = "serialization", serde(default))]
-    pub material: Option<WeaponMaterial>,
-}
-
-#[derive(Clone, Debug, PartialEq)]
-#[cfg_attr(feature = "bevy_components", derive(Component))]
-#[cfg_attr(
-    feature = "serialization",
-    derive(Deserialize, Serialize),
-    serde(rename_all = "snake_case")
-)]
-pub enum WeaponMaterial {
-    Bone,
-    Gold,
-    Iron,
-    Leather,
-    Steel,
-    Stone,
-    Wooden,
-}
-
-impl Display for WeaponMaterial {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match *self {
-            WeaponMaterial::Bone => write!(f, "bone"),
-            WeaponMaterial::Gold => write!(f, "gold"),
-            WeaponMaterial::Iron => write!(f, "iron"),
-            WeaponMaterial::Leather => write!(f, "leather"),
-            WeaponMaterial::Steel => write!(f, "steel"),
-            WeaponMaterial::Stone => write!(f, "stone"),
-            WeaponMaterial::Wooden => write!(f, "wooden"),
-        }
-    }
+    pub material: Option<ItemMaterial>,
 }
 
 impl Equippable for Weapon {
@@ -84,33 +55,6 @@ impl Display for Weapon {
     }
 }
 
-#[derive(Clone, Debug)]
-#[cfg_attr(feature = "bevy_components", derive(Component))]
-#[cfg_attr(
-    feature = "serialization",
-    derive(Deserialize, Serialize),
-    serde(rename_all = "snake_case")
-)]
-pub enum WeaponDescriptor {
-    Broken,
-    Chipped,
-    Dull,
-    Rusty,
-    Shiny,
-}
-
-impl Display for WeaponDescriptor {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match *self {
-            Self::Broken => write!(f, "broken"),
-            Self::Chipped => write!(f, "chipped"),
-            Self::Dull => write!(f, "dull"),
-            Self::Rusty => write!(f, "rusty"),
-            Self::Shiny => write!(f, "shiny"),
-        }
-    }
-}
-
 #[derive(Clone, Debug, PartialEq)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
@@ -133,6 +77,74 @@ pub enum WeaponType {
     Whip,
 }
 
+impl BuiltWithMaterial for WeaponType {
+    fn possible_materials(&self) -> Vec<ItemMaterial> {
+        match *self {
+            WeaponType::Buckler => {
+                vec![ItemMaterial::Hide, ItemMaterial::Iron, ItemMaterial::Steel]
+            }
+            WeaponType::Club => vec![
+                ItemMaterial::Bone,
+                ItemMaterial::Stone,
+                ItemMaterial::Wooden,
+            ],
+            WeaponType::Dagger => vec![
+                ItemMaterial::Bone,
+                ItemMaterial::Gold,
+                ItemMaterial::Iron,
+                ItemMaterial::Steel,
+                ItemMaterial::Stone,
+            ],
+            WeaponType::Dirk => vec![
+                ItemMaterial::Bone,
+                ItemMaterial::Iron,
+                ItemMaterial::Steel,
+                ItemMaterial::Stone,
+            ],
+            WeaponType::GreatSword => vec![
+                ItemMaterial::Bone,
+                ItemMaterial::Iron,
+                ItemMaterial::Steel,
+                ItemMaterial::Stone,
+            ],
+            WeaponType::Hammer => vec![ItemMaterial::Iron, ItemMaterial::Steel],
+            WeaponType::LongSword => {
+                vec![ItemMaterial::Bone, ItemMaterial::Iron, ItemMaterial::Steel]
+            }
+            WeaponType::Mace => vec![ItemMaterial::Iron, ItemMaterial::Steel],
+            WeaponType::Morningstar => vec![ItemMaterial::Iron, ItemMaterial::Steel],
+            WeaponType::Shield => vec![
+                ItemMaterial::Hide,
+                ItemMaterial::Iron,
+                ItemMaterial::Leather,
+                ItemMaterial::Steel,
+                ItemMaterial::Wooden,
+            ],
+            WeaponType::ShortSword => vec![ItemMaterial::Iron, ItemMaterial::Steel],
+            WeaponType::Whip => vec![ItemMaterial::Leather],
+        }
+    }
+}
+
+impl DescriptorTagged for WeaponType {
+    fn descriptor_tag(&self) -> DescriptorTag {
+        match *self {
+            WeaponType::Buckler => DescriptorTag::Shield,
+            WeaponType::Club => DescriptorTag::Blunt,
+            WeaponType::Dagger => DescriptorTag::Blade,
+            WeaponType::Dirk => DescriptorTag::Blade,
+            WeaponType::GreatSword => DescriptorTag::Blade,
+            WeaponType::Hammer => DescriptorTag::Blunt,
+            WeaponType::LongSword => DescriptorTag::Blade,
+            WeaponType::Mace => DescriptorTag::Blunt,
+            WeaponType::Morningstar => DescriptorTag::Blunt,
+            WeaponType::Shield => DescriptorTag::Shield,
+            WeaponType::ShortSword => DescriptorTag::Blade,
+            WeaponType::Whip => DescriptorTag::Rope,
+        }
+    }
+}
+
 impl WeaponType {
     pub fn all() -> Vec<WeaponType> {
         vec![
@@ -151,68 +163,68 @@ impl WeaponType {
         ]
     }
 
-    pub fn possible_descriptors(&self) -> Vec<WeaponDescriptor> {
+    pub fn possible_descriptors(&self) -> Vec<ItemDescriptor> {
         match *self {
-            WeaponType::Club => vec![WeaponDescriptor::Broken],
+            WeaponType::Club => vec![ItemDescriptor::Broken],
             WeaponType::Dagger => vec![
-                WeaponDescriptor::Broken,
-                WeaponDescriptor::Chipped,
-                WeaponDescriptor::Dull,
-                WeaponDescriptor::Rusty,
-                WeaponDescriptor::Shiny,
+                ItemDescriptor::Broken,
+                ItemDescriptor::Chipped,
+                ItemDescriptor::Dull,
+                ItemDescriptor::Rusty,
+                ItemDescriptor::Shiny,
             ],
             WeaponType::Hammer => vec![
-                WeaponDescriptor::Broken,
-                WeaponDescriptor::Chipped,
-                WeaponDescriptor::Rusty,
+                ItemDescriptor::Broken,
+                ItemDescriptor::Chipped,
+                ItemDescriptor::Rusty,
             ],
             WeaponType::LongSword => vec![
-                WeaponDescriptor::Broken,
-                WeaponDescriptor::Chipped,
-                WeaponDescriptor::Dull,
-                WeaponDescriptor::Rusty,
-                WeaponDescriptor::Shiny,
+                ItemDescriptor::Broken,
+                ItemDescriptor::Chipped,
+                ItemDescriptor::Dull,
+                ItemDescriptor::Rusty,
+                ItemDescriptor::Shiny,
             ],
             WeaponType::ShortSword => vec![
-                WeaponDescriptor::Broken,
-                WeaponDescriptor::Chipped,
-                WeaponDescriptor::Dull,
-                WeaponDescriptor::Rusty,
-                WeaponDescriptor::Shiny,
+                ItemDescriptor::Broken,
+                ItemDescriptor::Chipped,
+                ItemDescriptor::Dull,
+                ItemDescriptor::Rusty,
+                ItemDescriptor::Shiny,
             ],
             WeaponType::Buckler => vec![
-                WeaponDescriptor::Rusty,
-                WeaponDescriptor::Shiny,
-                WeaponDescriptor::Broken,
+                ItemDescriptor::Rusty,
+                ItemDescriptor::Shiny,
+                ItemDescriptor::Broken,
             ],
             WeaponType::Dirk => vec![
-                WeaponDescriptor::Broken,
-                WeaponDescriptor::Chipped,
-                WeaponDescriptor::Dull,
-                WeaponDescriptor::Rusty,
-                WeaponDescriptor::Shiny,
+                ItemDescriptor::Broken,
+                ItemDescriptor::Chipped,
+                ItemDescriptor::Dull,
+                ItemDescriptor::Rusty,
+                ItemDescriptor::Shiny,
             ],
             WeaponType::GreatSword => vec![
-                WeaponDescriptor::Broken,
-                WeaponDescriptor::Chipped,
-                WeaponDescriptor::Dull,
-                WeaponDescriptor::Rusty,
-                WeaponDescriptor::Shiny,
+                ItemDescriptor::Broken,
+                ItemDescriptor::Chipped,
+                ItemDescriptor::Dull,
+                ItemDescriptor::Rusty,
+                ItemDescriptor::Shiny,
             ],
             WeaponType::Mace => vec![
-                WeaponDescriptor::Broken,
-                WeaponDescriptor::Chipped,
-                WeaponDescriptor::Rusty,
+                ItemDescriptor::Broken,
+                ItemDescriptor::Chipped,
+                ItemDescriptor::Rusty,
             ],
             WeaponType::Morningstar => vec![
-                WeaponDescriptor::Broken,
-                WeaponDescriptor::Chipped,
-                WeaponDescriptor::Rusty,
+                ItemDescriptor::Broken,
+                ItemDescriptor::Chipped,
+                ItemDescriptor::Rusty,
             ],
             WeaponType::Shield => vec![
-                WeaponDescriptor::Broken,
-                WeaponDescriptor::Rusty,
-                WeaponDescriptor::Shiny,
+                ItemDescriptor::Broken,
+                ItemDescriptor::Rusty,
+                ItemDescriptor::Shiny,
             ],
             WeaponType::Whip => Vec::new(),
         }
@@ -358,15 +370,15 @@ mod weapon_type_tests {
 
 #[cfg(test)]
 mod weapon_quality_tests {
-    use crate::components::weapon::WeaponDescriptor;
+    use crate::components::item_descriptor::ItemDescriptor;
 
     #[test]
     fn to_string() {
-        assert_eq!("broken", WeaponDescriptor::Broken.to_string());
-        assert_eq!("chipped", WeaponDescriptor::Chipped.to_string());
-        assert_eq!("dull", WeaponDescriptor::Dull.to_string());
-        assert_eq!("rusty", WeaponDescriptor::Rusty.to_string());
-        assert_eq!("shiny", WeaponDescriptor::Shiny.to_string());
+        assert_eq!("broken", ItemDescriptor::Broken.to_string());
+        assert_eq!("chipped", ItemDescriptor::Chipped.to_string());
+        assert_eq!("dull", ItemDescriptor::Dull.to_string());
+        assert_eq!("rusty", ItemDescriptor::Rusty.to_string());
+        assert_eq!("shiny", ItemDescriptor::Shiny.to_string());
     }
 }
 
@@ -391,10 +403,7 @@ mod weapon_tests {
         let weapon = Weapon {
             attack: None,
             weapon_type: super::WeaponType::LongSword,
-            descriptors: vec![
-                super::WeaponDescriptor::Dull,
-                super::WeaponDescriptor::Chipped,
-            ],
+            descriptors: vec![super::ItemDescriptor::Dull, super::ItemDescriptor::Chipped],
             material: None,
         };
 

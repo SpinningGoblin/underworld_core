@@ -33,7 +33,7 @@ impl InventoryPrototype {
 
         let mut used_locations: Vec<EquippedLocation> = Vec::new();
         let mut equipped_weapons: Vec<EquippedItem<Weapon>> = Vec::new();
-        for _ in 0..count {
+        for _ in 1..count {
             let index = rng.gen_range(0..self.weapon_types.len());
             let weapon_type = match &self.weapon_types.get(index) {
                 Some(it) => *it,

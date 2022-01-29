@@ -4,7 +4,9 @@ use rand::Rng;
 
 use crate::components::{
     defense::Defense,
-    wearable::{Wearable, WearableDescriptor, WearableMaterial, WearableType},
+    item_descriptor::ItemDescriptor,
+    item_material::{BuiltWithMaterial, ItemMaterial},
+    wearable::{Wearable, WearableType},
 };
 
 use super::generator::Generator;
@@ -13,7 +15,7 @@ struct WearablePrototype {
     pub wearable_type: WearableType,
     pub num_descriptors: Range<usize>,
     pub defense: Option<Defense>,
-    pub possible_materials: Vec<WearableMaterial>,
+    pub possible_materials: Vec<ItemMaterial>,
 }
 
 pub struct WearableGenerator;
@@ -40,189 +42,165 @@ impl WearableGenerator {
 }
 
 impl WearablePrototype {
-    pub fn breastplate() -> Self {
+    pub fn build(
+        wearable_type: WearableType,
+        num_descriptors: Range<usize>,
+        defense: Option<Defense>,
+    ) -> WearablePrototype {
+        let possible_materials = wearable_type.possible_materials();
         Self {
-            wearable_type: WearableType::Breastplate,
-            num_descriptors: 0..3,
-            defense: Some(Defense {
+            wearable_type,
+            num_descriptors,
+            defense,
+            possible_materials,
+        }
+    }
+
+    pub fn breastplate() -> Self {
+        Self::build(
+            WearableType::Breastplate,
+            0..3,
+            Some(Defense {
                 minimum: 1,
                 maximum: 3,
             }),
-            possible_materials: vec![
-                WearableMaterial::Iron,
-                WearableMaterial::Leather,
-                WearableMaterial::Steel,
-            ],
-        }
+        )
     }
 
     pub fn boots() -> Self {
-        Self {
-            wearable_type: WearableType::Boots,
-            num_descriptors: 0..3,
-            defense: Some(Defense {
+        Self::build(
+            WearableType::Boots,
+            0..3,
+            Some(Defense {
                 minimum: 1,
                 maximum: 3,
             }),
-            possible_materials: vec![
-                WearableMaterial::Iron,
-                WearableMaterial::Leather,
-                WearableMaterial::Steel,
-            ],
-        }
+        )
     }
 
     pub fn gloves() -> Self {
-        Self {
-            wearable_type: WearableType::Gloves,
-            num_descriptors: 0..3,
-            defense: Some(Defense {
+        Self::build(
+            WearableType::Gloves,
+            0..3,
+            Some(Defense {
                 minimum: 1,
                 maximum: 3,
             }),
-            possible_materials: vec![
-                WearableMaterial::Iron,
-                WearableMaterial::Leather,
-                WearableMaterial::Steel,
-            ],
-        }
+        )
     }
 
     pub fn loin_cloth() -> Self {
-        Self {
-            wearable_type: WearableType::LoinCloth,
-            num_descriptors: 0..3,
-            defense: Some(Defense {
-                minimum: 1,
-                maximum: 3,
-            }),
-            possible_materials: Vec::new(),
-        }
-    }
-
-    pub fn vest() -> Self {
-        Self {
-            wearable_type: WearableType::Vest,
-            num_descriptors: 0..3,
-            defense: Some(Defense {
-                minimum: 1,
-                maximum: 3,
-            }),
-            possible_materials: vec![WearableMaterial::Gold, WearableMaterial::Leather],
-        }
-    }
-
-    pub fn cloak() -> Self {
-        Self {
-            wearable_type: WearableType::Cloak,
-            num_descriptors: 0..3,
-            defense: Some(Defense {
+        Self::build(
+            WearableType::LoinCloth,
+            0..3,
+            Some(Defense {
                 minimum: 0,
                 maximum: 2,
             }),
-            possible_materials: Vec::new(),
-        }
+        )
+    }
+
+    pub fn vest() -> Self {
+        Self::build(
+            WearableType::Vest,
+            0..3,
+            Some(Defense {
+                minimum: 1,
+                maximum: 3,
+            }),
+        )
+    }
+
+    pub fn cloak() -> Self {
+        Self::build(
+            WearableType::Cloak,
+            0..3,
+            Some(Defense {
+                minimum: 1,
+                maximum: 3,
+            }),
+        )
     }
 
     pub fn crown() -> Self {
-        Self {
-            wearable_type: WearableType::Crown,
-            num_descriptors: 0..3,
-            defense: Some(Defense {
-                minimum: 0,
-                maximum: 1,
+        Self::build(
+            WearableType::Crown,
+            0..3,
+            Some(Defense {
+                minimum: 1,
+                maximum: 3,
             }),
-            possible_materials: vec![
-                WearableMaterial::Bone,
-                WearableMaterial::Iron,
-                WearableMaterial::Gold,
-            ],
-        }
+        )
     }
 
     pub fn mask() -> Self {
-        Self {
-            wearable_type: WearableType::Mask,
-            num_descriptors: 0..3,
-            defense: Some(Defense {
-                minimum: 0,
-                maximum: 1,
+        Self::build(
+            WearableType::Mask,
+            0..3,
+            Some(Defense {
+                minimum: 1,
+                maximum: 3,
             }),
-            possible_materials: vec![
-                WearableMaterial::Bone,
-                WearableMaterial::Iron,
-                WearableMaterial::Steel,
-            ],
-        }
+        )
     }
 
     pub fn shirt() -> Self {
-        Self {
-            wearable_type: WearableType::Shirt,
-            num_descriptors: 0..3,
-            defense: Some(Defense {
-                minimum: 0,
-                maximum: 1,
+        Self::build(
+            WearableType::Shirt,
+            0..3,
+            Some(Defense {
+                minimum: 1,
+                maximum: 3,
             }),
-            possible_materials: vec![WearableMaterial::Cloth, WearableMaterial::Leather],
-        }
+        )
     }
 
     pub fn trousers() -> Self {
-        Self {
-            wearable_type: WearableType::Trousers,
-            num_descriptors: 0..3,
-            defense: Some(Defense {
-                minimum: 0,
-                maximum: 1,
+        Self::build(
+            WearableType::Trousers,
+            0..3,
+            Some(Defense {
+                minimum: 1,
+                maximum: 3,
             }),
-            possible_materials: vec![WearableMaterial::Cloth, WearableMaterial::Leather],
-        }
+        )
     }
 
     pub fn plate_helmet() -> Self {
-        Self {
-            wearable_type: WearableType::PlateHelmet,
-            num_descriptors: 0..3,
-            defense: Some(Defense {
+        Self::build(
+            WearableType::PlateHelmet,
+            0..3,
+            Some(Defense {
                 minimum: 3,
                 maximum: 6,
             }),
-            possible_materials: vec![WearableMaterial::Iron, WearableMaterial::Steel],
-        }
+        )
     }
 
     pub fn plate_boots() -> Self {
-        Self {
-            wearable_type: WearableType::PlateBoots,
-            num_descriptors: 0..3,
-            defense: Some(Defense {
+        Self::build(
+            WearableType::PlateBoots,
+            0..3,
+            Some(Defense {
                 minimum: 3,
                 maximum: 6,
             }),
-            possible_materials: vec![WearableMaterial::Iron, WearableMaterial::Steel],
-        }
+        )
     }
 
     pub fn plate_gauntlets() -> Self {
-        Self {
-            wearable_type: WearableType::PlateGauntlets,
-            num_descriptors: 0..3,
-            defense: Some(Defense {
+        Self::build(
+            WearableType::PlateGauntlets,
+            0..3,
+            Some(Defense {
                 minimum: 3,
                 maximum: 6,
             }),
-            possible_materials: vec![WearableMaterial::Iron, WearableMaterial::Steel],
-        }
+        )
     }
 
     pub fn shackles() -> Self {
-        Self {
-            wearable_type: WearableType::Shackles,
-            num_descriptors: 0..2,
-            defense: None,
-            possible_materials: vec![WearableMaterial::Iron, WearableMaterial::Steel],
-        }
+        Self::build(WearableType::Shackles, 0..3, None)
     }
 }
 
@@ -238,9 +216,11 @@ impl Generator<Wearable> for WearablePrototype {
             None
         };
 
-        let mut possible_descriptors: Vec<WearableDescriptor> =
-            self.wearable_type.possible_descriptors().to_vec();
-        let mut descriptors: Vec<WearableDescriptor> =
+        let mut possible_descriptors: Vec<ItemDescriptor> = match &material {
+            Some(material) => ItemDescriptor::matches_two_tagged(&self.wearable_type, material),
+            None => ItemDescriptor::matches_tagged(&self.wearable_type),
+        };
+        let mut descriptors: Vec<ItemDescriptor> =
             self.wearable_type.necessary_descriptors().to_vec();
         while num_descriptors > 0 {
             if possible_descriptors.is_empty() {
