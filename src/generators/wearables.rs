@@ -6,7 +6,7 @@ use crate::components::{
     defense::Defense,
     item_descriptor::ItemDescriptor,
     item_material::{BuiltWithMaterial, ItemMaterial},
-    wearable::{Wearable, WearableType},
+    wearables::{wearable::Wearable, wearable_type::WearableType},
 };
 
 use super::generator::Generator;

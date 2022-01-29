@@ -1,6 +1,7 @@
 use underworld_core::{
     components::{
-        life_modifier::LifeModifier, weapons::weapon_type::WeaponType, wearable::WearableType,
+        life_modifier::LifeModifier, weapons::weapon_type::WeaponType,
+        wearables::wearable_type::WearableType,
     },
     generators::{
         characters::CharacterPrototype, generator::Generator, inventory::InventoryPrototype,

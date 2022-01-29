@@ -6,7 +6,7 @@ use crate::components::{
     equipped_item::{Equippable, EquippedItem, EquippedLocation},
     inventory::Inventory,
     weapons::{weapon::Weapon, weapon_type::WeaponType},
-    wearable::{Wearable, WearableType},
+    wearables::{wearable::Wearable, wearable_type::WearableType},
 };
 
 use super::{generator::Generator, weapons::WeaponGenerator, wearables::WearableGenerator};

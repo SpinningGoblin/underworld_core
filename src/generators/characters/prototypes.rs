@@ -5,7 +5,7 @@ use rand::Rng;
 use crate::{
     components::{
         life_modifier::LifeModifier, species::Species, weapons::weapon_type::WeaponType,
-        wearable::WearableType,
+        wearables::wearable_type::WearableType,
     },
     generators::inventory::InventoryPrototype,
 };

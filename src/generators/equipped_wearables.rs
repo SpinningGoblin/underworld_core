@@ -1,4 +1,4 @@
-use crate::components::wearable::{Wearable, WearableType};
+use crate::components::wearables::{wearable::Wearable, wearable_type::WearableType};
 
 use super::{equipped_items::EquippedItemPrototype, wearables::WearableGenerator};
 

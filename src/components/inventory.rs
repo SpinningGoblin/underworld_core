@@ -7,7 +7,7 @@ use std::fmt::Display;
 
 use rand::{thread_rng, Rng};
 
-use super::{equipped_item::EquippedItem, weapons::weapon::Weapon, wearable::Wearable};
+use super::{equipped_item::EquippedItem, weapons::weapon::Weapon, wearables::wearable::Wearable};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -238,7 +238,7 @@ mod inventory_tests {
         item_descriptor::ItemDescriptor,
         item_material::ItemMaterial,
         weapons::{weapon::Weapon, weapon_type::WeaponType},
-        wearable::{Wearable, WearableType},
+        wearables::{wearable::Wearable, wearable_type::WearableType},
     };
 
     use super::Inventory;

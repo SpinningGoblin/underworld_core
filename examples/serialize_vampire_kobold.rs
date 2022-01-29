@@ -5,7 +5,7 @@ pub fn main() {
         use underworld_core::{
             components::{
                 life_modifier::LifeModifier, weapons::weapon_type::WeaponType,
-                wearable::WearableType,
+                wearables::wearable_type::WearableType,
             },
             generators::{
                 characters::CharacterPrototype, generator::Generator,

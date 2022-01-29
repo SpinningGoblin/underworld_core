@@ -17,4 +17,4 @@ pub mod room;
 pub mod species;
 pub mod stats;
 pub mod weapons;
-pub mod wearable;
+pub mod wearables;
