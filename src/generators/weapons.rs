@@ -6,7 +6,7 @@ use crate::components::{
     attack::Attack,
     item_descriptor::ItemDescriptor,
     item_material::{BuiltWithMaterial, ItemMaterial},
-    weapon::{Weapon, WeaponType},
+    weapons::{weapon::Weapon, weapon_type::WeaponType},
 };
 
 use super::generator::Generator;

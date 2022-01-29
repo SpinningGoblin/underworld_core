@@ -16,5 +16,5 @@ pub mod player;
 pub mod room;
 pub mod species;
 pub mod stats;
-pub mod weapon;
+pub mod weapons;
 pub mod wearable;

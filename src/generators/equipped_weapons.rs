@@ -1,4 +1,4 @@
-use crate::components::weapon::{Weapon, WeaponType};
+use crate::components::weapons::{weapon::Weapon, weapon_type::WeaponType};
 
 use super::{equipped_items::EquippedItemPrototype, weapons::WeaponGenerator};
 

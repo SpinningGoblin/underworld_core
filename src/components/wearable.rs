@@ -7,9 +7,10 @@ use std::fmt::Display;
 
 use super::{
     defense::Defense,
+    descriptor_tags::{DescriptorTag, DescriptorTagged},
     equipped_item::{Equippable, EquippedLocation},
     item_descriptor::ItemDescriptor,
-    item_material::{BuiltWithMaterial, ItemMaterial}, descriptor_tags::{DescriptorTag, DescriptorTagged},
+    item_material::{BuiltWithMaterial, ItemMaterial},
 };
 
 #[derive(Clone, Debug, PartialEq)]
@@ -232,20 +233,20 @@ impl Equippable for WearableType {
 impl Display for WearableType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
-            Self::Breastplate => write!(f, "armour"),
-            Self::Cloak => write!(f, "cloak"),
-            Self::Shirt => write!(f, "shirt"),
-            Self::PlateHelmet => write!(f, "plate helmet"),
-            Self::Shackles => write!(f, "shackles"),
-            Self::Mask => write!(f, "mask"),
-            Self::Trousers => write!(f, "trousers"),
-            Self::Crown => write!(f, "crown"),
-            Self::Boots => write!(f, "boots"),
-            Self::Gloves => write!(f, "gloves"),
-            Self::LoinCloth => write!(f, "loin cloth"),
-            Self::PlateBoots => write!(f, "plate boots"),
-            Self::PlateGauntlets => write!(f, "plate gauntlets"),
-            Self::Vest => write!(f, "vest"),
+            WearableType::Breastplate => write!(f, "armour"),
+            WearableType::Cloak => write!(f, "cloak"),
+            WearableType::Shirt => write!(f, "shirt"),
+            WearableType::PlateHelmet => write!(f, "plate helmet"),
+            WearableType::Shackles => write!(f, "shackles"),
+            WearableType::Mask => write!(f, "mask"),
+            WearableType::Trousers => write!(f, "trousers"),
+            WearableType::Crown => write!(f, "crown"),
+            WearableType::Boots => write!(f, "boots"),
+            WearableType::Gloves => write!(f, "gloves"),
+            WearableType::LoinCloth => write!(f, "loin cloth"),
+            WearableType::PlateBoots => write!(f, "plate boots"),
+            WearableType::PlateGauntlets => write!(f, "plate gauntlets"),
+            WearableType::Vest => write!(f, "vest"),
         }
     }
 }

@@ -184,7 +184,7 @@ impl ItemDescriptor {
 #[cfg(test)]
 mod tests {
     use crate::components::{
-        item_material::ItemMaterial, weapon::WeaponType, wearable::WearableType,
+        item_material::ItemMaterial, weapons::weapon_type::WeaponType, wearable::WearableType,
     };
 
     use super::ItemDescriptor;

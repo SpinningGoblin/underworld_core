@@ -5,7 +5,10 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use super::{item_descriptor::ItemDescriptor, descriptor_tags::{DescriptorTagged, DescriptorTag}};
+use super::{
+    descriptor_tags::{DescriptorTag, DescriptorTagged},
+    item_descriptor::ItemDescriptor,
+};
 
 #[derive(Clone, Debug, PartialEq)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]

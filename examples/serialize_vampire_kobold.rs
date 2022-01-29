@@ -1,11 +1,12 @@
-use underworld_core::components::{weapon::WeaponType, wearable::WearableType};
-
 pub fn main() {
     #[cfg(feature = "serialization")]
     #[cfg(feature = "json")]
     {
         use underworld_core::{
-            components::life_modifier::LifeModifier,
+            components::{
+                life_modifier::LifeModifier, weapons::weapon_type::WeaponType,
+                wearable::WearableType,
+            },
             generators::{
                 characters::CharacterPrototype, generator::Generator,
                 inventory::InventoryPrototype, non_players::NonPlayerPrototype,

@@ -114,7 +114,7 @@ mod serialization_tests {
     use crate::components::{
         equipped_item::EquippedLocation,
         item_descriptor::ItemDescriptor,
-        weapon::{Weapon, WeaponType},
+        weapons::{weapon::Weapon, weapon_type::WeaponType},
     };
 
     use super::EquippedItem;
@@ -123,7 +123,7 @@ mod serialization_tests {
     fn serialize() {
         let weapon = Weapon {
             attack: None,
-            weapon_type: crate::components::weapon::WeaponType::LongSword,
+            weapon_type: WeaponType::LongSword,
             descriptors: vec![ItemDescriptor::Dull],
             material: None,
         };

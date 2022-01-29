@@ -5,7 +5,7 @@ use rand::Rng;
 use crate::components::{
     equipped_item::{Equippable, EquippedItem, EquippedLocation},
     inventory::Inventory,
-    weapon::{Weapon, WeaponType},
+    weapons::{weapon::Weapon, weapon_type::WeaponType},
     wearable::{Wearable, WearableType},
 };
 
