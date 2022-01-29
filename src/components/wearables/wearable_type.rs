@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::components::{
     descriptor_tags::{DescriptorTag, DescriptorTagged},
-    equipped_item::{Equippable, EquippedLocation},
+    equipped_item::{Equippable, EquipLocationDescriptor},
     item_descriptor::ItemDescriptor,
     item_material::{BuiltWithMaterial, ItemMaterial},
 };
@@ -176,10 +176,10 @@ impl DescriptorTagged for WearableType {
 }
 
 impl Equippable for WearableType {
-    fn possible_equip_locations(&self) -> Vec<EquippedLocation> {
+    fn possible_equip_locations(&self) -> Vec<EquipLocationDescriptor> {
         match *self {
             WearableType::Breastplate => Vec::new(),
-            WearableType::Cloak => vec![EquippedLocation::HangingLooselyShoulders],
+            WearableType::Cloak => vec![EquipLocationDescriptor::HangingLooselyShoulders],
             WearableType::Shirt => Vec::new(),
             WearableType::PlateHelmet => Vec::new(),
             WearableType::Shackles => Vec::new(),

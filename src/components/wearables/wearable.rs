@@ -7,7 +7,7 @@ use std::fmt::Display;
 
 use crate::components::{
     defense::Defense,
-    equipped_item::{Equippable, EquippedLocation},
+    equipped_item::{Equippable, EquipLocationDescriptor},
     item_descriptor::ItemDescriptor,
     item_material::ItemMaterial,
 };
@@ -32,7 +32,7 @@ pub struct Wearable {
 }
 
 impl Equippable for Wearable {
-    fn possible_equip_locations(&self) -> Vec<EquippedLocation> {
+    fn possible_equip_locations(&self) -> Vec<EquipLocationDescriptor> {
         self.wearable_type.possible_equip_locations()
     }
 

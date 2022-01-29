@@ -3,7 +3,7 @@ use std::ops::Range;
 use rand::Rng;
 
 use crate::components::{
-    equipped_item::{Equippable, EquippedItem, EquippedLocation},
+    equipped_item::{Equippable, EquippedItem, EquipLocationDescriptor},
     inventory::Inventory,
     weapons::{weapon::Weapon, weapon_type::WeaponType},
     wearables::{wearable::Wearable, wearable_type::WearableType},
@@ -31,7 +31,7 @@ impl InventoryPrototype {
             return Vec::new();
         }
 
-        let mut used_locations: Vec<EquippedLocation> = Vec::new();
+        let mut used_locations: Vec<EquipLocationDescriptor> = Vec::new();
         let mut equipped_weapons: Vec<EquippedItem<Weapon>> = Vec::new();
         for _ in 1..count {
             let index = rng.gen_range(0..self.weapon_types.len());
@@ -41,7 +41,7 @@ impl InventoryPrototype {
             };
             let generator = WeaponGenerator::for_weapon_type(weapon_type);
             let weapon = generator.generate();
-            let possible_locations: Vec<EquippedLocation> = weapon
+            let possible_locations: Vec<EquipLocationDescriptor> = weapon
                 .possible_equip_locations()
                 .iter()
                 .filter(|location| {
@@ -59,7 +59,7 @@ impl InventoryPrototype {
             let range = 0..possible_locations.len();
 
             let equipped_location = if range.is_empty() {
-                EquippedLocation::None
+                EquipLocationDescriptor::None
             } else {
                 let location_index = rng.gen_range(range);
                 possible_locations
@@ -68,7 +68,7 @@ impl InventoryPrototype {
                     .unwrap_or_default()
             };
 
-            if equipped_location != EquippedLocation::None {
+            if equipped_location != EquipLocationDescriptor::None {
                 used_locations.push(equipped_location.clone());
             };
 
@@ -118,7 +118,7 @@ impl InventoryPrototype {
             return Vec::new();
         }
 
-        let mut used_locations: Vec<EquippedLocation> = Vec::new();
+        let mut used_locations: Vec<EquipLocationDescriptor> = Vec::new();
         let mut equipped_wearables: Vec<EquippedItem<Wearable>> = Vec::new();
         let mut used_types: Vec<WearableType> = Vec::new();
         for _ in 0..count {
@@ -145,7 +145,7 @@ impl InventoryPrototype {
             used_types.push(wearable_type.clone());
             let generator = WearableGenerator::for_wearable_type(wearable_type);
             let wearable = generator.generate();
-            let possible_locations: Vec<EquippedLocation> = wearable
+            let possible_locations: Vec<EquipLocationDescriptor> = wearable
                 .possible_equip_locations()
                 .iter()
                 .filter(|location| {
@@ -163,7 +163,7 @@ impl InventoryPrototype {
             let range = 0..possible_locations.len();
 
             let equipped_location = if range.is_empty() {
-                EquippedLocation::None
+                EquipLocationDescriptor::None
             } else {
                 let location_index = rng.gen_range(range);
                 possible_locations
@@ -172,7 +172,7 @@ impl InventoryPrototype {
                     .unwrap_or_default()
             };
 
-            if equipped_location != EquippedLocation::None {
+            if equipped_location != EquipLocationDescriptor::None {
                 used_locations.push(equipped_location.clone());
             };
 

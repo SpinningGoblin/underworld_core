@@ -234,7 +234,7 @@ impl SentenceJoiners {
 #[cfg(test)]
 mod inventory_tests {
     use crate::components::{
-        equipped_item::{EquippedItem, EquippedLocation},
+        equipped_item::{EquippedItem, EquipLocationDescriptor},
         item_descriptor::ItemDescriptor,
         item_material::ItemMaterial,
         weapons::{weapon::Weapon, weapon_type::WeaponType},
@@ -262,13 +262,13 @@ mod inventory_tests {
                 EquippedItem {
                     item: long_sword,
                     hidden: false,
-                    equipped_location: EquippedLocation::None,
+                    equipped_location: EquipLocationDescriptor::None,
                     multiple: false,
                 },
                 EquippedItem {
                     item: short_sword,
                     hidden: false,
-                    equipped_location: EquippedLocation::SheathedAtHip,
+                    equipped_location: EquipLocationDescriptor::SheathedAtHip,
                     multiple: false,
                 },
             ],
@@ -295,7 +295,7 @@ mod inventory_tests {
             equipped_weapons: vec![EquippedItem {
                 item: long_sword,
                 hidden: false,
-                equipped_location: EquippedLocation::None,
+                equipped_location: EquipLocationDescriptor::None,
                 multiple: false,
             }],
             equipped_wearables: Vec::new(),
@@ -327,13 +327,13 @@ mod inventory_tests {
                 EquippedItem {
                     item: long_sword,
                     hidden: false,
-                    equipped_location: EquippedLocation::None,
+                    equipped_location: EquipLocationDescriptor::None,
                     multiple: false,
                 },
                 EquippedItem {
                     item: short_sword,
                     hidden: true,
-                    equipped_location: EquippedLocation::StrappedToThigh,
+                    equipped_location: EquipLocationDescriptor::StrappedToThigh,
                     multiple: false,
                 },
             ],
@@ -361,7 +361,7 @@ mod inventory_tests {
             equipped_wearables: vec![EquippedItem {
                 item: chain_mail,
                 hidden: false,
-                equipped_location: EquippedLocation::None,
+                equipped_location: EquipLocationDescriptor::None,
                 multiple: false,
             }],
             carried_weapons: Vec::new(),
@@ -395,13 +395,13 @@ mod inventory_tests {
                 EquippedItem {
                     item: chain_mail,
                     hidden: false,
-                    equipped_location: EquippedLocation::None,
+                    equipped_location: EquipLocationDescriptor::None,
                     multiple: false,
                 },
                 EquippedItem {
                     item: shackles,
                     hidden: false,
-                    equipped_location: EquippedLocation::DanglingFromWrists,
+                    equipped_location: EquipLocationDescriptor::DanglingFromWrists,
                     multiple: true,
                 },
             ],

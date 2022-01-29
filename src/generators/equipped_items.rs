@@ -2,7 +2,7 @@ use std::fmt::{Debug, Display};
 
 use rand::Rng;
 
-use crate::components::equipped_item::{Equippable, EquippedItem, EquippedLocation};
+use crate::components::equipped_item::{Equippable, EquippedItem, EquipLocationDescriptor};
 
 use super::generator::Generator;
 
@@ -14,16 +14,16 @@ pub struct EquippedItemPrototype<T: Display + Clone + Debug + Equippable> {
 }
 
 impl<T: Display + Clone + Debug + Equippable> EquippedItemPrototype<T> {
-    fn equipped_location(&self, item: &T) -> EquippedLocation {
+    fn equipped_location(&self, item: &T) -> EquipLocationDescriptor {
         let mut rng = rand::thread_rng();
 
         if item.possible_equip_locations().is_empty() {
-            return EquippedLocation::None;
+            return EquipLocationDescriptor::None;
         }
 
         let equipped_location_roll: usize = rng.gen_range(0..=100);
         if equipped_location_roll > self.equipped_location_chance {
-            return EquippedLocation::None;
+            return EquipLocationDescriptor::None;
         }
 
         let index = rng.gen_range(0..item.possible_equip_locations().len());

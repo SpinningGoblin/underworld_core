@@ -11,12 +11,12 @@ use std::fmt::{Debug, Display};
 pub struct EquippedItem<T: Display + Clone + Debug + Equippable> {
     pub item: T,
     pub hidden: bool,
-    pub equipped_location: EquippedLocation,
+    pub equipped_location: EquipLocationDescriptor,
     pub multiple: bool,
 }
 
 pub trait Equippable {
-    fn possible_equip_locations(&self) -> Vec<EquippedLocation>;
+    fn possible_equip_locations(&self) -> Vec<EquipLocationDescriptor>;
     fn is_multiple(&self) -> bool;
 }
 
@@ -27,7 +27,7 @@ pub trait Equippable {
     derive(Deserialize, Serialize),
     serde(rename_all = "snake_case")
 )]
-pub enum EquippedLocation {
+pub enum EquipLocationDescriptor {
     AlmostFallingGrip,
     ClenchedInFist,
     DanglingFromWrists,
@@ -42,67 +42,67 @@ pub enum EquippedLocation {
     None,
 }
 
-impl Default for EquippedLocation {
+impl Default for EquipLocationDescriptor {
     fn default() -> Self {
-        EquippedLocation::None
+        EquipLocationDescriptor::None
     }
 }
 
-impl EquippedLocation {
-    pub fn unable_to_be_used_with(&self, other: &EquippedLocation) -> bool {
+impl EquipLocationDescriptor {
+    pub fn unable_to_be_used_with(&self, other: &EquipLocationDescriptor) -> bool {
         match *self {
-            EquippedLocation::AlmostFallingGrip => other.is_in_hand(),
-            EquippedLocation::ClenchedInFist => other.is_in_hand(),
-            EquippedLocation::DanglingFromWrists => false,
-            EquippedLocation::HangingHip => other.is_at_hip(),
-            EquippedLocation::HangingLooselyShoulders => false,
-            EquippedLocation::HeldLoosely => other.is_in_hand(),
-            EquippedLocation::HangingMoldySheath => other.is_at_hip(),
-            EquippedLocation::SheathedAtHip => other.is_at_hip(),
-            EquippedLocation::StrappedToBack => false,
-            EquippedLocation::StrappedToThigh => false,
-            EquippedLocation::ClenchedInFists => other.is_in_hand(),
-            EquippedLocation::None => false,
+            EquipLocationDescriptor::AlmostFallingGrip => other.is_in_hand(),
+            EquipLocationDescriptor::ClenchedInFist => other.is_in_hand(),
+            EquipLocationDescriptor::DanglingFromWrists => false,
+            EquipLocationDescriptor::HangingHip => other.is_at_hip(),
+            EquipLocationDescriptor::HangingLooselyShoulders => false,
+            EquipLocationDescriptor::HeldLoosely => other.is_in_hand(),
+            EquipLocationDescriptor::HangingMoldySheath => other.is_at_hip(),
+            EquipLocationDescriptor::SheathedAtHip => other.is_at_hip(),
+            EquipLocationDescriptor::StrappedToBack => false,
+            EquipLocationDescriptor::StrappedToThigh => false,
+            EquipLocationDescriptor::ClenchedInFists => other.is_in_hand(),
+            EquipLocationDescriptor::None => false,
         }
     }
 
     fn is_in_hand(&self) -> bool {
         matches!(
             *self,
-            EquippedLocation::AlmostFallingGrip
-                | EquippedLocation::ClenchedInFist
-                | EquippedLocation::ClenchedInFists
-                | EquippedLocation::HeldLoosely
+            EquipLocationDescriptor::AlmostFallingGrip
+                | EquipLocationDescriptor::ClenchedInFist
+                | EquipLocationDescriptor::ClenchedInFists
+                | EquipLocationDescriptor::HeldLoosely
         )
     }
 
     fn is_at_hip(&self) -> bool {
         matches!(
             *self,
-            EquippedLocation::HangingHip
-                | EquippedLocation::HangingMoldySheath
-                | EquippedLocation::SheathedAtHip
+            EquipLocationDescriptor::HangingHip
+                | EquipLocationDescriptor::HangingMoldySheath
+                | EquipLocationDescriptor::SheathedAtHip
         )
     }
 }
 
-impl Display for EquippedLocation {
+impl Display for EquipLocationDescriptor {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
-            EquippedLocation::StrappedToThigh => write!(f, "strapped to its thigh"),
-            EquippedLocation::ClenchedInFist => write!(f, "clenched in its fist"),
-            EquippedLocation::HeldLoosely => write!(f, "held loosely"),
-            EquippedLocation::StrappedToBack => write!(f, "strapped to its back"),
-            EquippedLocation::SheathedAtHip => write!(f, "sheathed at its hip"),
-            EquippedLocation::HangingMoldySheath => write!(f, "hanging in a moldy sheath"),
-            EquippedLocation::HangingLooselyShoulders => {
+            EquipLocationDescriptor::StrappedToThigh => write!(f, "strapped to its thigh"),
+            EquipLocationDescriptor::ClenchedInFist => write!(f, "clenched in its fist"),
+            EquipLocationDescriptor::HeldLoosely => write!(f, "held loosely"),
+            EquipLocationDescriptor::StrappedToBack => write!(f, "strapped to its back"),
+            EquipLocationDescriptor::SheathedAtHip => write!(f, "sheathed at its hip"),
+            EquipLocationDescriptor::HangingMoldySheath => write!(f, "hanging in a moldy sheath"),
+            EquipLocationDescriptor::HangingLooselyShoulders => {
                 write!(f, "which hangs loosely around its shoulders")
             }
-            EquippedLocation::DanglingFromWrists => write!(f, "dangling from its wrists"),
-            EquippedLocation::HangingHip => write!(f, "hanging at its hip"),
-            EquippedLocation::AlmostFallingGrip => write!(f, "almost falling from its grip"),
-            EquippedLocation::ClenchedInFists => write!(f, "clenched in its fists"),
-            EquippedLocation::None => write!(f, ""),
+            EquipLocationDescriptor::DanglingFromWrists => write!(f, "dangling from its wrists"),
+            EquipLocationDescriptor::HangingHip => write!(f, "hanging at its hip"),
+            EquipLocationDescriptor::AlmostFallingGrip => write!(f, "almost falling from its grip"),
+            EquipLocationDescriptor::ClenchedInFists => write!(f, "clenched in its fists"),
+            EquipLocationDescriptor::None => write!(f, ""),
         }
     }
 }
@@ -112,7 +112,7 @@ impl Display for EquippedLocation {
 #[cfg(feature = "json")]
 mod serialization_tests {
     use crate::components::{
-        equipped_item::EquippedLocation,
+        equipped_item::EquipLocationDescriptor,
         item_descriptor::ItemDescriptor,
         weapons::{weapon::Weapon, weapon_type::WeaponType},
     };
@@ -130,7 +130,7 @@ mod serialization_tests {
         let equipped_item = EquippedItem {
             item: weapon,
             hidden: false,
-            equipped_location: EquippedLocation::StrappedToThigh,
+            equipped_location: EquipLocationDescriptor::StrappedToThigh,
             multiple: false,
         };
         let serialized = serde_json::to_string(&equipped_item).unwrap();
