@@ -2,6 +2,7 @@ use std::fmt::Display;
 
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
+use enum_iterator::IntoEnumIterator;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
@@ -11,7 +12,7 @@ use crate::components::{
     item_material::{BuiltWithMaterial, ItemMaterial},
 };
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, IntoEnumIterator, PartialEq)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
     feature = "serialization",
@@ -103,20 +104,7 @@ impl DescriptorTagged for WeaponType {
 
 impl WeaponType {
     pub fn all() -> Vec<WeaponType> {
-        vec![
-            WeaponType::Buckler,
-            WeaponType::Club,
-            WeaponType::Dagger,
-            WeaponType::Dirk,
-            WeaponType::GreatSword,
-            WeaponType::Hammer,
-            WeaponType::LongSword,
-            WeaponType::Mace,
-            WeaponType::Morningstar,
-            WeaponType::Shield,
-            WeaponType::ShortSword,
-            WeaponType::Whip,
-        ]
+        WeaponType::into_enum_iter().collect()
     }
 }
 

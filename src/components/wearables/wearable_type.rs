@@ -2,6 +2,7 @@ use std::fmt::Display;
 
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
+use enum_iterator::IntoEnumIterator;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
@@ -12,7 +13,7 @@ use crate::components::{
     item_material::{BuiltWithMaterial, ItemMaterial},
 };
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, IntoEnumIterator, PartialEq)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
     feature = "serialization",
@@ -38,22 +39,7 @@ pub enum WearableType {
 
 impl WearableType {
     pub fn all() -> Vec<WearableType> {
-        vec![
-            WearableType::Breastplate,
-            WearableType::Boots,
-            WearableType::Cloak,
-            WearableType::Crown,
-            WearableType::Gloves,
-            WearableType::LoinCloth,
-            WearableType::Mask,
-            WearableType::PlateBoots,
-            WearableType::PlateGauntlets,
-            WearableType::PlateHelmet,
-            WearableType::Shackles,
-            WearableType::Shirt,
-            WearableType::Trousers,
-            WearableType::Vest,
-        ]
+        WearableType::into_enum_iter().collect()
     }
 
     pub fn unable_to_be_used_with(&self, other: &WearableType) -> bool {
