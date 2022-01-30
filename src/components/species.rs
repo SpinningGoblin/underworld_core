@@ -1,5 +1,6 @@
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
+use enum_iterator::IntoEnumIterator;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
@@ -7,7 +8,7 @@ use std::{fmt::Display, ops::Range};
 
 use super::dimension_descriptors::HeightDescriptor;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, IntoEnumIterator, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
     feature = "serialization",
@@ -78,7 +79,7 @@ impl Display for Species {
             Self::Kobold => write!(f, "kobold"),
             Self::Ogre => write!(f, "ogre"),
             Self::Orc => write!(f, "orc"),
-            _ => write!(f, "mysterious entity"),
+            _ => write!(f, "unknown creature"),
         }
     }
 }
