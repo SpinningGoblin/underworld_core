@@ -37,9 +37,15 @@ impl Character {
         descriptions.join(" ")
     }
 
-    pub fn describe_inventory(&self) -> String {
+    pub fn describe_inventory(&self, starter: &str) -> String {
+        let sentence_starter = if starter.is_empty() {
+            format!("The {}", self.species)
+        } else {
+            format!("{} {}", starter, self.species)
+        };
+
         match &self.inventory {
-            Some(inventory) => format!("{}", inventory),
+            Some(inventory) => inventory.describe(&sentence_starter, "It"),
             _ => "".to_string(),
         }
     }
