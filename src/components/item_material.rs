@@ -5,7 +5,7 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use super::descriptor_tags::{DescriptorTag, DescriptorTagged};
+use super::item_tag::{ItemTag, TaggedItem};
 
 #[derive(Clone, Debug, PartialEq)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -54,22 +54,22 @@ impl Display for ItemMaterial {
     }
 }
 
-impl DescriptorTagged for ItemMaterial {
-    fn descriptor_tag(&self) -> DescriptorTag {
+impl TaggedItem for ItemMaterial {
+    fn tag(&self) -> ItemTag {
         match *self {
-            ItemMaterial::Bone => DescriptorTag::Bone,
-            ItemMaterial::Gold => DescriptorTag::Metal,
-            ItemMaterial::Hide => DescriptorTag::Leather,
-            ItemMaterial::Iron => DescriptorTag::Metal,
-            ItemMaterial::Leather => DescriptorTag::Leather,
-            ItemMaterial::Steel => DescriptorTag::Metal,
-            ItemMaterial::Stone => DescriptorTag::Stone,
-            ItemMaterial::Wooden => DescriptorTag::Wood,
-            ItemMaterial::Cotton => DescriptorTag::Cloth,
-            ItemMaterial::Fur => DescriptorTag::Cloth,
-            ItemMaterial::Linen => DescriptorTag::Cloth,
-            ItemMaterial::Silk => DescriptorTag::Cloth,
-            ItemMaterial::Wool => DescriptorTag::Cloth,
+            ItemMaterial::Bone => ItemTag::Bone,
+            ItemMaterial::Gold => ItemTag::Metal,
+            ItemMaterial::Hide => ItemTag::Leather,
+            ItemMaterial::Iron => ItemTag::Metal,
+            ItemMaterial::Leather => ItemTag::Leather,
+            ItemMaterial::Steel => ItemTag::Metal,
+            ItemMaterial::Stone => ItemTag::Stone,
+            ItemMaterial::Wooden => ItemTag::Wood,
+            ItemMaterial::Cotton => ItemTag::Cloth,
+            ItemMaterial::Fur => ItemTag::Cloth,
+            ItemMaterial::Linen => ItemTag::Cloth,
+            ItemMaterial::Silk => ItemTag::Cloth,
+            ItemMaterial::Wool => ItemTag::Cloth,
         }
     }
 }

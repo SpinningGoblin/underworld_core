@@ -7,7 +7,7 @@ use enum_iterator::IntoEnumIterator;
 use serde::{Deserialize, Serialize};
 
 use crate::components::{
-    descriptor_tags::{DescriptorTag, DescriptorTagged},
+    item_tag::{ItemTag, TaggedItem},
     equipped_item::{EquipLocationDescriptor, Equippable},
     item_descriptor::ItemDescriptor,
     item_material::{BuiltWithMaterial, ItemMaterial},
@@ -167,23 +167,23 @@ impl BuiltWithMaterial for WearableType {
     }
 }
 
-impl DescriptorTagged for WearableType {
-    fn descriptor_tag(&self) -> DescriptorTag {
+impl TaggedItem for WearableType {
+    fn tag(&self) -> ItemTag {
         match *self {
-            WearableType::Breastplate => DescriptorTag::Armour,
-            WearableType::Mask => DescriptorTag::Accessory,
-            WearableType::Cloak => DescriptorTag::Clothing,
-            WearableType::Shirt => DescriptorTag::Clothing,
-            WearableType::Trousers => DescriptorTag::Clothing,
-            WearableType::Crown => DescriptorTag::Accessory,
-            WearableType::Boots => DescriptorTag::Armour,
-            WearableType::Gloves => DescriptorTag::Clothing,
-            WearableType::LoinCloth => DescriptorTag::Clothing,
-            WearableType::PlateBoots => DescriptorTag::Armour,
-            WearableType::PlateGauntlets => DescriptorTag::Armour,
-            WearableType::PlateHelmet => DescriptorTag::Armour,
-            WearableType::Shackles => DescriptorTag::Accessory,
-            WearableType::Vest => DescriptorTag::Clothing,
+            WearableType::Breastplate => ItemTag::Armour,
+            WearableType::Mask => ItemTag::Accessory,
+            WearableType::Cloak => ItemTag::Clothing,
+            WearableType::Shirt => ItemTag::Clothing,
+            WearableType::Trousers => ItemTag::Clothing,
+            WearableType::Crown => ItemTag::Accessory,
+            WearableType::Boots => ItemTag::Armour,
+            WearableType::Gloves => ItemTag::Clothing,
+            WearableType::LoinCloth => ItemTag::Clothing,
+            WearableType::PlateBoots => ItemTag::Armour,
+            WearableType::PlateGauntlets => ItemTag::Armour,
+            WearableType::PlateHelmet => ItemTag::Armour,
+            WearableType::Shackles => ItemTag::Accessory,
+            WearableType::Vest => ItemTag::Clothing,
         }
     }
 }

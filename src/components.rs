@@ -1,7 +1,7 @@
 pub mod attack;
 pub mod character;
 pub mod defense;
-pub mod descriptor_tags;
+pub mod item_tag;
 pub mod dimension_descriptors;
 pub mod dimensions;
 pub mod equipped_item;

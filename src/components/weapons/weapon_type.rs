@@ -7,7 +7,7 @@ use enum_iterator::IntoEnumIterator;
 use serde::{Deserialize, Serialize};
 
 use crate::components::{
-    descriptor_tags::{DescriptorTag, DescriptorTagged},
+    item_tag::{ItemTag, TaggedItem},
     equipped_item::{EquipLocationDescriptor, Equippable},
     item_material::{BuiltWithMaterial, ItemMaterial},
 };
@@ -83,21 +83,21 @@ impl BuiltWithMaterial for WeaponType {
     }
 }
 
-impl DescriptorTagged for WeaponType {
-    fn descriptor_tag(&self) -> DescriptorTag {
+impl TaggedItem for WeaponType {
+    fn tag(&self) -> ItemTag {
         match *self {
-            WeaponType::Buckler => DescriptorTag::Shield,
-            WeaponType::Club => DescriptorTag::Blunt,
-            WeaponType::Dagger => DescriptorTag::Blade,
-            WeaponType::Dirk => DescriptorTag::Blade,
-            WeaponType::GreatSword => DescriptorTag::Blade,
-            WeaponType::Hammer => DescriptorTag::Blunt,
-            WeaponType::LongSword => DescriptorTag::Blade,
-            WeaponType::Mace => DescriptorTag::Blunt,
-            WeaponType::Morningstar => DescriptorTag::Blunt,
-            WeaponType::Shield => DescriptorTag::Shield,
-            WeaponType::ShortSword => DescriptorTag::Blade,
-            WeaponType::Whip => DescriptorTag::Rope,
+            WeaponType::Buckler => ItemTag::Shield,
+            WeaponType::Club => ItemTag::Blunt,
+            WeaponType::Dagger => ItemTag::Blade,
+            WeaponType::Dirk => ItemTag::Blade,
+            WeaponType::GreatSword => ItemTag::Blade,
+            WeaponType::Hammer => ItemTag::Blunt,
+            WeaponType::LongSword => ItemTag::Blade,
+            WeaponType::Mace => ItemTag::Blunt,
+            WeaponType::Morningstar => ItemTag::Blunt,
+            WeaponType::Shield => ItemTag::Shield,
+            WeaponType::ShortSword => ItemTag::Blade,
+            WeaponType::Whip => ItemTag::Rope,
         }
     }
 }

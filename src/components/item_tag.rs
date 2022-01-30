@@ -1,9 +1,9 @@
-pub trait DescriptorTagged {
-    fn descriptor_tag(&self) -> DescriptorTag;
+pub trait TaggedItem {
+    fn tag(&self) -> ItemTag;
 }
 
 #[derive(Clone, Debug, PartialEq)]
-pub enum DescriptorTag {
+pub enum ItemTag {
     Accessory,
     Armour,
     Blade,

@@ -6,7 +6,7 @@ use enum_iterator::IntoEnumIterator;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use super::descriptor_tags::{DescriptorTag, DescriptorTagged};
+use super::item_tag::{ItemTag, TaggedItem};
 
 #[derive(Clone, Debug, IntoEnumIterator, PartialEq)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -84,100 +84,100 @@ impl Display for ItemDescriptor {
 }
 
 impl ItemDescriptor {
-    fn descriptor_tags(&self) -> Vec<DescriptorTag> {
+    fn descriptor_tags(&self) -> Vec<ItemTag> {
         match *self {
             ItemDescriptor::Beaten => vec![
-                DescriptorTag::Wood,
-                DescriptorTag::Bone,
-                DescriptorTag::Leather,
+                ItemTag::Wood,
+                ItemTag::Bone,
+                ItemTag::Leather,
             ],
-            ItemDescriptor::Bleached => vec![DescriptorTag::Bone, DescriptorTag::Wood],
+            ItemDescriptor::Bleached => vec![ItemTag::Bone, ItemTag::Wood],
             ItemDescriptor::Bloodstained => vec![
-                DescriptorTag::Blade,
-                DescriptorTag::Blunt,
-                DescriptorTag::Armour,
-                DescriptorTag::Clothing,
+                ItemTag::Blade,
+                ItemTag::Blunt,
+                ItemTag::Armour,
+                ItemTag::Clothing,
             ],
             ItemDescriptor::Broken => vec![
-                DescriptorTag::Armour,
-                DescriptorTag::Blade,
-                DescriptorTag::Blunt,
-                DescriptorTag::Shield,
+                ItemTag::Armour,
+                ItemTag::Blade,
+                ItemTag::Blunt,
+                ItemTag::Shield,
             ],
             ItemDescriptor::Chipped => vec![
-                DescriptorTag::Blade,
-                DescriptorTag::Blunt,
-                DescriptorTag::Bone,
+                ItemTag::Blade,
+                ItemTag::Blunt,
+                ItemTag::Bone,
             ],
-            ItemDescriptor::Colourful => vec![DescriptorTag::Cloth, DescriptorTag::Clothing],
-            ItemDescriptor::Cracked => vec![DescriptorTag::Bone, DescriptorTag::Stone],
-            ItemDescriptor::Crumbling => vec![DescriptorTag::Leather],
+            ItemDescriptor::Colourful => vec![ItemTag::Cloth, ItemTag::Clothing],
+            ItemDescriptor::Cracked => vec![ItemTag::Bone, ItemTag::Stone],
+            ItemDescriptor::Crumbling => vec![ItemTag::Leather],
             ItemDescriptor::Dingy => vec![
-                DescriptorTag::Cloth,
-                DescriptorTag::Clothing,
-                DescriptorTag::Leather,
+                ItemTag::Cloth,
+                ItemTag::Clothing,
+                ItemTag::Leather,
             ],
-            ItemDescriptor::Dirty => vec![DescriptorTag::Cloth, DescriptorTag::Clothing],
-            ItemDescriptor::Drab => vec![DescriptorTag::Clothing],
-            ItemDescriptor::Dull => vec![DescriptorTag::Blade],
-            ItemDescriptor::IllFitting => vec![DescriptorTag::Armour, DescriptorTag::Clothing],
-            ItemDescriptor::LooseFitting => vec![DescriptorTag::Armour, DescriptorTag::Clothing],
-            ItemDescriptor::Ripped => vec![DescriptorTag::Cloth],
-            ItemDescriptor::Rusty => vec![DescriptorTag::Metal],
-            ItemDescriptor::Scuffed => vec![DescriptorTag::Leather],
+            ItemDescriptor::Dirty => vec![ItemTag::Cloth, ItemTag::Clothing],
+            ItemDescriptor::Drab => vec![ItemTag::Clothing],
+            ItemDescriptor::Dull => vec![ItemTag::Blade],
+            ItemDescriptor::IllFitting => vec![ItemTag::Armour, ItemTag::Clothing],
+            ItemDescriptor::LooseFitting => vec![ItemTag::Armour, ItemTag::Clothing],
+            ItemDescriptor::Ripped => vec![ItemTag::Cloth],
+            ItemDescriptor::Rusty => vec![ItemTag::Metal],
+            ItemDescriptor::Scuffed => vec![ItemTag::Leather],
             ItemDescriptor::SetOf => vec![],
-            ItemDescriptor::Shimmering => vec![DescriptorTag::Cloth, DescriptorTag::Clothing],
-            ItemDescriptor::Shiny => vec![DescriptorTag::Metal],
+            ItemDescriptor::Shimmering => vec![ItemTag::Cloth, ItemTag::Clothing],
+            ItemDescriptor::Shiny => vec![ItemTag::Metal],
             ItemDescriptor::Smoothed => vec![
-                DescriptorTag::Bone,
-                DescriptorTag::Stone,
-                DescriptorTag::Wood,
+                ItemTag::Bone,
+                ItemTag::Stone,
+                ItemTag::Wood,
             ],
-            ItemDescriptor::Splintered => vec![DescriptorTag::Wood],
+            ItemDescriptor::Splintered => vec![ItemTag::Wood],
             ItemDescriptor::Stained => vec![
-                DescriptorTag::Cloth,
-                DescriptorTag::Clothing,
-                DescriptorTag::Leather,
+                ItemTag::Cloth,
+                ItemTag::Clothing,
+                ItemTag::Leather,
             ],
-            ItemDescriptor::Tangled => vec![DescriptorTag::Rope],
-            ItemDescriptor::Tarnished => vec![DescriptorTag::Metal],
-            ItemDescriptor::Torn => vec![DescriptorTag::Cloth, DescriptorTag::Clothing],
+            ItemDescriptor::Tangled => vec![ItemTag::Rope],
+            ItemDescriptor::Tarnished => vec![ItemTag::Metal],
+            ItemDescriptor::Torn => vec![ItemTag::Cloth, ItemTag::Clothing],
             ItemDescriptor::WaterLogged => vec![
-                DescriptorTag::Cloth,
-                DescriptorTag::Clothing,
-                DescriptorTag::Leather,
+                ItemTag::Cloth,
+                ItemTag::Clothing,
+                ItemTag::Leather,
             ],
             ItemDescriptor::Weathered => vec![
-                DescriptorTag::Bone,
-                DescriptorTag::Leather,
-                DescriptorTag::Wood,
+                ItemTag::Bone,
+                ItemTag::Leather,
+                ItemTag::Wood,
             ],
-            ItemDescriptor::Rotting => vec![DescriptorTag::Cloth, DescriptorTag::Clothing],
+            ItemDescriptor::Rotting => vec![ItemTag::Cloth, ItemTag::Clothing],
         }
     }
 
-    fn has_tag(&self, tag: &DescriptorTag) -> bool {
+    fn has_tag(&self, tag: &ItemTag) -> bool {
         self.descriptor_tags().contains(tag)
     }
 
-    pub fn matches_tagged(tagged: &impl DescriptorTagged) -> Vec<ItemDescriptor> {
-        Self::matches_tag(&tagged.descriptor_tag())
+    pub fn matches_tagged(tagged: &impl TaggedItem) -> Vec<ItemDescriptor> {
+        Self::matches_tag(&tagged.tag())
     }
 
     pub fn matches_two_tagged(
-        tagged_1: &impl DescriptorTagged,
-        tagged_2: &impl DescriptorTagged,
+        tagged_1: &impl TaggedItem,
+        tagged_2: &impl TaggedItem,
     ) -> Vec<ItemDescriptor> {
-        Self::matches_tags(&tagged_1.descriptor_tag(), &tagged_2.descriptor_tag())
+        Self::matches_tags(&tagged_1.tag(), &tagged_2.tag())
     }
 
-    fn matches_tags(tag_1: &DescriptorTag, tag_2: &DescriptorTag) -> Vec<ItemDescriptor> {
+    fn matches_tags(tag_1: &ItemTag, tag_2: &ItemTag) -> Vec<ItemDescriptor> {
         ItemDescriptor::into_enum_iter()
             .filter(|descriptor| descriptor.has_tag(tag_1) || descriptor.has_tag(tag_2))
             .collect()
     }
 
-    fn matches_tag(tag: &DescriptorTag) -> Vec<ItemDescriptor> {
+    fn matches_tag(tag: &ItemTag) -> Vec<ItemDescriptor> {
         ItemDescriptor::into_enum_iter()
             .filter(|descriptor| descriptor.has_tag(tag))
             .collect()
