@@ -152,10 +152,7 @@ impl ItemDescriptor {
                 DescriptorTag::Leather,
                 DescriptorTag::Wood,
             ],
-            ItemDescriptor::Rotting => vec![
-                DescriptorTag::Cloth,
-                DescriptorTag::Clothing,
-            ],
+            ItemDescriptor::Rotting => vec![DescriptorTag::Cloth, DescriptorTag::Clothing],
         }
     }
 
