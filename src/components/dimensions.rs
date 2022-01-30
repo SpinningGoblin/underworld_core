@@ -14,6 +14,12 @@ pub struct Dimensions {
 }
 
 impl Dimensions {
+    pub fn is_average_height(&self, descriptor: &impl HeightDescriptor) -> bool {
+        let height_range = descriptor.height_range();
+
+        !self.is_larger_than(height_range.end) && !self.is_smaller_than(height_range.start)
+    }
+
     pub fn describe_height(&self, descriptor: &impl HeightDescriptor) -> String {
         let height_range = descriptor.height_range();
         if self.is_larger_than(height_range.end) {
