@@ -24,3 +24,9 @@ impl Display for Identifier {
         }
     }
 }
+
+impl Identifier {
+    pub fn set_name(&mut self, name: &str) {
+        self.name = Some(name.to_string());
+    }
+}
