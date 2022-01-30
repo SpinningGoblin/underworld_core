@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::components::dimension_descriptors::{HeightDescriptor, WidthDescriptor};
 
-use super::room_descriptor::RoomDescriptor;
+use super::descriptor::Descriptor;
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -97,42 +97,42 @@ impl Display for RoomType {
 }
 
 impl RoomType {
-    pub fn possible_descriptors(&self) -> Vec<RoomDescriptor> {
+    pub fn possible_descriptors(&self) -> Vec<Descriptor> {
         match *self {
             RoomType::Cave => vec![
-                RoomDescriptor::Chill,
-                RoomDescriptor::Dark,
-                RoomDescriptor::Dim,
-                RoomDescriptor::Grimy,
-                RoomDescriptor::Moist,
+                Descriptor::Chill,
+                Descriptor::Dark,
+                Descriptor::Dim,
+                Descriptor::Grimy,
+                Descriptor::Moist,
             ],
             RoomType::Cavern => vec![
-                RoomDescriptor::Chill,
-                RoomDescriptor::Dark,
-                RoomDescriptor::Dim,
-                RoomDescriptor::Grimy,
-                RoomDescriptor::Moist,
+                Descriptor::Chill,
+                Descriptor::Dark,
+                Descriptor::Dim,
+                Descriptor::Grimy,
+                Descriptor::Moist,
             ],
             RoomType::PrisonCell => vec![
-                RoomDescriptor::Chill,
-                RoomDescriptor::Dark,
-                RoomDescriptor::Dim,
-                RoomDescriptor::Grimy,
-                RoomDescriptor::Moist,
+                Descriptor::Chill,
+                Descriptor::Dark,
+                Descriptor::Dim,
+                Descriptor::Grimy,
+                Descriptor::Moist,
             ],
             RoomType::Room => vec![
-                RoomDescriptor::Chill,
-                RoomDescriptor::Dark,
-                RoomDescriptor::Dim,
-                RoomDescriptor::Grimy,
-                RoomDescriptor::Moist,
+                Descriptor::Chill,
+                Descriptor::Dark,
+                Descriptor::Dim,
+                Descriptor::Grimy,
+                Descriptor::Moist,
             ],
             RoomType::EntryWay => vec![
-                RoomDescriptor::Chill,
-                RoomDescriptor::Dark,
-                RoomDescriptor::Dim,
-                RoomDescriptor::Grimy,
-                RoomDescriptor::Moist,
+                Descriptor::Chill,
+                Descriptor::Dark,
+                Descriptor::Dim,
+                Descriptor::Grimy,
+                Descriptor::Moist,
             ],
         }
     }

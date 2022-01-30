@@ -10,7 +10,7 @@ use crate::components::{
     dimensions::Dimensions, identifier::Identifier, non_player::NonPlayer, species::Species,
 };
 
-use super::{room_descriptor::RoomDescriptor, room_type::RoomType};
+use super::{descriptor::Descriptor, room_type::RoomType};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -18,7 +18,7 @@ use super::{room_descriptor::RoomDescriptor, room_type::RoomType};
 pub struct Room {
     pub identifier: Identifier,
     pub dimensions: Dimensions,
-    pub descriptors: Vec<RoomDescriptor>,
+    pub descriptors: Vec<Descriptor>,
     pub room_type: RoomType,
     pub non_players: Vec<NonPlayer>,
 }

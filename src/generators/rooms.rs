@@ -8,7 +8,7 @@ use crate::components::{
     dimensions::Dimensions,
     identifier::Identifier,
     non_player::NonPlayer,
-    rooms::{room::Room, room_descriptor::RoomDescriptor, room_type::RoomType},
+    rooms::{room::Room, descriptor::Descriptor, room_type::RoomType},
     species::Species,
 };
 
@@ -24,7 +24,7 @@ pub struct RoomPrototype {
     pub num_descriptors: Range<usize>,
     pub room_type: RoomType,
     pub dimensions_generator: Box<dyn Generator<Dimensions>>,
-    pub possible_descriptors: Vec<RoomDescriptor>,
+    pub possible_descriptors: Vec<Descriptor>,
 }
 
 impl Generator<Room> for RoomPrototype {
@@ -55,7 +55,7 @@ impl Generator<Room> for RoomPrototype {
             }
         }
 
-        let mut descriptors: Vec<RoomDescriptor> = Vec::new();
+        let mut descriptors: Vec<Descriptor> = Vec::new();
         let num_descriptors = rng.gen_range(self.num_descriptors.clone());
         let descriptor_range = 0..=num_descriptors;
         if !descriptor_range.is_empty() {
