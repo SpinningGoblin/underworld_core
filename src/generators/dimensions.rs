@@ -2,7 +2,7 @@ use std::ops::Range;
 
 use rand::Rng;
 
-use crate::components::{dimensions::Dimensions, room::RoomType};
+use crate::components::{dimensions::Dimensions, rooms::room_type::RoomType};
 
 use super::generator::Generator;
 

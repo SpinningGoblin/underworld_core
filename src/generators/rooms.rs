@@ -1,5 +1,6 @@
 use std::ops::Range;
 
+use enum_iterator::IntoEnumIterator;
 use rand::Rng;
 use uuid::Uuid;
 
@@ -7,7 +8,8 @@ use crate::components::{
     dimensions::Dimensions,
     identifier::Identifier,
     non_player::NonPlayer,
-    room::{Room, RoomDescriptor, RoomType},
+    rooms::{room::Room, room_descriptor::RoomDescriptor, room_type::RoomType},
+    species::Species,
 };
 
 use super::{
@@ -16,6 +18,7 @@ use super::{
 };
 
 pub struct RoomPrototype {
+    pub possible_npc_names: Vec<String>,
     pub non_player_generators: Vec<Box<dyn Generator<NonPlayer>>>,
     pub num_non_players: Range<usize>,
     pub num_descriptors: Range<usize>,
@@ -31,12 +34,23 @@ impl Generator<Room> for RoomPrototype {
 
         let mut non_players: Vec<NonPlayer> = Vec::new();
         let non_player_range = 0..=num_non_players;
+        let mut names = self.possible_npc_names.clone();
 
         if !non_player_range.is_empty() {
-            for _ in 0..num_non_players {
-                let npc_generator_index = rng.gen_range(0..self.non_player_generators.len());
-                let npc_generator = self.non_player_generators.get(npc_generator_index).unwrap();
-                let non_player = npc_generator.generate();
+            let npc_generator_index = rng.gen_range(0..self.non_player_generators.len());
+            let mut npc_generator = self.non_player_generators.get(npc_generator_index).unwrap();
+            for _ in 1..=num_non_players {
+                let switch_generator_chance = rng.gen_range(0..=100);
+                if switch_generator_chance > 75 {
+                    let generator_index = rng.gen_range(0..self.non_player_generators.len());
+                    npc_generator = self.non_player_generators.get(generator_index).unwrap();
+                }
+                let mut non_player = npc_generator.generate();
+                if !names.is_empty() {
+                    let name_index = rng.gen_range(0..names.len());
+                    let name = names.remove(name_index);
+                    non_player.set_name(&name);
+                }
                 non_players.push(non_player);
             }
         }
@@ -72,24 +86,15 @@ impl Generator<Room> for RoomPrototype {
 }
 
 impl RoomPrototype {
-    pub fn build_random(npc_names: Vec<String>) -> RoomPrototype {
-        let npc_generators: Vec<Box<dyn Generator<NonPlayer>>> = if npc_names.is_empty() {
-            let character_prototype = CharacterPrototype::random_species_character();
-            vec![Box::new(NonPlayerPrototype {
-                name: None,
-                character_generator: Box::new(character_prototype),
-            })]
-        } else {
-            let mut generators: Vec<Box<dyn Generator<NonPlayer>>> = Vec::new();
-            for name in npc_names.iter() {
-                generators.push(Box::new(NonPlayerPrototype {
-                    name: Some(name.clone()),
-                    character_generator: Box::new(CharacterPrototype::random_species_character()),
-                }));
-            }
+    pub fn build_random(npc_names: Vec<String>, num_non_players: Range<usize>) -> RoomPrototype {
+        let mut npc_generators: Vec<Box<dyn Generator<NonPlayer>>> = Vec::new();
 
-            generators
-        };
+        for species in Species::into_enum_iter() {
+            npc_generators.push(Box::new(NonPlayerPrototype {
+                character_generator: Box::new(CharacterPrototype::overloaded_character(species)),
+                name: None,
+            }));
+        }
 
         let room_types = vec![
             RoomType::Cave,
@@ -104,9 +109,10 @@ impl RoomPrototype {
         let room_type = room_types.get(index).unwrap().clone();
 
         RoomPrototype {
+            num_non_players,
+            possible_npc_names: npc_names,
             room_type: room_type.clone(),
             non_player_generators: npc_generators,
-            num_non_players: 1..3,
             num_descriptors: 1..3,
             dimensions_generator: Box::new(DimensionsPrototype::for_room_type(&room_type)),
             possible_descriptors: room_type.possible_descriptors(),

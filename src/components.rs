@@ -13,7 +13,7 @@ pub mod item_material;
 pub mod life_modifier;
 pub mod non_player;
 pub mod player;
-pub mod room;
+pub mod rooms;
 pub mod species;
 pub mod stats;
 pub mod weapons;

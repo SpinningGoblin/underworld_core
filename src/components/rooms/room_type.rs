@@ -1,59 +1,13 @@
+use std::{fmt::Display, ops::Range};
+
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use std::{fmt::Display, ops::Range};
+use crate::components::dimension_descriptors::{HeightDescriptor, WidthDescriptor};
 
-use super::{
-    dimension_descriptors::{HeightDescriptor, WidthDescriptor},
-    dimensions::Dimensions,
-    identifier::Identifier,
-    non_player::NonPlayer,
-};
-
-#[derive(Clone, Debug)]
-#[cfg_attr(feature = "bevy_components", derive(Component))]
-#[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
-pub struct Room {
-    pub identifier: Identifier,
-    pub dimensions: Dimensions,
-    pub descriptors: Vec<RoomDescriptor>,
-    pub room_type: RoomType,
-    pub non_players: Vec<NonPlayer>,
-}
-
-impl Display for Room {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let parts: Vec<String> = vec![self.describe_room()];
-
-        write!(f, "{}", parts.join(" "))
-    }
-}
-
-impl Room {
-    fn describe_room(&self) -> String {
-        let mut parts: Vec<String> = vec!["It is a".to_string()];
-
-        let height_description = self.dimensions.describe_height(&self.room_type);
-        if !height_description.is_empty() {
-            parts.push(format!(" {}", height_description));
-        }
-
-        let width_description = self.dimensions.describe_width(&self.room_type);
-        if !width_description.is_empty() {
-            parts.push(format!(" {}", width_description));
-        }
-
-        self.descriptors
-            .iter()
-            .for_each(|descriptor| parts.push(format!(" {}", descriptor)));
-
-        parts.push(format!(" {}", &self.room_type));
-        parts.push(".".to_string());
-        parts.join("")
-    }
-}
+use super::room_descriptor::RoomDescriptor;
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -180,33 +134,6 @@ impl RoomType {
                 RoomDescriptor::Grimy,
                 RoomDescriptor::Moist,
             ],
-        }
-    }
-}
-
-#[derive(Clone, Debug)]
-#[cfg_attr(feature = "bevy_components", derive(Component))]
-#[cfg_attr(
-    feature = "serialization",
-    derive(Deserialize, Serialize),
-    serde(rename_all = "snake_case")
-)]
-pub enum RoomDescriptor {
-    Chill,
-    Dark,
-    Dim,
-    Grimy,
-    Moist,
-}
-
-impl Display for RoomDescriptor {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match *self {
-            RoomDescriptor::Chill => write!(f, "chill"),
-            RoomDescriptor::Dark => write!(f, "dark"),
-            RoomDescriptor::Dim => write!(f, "dim"),
-            RoomDescriptor::Grimy => write!(f, "grimy"),
-            RoomDescriptor::Moist => write!(f, "moist"),
         }
     }
 }
