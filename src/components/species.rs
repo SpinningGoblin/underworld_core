@@ -110,6 +110,6 @@ mod tests {
 
     #[test]
     fn to_string_when_unknown() {
-        assert_eq!("mysterious entity", Species::Unknown.to_string());
+        assert_eq!("unknown creature", Species::Unknown.to_string());
     }
 }
