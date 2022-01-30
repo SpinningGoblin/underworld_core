@@ -21,36 +21,40 @@ pub struct Inventory {
 
 impl Display for Inventory {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let mut descriptions: Vec<String> = Vec::new();
-
-        let weapon_description = self.weapon_description();
-        if !weapon_description.is_empty() {
-            descriptions.push(weapon_description);
-        }
-
-        let wearable_description = self.wearables_description();
-        if !wearable_description.is_empty() {
-            descriptions.push(wearable_description);
-        }
-
-        write!(f, "{}", descriptions.join(" "))
+        write!(f, "{}", self.describe("It", "It"))
     }
 }
 
 impl Inventory {
-    fn weapon_description(&self) -> String {
+    pub fn describe(&self, weapon_starter: &str, wearable_starter: &str) -> String {
+        let mut descriptions: Vec<String> = Vec::new();
+
+        let weapon_description = self.weapon_description(weapon_starter);
+        if !weapon_description.is_empty() {
+            descriptions.push(weapon_description);
+        }
+
+        let wearable_description = self.wearables_description(wearable_starter);
+        if !wearable_description.is_empty() {
+            descriptions.push(wearable_description);
+        }
+
+        descriptions.join(" ")
+    }
+
+    fn weapon_description(&self, starter: &str) -> String {
         let visible_weapons: Vec<&EquippedItem<Weapon>> = self
             .equipped_weapons
             .iter()
             .filter(|equipped_weapon| !equipped_weapon.hidden)
             .collect();
         if visible_weapons.is_empty() {
-            return "It has no visible weapons".to_string();
+            return format!("{} has no visible weapons", starter);
         }
 
         let sentence_starters = SentenceStarters::default();
         let sentence_joiners = SentenceJoiners::default();
-        let mut weapons: Vec<String> = vec!["It ".to_string()];
+        let mut weapons: Vec<String> = vec![format!("{} ", starter)];
 
         visible_weapons
             .iter()
@@ -90,7 +94,7 @@ impl Inventory {
         weapons.join("")
     }
 
-    fn wearables_description(&self) -> String {
+    fn wearables_description(&self, starter: &str) -> String {
         let visible_wearables: Vec<&EquippedItem<Wearable>> = self
             .equipped_wearables
             .iter()
@@ -98,12 +102,12 @@ impl Inventory {
             .collect();
 
         if visible_wearables.is_empty() {
-            return "It is wearing... nothing?".to_string();
+            return format!("{} is wearing... nothing?", starter);
         }
 
         let sentence_starters = SentenceStarters::default();
         let sentence_joiners = SentenceJoiners::default();
-        let mut wearables: Vec<String> = vec!["It is ".to_string()];
+        let mut wearables: Vec<String> = vec![format!("{} is ", starter)];
 
         visible_wearables
             .iter()
