@@ -20,4 +20,8 @@ impl NonPlayer {
             _ => "It has no name.".to_string(),
         }
     }
+
+    pub fn set_name(&mut self, name: &str) {
+        self.identifier.set_name(name);
+    }
 }
