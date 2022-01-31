@@ -84,20 +84,20 @@ impl BuiltWithMaterial for WeaponType {
 }
 
 impl TaggedItem for WeaponType {
-    fn tag(&self) -> ItemTag {
+    fn tags(&self) -> Vec<ItemTag> {
         match *self {
-            WeaponType::Buckler => ItemTag::Shield,
-            WeaponType::Club => ItemTag::Blunt,
-            WeaponType::Dagger => ItemTag::Blade,
-            WeaponType::Dirk => ItemTag::Blade,
-            WeaponType::GreatSword => ItemTag::Blade,
-            WeaponType::Hammer => ItemTag::Blunt,
-            WeaponType::LongSword => ItemTag::Blade,
-            WeaponType::Mace => ItemTag::Blunt,
-            WeaponType::Morningstar => ItemTag::Blunt,
-            WeaponType::Shield => ItemTag::Shield,
-            WeaponType::ShortSword => ItemTag::Blade,
-            WeaponType::Whip => ItemTag::Rope,
+            WeaponType::Buckler => vec![ItemTag::Shield],
+            WeaponType::Club => vec![ItemTag::Blunt],
+            WeaponType::Dagger => vec![ItemTag::Blade],
+            WeaponType::Dirk => vec![ItemTag::Blade],
+            WeaponType::GreatSword => vec![ItemTag::Blade],
+            WeaponType::Hammer => vec![ItemTag::Blunt],
+            WeaponType::LongSword => vec![ItemTag::Blade],
+            WeaponType::Mace => vec![ItemTag::Blunt],
+            WeaponType::Morningstar => vec![ItemTag::Blunt],
+            WeaponType::Shield => vec![ItemTag::Shield],
+            WeaponType::ShortSword => vec![ItemTag::Blade],
+            WeaponType::Whip => vec![ItemTag::Rope],
         }
     }
 }
@@ -209,6 +209,10 @@ impl Equippable for WeaponType {
             WeaponType::Shield => false,
             WeaponType::Whip => false,
         }
+    }
+
+    fn look_at(&self, _is_equipped: bool) -> String {
+        format!("{}", self)
     }
 }
 

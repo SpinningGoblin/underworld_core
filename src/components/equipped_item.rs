@@ -16,6 +16,7 @@ pub struct EquippedItem<T: Display + Clone + Debug + Equippable> {
 }
 
 pub trait Equippable {
+    fn look_at(&self, is_equipped: bool) -> String;
     fn possible_equip_locations(&self) -> Vec<EquipLocationDescriptor>;
     fn is_multiple(&self) -> bool;
 }

@@ -168,22 +168,22 @@ impl BuiltWithMaterial for WearableType {
 }
 
 impl TaggedItem for WearableType {
-    fn tag(&self) -> ItemTag {
+    fn tags(&self) -> Vec<ItemTag> {
         match *self {
-            WearableType::Breastplate => ItemTag::Armour,
-            WearableType::Mask => ItemTag::Accessory,
-            WearableType::Cloak => ItemTag::Clothing,
-            WearableType::Shirt => ItemTag::Clothing,
-            WearableType::Trousers => ItemTag::Clothing,
-            WearableType::Crown => ItemTag::Accessory,
-            WearableType::Boots => ItemTag::Armour,
-            WearableType::Gloves => ItemTag::Clothing,
-            WearableType::LoinCloth => ItemTag::Clothing,
-            WearableType::PlateBoots => ItemTag::Armour,
-            WearableType::PlateGauntlets => ItemTag::Armour,
-            WearableType::PlateHelmet => ItemTag::Armour,
-            WearableType::Shackles => ItemTag::Accessory,
-            WearableType::Vest => ItemTag::Clothing,
+            WearableType::Breastplate => vec![ItemTag::Armour],
+            WearableType::Mask => vec![ItemTag::Accessory],
+            WearableType::Cloak => vec![ItemTag::Clothing],
+            WearableType::Shirt => vec![ItemTag::Clothing],
+            WearableType::Trousers => vec![ItemTag::Clothing],
+            WearableType::Crown => vec![ItemTag::Accessory],
+            WearableType::Boots => vec![ItemTag::Armour],
+            WearableType::Gloves => vec![ItemTag::Clothing],
+            WearableType::LoinCloth => vec![ItemTag::Clothing],
+            WearableType::PlateBoots => vec![ItemTag::Armour],
+            WearableType::PlateGauntlets => vec![ItemTag::Armour],
+            WearableType::PlateHelmet => vec![ItemTag::Armour],
+            WearableType::Shackles => vec![ItemTag::Accessory],
+            WearableType::Vest => vec![ItemTag::Clothing],
         }
     }
 }
@@ -225,6 +225,10 @@ impl Equippable for WearableType {
             WearableType::PlateGauntlets => true,
             WearableType::Vest => false,
         }
+    }
+
+    fn look_at(&self, _is_equipped: bool) -> String {
+        format!("{}", self)
     }
 }
 

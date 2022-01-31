@@ -31,6 +31,30 @@ pub struct Wearable {
     pub defense: Option<Defense>,
 }
 
+impl Wearable {
+    fn describe(&self, is_equipped: bool) -> String {
+        let mut descriptions: Vec<String> = Vec::new();
+
+        self.descriptors
+            .iter()
+            .filter(|descriptor| {
+                if !is_equipped {
+                    !descriptor.is_for_equipped()
+                } else {
+                    true
+                }
+            })
+            .for_each(|descriptor| descriptions.push(descriptor.to_string()));
+
+        if let Some(material) = &self.material {
+            descriptions.push(material.to_string());
+        }
+
+        descriptions.push(self.wearable_type.to_string());
+        descriptions.join(" ")
+    }
+}
+
 impl Equippable for Wearable {
     fn possible_equip_locations(&self) -> Vec<EquipLocationDescriptor> {
         self.wearable_type.possible_equip_locations()
@@ -39,22 +63,15 @@ impl Equippable for Wearable {
     fn is_multiple(&self) -> bool {
         self.wearable_type.is_multiple()
     }
+
+    fn look_at(&self, is_equipped: bool) -> String {
+        self.describe(is_equipped)
+    }
 }
 
 impl Display for Wearable {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let mut descriptions: Vec<String> = Vec::new();
-
-        self.descriptors
-            .iter()
-            .for_each(|quality| descriptions.push(quality.to_string()));
-
-        if let Some(material) = &self.material {
-            descriptions.push(material.to_string());
-        }
-
-        descriptions.push(self.wearable_type.to_string());
-        write!(f, "{}", descriptions.join(" "))
+        write!(f, "{}", self.describe(false))
     }
 }
 

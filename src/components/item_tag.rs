@@ -1,5 +1,5 @@
 pub trait TaggedItem {
-    fn tag(&self) -> ItemTag;
+    fn tags(&self) -> Vec<ItemTag>;
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -11,6 +11,7 @@ pub enum ItemTag {
     Bone,
     Cloth,
     Clothing,
+    Equipped,
     Leather,
     Metal,
     Rope,

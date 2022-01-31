@@ -55,21 +55,21 @@ impl Display for ItemMaterial {
 }
 
 impl TaggedItem for ItemMaterial {
-    fn tag(&self) -> ItemTag {
+    fn tags(&self) -> Vec<ItemTag> {
         match *self {
-            ItemMaterial::Bone => ItemTag::Bone,
-            ItemMaterial::Gold => ItemTag::Metal,
-            ItemMaterial::Hide => ItemTag::Leather,
-            ItemMaterial::Iron => ItemTag::Metal,
-            ItemMaterial::Leather => ItemTag::Leather,
-            ItemMaterial::Steel => ItemTag::Metal,
-            ItemMaterial::Stone => ItemTag::Stone,
-            ItemMaterial::Wooden => ItemTag::Wood,
-            ItemMaterial::Cotton => ItemTag::Cloth,
-            ItemMaterial::Fur => ItemTag::Cloth,
-            ItemMaterial::Linen => ItemTag::Cloth,
-            ItemMaterial::Silk => ItemTag::Cloth,
-            ItemMaterial::Wool => ItemTag::Cloth,
+            ItemMaterial::Bone => vec![ItemTag::Bone],
+            ItemMaterial::Gold => vec![ItemTag::Metal],
+            ItemMaterial::Hide => vec![ItemTag::Leather],
+            ItemMaterial::Iron => vec![ItemTag::Metal],
+            ItemMaterial::Leather => vec![ItemTag::Leather],
+            ItemMaterial::Steel => vec![ItemTag::Metal],
+            ItemMaterial::Stone => vec![ItemTag::Stone],
+            ItemMaterial::Wooden => vec![ItemTag::Wood],
+            ItemMaterial::Cotton => vec![ItemTag::Cloth],
+            ItemMaterial::Fur => vec![ItemTag::Cloth],
+            ItemMaterial::Linen => vec![ItemTag::Cloth],
+            ItemMaterial::Silk => vec![ItemTag::Cloth],
+            ItemMaterial::Wool => vec![ItemTag::Cloth],
         }
     }
 }

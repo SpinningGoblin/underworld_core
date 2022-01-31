@@ -84,6 +84,10 @@ impl Display for ItemDescriptor {
 }
 
 impl ItemDescriptor {
+    pub fn is_for_equipped(&self) -> bool {
+        self.descriptor_tags().contains(&ItemTag::Equipped)
+    }
+
     fn descriptor_tags(&self) -> Vec<ItemTag> {
         match *self {
             ItemDescriptor::Beaten => vec![ItemTag::Wood, ItemTag::Bone, ItemTag::Leather],
@@ -108,8 +112,12 @@ impl ItemDescriptor {
             ItemDescriptor::Dirty => vec![ItemTag::Cloth, ItemTag::Clothing],
             ItemDescriptor::Drab => vec![ItemTag::Clothing],
             ItemDescriptor::Dull => vec![ItemTag::Blade],
-            ItemDescriptor::IllFitting => vec![ItemTag::Armour, ItemTag::Clothing],
-            ItemDescriptor::LooseFitting => vec![ItemTag::Armour, ItemTag::Clothing],
+            ItemDescriptor::IllFitting => {
+                vec![ItemTag::Armour, ItemTag::Clothing, ItemTag::Equipped]
+            }
+            ItemDescriptor::LooseFitting => {
+                vec![ItemTag::Armour, ItemTag::Clothing, ItemTag::Equipped]
+            }
             ItemDescriptor::Ripped => vec![ItemTag::Cloth],
             ItemDescriptor::Rusty => vec![ItemTag::Metal],
             ItemDescriptor::Scuffed => vec![ItemTag::Leather],
@@ -130,30 +138,28 @@ impl ItemDescriptor {
         }
     }
 
-    fn has_tag(&self, tag: &ItemTag) -> bool {
-        self.descriptor_tags().contains(tag)
-    }
-
     pub fn matches_tagged(tagged: &impl TaggedItem) -> Vec<ItemDescriptor> {
-        Self::matches_tag(&tagged.tag())
+        Self::matches_tags(tagged.tags())
     }
 
     pub fn matches_two_tagged(
         tagged_1: &impl TaggedItem,
         tagged_2: &impl TaggedItem,
     ) -> Vec<ItemDescriptor> {
-        Self::matches_tags(&tagged_1.tag(), &tagged_2.tag())
+        let mut tags = tagged_1.tags().clone();
+        let mut tags_2 = tagged_2.tags().clone();
+        tags.append(&mut tags_2);
+        Self::matches_tags(tags)
     }
 
-    fn matches_tags(tag_1: &ItemTag, tag_2: &ItemTag) -> Vec<ItemDescriptor> {
+    fn matches_tags(tags: Vec<ItemTag>) -> Vec<ItemDescriptor> {
         ItemDescriptor::into_enum_iter()
-            .filter(|descriptor| descriptor.has_tag(tag_1) || descriptor.has_tag(tag_2))
-            .collect()
-    }
-
-    fn matches_tag(tag: &ItemTag) -> Vec<ItemDescriptor> {
-        ItemDescriptor::into_enum_iter()
-            .filter(|descriptor| descriptor.has_tag(tag))
+            .filter(|descriptor| {
+                descriptor
+                    .descriptor_tags()
+                    .iter()
+                    .any(|tag| tags.contains(&tag))
+            })
             .collect()
     }
 }

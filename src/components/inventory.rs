@@ -7,7 +7,11 @@ use std::fmt::Display;
 
 use rand::{thread_rng, Rng};
 
-use super::{equipped_item::EquippedItem, weapons::weapon::Weapon, wearables::wearable::Wearable};
+use super::{
+    equipped_item::{Equippable, EquippedItem},
+    weapons::weapon::Weapon,
+    wearables::wearable::Wearable,
+};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -69,7 +73,8 @@ impl Inventory {
 
                 let weapon_description = format!(
                     "{} {}",
-                    equipped_weapon.item, equipped_weapon.equipped_location
+                    equipped_weapon.item.look_at(true),
+                    equipped_weapon.equipped_location
                 )
                 .trim_end()
                 .to_string();
@@ -122,7 +127,8 @@ impl Inventory {
 
                 let wearable_description = format!(
                     "{} {}",
-                    equipped_wearable.item, equipped_wearable.equipped_location
+                    equipped_wearable.item.look_at(true),
+                    equipped_wearable.equipped_location
                 )
                 .trim_end()
                 .to_string();

@@ -38,14 +38,25 @@ impl Equippable for Weapon {
     fn is_multiple(&self) -> bool {
         self.weapon_type.is_multiple()
     }
+
+    fn look_at(&self, is_equipped: bool) -> String {
+        self.describe(is_equipped)
+    }
 }
 
-impl Display for Weapon {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl Weapon {
+    fn describe(&self, is_equipped: bool) -> String {
         let mut descriptions: Vec<String> = Vec::new();
-        for quality in self.descriptors.iter() {
-            descriptions.push(quality.to_string());
-        }
+        self.descriptors
+            .iter()
+            .filter(|descriptor| {
+                if !is_equipped {
+                    !descriptor.is_for_equipped()
+                } else {
+                    true
+                }
+            })
+            .for_each(|descriptor| descriptions.push(descriptor.to_string()));
 
         if let Some(material) = &self.material {
             descriptions.push(material.to_string());
@@ -53,7 +64,13 @@ impl Display for Weapon {
 
         descriptions.push(self.weapon_type.to_string());
 
-        write!(f, "{}", descriptions.join(" "))
+        descriptions.join(" ")
+    }
+}
+
+impl Display for Weapon {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.describe(false))
     }
 }
 
