@@ -36,7 +36,9 @@ impl Display for Descriptor {
             Descriptor::Moist => write!(f, "moist"),
             Descriptor::AStrangeBreezeBlows => write!(f, "a strange breeze blows"),
             Descriptor::MoldMossCoversWalls => write!(f, "mold and moss cover the walls"),
-            Descriptor::UnseenLightsFlickerWalls => write!(f, "unseen lights flicker across the walls"),
+            Descriptor::UnseenLightsFlickerWalls => {
+                write!(f, "unseen lights flicker across the walls")
+            }
         }
     }
 }
