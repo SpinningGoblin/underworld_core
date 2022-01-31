@@ -8,7 +8,7 @@ use crate::components::{
     dimensions::Dimensions,
     identifier::Identifier,
     non_player::NonPlayer,
-    rooms::{room::Room, descriptor::Descriptor, room_type::RoomType},
+    rooms::{descriptor::Descriptor, room::Room, room_type::RoomType},
     species::Species,
 };
 

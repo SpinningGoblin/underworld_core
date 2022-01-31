@@ -7,9 +7,9 @@ use enum_iterator::IntoEnumIterator;
 use serde::{Deserialize, Serialize};
 
 use crate::components::{
-    item_tag::{ItemTag, TaggedItem},
     equipped_item::{EquipLocationDescriptor, Equippable},
     item_material::{BuiltWithMaterial, ItemMaterial},
+    item_tag::{ItemTag, TaggedItem},
 };
 
 #[derive(Clone, Debug, IntoEnumIterator, PartialEq)]

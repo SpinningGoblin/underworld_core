@@ -86,11 +86,7 @@ impl Display for ItemDescriptor {
 impl ItemDescriptor {
     fn descriptor_tags(&self) -> Vec<ItemTag> {
         match *self {
-            ItemDescriptor::Beaten => vec![
-                ItemTag::Wood,
-                ItemTag::Bone,
-                ItemTag::Leather,
-            ],
+            ItemDescriptor::Beaten => vec![ItemTag::Wood, ItemTag::Bone, ItemTag::Leather],
             ItemDescriptor::Bleached => vec![ItemTag::Bone, ItemTag::Wood],
             ItemDescriptor::Bloodstained => vec![
                 ItemTag::Blade,
@@ -104,19 +100,11 @@ impl ItemDescriptor {
                 ItemTag::Blunt,
                 ItemTag::Shield,
             ],
-            ItemDescriptor::Chipped => vec![
-                ItemTag::Blade,
-                ItemTag::Blunt,
-                ItemTag::Bone,
-            ],
+            ItemDescriptor::Chipped => vec![ItemTag::Blade, ItemTag::Blunt, ItemTag::Bone],
             ItemDescriptor::Colourful => vec![ItemTag::Cloth, ItemTag::Clothing],
             ItemDescriptor::Cracked => vec![ItemTag::Bone, ItemTag::Stone],
             ItemDescriptor::Crumbling => vec![ItemTag::Leather],
-            ItemDescriptor::Dingy => vec![
-                ItemTag::Cloth,
-                ItemTag::Clothing,
-                ItemTag::Leather,
-            ],
+            ItemDescriptor::Dingy => vec![ItemTag::Cloth, ItemTag::Clothing, ItemTag::Leather],
             ItemDescriptor::Dirty => vec![ItemTag::Cloth, ItemTag::Clothing],
             ItemDescriptor::Drab => vec![ItemTag::Clothing],
             ItemDescriptor::Dull => vec![ItemTag::Blade],
@@ -128,30 +116,16 @@ impl ItemDescriptor {
             ItemDescriptor::SetOf => vec![],
             ItemDescriptor::Shimmering => vec![ItemTag::Cloth, ItemTag::Clothing],
             ItemDescriptor::Shiny => vec![ItemTag::Metal],
-            ItemDescriptor::Smoothed => vec![
-                ItemTag::Bone,
-                ItemTag::Stone,
-                ItemTag::Wood,
-            ],
+            ItemDescriptor::Smoothed => vec![ItemTag::Bone, ItemTag::Stone, ItemTag::Wood],
             ItemDescriptor::Splintered => vec![ItemTag::Wood],
-            ItemDescriptor::Stained => vec![
-                ItemTag::Cloth,
-                ItemTag::Clothing,
-                ItemTag::Leather,
-            ],
+            ItemDescriptor::Stained => vec![ItemTag::Cloth, ItemTag::Clothing, ItemTag::Leather],
             ItemDescriptor::Tangled => vec![ItemTag::Rope],
             ItemDescriptor::Tarnished => vec![ItemTag::Metal],
             ItemDescriptor::Torn => vec![ItemTag::Cloth, ItemTag::Clothing],
-            ItemDescriptor::WaterLogged => vec![
-                ItemTag::Cloth,
-                ItemTag::Clothing,
-                ItemTag::Leather,
-            ],
-            ItemDescriptor::Weathered => vec![
-                ItemTag::Bone,
-                ItemTag::Leather,
-                ItemTag::Wood,
-            ],
+            ItemDescriptor::WaterLogged => {
+                vec![ItemTag::Cloth, ItemTag::Clothing, ItemTag::Leather]
+            }
+            ItemDescriptor::Weathered => vec![ItemTag::Bone, ItemTag::Leather, ItemTag::Wood],
             ItemDescriptor::Rotting => vec![ItemTag::Cloth, ItemTag::Clothing],
         }
     }

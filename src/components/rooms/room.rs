@@ -91,10 +91,17 @@ impl Room {
 
         self.descriptors
             .iter()
+            .filter(|descriptor| descriptor.is_pre())
             .for_each(|descriptor| parts.push(format!(" {}", descriptor)));
 
         parts.push(format!(" {}", &self.room_type));
         parts.push(".".to_string());
+
+        self.descriptors
+            .iter()
+            .filter(|descriptor| !descriptor.is_pre())
+            .for_each(|descriptor| parts.push(format!(" {}", descriptor.as_sentence())));
+
         parts.join("")
     }
 

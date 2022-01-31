@@ -2,6 +2,7 @@ use std::{fmt::Display, ops::Range};
 
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
+use enum_iterator::IntoEnumIterator;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
@@ -99,41 +100,11 @@ impl Display for RoomType {
 impl RoomType {
     pub fn possible_descriptors(&self) -> Vec<Descriptor> {
         match *self {
-            RoomType::Cave => vec![
-                Descriptor::Chill,
-                Descriptor::Dark,
-                Descriptor::Dim,
-                Descriptor::Grimy,
-                Descriptor::Moist,
-            ],
-            RoomType::Cavern => vec![
-                Descriptor::Chill,
-                Descriptor::Dark,
-                Descriptor::Dim,
-                Descriptor::Grimy,
-                Descriptor::Moist,
-            ],
-            RoomType::PrisonCell => vec![
-                Descriptor::Chill,
-                Descriptor::Dark,
-                Descriptor::Dim,
-                Descriptor::Grimy,
-                Descriptor::Moist,
-            ],
-            RoomType::Room => vec![
-                Descriptor::Chill,
-                Descriptor::Dark,
-                Descriptor::Dim,
-                Descriptor::Grimy,
-                Descriptor::Moist,
-            ],
-            RoomType::EntryWay => vec![
-                Descriptor::Chill,
-                Descriptor::Dark,
-                Descriptor::Dim,
-                Descriptor::Grimy,
-                Descriptor::Moist,
-            ],
+            RoomType::Cave => Descriptor::into_enum_iter().collect(),
+            RoomType::Cavern => Descriptor::into_enum_iter().collect(),
+            RoomType::PrisonCell => Descriptor::into_enum_iter().collect(),
+            RoomType::Room => Descriptor::into_enum_iter().collect(),
+            RoomType::EntryWay => Descriptor::into_enum_iter().collect(),
         }
     }
 }

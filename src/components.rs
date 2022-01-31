@@ -1,7 +1,6 @@
 pub mod attack;
 pub mod character;
 pub mod defense;
-pub mod item_tag;
 pub mod dimension_descriptors;
 pub mod dimensions;
 pub mod equipped_item;
@@ -10,6 +9,7 @@ pub mod identifier;
 pub mod inventory;
 pub mod item_descriptor;
 pub mod item_material;
+pub mod item_tag;
 pub mod life_modifier;
 pub mod non_player;
 pub mod player;
