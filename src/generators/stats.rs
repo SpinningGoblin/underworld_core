@@ -38,6 +38,17 @@ impl StatsPrototype {
         }
     }
 
+    pub fn hobgoblin(max_health: Option<i32>) -> Self {
+        Self {
+            max_health,
+            height_range: 0.4..1.4,
+            width_range: 0.5..0.75,
+            health_range: 8..13,
+            has_health: true,
+            has_dimensions: true,
+        }
+    }
+
     pub fn kobold(max_health: Option<i32>) -> Self {
         Self {
             max_health,
@@ -90,6 +101,7 @@ impl StatsPrototype {
             Species::Ogre => Self::ogre(Some(max_health)),
             Species::Orc => Self::orc(Some(max_health)),
             Species::Unknown => Self::unknown(Some(max_health)),
+            Species::Hobgoblin => Self::hobgoblin(Some(max_health)),
         }
     }
 }
@@ -103,6 +115,7 @@ impl From<&Species> for StatsPrototype {
             Species::Ogre => Self::ogre(None),
             Species::Orc => Self::orc(None),
             Species::Unknown => Self::unknown(None),
+            Species::Hobgoblin => Self::hobgoblin(None),
         }
     }
 }

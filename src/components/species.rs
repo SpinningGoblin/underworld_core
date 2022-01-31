@@ -18,6 +18,7 @@ use super::dimension_descriptors::HeightDescriptor;
 pub enum Species {
     Bugbear,
     Goblin,
+    Hobgoblin,
     Kobold,
     Ogre,
     Orc,
@@ -36,12 +37,13 @@ const AVERAGE_HEIGHT: &str = "";
 impl HeightDescriptor for Species {
     fn height_range(&self) -> Range<f32> {
         match *self {
-            Self::Bugbear => MEDIUM_HEIGHT,
-            Self::Goblin => SMALL_HEIGHT,
-            Self::Kobold => SMALL_HEIGHT,
-            Self::Ogre => LARGE_HEIGHT,
-            Self::Orc => MEDIUM_HEIGHT,
-            Self::Unknown => UNKNOWN_HEIGHT,
+            Species::Bugbear => MEDIUM_HEIGHT,
+            Species::Goblin => SMALL_HEIGHT,
+            Species::Kobold => SMALL_HEIGHT,
+            Species::Ogre => LARGE_HEIGHT,
+            Species::Orc => MEDIUM_HEIGHT,
+            Species::Unknown => UNKNOWN_HEIGHT,
+            Species::Hobgoblin => SMALL_HEIGHT,
         }
     }
 
@@ -61,12 +63,13 @@ impl HeightDescriptor for Species {
 impl Species {
     pub fn height_range(&self) -> Range<f32> {
         match *self {
-            Self::Bugbear => MEDIUM_HEIGHT,
-            Self::Goblin => SMALL_HEIGHT,
-            Self::Kobold => SMALL_HEIGHT,
-            Self::Ogre => LARGE_HEIGHT,
-            Self::Orc => MEDIUM_HEIGHT,
-            Self::Unknown => UNKNOWN_HEIGHT,
+            Species::Bugbear => MEDIUM_HEIGHT,
+            Species::Goblin => SMALL_HEIGHT,
+            Species::Kobold => SMALL_HEIGHT,
+            Species::Ogre => LARGE_HEIGHT,
+            Species::Orc => MEDIUM_HEIGHT,
+            Species::Unknown => UNKNOWN_HEIGHT,
+            Species::Hobgoblin => SMALL_HEIGHT,
         }
     }
 }
@@ -74,12 +77,13 @@ impl Species {
 impl Display for Species {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
-            Self::Bugbear => write!(f, "bugbear"),
-            Self::Goblin => write!(f, "goblin"),
-            Self::Kobold => write!(f, "kobold"),
-            Self::Ogre => write!(f, "ogre"),
-            Self::Orc => write!(f, "orc"),
-            _ => write!(f, "unknown creature"),
+            Species::Bugbear => write!(f, "bugbear"),
+            Species::Goblin => write!(f, "goblin"),
+            Species::Kobold => write!(f, "kobold"),
+            Species::Ogre => write!(f, "ogre"),
+            Species::Orc => write!(f, "orc"),
+            Species::Hobgoblin => write!(f, "hobgoblin"),
+            Species::Unknown => write!(f, "unknown creature"),
         }
     }
 }
