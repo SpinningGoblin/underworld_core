@@ -81,6 +81,7 @@ impl Generator<Room> for RoomPrototype {
                 name: None,
             },
             room_type: self.room_type.clone(),
+            fixtures: Vec::new(),
         }
     }
 }

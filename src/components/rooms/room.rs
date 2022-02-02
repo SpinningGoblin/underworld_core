@@ -7,7 +7,8 @@ use rand::Rng;
 use serde::{Deserialize, Serialize};
 
 use crate::components::{
-    dimensions::Dimensions, identifier::Identifier, non_player::NonPlayer, species::Species,
+    dimensions::Dimensions, fixtures::fixture::Fixture, identifier::Identifier,
+    non_player::NonPlayer, species::Species,
 };
 
 use super::{descriptor::Descriptor, room_type::RoomType};
@@ -21,6 +22,7 @@ pub struct Room {
     pub descriptors: Vec<Descriptor>,
     pub room_type: RoomType,
     pub non_players: Vec<NonPlayer>,
+    pub fixtures: Vec<Fixture>,
 }
 
 impl Display for Room {
