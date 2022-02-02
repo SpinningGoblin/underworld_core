@@ -9,8 +9,8 @@ use serde::{Deserialize, Serialize};
 use crate::components::{
     equipped_item::{EquipLocationDescriptor, Equippable},
     item_descriptor::ItemDescriptor,
-    item_material::{BuiltWithMaterial, ItemMaterial},
     item_tag::{ItemTag, TaggedItem},
+    material::{BuiltWithMaterial, Material},
 };
 
 #[derive(Clone, Debug, IntoEnumIterator, PartialEq)]
@@ -111,57 +111,49 @@ impl WearableType {
 }
 
 impl BuiltWithMaterial for WearableType {
-    fn possible_materials(&self) -> Vec<ItemMaterial> {
+    fn possible_materials(&self) -> Vec<Material> {
         match *self {
-            WearableType::Breastplate => vec![
-                ItemMaterial::Iron,
-                ItemMaterial::Leather,
-                ItemMaterial::Steel,
-            ],
-            WearableType::Mask => vec![ItemMaterial::Bone, ItemMaterial::Iron],
+            WearableType::Breastplate => vec![Material::Iron, Material::Leather, Material::Steel],
+            WearableType::Mask => vec![Material::Bone, Material::Iron],
             WearableType::Cloak => {
-                vec![ItemMaterial::Linen, ItemMaterial::Hide, ItemMaterial::Wool]
+                vec![Material::Linen, Material::Hide, Material::Wool]
             }
             WearableType::Shirt => vec![
-                ItemMaterial::Wool,
-                ItemMaterial::Linen,
-                ItemMaterial::Cotton,
-                ItemMaterial::Silk,
+                Material::Wool,
+                Material::Linen,
+                Material::Cotton,
+                Material::Silk,
             ],
             WearableType::Trousers => vec![
-                ItemMaterial::Hide,
-                ItemMaterial::Leather,
-                ItemMaterial::Wool,
-                ItemMaterial::Linen,
+                Material::Hide,
+                Material::Leather,
+                Material::Wool,
+                Material::Linen,
             ],
             WearableType::Crown => {
-                vec![ItemMaterial::Bone, ItemMaterial::Gold, ItemMaterial::Stone]
+                vec![Material::Bone, Material::Gold, Material::Stone]
             }
             WearableType::Boots => vec![
-                ItemMaterial::Hide,
-                ItemMaterial::Iron,
-                ItemMaterial::Leather,
-                ItemMaterial::Steel,
+                Material::Hide,
+                Material::Iron,
+                Material::Leather,
+                Material::Steel,
             ],
-            WearableType::Gloves => vec![ItemMaterial::Hide, ItemMaterial::Leather],
+            WearableType::Gloves => vec![Material::Hide, Material::Leather],
             WearableType::LoinCloth => vec![
-                ItemMaterial::Hide,
-                ItemMaterial::Wool,
-                ItemMaterial::Leather,
-                ItemMaterial::Silk,
-                ItemMaterial::Linen,
-                ItemMaterial::Cotton,
+                Material::Hide,
+                Material::Wool,
+                Material::Leather,
+                Material::Silk,
+                Material::Linen,
+                Material::Cotton,
             ],
-            WearableType::PlateBoots => vec![ItemMaterial::Iron, ItemMaterial::Steel],
-            WearableType::PlateGauntlets => vec![ItemMaterial::Iron, ItemMaterial::Steel],
-            WearableType::PlateHelmet => vec![ItemMaterial::Iron, ItemMaterial::Steel],
-            WearableType::Shackles => vec![
-                ItemMaterial::Iron,
-                ItemMaterial::Leather,
-                ItemMaterial::Steel,
-            ],
+            WearableType::PlateBoots => vec![Material::Iron, Material::Steel],
+            WearableType::PlateGauntlets => vec![Material::Iron, Material::Steel],
+            WearableType::PlateHelmet => vec![Material::Iron, Material::Steel],
+            WearableType::Shackles => vec![Material::Iron, Material::Leather, Material::Steel],
             WearableType::Vest => {
-                vec![ItemMaterial::Fur, ItemMaterial::Hide, ItemMaterial::Leather]
+                vec![Material::Fur, Material::Hide, Material::Leather]
             }
         }
     }

@@ -246,7 +246,7 @@ mod inventory_tests {
     use crate::components::{
         equipped_item::{EquipLocationDescriptor, EquippedItem},
         item_descriptor::ItemDescriptor,
-        item_material::ItemMaterial,
+        material::Material,
         weapons::{weapon::Weapon, weapon_type::WeaponType},
         wearables::{wearable::Wearable, wearable_type::WearableType},
     };
@@ -361,7 +361,7 @@ mod inventory_tests {
     fn display_with_one_wearable() {
         let chain_mail = Wearable {
             wearable_type: WearableType::PlateHelmet,
-            material: Some(ItemMaterial::Steel),
+            material: Some(Material::Steel),
             descriptors: vec![ItemDescriptor::SetOf, ItemDescriptor::Drab],
             defense: None,
         };
@@ -387,14 +387,14 @@ mod inventory_tests {
     fn display_with_two_wearables() {
         let chain_mail = Wearable {
             wearable_type: WearableType::PlateHelmet,
-            material: Some(ItemMaterial::Steel),
+            material: Some(Material::Steel),
             descriptors: vec![ItemDescriptor::SetOf, ItemDescriptor::Drab],
             defense: None,
         };
 
         let shackles = Wearable {
             wearable_type: WearableType::Shackles,
-            material: Some(ItemMaterial::Iron),
+            material: Some(Material::Iron),
             descriptors: vec![ItemDescriptor::Rusty],
             defense: None,
         };

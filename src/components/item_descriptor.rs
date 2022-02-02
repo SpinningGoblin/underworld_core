@@ -146,8 +146,8 @@ impl ItemDescriptor {
         tagged_1: &impl TaggedItem,
         tagged_2: &impl TaggedItem,
     ) -> Vec<ItemDescriptor> {
-        let mut tags = tagged_1.tags().clone();
-        let mut tags_2 = tagged_2.tags().clone();
+        let mut tags = tagged_1.tags();
+        let mut tags_2 = tagged_2.tags();
         tags.append(&mut tags_2);
         Self::matches_tags(tags)
     }
@@ -158,7 +158,7 @@ impl ItemDescriptor {
                 descriptor
                     .descriptor_tags()
                     .iter()
-                    .any(|tag| tags.contains(&tag))
+                    .any(|tag| tags.contains(tag))
             })
             .collect()
     }
@@ -167,7 +167,7 @@ impl ItemDescriptor {
 #[cfg(test)]
 mod tests {
     use crate::components::{
-        item_material::ItemMaterial, weapons::weapon_type::WeaponType,
+        material::Material, weapons::weapon_type::WeaponType,
         wearables::wearable_type::WearableType,
     };
 
@@ -175,15 +175,14 @@ mod tests {
 
     #[test]
     fn get_descriptors_for_weapon() {
-        let descriptors =
-            ItemDescriptor::matches_two_tagged(&WeaponType::Whip, &ItemMaterial::Leather);
+        let descriptors = ItemDescriptor::matches_two_tagged(&WeaponType::Whip, &Material::Leather);
         assert!(!descriptors.is_empty());
     }
 
     #[test]
     fn get_descriptors_for_wearable() {
         let descriptors =
-            ItemDescriptor::matches_two_tagged(&WearableType::LoinCloth, &ItemMaterial::Wool);
+            ItemDescriptor::matches_two_tagged(&WearableType::LoinCloth, &Material::Wool);
         assert!(!descriptors.is_empty());
     }
 

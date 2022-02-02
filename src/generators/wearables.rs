@@ -5,7 +5,7 @@ use rand::Rng;
 use crate::components::{
     defense::Defense,
     item_descriptor::ItemDescriptor,
-    item_material::{BuiltWithMaterial, ItemMaterial},
+    material::{BuiltWithMaterial, Material},
     wearables::{wearable::Wearable, wearable_type::WearableType},
 };
 
@@ -15,7 +15,7 @@ struct WearablePrototype {
     pub wearable_type: WearableType,
     pub num_descriptors: Range<usize>,
     pub defense: Option<Defense>,
-    pub possible_materials: Vec<ItemMaterial>,
+    pub possible_materials: Vec<Material>,
 }
 
 pub struct WearableGenerator;

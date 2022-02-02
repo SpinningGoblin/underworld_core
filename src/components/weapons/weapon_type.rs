@@ -8,8 +8,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::components::{
     equipped_item::{EquipLocationDescriptor, Equippable},
-    item_material::{BuiltWithMaterial, ItemMaterial},
     item_tag::{ItemTag, TaggedItem},
+    material::{BuiltWithMaterial, Material},
 };
 
 #[derive(Clone, Debug, IntoEnumIterator, PartialEq)]
@@ -35,50 +35,46 @@ pub enum WeaponType {
 }
 
 impl BuiltWithMaterial for WeaponType {
-    fn possible_materials(&self) -> Vec<ItemMaterial> {
+    fn possible_materials(&self) -> Vec<Material> {
         match *self {
             WeaponType::Buckler => {
-                vec![ItemMaterial::Hide, ItemMaterial::Iron, ItemMaterial::Steel]
+                vec![Material::Hide, Material::Iron, Material::Steel]
             }
-            WeaponType::Club => vec![
-                ItemMaterial::Bone,
-                ItemMaterial::Stone,
-                ItemMaterial::Wooden,
-            ],
+            WeaponType::Club => vec![Material::Bone, Material::Stone, Material::Wooden],
             WeaponType::Dagger => vec![
-                ItemMaterial::Bone,
-                ItemMaterial::Gold,
-                ItemMaterial::Iron,
-                ItemMaterial::Steel,
-                ItemMaterial::Stone,
+                Material::Bone,
+                Material::Gold,
+                Material::Iron,
+                Material::Steel,
+                Material::Stone,
             ],
             WeaponType::Dirk => vec![
-                ItemMaterial::Bone,
-                ItemMaterial::Iron,
-                ItemMaterial::Steel,
-                ItemMaterial::Stone,
+                Material::Bone,
+                Material::Iron,
+                Material::Steel,
+                Material::Stone,
             ],
             WeaponType::GreatSword => vec![
-                ItemMaterial::Bone,
-                ItemMaterial::Iron,
-                ItemMaterial::Steel,
-                ItemMaterial::Stone,
+                Material::Bone,
+                Material::Iron,
+                Material::Steel,
+                Material::Stone,
             ],
-            WeaponType::Hammer => vec![ItemMaterial::Iron, ItemMaterial::Steel],
+            WeaponType::Hammer => vec![Material::Iron, Material::Steel],
             WeaponType::LongSword => {
-                vec![ItemMaterial::Bone, ItemMaterial::Iron, ItemMaterial::Steel]
+                vec![Material::Bone, Material::Iron, Material::Steel]
             }
-            WeaponType::Mace => vec![ItemMaterial::Iron, ItemMaterial::Steel],
-            WeaponType::Morningstar => vec![ItemMaterial::Iron, ItemMaterial::Steel],
+            WeaponType::Mace => vec![Material::Iron, Material::Steel],
+            WeaponType::Morningstar => vec![Material::Iron, Material::Steel],
             WeaponType::Shield => vec![
-                ItemMaterial::Hide,
-                ItemMaterial::Iron,
-                ItemMaterial::Leather,
-                ItemMaterial::Steel,
-                ItemMaterial::Wooden,
+                Material::Hide,
+                Material::Iron,
+                Material::Leather,
+                Material::Steel,
+                Material::Wooden,
             ],
-            WeaponType::ShortSword => vec![ItemMaterial::Iron, ItemMaterial::Steel],
-            WeaponType::Whip => vec![ItemMaterial::Leather],
+            WeaponType::ShortSword => vec![Material::Iron, Material::Steel],
+            WeaponType::Whip => vec![Material::Leather],
         }
     }
 }

@@ -5,7 +5,7 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::components::item_material::ItemMaterial;
+use crate::components::material::Material;
 
 use super::fixture_type::FixtureType;
 
@@ -19,7 +19,7 @@ use super::fixture_type::FixtureType;
 pub struct Fixture {
     pub fixture_type: FixtureType,
     #[cfg_attr(feature = "serialization", serde(default))]
-    pub material: Option<ItemMaterial>,
+    pub material: Option<Material>,
 }
 
 impl Display for Fixture {
@@ -35,7 +35,7 @@ impl Display for Fixture {
 
 #[cfg(test)]
 mod display_tests {
-    use crate::components::{fixtures::fixture_type::FixtureType, item_material::ItemMaterial};
+    use crate::components::{fixtures::fixture_type::FixtureType, material::Material};
 
     use super::Fixture;
 
@@ -43,7 +43,7 @@ mod display_tests {
     fn display_with_material() {
         let fixture = Fixture {
             fixture_type: FixtureType::Chest,
-            material: Some(ItemMaterial::Steel),
+            material: Some(Material::Steel),
         };
 
         assert_eq!("steel chest", format!("{}", fixture));

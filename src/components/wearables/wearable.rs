@@ -9,7 +9,7 @@ use crate::components::{
     defense::Defense,
     equipped_item::{EquipLocationDescriptor, Equippable},
     item_descriptor::ItemDescriptor,
-    item_material::ItemMaterial,
+    material::Material,
 };
 
 use super::wearable_type::WearableType;
@@ -24,7 +24,7 @@ use super::wearable_type::WearableType;
 pub struct Wearable {
     pub wearable_type: WearableType,
     #[cfg_attr(feature = "serialization", serde(default))]
-    pub material: Option<ItemMaterial>,
+    pub material: Option<Material>,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub descriptors: Vec<ItemDescriptor>,
     #[cfg_attr(feature = "serialization", serde(default))]
@@ -117,7 +117,7 @@ mod wearable_quality_tests {
 
 #[cfg(test)]
 mod wearable_tests {
-    use crate::components::item_material::ItemMaterial;
+    use crate::components::material::Material;
 
     use super::{ItemDescriptor, Wearable, WearableType};
 
@@ -137,7 +137,7 @@ mod wearable_tests {
     fn display_when_there_is_material() {
         let wearable = Wearable {
             wearable_type: WearableType::PlateHelmet,
-            material: Some(ItemMaterial::Steel),
+            material: Some(Material::Steel),
             descriptors: Vec::new(),
             defense: None,
         };
@@ -161,7 +161,7 @@ mod wearable_tests {
     fn display_when_there_are_qualities_and_material() {
         let wearable = Wearable {
             wearable_type: WearableType::Shackles,
-            material: Some(ItemMaterial::Iron),
+            material: Some(Material::Iron),
             descriptors: vec![ItemDescriptor::Bloodstained],
             defense: None,
         };

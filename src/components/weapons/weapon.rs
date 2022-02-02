@@ -9,7 +9,7 @@ use crate::components::{
     attack::Attack,
     equipped_item::{EquipLocationDescriptor, Equippable},
     item_descriptor::ItemDescriptor,
-    item_material::ItemMaterial,
+    material::Material,
 };
 
 use super::weapon_type::WeaponType;
@@ -27,7 +27,7 @@ pub struct Weapon {
     pub weapon_type: WeaponType,
     pub descriptors: Vec<ItemDescriptor>,
     #[cfg_attr(feature = "serialization", serde(default))]
-    pub material: Option<ItemMaterial>,
+    pub material: Option<Material>,
 }
 
 impl Equippable for Weapon {

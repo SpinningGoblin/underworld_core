@@ -5,7 +5,7 @@ use rand::Rng;
 use crate::components::{
     attack::Attack,
     item_descriptor::ItemDescriptor,
-    item_material::{BuiltWithMaterial, ItemMaterial},
+    material::{BuiltWithMaterial, Material},
     weapons::{weapon::Weapon, weapon_type::WeaponType},
 };
 
@@ -36,7 +36,7 @@ struct WeaponPrototype {
     pub weapon_type: WeaponType,
     pub num_descriptors: Range<usize>,
     pub attack: Option<Attack>,
-    pub possible_materials: Vec<ItemMaterial>,
+    pub possible_materials: Vec<Material>,
 }
 
 impl WeaponPrototype {
