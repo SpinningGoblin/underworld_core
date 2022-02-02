@@ -4,6 +4,7 @@ pub mod defense;
 pub mod dimension_descriptors;
 pub mod dimensions;
 pub mod equipped_item;
+pub mod fixtures;
 pub mod health;
 pub mod identifier;
 pub mod inventory;
