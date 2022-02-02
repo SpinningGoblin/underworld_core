@@ -7,7 +7,8 @@ use enum_iterator::IntoEnumIterator;
 use serde::{Deserialize, Serialize};
 
 use crate::components::{
-    equipped_item::{EquipLocationDescriptor, Equippable},
+    equipped::equip_location_descriptor::EquipLocationDescriptor,
+    item::{EquippableItem, Item},
     item_descriptor::ItemDescriptor,
     item_tag::{ItemTag, TaggedItem},
     material::{BuiltWithMaterial, Material},
@@ -180,7 +181,7 @@ impl TaggedItem for WearableType {
     }
 }
 
-impl Equippable for WearableType {
+impl EquippableItem for WearableType {
     fn possible_equip_locations(&self) -> Vec<EquipLocationDescriptor> {
         match *self {
             WearableType::Breastplate => Vec::new(),
@@ -198,6 +199,12 @@ impl Equippable for WearableType {
             WearableType::PlateGauntlets => Vec::new(),
             WearableType::Vest => Vec::new(),
         }
+    }
+}
+
+impl Item for WearableType {
+    fn look_at(&self, _is_equipped: bool) -> String {
+        format!("{}", self)
     }
 
     fn is_multiple(&self) -> bool {
@@ -219,8 +226,8 @@ impl Equippable for WearableType {
         }
     }
 
-    fn look_at(&self, _is_equipped: bool) -> String {
-        format!("{}", self)
+    fn material(&self) -> Option<Material> {
+        None
     }
 }
 

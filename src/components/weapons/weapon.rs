@@ -7,7 +7,8 @@ use std::fmt::Display;
 
 use crate::components::{
     attack::Attack,
-    equipped_item::{EquipLocationDescriptor, Equippable},
+    equipped::equip_location_descriptor::EquipLocationDescriptor,
+    item::{EquippableItem, Item},
     item_descriptor::ItemDescriptor,
     material::Material,
 };
@@ -30,17 +31,23 @@ pub struct Weapon {
     pub material: Option<Material>,
 }
 
-impl Equippable for Weapon {
+impl EquippableItem for Weapon {
     fn possible_equip_locations(&self) -> Vec<EquipLocationDescriptor> {
         self.weapon_type.possible_equip_locations()
     }
+}
 
+impl Item for Weapon {
     fn is_multiple(&self) -> bool {
         self.weapon_type.is_multiple()
     }
 
     fn look_at(&self, is_equipped: bool) -> String {
         self.describe(is_equipped)
+    }
+
+    fn material(&self) -> Option<Material> {
+        self.material.clone()
     }
 }
 

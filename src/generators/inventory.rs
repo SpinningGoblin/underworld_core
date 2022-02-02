@@ -3,8 +3,11 @@ use std::ops::Range;
 use rand::Rng;
 
 use crate::components::{
-    equipped_item::{EquipLocationDescriptor, Equippable, EquippedItem},
+    equipped::{
+        equip_location_descriptor::EquipLocationDescriptor, equipped_item::EquippedItem, Equipped,
+    },
     inventory::Inventory,
+    item::{EquippableItem, Item},
     weapons::{weapon::Weapon, weapon_type::WeaponType},
     wearables::{wearable::Wearable, wearable_type::WearableType},
 };
@@ -222,8 +225,10 @@ impl Generator<Inventory> for InventoryPrototype {
         let carried_wearables = self.carried_wearables();
 
         Inventory {
-            equipped_weapons,
-            equipped_wearables,
+            equipped: Equipped {
+                weapons: equipped_weapons,
+                wearables: equipped_wearables,
+            },
             carried_weapons,
             carried_wearables,
         }

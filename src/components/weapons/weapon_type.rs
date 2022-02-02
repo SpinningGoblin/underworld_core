@@ -7,7 +7,8 @@ use enum_iterator::IntoEnumIterator;
 use serde::{Deserialize, Serialize};
 
 use crate::components::{
-    equipped_item::{EquipLocationDescriptor, Equippable},
+    equipped::equip_location_descriptor::EquipLocationDescriptor,
+    item::{EquippableItem, Item},
     item_tag::{ItemTag, TaggedItem},
     material::{BuiltWithMaterial, Material},
 };
@@ -104,7 +105,7 @@ impl WeaponType {
     }
 }
 
-impl Equippable for WeaponType {
+impl EquippableItem for WeaponType {
     fn possible_equip_locations(&self) -> Vec<EquipLocationDescriptor> {
         match *self {
             WeaponType::Club => vec![
@@ -189,7 +190,9 @@ impl Equippable for WeaponType {
             ],
         }
     }
+}
 
+impl Item for WeaponType {
     fn is_multiple(&self) -> bool {
         match *self {
             WeaponType::Club => false,
@@ -209,6 +212,10 @@ impl Equippable for WeaponType {
 
     fn look_at(&self, _is_equipped: bool) -> String {
         format!("{}", self)
+    }
+
+    fn material(&self) -> Option<Material> {
+        None
     }
 }
 

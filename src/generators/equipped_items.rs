@@ -2,18 +2,21 @@ use std::fmt::{Debug, Display};
 
 use rand::Rng;
 
-use crate::components::equipped_item::{EquipLocationDescriptor, Equippable, EquippedItem};
+use crate::components::{
+    equipped::{equip_location_descriptor::EquipLocationDescriptor, equipped_item::EquippedItem},
+    item::{EquippableItem, Item},
+};
 
 use super::generator::Generator;
 
-pub struct EquippedItemPrototype<T: Display + Clone + Debug + Equippable> {
+pub struct EquippedItemPrototype<T: Display + Clone + Debug + Item> {
     pub generator: Box<dyn Generator<T>>,
     pub hidden_chance: usize,
     pub multiple: bool,
     pub equipped_location_chance: usize,
 }
 
-impl<T: Display + Clone + Debug + Equippable> EquippedItemPrototype<T> {
+impl<T: Display + Clone + Debug + Item + EquippableItem> EquippedItemPrototype<T> {
     fn equipped_location(&self, item: &T) -> EquipLocationDescriptor {
         let mut rng = rand::thread_rng();
 
@@ -34,7 +37,7 @@ impl<T: Display + Clone + Debug + Equippable> EquippedItemPrototype<T> {
     }
 }
 
-impl<T: Display + Clone + Debug + Equippable> Generator<EquippedItem<T>>
+impl<T: Display + Clone + Debug + Item + EquippableItem> Generator<EquippedItem<T>>
     for EquippedItemPrototype<T>
 {
     fn generate(&self) -> EquippedItem<T> {
