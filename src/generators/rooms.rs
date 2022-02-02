@@ -119,3 +119,15 @@ impl RoomPrototype {
         }
     }
 }
+
+impl RoomType {
+    fn possible_descriptors(&self) -> Vec<Descriptor> {
+        match *self {
+            RoomType::Cave => Descriptor::into_enum_iter().collect(),
+            RoomType::Cavern => Descriptor::into_enum_iter().collect(),
+            RoomType::PrisonCell => Descriptor::into_enum_iter().collect(),
+            RoomType::Room => Descriptor::into_enum_iter().collect(),
+            RoomType::EntryWay => Descriptor::into_enum_iter().collect(),
+        }
+    }
+}
