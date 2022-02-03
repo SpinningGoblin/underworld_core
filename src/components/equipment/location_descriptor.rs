@@ -20,6 +20,7 @@ use super::location_tag::LocationTag;
 pub enum LocationDescriptor {
     AlmostFallingGrip,
     ClenchedInFist,
+    CoiledAtWaist,
     DanglingFromWrists,
     HangingHip,
     HangingLooselyShoulders,
@@ -56,9 +57,9 @@ impl LocationDescriptor {
                 vec![ItemTag::Blade, ItemTag::Blunt, ItemTag::Rope]
             }
             LocationDescriptor::DanglingFromWrists => vec![ItemTag::Rope],
-            LocationDescriptor::HangingHip => vec![ItemTag::Blade, ItemTag::Blunt, ItemTag::Rope],
+            LocationDescriptor::HangingHip => vec![ItemTag::Blade, ItemTag::Blunt, ItemTag::Rope, ItemTag::Whip],
             LocationDescriptor::HangingLooselyShoulders => vec![ItemTag::Clothing],
-            LocationDescriptor::HeldLoosely => vec![ItemTag::Blade, ItemTag::Blunt, ItemTag::Rope],
+            LocationDescriptor::HeldLoosely => vec![ItemTag::Blade, ItemTag::Blunt, ItemTag::Rope, ItemTag::Whip],
             LocationDescriptor::HangingMoldySheath => vec![ItemTag::Blade],
             LocationDescriptor::SheathedAtHip => vec![ItemTag::Blade],
             LocationDescriptor::StrappedToBack => vec![ItemTag::Blade, ItemTag::Blunt],
@@ -67,6 +68,7 @@ impl LocationDescriptor {
                 vec![ItemTag::Blade, ItemTag::Blunt, ItemTag::Rope]
             }
             LocationDescriptor::None => Vec::new(),
+            LocationDescriptor::CoiledAtWaist => vec![ItemTag::Rope, ItemTag::Whip],
         }
     }
 
@@ -96,6 +98,7 @@ impl LocationDescriptor {
             LocationDescriptor::StrappedToThigh => vec![LocationTag::Equipped, LocationTag::Leg],
             LocationDescriptor::ClenchedInFists => vec![LocationTag::Equipped, LocationTag::Hand],
             LocationDescriptor::None => Vec::new(),
+            LocationDescriptor::CoiledAtWaist => vec![LocationTag::Equipped, LocationTag::Waist],
         }
     }
 
@@ -113,6 +116,7 @@ impl LocationDescriptor {
             LocationDescriptor::StrappedToThigh => false,
             LocationDescriptor::ClenchedInFists => other.is_in_hand(),
             LocationDescriptor::None => false,
+            LocationDescriptor::CoiledAtWaist => other.is_at_hip(),
         }
     }
 
@@ -153,6 +157,7 @@ impl Display for LocationDescriptor {
             LocationDescriptor::AlmostFallingGrip => write!(f, "almost falling from its grip"),
             LocationDescriptor::ClenchedInFists => write!(f, "clenched in its fists"),
             LocationDescriptor::None => write!(f, ""),
+            LocationDescriptor::CoiledAtWaist => write!(f, "coiled at its waist"),
         }
     }
 }
