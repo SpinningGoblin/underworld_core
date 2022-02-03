@@ -7,8 +7,7 @@ use enum_iterator::IntoEnumIterator;
 use serde::{Deserialize, Serialize};
 
 use crate::components::{
-    equipped::equip_location_descriptor::EquipLocationDescriptor,
-    item::{EquippableItem, Item},
+    equipment::{location_tag::LocationTag, Equipment},
     item_descriptor::ItemDescriptor,
     item_tag::{ItemTag, TaggedItem},
     material::{BuiltWithMaterial, Material},
@@ -41,6 +40,25 @@ pub enum WearableType {
 impl WearableType {
     pub fn all() -> Vec<WearableType> {
         WearableType::into_enum_iter().collect()
+    }
+
+    pub fn is_multiple(&self) -> bool {
+        match *self {
+            WearableType::Breastplate => true,
+            WearableType::Cloak => false,
+            WearableType::Shirt => false,
+            WearableType::PlateHelmet => false,
+            WearableType::Shackles => false,
+            WearableType::Mask => false,
+            WearableType::Trousers => true,
+            WearableType::Crown => false,
+            WearableType::Boots => true,
+            WearableType::Gloves => true,
+            WearableType::LoinCloth => false,
+            WearableType::PlateBoots => true,
+            WearableType::PlateGauntlets => true,
+            WearableType::Vest => false,
+        }
     }
 
     pub fn unable_to_be_used_with(&self, other: &WearableType) -> bool {
@@ -175,59 +193,103 @@ impl TaggedItem for WearableType {
             WearableType::PlateBoots => vec![ItemTag::Armour],
             WearableType::PlateGauntlets => vec![ItemTag::Armour],
             WearableType::PlateHelmet => vec![ItemTag::Armour],
-            WearableType::Shackles => vec![ItemTag::Accessory],
+            WearableType::Shackles => vec![ItemTag::Accessory, ItemTag::Rope],
             WearableType::Vest => vec![ItemTag::Clothing],
         }
     }
 }
 
-impl EquippableItem for WearableType {
-    fn possible_equip_locations(&self) -> Vec<EquipLocationDescriptor> {
+impl Equipment for WearableType {
+    fn possible_location_tags(&self) -> Vec<LocationTag> {
         match *self {
-            WearableType::Breastplate => Vec::new(),
-            WearableType::Cloak => vec![EquipLocationDescriptor::HangingLooselyShoulders],
-            WearableType::Shirt => Vec::new(),
-            WearableType::PlateHelmet => Vec::new(),
-            WearableType::Shackles => Vec::new(),
-            WearableType::Mask => Vec::new(),
-            WearableType::Trousers => Vec::new(),
-            WearableType::Crown => Vec::new(),
-            WearableType::Boots => Vec::new(),
-            WearableType::Gloves => Vec::new(),
-            WearableType::LoinCloth => Vec::new(),
-            WearableType::PlateBoots => Vec::new(),
-            WearableType::PlateGauntlets => Vec::new(),
-            WearableType::Vest => Vec::new(),
+            WearableType::Breastplate => vec![
+                LocationTag::Equipped,
+                LocationTag::Body,
+                LocationTag::Packed,
+            ],
+            WearableType::Cloak => vec![
+                LocationTag::Equipped,
+                LocationTag::Shoulder,
+                LocationTag::Packed,
+            ],
+            WearableType::Shirt => vec![
+                LocationTag::Equipped,
+                LocationTag::Body,
+                LocationTag::Packed,
+            ],
+            WearableType::PlateHelmet => vec![
+                LocationTag::Equipped,
+                LocationTag::Head,
+                LocationTag::Packed,
+            ],
+            WearableType::Shackles => vec![
+                LocationTag::Equipped,
+                LocationTag::Wrist,
+                LocationTag::Packed,
+            ],
+            WearableType::Mask => vec![
+                LocationTag::Equipped,
+                LocationTag::Head,
+                LocationTag::Packed,
+            ],
+            WearableType::Trousers => {
+                vec![LocationTag::Equipped, LocationTag::Leg, LocationTag::Packed]
+            }
+            WearableType::Crown => vec![
+                LocationTag::Equipped,
+                LocationTag::Head,
+                LocationTag::Packed,
+            ],
+            WearableType::Boots => vec![
+                LocationTag::Equipped,
+                LocationTag::Feet,
+                LocationTag::Packed,
+            ],
+            WearableType::Gloves => vec![
+                LocationTag::Equipped,
+                LocationTag::Hand,
+                LocationTag::Packed,
+            ],
+            WearableType::LoinCloth => vec![
+                LocationTag::Equipped,
+                LocationTag::Waist,
+                LocationTag::Packed,
+            ],
+            WearableType::PlateBoots => vec![
+                LocationTag::Equipped,
+                LocationTag::Feet,
+                LocationTag::Packed,
+            ],
+            WearableType::PlateGauntlets => vec![
+                LocationTag::Equipped,
+                LocationTag::Hand,
+                LocationTag::Packed,
+            ],
+            WearableType::Vest => vec![
+                LocationTag::Equipped,
+                LocationTag::Body,
+                LocationTag::Packed,
+            ],
         }
     }
-}
 
-impl Item for WearableType {
-    fn look_at(&self, _is_equipped: bool) -> String {
-        format!("{}", self)
-    }
-
-    fn is_multiple(&self) -> bool {
+    fn character_location_tags(&self) -> Vec<LocationTag> {
         match *self {
-            WearableType::Breastplate => true,
-            WearableType::Cloak => false,
-            WearableType::Shirt => false,
-            WearableType::PlateHelmet => false,
-            WearableType::Shackles => false,
-            WearableType::Mask => false,
-            WearableType::Trousers => true,
-            WearableType::Crown => false,
-            WearableType::Boots => true,
-            WearableType::Gloves => true,
-            WearableType::LoinCloth => false,
-            WearableType::PlateBoots => true,
-            WearableType::PlateGauntlets => true,
-            WearableType::Vest => false,
+            WearableType::Breastplate => vec![LocationTag::Body],
+            WearableType::Mask => vec![LocationTag::Head],
+            WearableType::Cloak => vec![LocationTag::Shoulder],
+            WearableType::Shirt => vec![LocationTag::Body],
+            WearableType::Trousers => vec![LocationTag::Leg],
+            WearableType::Crown => vec![LocationTag::Head],
+            WearableType::Boots => vec![LocationTag::Feet],
+            WearableType::Gloves => vec![LocationTag::Hand],
+            WearableType::LoinCloth => vec![LocationTag::Waist],
+            WearableType::PlateBoots => vec![LocationTag::Feet],
+            WearableType::PlateGauntlets => vec![LocationTag::Hand],
+            WearableType::PlateHelmet => vec![LocationTag::Head],
+            WearableType::Shackles => vec![LocationTag::Ankle, LocationTag::Wrist],
+            WearableType::Vest => vec![LocationTag::Body],
         }
-    }
-
-    fn material(&self) -> Option<Material> {
-        None
     }
 }
 

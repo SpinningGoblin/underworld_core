@@ -19,5 +19,16 @@ pub enum ItemTag {
     Rope,
     Shield,
     Stone,
+    Whip,
     Wood,
+}
+
+impl ItemTag {
+    pub fn is_weapon(&self) -> bool {
+        vec![ItemTag::Blade, ItemTag::Blunt, ItemTag::Whip].contains(self)
+    }
+
+    pub fn is_wearable(&self) -> bool {
+        vec![ItemTag::Accessory, ItemTag::Armour, ItemTag::Clothing].contains(self)
+    }
 }

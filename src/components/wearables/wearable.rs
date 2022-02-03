@@ -7,10 +7,10 @@ use std::fmt::Display;
 
 use crate::components::{
     defense::Defense,
-    equipped::equip_location_descriptor::EquipLocationDescriptor,
-    item::{EquippableItem, Item},
+    equipment::{location_tag::LocationTag, Equipment},
     item_descriptor::ItemDescriptor,
     material::Material,
+    object::Object,
 };
 
 use super::wearable_type::WearableType;
@@ -56,23 +56,27 @@ impl Wearable {
     }
 }
 
-impl EquippableItem for Wearable {
-    fn possible_equip_locations(&self) -> Vec<EquipLocationDescriptor> {
-        self.wearable_type.possible_equip_locations()
+impl Equipment for Wearable {
+    fn possible_location_tags(&self) -> Vec<LocationTag> {
+        self.wearable_type.possible_location_tags()
+    }
+
+    fn character_location_tags(&self) -> Vec<LocationTag> {
+        self.wearable_type.character_location_tags()
     }
 }
 
-impl Item for Wearable {
+impl Object for Wearable {
     fn look_at(&self, is_equipped: bool) -> String {
         self.describe(is_equipped)
     }
 
-    fn is_multiple(&self) -> bool {
-        self.wearable_type.is_multiple()
-    }
-
     fn material(&self) -> Option<Material> {
         self.material.clone()
+    }
+
+    fn is_multiple(&self) -> bool {
+        self.wearable_type.is_multiple()
     }
 }
 

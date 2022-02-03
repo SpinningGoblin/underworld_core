@@ -5,15 +5,19 @@ use serde::{Deserialize, Serialize};
 
 use std::fmt::Display;
 
-use super::{equipped::Equipped, weapons::weapon::Weapon, wearables::wearable::Wearable};
+use crate::utils::sentences::{SentenceJoiners, SentenceStarters};
+
+use super::{
+    character_item::CharacterItem, object::Object, weapons::weapon::Weapon,
+    wearables::wearable::Wearable,
+};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct Inventory {
-    pub equipped: Equipped,
-    pub carried_weapons: Vec<Weapon>,
-    pub carried_wearables: Vec<Wearable>,
+    pub weapons: Vec<CharacterItem<Weapon>>,
+    pub wearables: Vec<CharacterItem<Wearable>>,
 }
 
 impl Display for Inventory {
@@ -39,22 +43,110 @@ impl Inventory {
         descriptions.join(" ")
     }
 
-    fn weapon_description(&self, starter: &str) -> String {
-        self.equipped.weapon_description(starter)
+    pub fn weapon_description(&self, starter: &str) -> String {
+        let visible_weapons: Vec<&CharacterItem<Weapon>> = self
+            .weapons
+            .iter()
+            .filter(|weapon| !weapon.is_hidden)
+            .collect();
+        if visible_weapons.is_empty() {
+            return format!("{} has no visible weapons", starter);
+        }
+
+        let starters = SentenceStarters::weapon_starters();
+        let joiners = SentenceJoiners::weapon_joiners();
+        let mut weapons: Vec<String> = vec![format!("{} ", starter)];
+
+        for (index, weapon) in visible_weapons.iter().enumerate() {
+            if index == 0 {
+                weapons.push(format!("{} ", starters.get_starter(weapon.is_multiple)));
+            }
+
+            let description = format!(
+                "{} {}",
+                weapon.item.look_at(true),
+                weapon.location_descriptor
+            )
+            .trim_end()
+            .to_string();
+
+            if index == self.weapons.len() - 1 && self.weapons.len() != 1 {
+                weapons.push(", and ".to_string());
+            } else if index > 0 {
+                weapons.push(", ".to_string());
+            }
+
+            if index == 0 {
+                weapons.push(description);
+            } else {
+                weapons.push(format!(
+                    "{} {}",
+                    joiners.get_joiner(weapon.is_multiple),
+                    description
+                ));
+            }
+        }
+
+        weapons.push(".".to_string());
+        weapons.join("")
     }
 
-    fn wearables_description(&self, starter: &str) -> String {
-        self.equipped.wearables_description(starter)
+    pub fn wearables_description(&self, starter: &str) -> String {
+        let visible_wearables: Vec<&CharacterItem<Wearable>> = self
+            .wearables
+            .iter()
+            .filter(|equipped_wearable| !equipped_wearable.is_hidden)
+            .collect();
+
+        if visible_wearables.is_empty() {
+            return format!("{} is wearing... nothing?", starter);
+        }
+
+        let starters = SentenceStarters::wearable_starters();
+        let joiners = SentenceJoiners::wearable_joiners();
+        let mut wearables: Vec<String> = vec![format!("{} is ", starter)];
+
+        for (index, wearable) in visible_wearables.iter().enumerate() {
+            if index == 0 {
+                wearables.push(format!("{} ", starters.get_starter(wearable.is_multiple)));
+            }
+
+            let description = format!(
+                "{} {}",
+                wearable.item.look_at(true),
+                wearable.location_descriptor
+            )
+            .trim_end()
+            .to_string();
+
+            if index == self.wearables.len() - 1 && self.wearables.len() != 1 {
+                wearables.push(", and ".to_string());
+            } else if index > 0 {
+                wearables.push(", ".to_string());
+            }
+
+            if index == 0 {
+                wearables.push(description);
+            } else {
+                wearables.push(format!(
+                    "{} {}",
+                    joiners.get_joiner(wearable.is_multiple),
+                    description
+                ));
+            }
+        }
+
+        wearables.push(".".to_string());
+
+        wearables.join("")
     }
 }
 
 #[cfg(test)]
 mod inventory_tests {
     use crate::components::{
-        equipped::{
-            equip_location_descriptor::EquipLocationDescriptor, equipped_item::EquippedItem,
-            Equipped,
-        },
+        character_item::CharacterItem,
+        equipment::location_descriptor::LocationDescriptor,
         item_descriptor::ItemDescriptor,
         material::Material,
         weapons::{weapon::Weapon, weapon_type::WeaponType},
@@ -78,25 +170,21 @@ mod inventory_tests {
             material: None,
         };
         let inventory = Inventory {
-            equipped: Equipped {
-                weapons: vec![
-                    EquippedItem {
-                        item: long_sword,
-                        hidden: false,
-                        equipped_location: EquipLocationDescriptor::None,
-                        multiple: false,
-                    },
-                    EquippedItem {
-                        item: short_sword,
-                        hidden: false,
-                        equipped_location: EquipLocationDescriptor::SheathedAtHip,
-                        multiple: false,
-                    },
-                ],
-                wearables: Vec::new(),
-            },
-            carried_weapons: Vec::new(),
-            carried_wearables: Vec::new(),
+            weapons: vec![
+                CharacterItem {
+                    item: long_sword,
+                    is_hidden: false,
+                    location_descriptor: LocationDescriptor::None,
+                    is_multiple: false,
+                },
+                CharacterItem {
+                    item: short_sword,
+                    is_hidden: false,
+                    location_descriptor: LocationDescriptor::SheathedAtHip,
+                    is_multiple: false,
+                },
+            ],
+            wearables: Vec::new(),
         };
 
         let description = inventory.to_string();
@@ -114,17 +202,13 @@ mod inventory_tests {
             material: None,
         };
         let inventory = Inventory {
-            equipped: Equipped {
-                weapons: vec![EquippedItem {
-                    item: long_sword,
-                    hidden: false,
-                    equipped_location: EquipLocationDescriptor::None,
-                    multiple: false,
-                }],
-                wearables: Vec::new(),
-            },
-            carried_weapons: Vec::new(),
-            carried_wearables: Vec::new(),
+            weapons: vec![CharacterItem {
+                item: long_sword,
+                is_hidden: false,
+                location_descriptor: LocationDescriptor::None,
+                is_multiple: false,
+            }],
+            wearables: Vec::new(),
         };
 
         let description = inventory.to_string();
@@ -147,25 +231,21 @@ mod inventory_tests {
             material: None,
         };
         let inventory = Inventory {
-            equipped: Equipped {
-                weapons: vec![
-                    EquippedItem {
-                        item: long_sword,
-                        hidden: false,
-                        equipped_location: EquipLocationDescriptor::None,
-                        multiple: false,
-                    },
-                    EquippedItem {
-                        item: short_sword,
-                        hidden: true,
-                        equipped_location: EquipLocationDescriptor::StrappedToThigh,
-                        multiple: false,
-                    },
-                ],
-                wearables: Vec::new(),
-            },
-            carried_weapons: Vec::new(),
-            carried_wearables: Vec::new(),
+            weapons: vec![
+                CharacterItem {
+                    item: long_sword,
+                    is_hidden: false,
+                    location_descriptor: LocationDescriptor::None,
+                    is_multiple: false,
+                },
+                CharacterItem {
+                    item: short_sword,
+                    is_hidden: true,
+                    location_descriptor: LocationDescriptor::StrappedToThigh,
+                    is_multiple: false,
+                },
+            ],
+            wearables: Vec::new(),
         };
 
         let description = inventory.to_string();
@@ -183,17 +263,13 @@ mod inventory_tests {
         };
 
         let inventory = Inventory {
-            equipped: Equipped {
-                weapons: Vec::new(),
-                wearables: vec![EquippedItem {
-                    item: chain_mail,
-                    hidden: false,
-                    equipped_location: EquipLocationDescriptor::None,
-                    multiple: false,
-                }],
-            },
-            carried_weapons: Vec::new(),
-            carried_wearables: Vec::new(),
+            weapons: Vec::new(),
+            wearables: vec![CharacterItem {
+                item: chain_mail,
+                is_hidden: false,
+                location_descriptor: LocationDescriptor::None,
+                is_multiple: false,
+            }],
         };
 
         let description = inventory.to_string();
@@ -218,25 +294,21 @@ mod inventory_tests {
         };
 
         let inventory = Inventory {
-            equipped: Equipped {
-                weapons: Vec::new(),
-                wearables: vec![
-                    EquippedItem {
-                        item: chain_mail,
-                        hidden: false,
-                        equipped_location: EquipLocationDescriptor::None,
-                        multiple: false,
-                    },
-                    EquippedItem {
-                        item: shackles,
-                        hidden: false,
-                        equipped_location: EquipLocationDescriptor::DanglingFromWrists,
-                        multiple: true,
-                    },
-                ],
-            },
-            carried_weapons: Vec::new(),
-            carried_wearables: Vec::new(),
+            weapons: Vec::new(),
+            wearables: vec![
+                CharacterItem {
+                    item: chain_mail,
+                    is_hidden: false,
+                    location_descriptor: LocationDescriptor::None,
+                    is_multiple: false,
+                },
+                CharacterItem {
+                    item: shackles,
+                    is_hidden: false,
+                    location_descriptor: LocationDescriptor::DanglingFromWrists,
+                    is_multiple: true,
+                },
+            ],
         };
 
         let description = inventory.to_string();

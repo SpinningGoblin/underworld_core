@@ -7,8 +7,7 @@ use enum_iterator::IntoEnumIterator;
 use serde::{Deserialize, Serialize};
 
 use crate::components::{
-    equipped::equip_location_descriptor::EquipLocationDescriptor,
-    item::{EquippableItem, Item},
+    equipment::{location_tag::LocationTag, Equipment},
     item_tag::{ItemTag, TaggedItem},
     material::{BuiltWithMaterial, Material},
 };
@@ -94,106 +93,13 @@ impl TaggedItem for WeaponType {
             WeaponType::Morningstar => vec![ItemTag::Blunt],
             WeaponType::Shield => vec![ItemTag::Shield],
             WeaponType::ShortSword => vec![ItemTag::Blade],
-            WeaponType::Whip => vec![ItemTag::Rope],
+            WeaponType::Whip => vec![ItemTag::Rope, ItemTag::Whip],
         }
     }
 }
 
 impl WeaponType {
-    pub fn all() -> Vec<WeaponType> {
-        WeaponType::into_enum_iter().collect()
-    }
-}
-
-impl EquippableItem for WeaponType {
-    fn possible_equip_locations(&self) -> Vec<EquipLocationDescriptor> {
-        match *self {
-            WeaponType::Club => vec![
-                EquipLocationDescriptor::AlmostFallingGrip,
-                EquipLocationDescriptor::ClenchedInFist,
-                EquipLocationDescriptor::HangingHip,
-                EquipLocationDescriptor::HeldLoosely,
-                EquipLocationDescriptor::StrappedToBack,
-            ],
-            WeaponType::Dagger => vec![
-                EquipLocationDescriptor::AlmostFallingGrip,
-                EquipLocationDescriptor::ClenchedInFist,
-                EquipLocationDescriptor::HangingHip,
-                EquipLocationDescriptor::HeldLoosely,
-                EquipLocationDescriptor::SheathedAtHip,
-                EquipLocationDescriptor::HangingMoldySheath,
-                EquipLocationDescriptor::StrappedToThigh,
-            ],
-            WeaponType::Hammer => vec![
-                EquipLocationDescriptor::AlmostFallingGrip,
-                EquipLocationDescriptor::ClenchedInFist,
-                EquipLocationDescriptor::HangingHip,
-                EquipLocationDescriptor::HeldLoosely,
-            ],
-            WeaponType::LongSword => vec![
-                EquipLocationDescriptor::AlmostFallingGrip,
-                EquipLocationDescriptor::ClenchedInFist,
-                EquipLocationDescriptor::HangingHip,
-                EquipLocationDescriptor::HeldLoosely,
-                EquipLocationDescriptor::SheathedAtHip,
-                EquipLocationDescriptor::HangingMoldySheath,
-                EquipLocationDescriptor::StrappedToBack,
-            ],
-            WeaponType::ShortSword => vec![
-                EquipLocationDescriptor::AlmostFallingGrip,
-                EquipLocationDescriptor::ClenchedInFist,
-                EquipLocationDescriptor::HangingHip,
-                EquipLocationDescriptor::HeldLoosely,
-                EquipLocationDescriptor::SheathedAtHip,
-                EquipLocationDescriptor::HangingMoldySheath,
-                EquipLocationDescriptor::StrappedToBack,
-            ],
-            WeaponType::Buckler => vec![EquipLocationDescriptor::AlmostFallingGrip],
-            WeaponType::Dirk => vec![
-                EquipLocationDescriptor::AlmostFallingGrip,
-                EquipLocationDescriptor::ClenchedInFist,
-                EquipLocationDescriptor::HangingHip,
-                EquipLocationDescriptor::HeldLoosely,
-                EquipLocationDescriptor::SheathedAtHip,
-                EquipLocationDescriptor::HangingMoldySheath,
-                EquipLocationDescriptor::StrappedToBack,
-            ],
-            WeaponType::GreatSword => vec![
-                EquipLocationDescriptor::AlmostFallingGrip,
-                EquipLocationDescriptor::ClenchedInFist,
-                EquipLocationDescriptor::HangingHip,
-                EquipLocationDescriptor::HeldLoosely,
-                EquipLocationDescriptor::SheathedAtHip,
-                EquipLocationDescriptor::HangingMoldySheath,
-                EquipLocationDescriptor::StrappedToBack,
-            ],
-            WeaponType::Mace => vec![
-                EquipLocationDescriptor::AlmostFallingGrip,
-                EquipLocationDescriptor::ClenchedInFist,
-                EquipLocationDescriptor::HeldLoosely,
-            ],
-            WeaponType::Morningstar => vec![
-                EquipLocationDescriptor::AlmostFallingGrip,
-                EquipLocationDescriptor::ClenchedInFist,
-                EquipLocationDescriptor::HeldLoosely,
-            ],
-            WeaponType::Shield => vec![
-                EquipLocationDescriptor::AlmostFallingGrip,
-                EquipLocationDescriptor::HeldLoosely,
-                EquipLocationDescriptor::StrappedToBack,
-            ],
-            WeaponType::Whip => vec![
-                EquipLocationDescriptor::AlmostFallingGrip,
-                EquipLocationDescriptor::ClenchedInFist,
-                EquipLocationDescriptor::HangingHip,
-                EquipLocationDescriptor::HeldLoosely,
-            ],
-        }
-    }
-}
-
-impl Item for WeaponType {
-    fn is_multiple(&self) -> bool {
+    pub fn is_multiple(&self) -> bool {
         match *self {
             WeaponType::Club => false,
             WeaponType::Dagger => false,
@@ -210,12 +116,99 @@ impl Item for WeaponType {
         }
     }
 
-    fn look_at(&self, _is_equipped: bool) -> String {
-        format!("{}", self)
+    pub fn all() -> Vec<WeaponType> {
+        WeaponType::into_enum_iter().collect()
+    }
+}
+
+impl Equipment for WeaponType {
+    fn possible_location_tags(&self) -> Vec<LocationTag> {
+        match *self {
+            WeaponType::Buckler => vec![
+                LocationTag::Equipped,
+                LocationTag::Hand,
+                LocationTag::Packed,
+            ],
+            WeaponType::Club => vec![
+                LocationTag::Equipped,
+                LocationTag::Hand,
+                LocationTag::Packed,
+            ],
+            WeaponType::Dagger => vec![
+                LocationTag::Equipped,
+                LocationTag::Hand,
+                LocationTag::Packed,
+            ],
+            WeaponType::Dirk => vec![
+                LocationTag::Equipped,
+                LocationTag::Hand,
+                LocationTag::Packed,
+            ],
+            WeaponType::GreatSword => vec![
+                LocationTag::Equipped,
+                LocationTag::Hand,
+                LocationTag::Packed,
+            ],
+            WeaponType::Hammer => vec![
+                LocationTag::Equipped,
+                LocationTag::Hand,
+                LocationTag::Packed,
+            ],
+            WeaponType::LongSword => vec![
+                LocationTag::Equipped,
+                LocationTag::Hand,
+                LocationTag::Packed,
+            ],
+            WeaponType::Mace => vec![
+                LocationTag::Equipped,
+                LocationTag::Hand,
+                LocationTag::Packed,
+            ],
+            WeaponType::Morningstar => vec![
+                LocationTag::Equipped,
+                LocationTag::Hand,
+                LocationTag::Packed,
+            ],
+            WeaponType::Shield => vec![
+                LocationTag::Equipped,
+                LocationTag::Hand,
+                LocationTag::Packed,
+            ],
+            WeaponType::ShortSword => vec![
+                LocationTag::Equipped,
+                LocationTag::Hand,
+                LocationTag::Packed,
+            ],
+            WeaponType::Whip => vec![
+                LocationTag::Equipped,
+                LocationTag::Hand,
+                LocationTag::Packed,
+            ],
+        }
     }
 
-    fn material(&self) -> Option<Material> {
-        None
+    fn character_location_tags(&self) -> Vec<LocationTag> {
+        match *self {
+            WeaponType::Buckler => vec![LocationTag::Hand],
+            WeaponType::Club => vec![LocationTag::Hand, LocationTag::Hip],
+            WeaponType::Dagger => vec![LocationTag::Hand, LocationTag::Hip, LocationTag::HipSheath],
+            WeaponType::Dirk => vec![LocationTag::Hand, LocationTag::Hip, LocationTag::HipSheath],
+            WeaponType::GreatSword => vec![LocationTag::Hand, LocationTag::Back],
+            WeaponType::Hammer => vec![LocationTag::Hand, LocationTag::Hip],
+            WeaponType::LongSword => vec![
+                LocationTag::Hand,
+                LocationTag::Hip,
+                LocationTag::HipSheath,
+                LocationTag::Back,
+            ],
+            WeaponType::Mace => vec![LocationTag::Hand, LocationTag::Hip],
+            WeaponType::Morningstar => vec![LocationTag::Hand, LocationTag::Hip],
+            WeaponType::Shield => vec![LocationTag::Hand, LocationTag::Back],
+            WeaponType::ShortSword => {
+                vec![LocationTag::Hand, LocationTag::Hip, LocationTag::HipSheath]
+            }
+            WeaponType::Whip => vec![LocationTag::Hand, LocationTag::Hip],
+        }
     }
 }
 

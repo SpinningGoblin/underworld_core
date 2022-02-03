@@ -1,8 +1,5 @@
 pub mod characters;
 pub mod dimensions;
-pub mod equipped_items;
-pub mod equipped_weapons;
-pub mod equipped_wearables;
 pub mod fixtures;
 pub mod generator;
 pub mod inventory;
