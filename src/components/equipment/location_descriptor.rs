@@ -51,10 +51,20 @@ impl LocationDescriptor {
     pub fn item_tags(&self) -> Vec<ObjectTag> {
         match *self {
             LocationDescriptor::AlmostFallingGrip => {
-                vec![ObjectTag::Blade, ObjectTag::Blunt, ObjectTag::Rope]
+                vec![
+                    ObjectTag::Blade,
+                    ObjectTag::Blunt,
+                    ObjectTag::Rope,
+                    ObjectTag::Shield,
+                ]
             }
             LocationDescriptor::ClenchedInFist => {
-                vec![ObjectTag::Blade, ObjectTag::Blunt, ObjectTag::Rope]
+                vec![
+                    ObjectTag::Blade,
+                    ObjectTag::Blunt,
+                    ObjectTag::Rope,
+                    ObjectTag::Shield,
+                ]
             }
             LocationDescriptor::DanglingFromWrists => vec![ObjectTag::Rope],
             LocationDescriptor::HangingHip => vec![
@@ -69,10 +79,13 @@ impl LocationDescriptor {
                 ObjectTag::Blunt,
                 ObjectTag::Rope,
                 ObjectTag::Whip,
+                ObjectTag::Shield,
             ],
             LocationDescriptor::HangingMoldySheath => vec![ObjectTag::Blade],
             LocationDescriptor::SheathedAtHip => vec![ObjectTag::Blade],
-            LocationDescriptor::StrappedToBack => vec![ObjectTag::Blade, ObjectTag::Blunt],
+            LocationDescriptor::StrappedToBack => {
+                vec![ObjectTag::Blade, ObjectTag::Blunt, ObjectTag::Shield]
+            }
             LocationDescriptor::StrappedToThigh => vec![ObjectTag::Blade],
             LocationDescriptor::ClenchedInFists => {
                 vec![ObjectTag::Blade, ObjectTag::Blunt, ObjectTag::Rope]
