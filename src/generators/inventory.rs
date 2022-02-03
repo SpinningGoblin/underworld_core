@@ -64,19 +64,18 @@ impl InventoryPrototype {
 
             let range = 0..possibilities.len();
 
-            let equipped_location = if range.is_empty() {
-                LocationDescriptor::None
-            } else {
-                let location_index = rng.gen_range(range);
-                possibilities
-                    .get(location_index)
-                    .cloned()
-                    .unwrap_or_default()
-            };
+            // If we've got nowhere to put the weapon, we can't equip it.
+            if range.is_empty() {
+                continue;
+            }
 
-            if equipped_location != LocationDescriptor::None {
-                used_descriptors.push(equipped_location.clone());
-            };
+            let location_index = rng.gen_range(range);
+            let equipped_location = possibilities
+                .get(location_index)
+                .cloned()
+                .unwrap_or_default();
+
+            used_descriptors.push(equipped_location.clone());
 
             let hidden_roll: usize = rng.gen_range(0..=100);
             let multiple = weapon.is_multiple();
