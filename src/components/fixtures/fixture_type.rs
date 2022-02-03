@@ -7,8 +7,8 @@ use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 
 use crate::components::{
-    item_tag::{ItemTag, TaggedItem},
     material::{BuiltWithMaterial, Material},
+    object_tag::{ObjectTag, TaggedObject},
 };
 
 #[derive(Clone, Debug, IntoEnumIterator, PartialEq)]
@@ -46,18 +46,20 @@ impl Display for FixtureType {
     }
 }
 
-impl TaggedItem for FixtureType {
-    fn tags(&self) -> Vec<ItemTag> {
+impl TaggedObject for FixtureType {
+    fn tags(&self) -> Vec<ObjectTag> {
         match *self {
-            FixtureType::Bed => vec![ItemTag::Cloth, ItemTag::Fixture],
-            FixtureType::Chair => vec![ItemTag::Fixture],
-            FixtureType::Chest => vec![ItemTag::Fixture, ItemTag::Container],
-            FixtureType::Cot => vec![ItemTag::Fixture, ItemTag::Cloth],
-            FixtureType::SleepingRoll => vec![ItemTag::Fixture, ItemTag::Cloth, ItemTag::Leather],
-            FixtureType::Table => vec![ItemTag::Fixture],
-            FixtureType::WeaponRack => vec![ItemTag::Fixture],
-            FixtureType::Barrel => vec![ItemTag::Fixture, ItemTag::Container],
-            FixtureType::Crate => vec![ItemTag::Fixture, ItemTag::Container],
+            FixtureType::Bed => vec![ObjectTag::Cloth, ObjectTag::Fixture],
+            FixtureType::Chair => vec![ObjectTag::Fixture],
+            FixtureType::Chest => vec![ObjectTag::Fixture, ObjectTag::Container],
+            FixtureType::Cot => vec![ObjectTag::Fixture, ObjectTag::Cloth],
+            FixtureType::SleepingRoll => {
+                vec![ObjectTag::Fixture, ObjectTag::Cloth, ObjectTag::Leather]
+            }
+            FixtureType::Table => vec![ObjectTag::Fixture],
+            FixtureType::WeaponRack => vec![ObjectTag::Fixture],
+            FixtureType::Barrel => vec![ObjectTag::Fixture, ObjectTag::Container],
+            FixtureType::Crate => vec![ObjectTag::Fixture, ObjectTag::Container],
         }
     }
 }

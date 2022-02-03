@@ -8,9 +8,9 @@ use std::fmt::Display;
 use crate::components::{
     defense::Defense,
     equipment::{location_tag::LocationTag, Equipment},
-    item_descriptor::ItemDescriptor,
     material::Material,
     object::Object,
+    object_descriptor::ObjectDescriptor,
 };
 
 use super::wearable_type::WearableType;
@@ -27,7 +27,7 @@ pub struct Wearable {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub material: Option<Material>,
     #[cfg_attr(feature = "serialization", serde(default))]
-    pub descriptors: Vec<ItemDescriptor>,
+    pub descriptors: Vec<ObjectDescriptor>,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub defense: Option<Defense>,
 }
@@ -108,21 +108,27 @@ mod wearable_type_tests {
 
 #[cfg(test)]
 mod wearable_quality_tests {
-    use crate::components::item_descriptor::ItemDescriptor;
+    use crate::components::object_descriptor::ObjectDescriptor;
 
     #[test]
     fn display() {
-        assert_eq!("bloodstained", format!("{}", ItemDescriptor::Bloodstained));
-        assert_eq!("broken", format!("{}", ItemDescriptor::Broken));
-        assert_eq!("colourful", format!("{}", ItemDescriptor::Colourful));
-        assert_eq!("dingy", format!("{}", ItemDescriptor::Dingy));
-        assert_eq!("drab", format!("{}", ItemDescriptor::Drab));
-        assert_eq!("ill fitting", format!("{}", ItemDescriptor::IllFitting));
-        assert_eq!("loose fitting", format!("{}", ItemDescriptor::LooseFitting));
-        assert_eq!("rusty", format!("{}", ItemDescriptor::Rusty));
-        assert_eq!("shimmering", format!("{}", ItemDescriptor::Shimmering));
-        assert_eq!("shiny", format!("{}", ItemDescriptor::Shiny));
-        assert_eq!("stained", format!("{}", ItemDescriptor::Stained));
+        assert_eq!(
+            "bloodstained",
+            format!("{}", ObjectDescriptor::Bloodstained)
+        );
+        assert_eq!("broken", format!("{}", ObjectDescriptor::Broken));
+        assert_eq!("colourful", format!("{}", ObjectDescriptor::Colourful));
+        assert_eq!("dingy", format!("{}", ObjectDescriptor::Dingy));
+        assert_eq!("drab", format!("{}", ObjectDescriptor::Drab));
+        assert_eq!("ill fitting", format!("{}", ObjectDescriptor::IllFitting));
+        assert_eq!(
+            "loose fitting",
+            format!("{}", ObjectDescriptor::LooseFitting)
+        );
+        assert_eq!("rusty", format!("{}", ObjectDescriptor::Rusty));
+        assert_eq!("shimmering", format!("{}", ObjectDescriptor::Shimmering));
+        assert_eq!("shiny", format!("{}", ObjectDescriptor::Shiny));
+        assert_eq!("stained", format!("{}", ObjectDescriptor::Stained));
     }
 }
 
@@ -130,7 +136,7 @@ mod wearable_quality_tests {
 mod wearable_tests {
     use crate::components::material::Material;
 
-    use super::{ItemDescriptor, Wearable, WearableType};
+    use super::{ObjectDescriptor, Wearable, WearableType};
 
     #[test]
     fn display_when_there_is_only_type() {
@@ -161,7 +167,7 @@ mod wearable_tests {
         let wearable = Wearable {
             wearable_type: WearableType::Shackles,
             material: None,
-            descriptors: vec![ItemDescriptor::Dingy, ItemDescriptor::Bloodstained],
+            descriptors: vec![ObjectDescriptor::Dingy, ObjectDescriptor::Bloodstained],
             defense: None,
         };
 
@@ -173,7 +179,7 @@ mod wearable_tests {
         let wearable = Wearable {
             wearable_type: WearableType::Shackles,
             material: Some(Material::Iron),
-            descriptors: vec![ItemDescriptor::Bloodstained],
+            descriptors: vec![ObjectDescriptor::Bloodstained],
             defense: None,
         };
 

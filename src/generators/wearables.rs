@@ -4,8 +4,8 @@ use rand::Rng;
 
 use crate::components::{
     defense::Defense,
-    item_descriptor::ItemDescriptor,
     material::{BuiltWithMaterial, Material},
+    object_descriptor::ObjectDescriptor,
     wearables::{wearable::Wearable, wearable_type::WearableType},
 };
 
@@ -216,11 +216,11 @@ impl Generator<Wearable> for WearablePrototype {
             None
         };
 
-        let mut possible_descriptors: Vec<ItemDescriptor> = match &material {
-            Some(material) => ItemDescriptor::matches_two_tagged(&self.wearable_type, material),
-            None => ItemDescriptor::matches_tagged(&self.wearable_type),
+        let mut possible_descriptors: Vec<ObjectDescriptor> = match &material {
+            Some(material) => ObjectDescriptor::matches_two_tagged(&self.wearable_type, material),
+            None => ObjectDescriptor::matches_tagged(&self.wearable_type),
         };
-        let mut descriptors: Vec<ItemDescriptor> =
+        let mut descriptors: Vec<ObjectDescriptor> =
             self.wearable_type.necessary_descriptors().to_vec();
         while num_descriptors > 0 {
             if possible_descriptors.is_empty() {

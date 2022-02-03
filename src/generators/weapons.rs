@@ -4,8 +4,8 @@ use rand::Rng;
 
 use crate::components::{
     attack::Attack,
-    item_descriptor::ItemDescriptor,
     material::{BuiltWithMaterial, Material},
+    object_descriptor::ObjectDescriptor,
     weapons::{weapon::Weapon, weapon_type::WeaponType},
 };
 
@@ -199,11 +199,11 @@ impl Generator<Weapon> for WeaponPrototype {
             None
         };
 
-        let mut possible_descriptors: Vec<ItemDescriptor> = match &material {
-            Some(material) => ItemDescriptor::matches_two_tagged(&self.weapon_type, material),
-            None => ItemDescriptor::matches_tagged(&self.weapon_type),
+        let mut possible_descriptors: Vec<ObjectDescriptor> = match &material {
+            Some(material) => ObjectDescriptor::matches_two_tagged(&self.weapon_type, material),
+            None => ObjectDescriptor::matches_tagged(&self.weapon_type),
         };
-        let mut descriptors: Vec<ItemDescriptor> = Vec::new();
+        let mut descriptors: Vec<ObjectDescriptor> = Vec::new();
         while num_descriptors > 0 {
             if possible_descriptors.is_empty() {
                 break;

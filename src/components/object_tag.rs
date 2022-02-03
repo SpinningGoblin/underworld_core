@@ -1,9 +1,9 @@
-pub trait TaggedItem {
-    fn tags(&self) -> Vec<ItemTag>;
+pub trait TaggedObject {
+    fn tags(&self) -> Vec<ObjectTag>;
 }
 
 #[derive(Clone, Debug, PartialEq)]
-pub enum ItemTag {
+pub enum ObjectTag {
     Accessory,
     Armour,
     Blade,
@@ -23,12 +23,12 @@ pub enum ItemTag {
     Wood,
 }
 
-impl ItemTag {
+impl ObjectTag {
     pub fn is_weapon(&self) -> bool {
-        vec![ItemTag::Blade, ItemTag::Blunt, ItemTag::Whip].contains(self)
+        vec![ObjectTag::Blade, ObjectTag::Blunt, ObjectTag::Whip].contains(self)
     }
 
     pub fn is_wearable(&self) -> bool {
-        vec![ItemTag::Accessory, ItemTag::Armour, ItemTag::Clothing].contains(self)
+        vec![ObjectTag::Accessory, ObjectTag::Armour, ObjectTag::Clothing].contains(self)
     }
 }

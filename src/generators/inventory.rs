@@ -7,8 +7,8 @@ use crate::components::{
     character_item::CharacterItem,
     equipment::{location_descriptor::LocationDescriptor, Equipment},
     inventory::Inventory,
-    item_tag::TaggedItem,
     object::Object,
+    object_tag::TaggedObject,
     weapons::{weapon::Weapon, weapon_type::WeaponType},
     wearables::{wearable::Wearable, wearable_type::WearableType},
 };

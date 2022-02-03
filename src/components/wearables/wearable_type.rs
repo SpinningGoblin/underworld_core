@@ -8,9 +8,9 @@ use serde::{Deserialize, Serialize};
 
 use crate::components::{
     equipment::{location_tag::LocationTag, Equipment},
-    item_descriptor::ItemDescriptor,
-    item_tag::{ItemTag, TaggedItem},
     material::{BuiltWithMaterial, Material},
+    object_descriptor::ObjectDescriptor,
+    object_tag::{ObjectTag, TaggedObject},
 };
 
 #[derive(Clone, Debug, IntoEnumIterator, PartialEq)]
@@ -109,13 +109,13 @@ impl WearableType {
         )
     }
 
-    pub fn necessary_descriptors(&self) -> Vec<ItemDescriptor> {
+    pub fn necessary_descriptors(&self) -> Vec<ObjectDescriptor> {
         match *self {
             WearableType::Breastplate => Vec::new(),
             WearableType::Cloak => Vec::new(),
             WearableType::Shirt => Vec::new(),
             WearableType::PlateHelmet => Vec::new(),
-            WearableType::Shackles => vec![ItemDescriptor::SetOf],
+            WearableType::Shackles => vec![ObjectDescriptor::SetOf],
             WearableType::Mask => Vec::new(),
             WearableType::Trousers => Vec::new(),
             WearableType::Crown => Vec::new(),
@@ -178,23 +178,23 @@ impl BuiltWithMaterial for WearableType {
     }
 }
 
-impl TaggedItem for WearableType {
-    fn tags(&self) -> Vec<ItemTag> {
+impl TaggedObject for WearableType {
+    fn tags(&self) -> Vec<ObjectTag> {
         match *self {
-            WearableType::Breastplate => vec![ItemTag::Armour],
-            WearableType::Mask => vec![ItemTag::Accessory],
-            WearableType::Cloak => vec![ItemTag::Clothing],
-            WearableType::Shirt => vec![ItemTag::Clothing],
-            WearableType::Trousers => vec![ItemTag::Clothing],
-            WearableType::Crown => vec![ItemTag::Accessory],
-            WearableType::Boots => vec![ItemTag::Armour],
-            WearableType::Gloves => vec![ItemTag::Clothing],
-            WearableType::LoinCloth => vec![ItemTag::Clothing],
-            WearableType::PlateBoots => vec![ItemTag::Armour],
-            WearableType::PlateGauntlets => vec![ItemTag::Armour],
-            WearableType::PlateHelmet => vec![ItemTag::Armour],
-            WearableType::Shackles => vec![ItemTag::Accessory, ItemTag::Rope],
-            WearableType::Vest => vec![ItemTag::Clothing],
+            WearableType::Breastplate => vec![ObjectTag::Armour],
+            WearableType::Mask => vec![ObjectTag::Accessory],
+            WearableType::Cloak => vec![ObjectTag::Clothing],
+            WearableType::Shirt => vec![ObjectTag::Clothing],
+            WearableType::Trousers => vec![ObjectTag::Clothing],
+            WearableType::Crown => vec![ObjectTag::Accessory],
+            WearableType::Boots => vec![ObjectTag::Armour],
+            WearableType::Gloves => vec![ObjectTag::Clothing],
+            WearableType::LoinCloth => vec![ObjectTag::Clothing],
+            WearableType::PlateBoots => vec![ObjectTag::Armour],
+            WearableType::PlateGauntlets => vec![ObjectTag::Armour],
+            WearableType::PlateHelmet => vec![ObjectTag::Armour],
+            WearableType::Shackles => vec![ObjectTag::Accessory, ObjectTag::Rope],
+            WearableType::Vest => vec![ObjectTag::Clothing],
         }
     }
 }

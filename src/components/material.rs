@@ -5,7 +5,7 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use super::item_tag::{ItemTag, TaggedItem};
+use super::object_tag::{ObjectTag, TaggedObject};
 
 #[derive(Clone, Debug, PartialEq)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -54,22 +54,22 @@ impl Display for Material {
     }
 }
 
-impl TaggedItem for Material {
-    fn tags(&self) -> Vec<ItemTag> {
+impl TaggedObject for Material {
+    fn tags(&self) -> Vec<ObjectTag> {
         match *self {
-            Material::Bone => vec![ItemTag::Bone],
-            Material::Gold => vec![ItemTag::Metal],
-            Material::Hide => vec![ItemTag::Leather],
-            Material::Iron => vec![ItemTag::Metal],
-            Material::Leather => vec![ItemTag::Leather],
-            Material::Steel => vec![ItemTag::Metal],
-            Material::Stone => vec![ItemTag::Stone],
-            Material::Wooden => vec![ItemTag::Wood],
-            Material::Cotton => vec![ItemTag::Cloth],
-            Material::Fur => vec![ItemTag::Cloth],
-            Material::Linen => vec![ItemTag::Cloth],
-            Material::Silk => vec![ItemTag::Cloth],
-            Material::Wool => vec![ItemTag::Cloth],
+            Material::Bone => vec![ObjectTag::Bone],
+            Material::Gold => vec![ObjectTag::Metal],
+            Material::Hide => vec![ObjectTag::Leather],
+            Material::Iron => vec![ObjectTag::Metal],
+            Material::Leather => vec![ObjectTag::Leather],
+            Material::Steel => vec![ObjectTag::Metal],
+            Material::Stone => vec![ObjectTag::Stone],
+            Material::Wooden => vec![ObjectTag::Wood],
+            Material::Cotton => vec![ObjectTag::Cloth],
+            Material::Fur => vec![ObjectTag::Cloth],
+            Material::Linen => vec![ObjectTag::Cloth],
+            Material::Silk => vec![ObjectTag::Cloth],
+            Material::Wool => vec![ObjectTag::Cloth],
         }
     }
 }

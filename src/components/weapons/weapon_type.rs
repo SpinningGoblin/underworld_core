@@ -8,8 +8,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::components::{
     equipment::{location_tag::LocationTag, Equipment},
-    item_tag::{ItemTag, TaggedItem},
     material::{BuiltWithMaterial, Material},
+    object_tag::{ObjectTag, TaggedObject},
 };
 
 #[derive(Clone, Debug, IntoEnumIterator, PartialEq)]
@@ -79,21 +79,21 @@ impl BuiltWithMaterial for WeaponType {
     }
 }
 
-impl TaggedItem for WeaponType {
-    fn tags(&self) -> Vec<ItemTag> {
+impl TaggedObject for WeaponType {
+    fn tags(&self) -> Vec<ObjectTag> {
         match *self {
-            WeaponType::Buckler => vec![ItemTag::Shield],
-            WeaponType::Club => vec![ItemTag::Blunt],
-            WeaponType::Dagger => vec![ItemTag::Blade],
-            WeaponType::Dirk => vec![ItemTag::Blade],
-            WeaponType::GreatSword => vec![ItemTag::Blade],
-            WeaponType::Hammer => vec![ItemTag::Blunt],
-            WeaponType::LongSword => vec![ItemTag::Blade],
-            WeaponType::Mace => vec![ItemTag::Blunt],
-            WeaponType::Morningstar => vec![ItemTag::Blunt],
-            WeaponType::Shield => vec![ItemTag::Shield],
-            WeaponType::ShortSword => vec![ItemTag::Blade],
-            WeaponType::Whip => vec![ItemTag::Rope, ItemTag::Whip],
+            WeaponType::Buckler => vec![ObjectTag::Shield],
+            WeaponType::Club => vec![ObjectTag::Blunt],
+            WeaponType::Dagger => vec![ObjectTag::Blade],
+            WeaponType::Dirk => vec![ObjectTag::Blade],
+            WeaponType::GreatSword => vec![ObjectTag::Blade],
+            WeaponType::Hammer => vec![ObjectTag::Blunt],
+            WeaponType::LongSword => vec![ObjectTag::Blade],
+            WeaponType::Mace => vec![ObjectTag::Blunt],
+            WeaponType::Morningstar => vec![ObjectTag::Blunt],
+            WeaponType::Shield => vec![ObjectTag::Shield],
+            WeaponType::ShortSword => vec![ObjectTag::Blade],
+            WeaponType::Whip => vec![ObjectTag::Rope, ObjectTag::Whip],
         }
     }
 }

@@ -6,7 +6,7 @@ use enum_iterator::IntoEnumIterator;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::components::item_tag::ItemTag;
+use crate::components::object_tag::ObjectTag;
 
 use super::location_tag::LocationTag;
 
@@ -44,31 +44,41 @@ impl LocationDescriptor {
         tags.iter().any(|tag| self.tags().contains(tag))
     }
 
-    pub fn matches_any_item_tags(&self, tags: Vec<ItemTag>) -> bool {
+    pub fn matches_any_item_tags(&self, tags: Vec<ObjectTag>) -> bool {
         tags.iter().any(|tag| self.item_tags().contains(tag))
     }
 
-    pub fn item_tags(&self) -> Vec<ItemTag> {
+    pub fn item_tags(&self) -> Vec<ObjectTag> {
         match *self {
             LocationDescriptor::AlmostFallingGrip => {
-                vec![ItemTag::Blade, ItemTag::Blunt, ItemTag::Rope]
+                vec![ObjectTag::Blade, ObjectTag::Blunt, ObjectTag::Rope]
             }
             LocationDescriptor::ClenchedInFist => {
-                vec![ItemTag::Blade, ItemTag::Blunt, ItemTag::Rope]
+                vec![ObjectTag::Blade, ObjectTag::Blunt, ObjectTag::Rope]
             }
-            LocationDescriptor::DanglingFromWrists => vec![ItemTag::Rope],
-            LocationDescriptor::HangingHip => vec![ItemTag::Blade, ItemTag::Blunt, ItemTag::Rope, ItemTag::Whip],
-            LocationDescriptor::HangingLooselyShoulders => vec![ItemTag::Clothing],
-            LocationDescriptor::HeldLoosely => vec![ItemTag::Blade, ItemTag::Blunt, ItemTag::Rope, ItemTag::Whip],
-            LocationDescriptor::HangingMoldySheath => vec![ItemTag::Blade],
-            LocationDescriptor::SheathedAtHip => vec![ItemTag::Blade],
-            LocationDescriptor::StrappedToBack => vec![ItemTag::Blade, ItemTag::Blunt],
-            LocationDescriptor::StrappedToThigh => vec![ItemTag::Blade],
+            LocationDescriptor::DanglingFromWrists => vec![ObjectTag::Rope],
+            LocationDescriptor::HangingHip => vec![
+                ObjectTag::Blade,
+                ObjectTag::Blunt,
+                ObjectTag::Rope,
+                ObjectTag::Whip,
+            ],
+            LocationDescriptor::HangingLooselyShoulders => vec![ObjectTag::Clothing],
+            LocationDescriptor::HeldLoosely => vec![
+                ObjectTag::Blade,
+                ObjectTag::Blunt,
+                ObjectTag::Rope,
+                ObjectTag::Whip,
+            ],
+            LocationDescriptor::HangingMoldySheath => vec![ObjectTag::Blade],
+            LocationDescriptor::SheathedAtHip => vec![ObjectTag::Blade],
+            LocationDescriptor::StrappedToBack => vec![ObjectTag::Blade, ObjectTag::Blunt],
+            LocationDescriptor::StrappedToThigh => vec![ObjectTag::Blade],
             LocationDescriptor::ClenchedInFists => {
-                vec![ItemTag::Blade, ItemTag::Blunt, ItemTag::Rope]
+                vec![ObjectTag::Blade, ObjectTag::Blunt, ObjectTag::Rope]
             }
             LocationDescriptor::None => Vec::new(),
-            LocationDescriptor::CoiledAtWaist => vec![ItemTag::Rope, ItemTag::Whip],
+            LocationDescriptor::CoiledAtWaist => vec![ObjectTag::Rope, ObjectTag::Whip],
         }
     }
 

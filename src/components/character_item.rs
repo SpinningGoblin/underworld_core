@@ -7,8 +7,8 @@ use std::fmt::{Debug, Display};
 
 use super::{
     equipment::{location_descriptor::LocationDescriptor, location_tag::LocationTag, Equipment},
-    item_tag::TaggedItem,
     object::Object,
+    object_tag::TaggedObject,
 };
 
 #[derive(Clone, Debug)]
@@ -21,7 +21,7 @@ pub struct CharacterItem<T: Display + Clone + Debug + Object + Equipment> {
     pub is_multiple: bool,
 }
 
-impl<T: Display + Clone + Debug + Object + Equipment + TaggedItem> CharacterItem<T> {
+impl<T: Display + Clone + Debug + Object + Equipment + TaggedObject> CharacterItem<T> {
     pub fn is_equipped(&self) -> bool {
         self.location_descriptor
             .tags()

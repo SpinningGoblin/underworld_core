@@ -8,9 +8,9 @@ use std::fmt::Display;
 use crate::components::{
     attack::Attack,
     equipment::{location_tag::LocationTag, Equipment},
-    item_descriptor::ItemDescriptor,
     material::Material,
     object::Object,
+    object_descriptor::ObjectDescriptor,
 };
 
 use super::weapon_type::WeaponType;
@@ -26,7 +26,7 @@ pub struct Weapon {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub attack: Option<Attack>,
     pub weapon_type: WeaponType,
-    pub descriptors: Vec<ItemDescriptor>,
+    pub descriptors: Vec<ObjectDescriptor>,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub material: Option<Material>,
 }
@@ -106,7 +106,10 @@ mod weapon_tests {
         let weapon = Weapon {
             attack: None,
             weapon_type: super::WeaponType::LongSword,
-            descriptors: vec![super::ItemDescriptor::Dull, super::ItemDescriptor::Chipped],
+            descriptors: vec![
+                super::ObjectDescriptor::Dull,
+                super::ObjectDescriptor::Chipped,
+            ],
             material: None,
         };
 
