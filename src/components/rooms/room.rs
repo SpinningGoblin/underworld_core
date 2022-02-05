@@ -84,15 +84,15 @@ impl Room {
         let mut parts: Vec<String> = vec!["It is a".to_string()];
 
         if !self.height.is_average() {
-            parts.push(format!("{}", &self.height));
+            parts.push(format!(" {}", &self.height));
         }
 
         if !self.width.is_average() {
-            parts.push(format!("{}", &self.width));
+            parts.push(format!(" {}", &self.width));
         }
 
         if !self.length.is_average() {
-            parts.push(format!("{}", &self.length));
+            parts.push(format!(" {}", &self.length));
         }
 
         self.descriptors
