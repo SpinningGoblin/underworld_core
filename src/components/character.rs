@@ -21,11 +21,8 @@ impl Character {
     pub fn describe_species(&self) -> String {
         let mut descriptions: Vec<String> = Vec::new();
 
-        if let Some(dimensions) = &self.stats.dimensions {
-            let height_description = dimensions.describe_height(&self.species);
-            if !height_description.is_empty() {
-                descriptions.push(height_description);
-            }
+        if !self.stats.height.is_average() {
+            descriptions.push(format!("{}", self.stats.height));
         }
 
         descriptions.push(self.species.to_string());
@@ -53,9 +50,7 @@ impl Character {
 
 #[cfg(test)]
 mod tests {
-    use crate::components::{
-        dimensions::Dimensions, life_modifier::LifeModifier, species::Species, stats::Stats,
-    };
+    use crate::components::{life_modifier::LifeModifier, species::Species, stats::Stats};
 
     use super::Character;
 
@@ -64,10 +59,7 @@ mod tests {
         let character = Character {
             stats: Stats {
                 health: None,
-                dimensions: Some(Dimensions {
-                    height: 2.0,
-                    width: 1.0,
-                }),
+                height: crate::components::size::Size::Tall,
             },
             species: Species::Goblin,
             life_modifier: None,
@@ -83,10 +75,7 @@ mod tests {
         let character = Character {
             stats: Stats {
                 health: None,
-                dimensions: Some(Dimensions {
-                    height: 1.0,
-                    width: 1.0,
-                }),
+                height: crate::components::size::Size::Average,
             },
             species: Species::Goblin,
             life_modifier: Some(LifeModifier::Skeleton),

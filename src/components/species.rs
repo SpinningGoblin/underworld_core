@@ -4,9 +4,7 @@ use enum_iterator::IntoEnumIterator;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use std::{fmt::Display, ops::Range};
-
-use super::dimension_descriptors::HeightDescriptor;
+use std::fmt::Display;
 
 #[derive(Clone, Debug, IntoEnumIterator, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -23,55 +21,6 @@ pub enum Species {
     Ogre,
     Orc,
     Unknown,
-}
-
-const SMALL_HEIGHT: Range<f32> = 0.6..1.2;
-const MEDIUM_HEIGHT: Range<f32> = 1.2..2.0;
-const LARGE_HEIGHT: Range<f32> = 2.05..4.4;
-const UNKNOWN_HEIGHT: Range<f32> = 0.6..4.4;
-
-const TALL: &str = "tall";
-const SHORT: &str = "short";
-const AVERAGE_HEIGHT: &str = "";
-
-impl HeightDescriptor for Species {
-    fn height_range(&self) -> Range<f32> {
-        match *self {
-            Species::Bugbear => MEDIUM_HEIGHT,
-            Species::Goblin => SMALL_HEIGHT,
-            Species::Kobold => SMALL_HEIGHT,
-            Species::Ogre => LARGE_HEIGHT,
-            Species::Orc => MEDIUM_HEIGHT,
-            Species::Unknown => UNKNOWN_HEIGHT,
-            Species::Hobgoblin => SMALL_HEIGHT,
-        }
-    }
-
-    fn bigger_text(&self) -> String {
-        TALL.to_string()
-    }
-
-    fn smaller_text(&self) -> String {
-        SHORT.to_string()
-    }
-
-    fn average_text(&self) -> String {
-        AVERAGE_HEIGHT.to_string()
-    }
-}
-
-impl Species {
-    pub fn height_range(&self) -> Range<f32> {
-        match *self {
-            Species::Bugbear => MEDIUM_HEIGHT,
-            Species::Goblin => SMALL_HEIGHT,
-            Species::Kobold => SMALL_HEIGHT,
-            Species::Ogre => LARGE_HEIGHT,
-            Species::Orc => MEDIUM_HEIGHT,
-            Species::Unknown => UNKNOWN_HEIGHT,
-            Species::Hobgoblin => SMALL_HEIGHT,
-        }
-    }
 }
 
 impl Display for Species {

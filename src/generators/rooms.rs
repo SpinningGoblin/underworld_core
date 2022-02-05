@@ -5,16 +5,15 @@ use rand::Rng;
 use uuid::Uuid;
 
 use crate::components::{
-    dimensions::Dimensions,
     identifier::Identifier,
     non_player::NonPlayer,
     rooms::{descriptor::Descriptor, room::Room, room_type::RoomType},
+    size::Size,
     species::Species,
 };
 
 use super::{
-    characters::CharacterPrototype, dimensions::DimensionsPrototype, generator::Generator,
-    non_players::NonPlayerPrototype,
+    characters::CharacterPrototype, generator::Generator, non_players::NonPlayerPrototype,
 };
 
 pub struct RoomPrototype {
@@ -23,7 +22,6 @@ pub struct RoomPrototype {
     pub num_non_players: Range<usize>,
     pub num_descriptors: Range<usize>,
     pub room_type: RoomType,
-    pub dimensions_generator: Box<dyn Generator<Dimensions>>,
     pub possible_descriptors: Vec<Descriptor>,
 }
 
@@ -70,10 +68,10 @@ impl Generator<Room> for RoomPrototype {
             }
         }
 
-        let dimensions = self.dimensions_generator.generate();
-
         Room {
-            dimensions,
+            height: Size::Average,
+            width: Size::Average,
+            length: Size::Average,
             descriptors,
             non_players,
             identifier: Identifier {
@@ -115,7 +113,6 @@ impl RoomPrototype {
             room_type: room_type.clone(),
             non_player_generators: npc_generators,
             num_descriptors: 1..3,
-            dimensions_generator: Box::new(DimensionsPrototype::for_room_type(&room_type)),
             possible_descriptors: room_type.possible_descriptors(),
         }
     }

@@ -1,5 +1,4 @@
 pub mod characters;
-pub mod dimensions;
 pub mod fixtures;
 pub mod generator;
 pub mod inventory;

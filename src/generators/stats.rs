@@ -2,7 +2,7 @@ use std::ops::Range;
 
 use rand::Rng;
 
-use crate::components::{dimensions::Dimensions, health::Health, species::Species, stats::Stats};
+use crate::components::{health::Health, size::Size, species::Species, stats::Stats};
 
 use super::generator::Generator;
 
@@ -137,14 +137,9 @@ impl Generator<Stats> for StatsPrototype {
             None
         };
 
-        let dimensions = if self.has_dimensions {
-            let height = rng.gen_range(self.height_range.clone());
-            let width = rng.gen_range(self.width_range.clone());
-            Some(Dimensions { height, width })
-        } else {
-            None
-        };
-
-        Stats { health, dimensions }
+        Stats {
+            health,
+            height: Size::Average,
+        }
     }
 }

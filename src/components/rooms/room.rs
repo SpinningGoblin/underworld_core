@@ -1,14 +1,14 @@
+use rand::Rng;
 use std::{collections::HashMap, fmt::Display};
 
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
-use rand::Rng;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
 use crate::components::{
-    dimensions::Dimensions, fixtures::fixture::Fixture, identifier::Identifier,
-    non_player::NonPlayer, species::Species,
+    fixtures::fixture::Fixture, identifier::Identifier, non_player::NonPlayer, size::Size,
+    species::Species,
 };
 
 use super::{descriptor::Descriptor, room_type::RoomType};
@@ -18,11 +18,13 @@ use super::{descriptor::Descriptor, room_type::RoomType};
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct Room {
     pub identifier: Identifier,
-    pub dimensions: Dimensions,
     pub descriptors: Vec<Descriptor>,
     pub room_type: RoomType,
     pub non_players: Vec<NonPlayer>,
     pub fixtures: Vec<Fixture>,
+    pub height: Size,
+    pub width: Size,
+    pub length: Size,
 }
 
 impl Display for Room {
@@ -81,14 +83,16 @@ impl Room {
     fn describe_room(&self) -> String {
         let mut parts: Vec<String> = vec!["It is a".to_string()];
 
-        let height_description = self.dimensions.describe_height(&self.room_type);
-        if !height_description.is_empty() {
-            parts.push(format!(" {}", height_description));
+        if !self.height.is_average() {
+            parts.push(format!("{}", &self.height));
         }
 
-        let width_description = self.dimensions.describe_width(&self.room_type);
-        if !width_description.is_empty() {
-            parts.push(format!(" {}", width_description));
+        if !self.width.is_average() {
+            parts.push(format!("{}", &self.width));
+        }
+
+        if !self.length.is_average() {
+            parts.push(format!("{}", &self.length));
         }
 
         self.descriptors
