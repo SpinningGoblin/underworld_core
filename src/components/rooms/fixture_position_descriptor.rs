@@ -1,0 +1,68 @@
+use std::fmt::Display;
+
+#[cfg(feature = "bevy_components")]
+use bevy_ecs::prelude::Component;
+use enum_iterator::IntoEnumIterator;
+#[cfg(feature = "serialization")]
+use serde::{Deserialize, Serialize};
+
+use super::descriptor_position::DescriptorPosition;
+
+#[derive(Clone, Debug, IntoEnumIterator, PartialEq)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
+pub enum FixturePositionDescriptor {
+    AreAlongOneSide,
+    AreInTheCorner,
+    IsInTheCorner,
+    AreScatteredAboutTheRoom,
+    SitAlongOneSide,
+    SitsAlongOneSide,
+    StandsInTheCorner,
+}
+
+impl FixturePositionDescriptor {
+    fn descriptor_position(&self) -> DescriptorPosition {
+        match *self {
+            FixturePositionDescriptor::IsInTheCorner => DescriptorPosition::Post,
+            FixturePositionDescriptor::AreInTheCorner => DescriptorPosition::Post,
+            FixturePositionDescriptor::AreAlongOneSide => DescriptorPosition::Post,
+            FixturePositionDescriptor::AreScatteredAboutTheRoom => DescriptorPosition::Post,
+            FixturePositionDescriptor::SitAlongOneSide => DescriptorPosition::Post,
+            FixturePositionDescriptor::SitsAlongOneSide => DescriptorPosition::Post,
+            FixturePositionDescriptor::StandsInTheCorner => DescriptorPosition::Post,
+        }
+    }
+
+    pub fn unable_to_be_used_with(&self, other: &FixturePositionDescriptor) -> bool {
+        if self.is_post() {
+            other.is_post()
+        } else {
+            other.is_pre()
+        }
+    }
+
+    pub fn is_pre(&self) -> bool {
+        self.descriptor_position() == DescriptorPosition::Pre
+    }
+
+    pub fn is_post(&self) -> bool {
+        self.descriptor_position() == DescriptorPosition::Post
+    }
+}
+
+impl Display for FixturePositionDescriptor {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let text = match *self {
+            FixturePositionDescriptor::IsInTheCorner => "is in the corner",
+            FixturePositionDescriptor::AreInTheCorner => "are in the corner",
+            FixturePositionDescriptor::AreAlongOneSide => "are along one side",
+            FixturePositionDescriptor::AreScatteredAboutTheRoom => "are scattered about the room",
+            FixturePositionDescriptor::SitAlongOneSide => "sit along one side",
+            FixturePositionDescriptor::SitsAlongOneSide => "sits along one side",
+            FixturePositionDescriptor::StandsInTheCorner => "stands in the corner",
+        };
+
+        write!(f, "{}", text)
+    }
+}
