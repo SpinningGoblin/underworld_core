@@ -11,7 +11,7 @@ use crate::components::{
     object_tag::{ObjectTag, TaggedObject},
 };
 
-#[derive(Clone, Debug, IntoEnumIterator, PartialEq)]
+#[derive(Clone, Debug, IntoEnumIterator, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
     feature = "serialization",
@@ -21,6 +21,7 @@ use crate::components::{
 pub enum FixtureType {
     Barrel,
     Bed,
+    Bucket,
     Chair,
     Chest,
     Cot,
@@ -30,9 +31,20 @@ pub enum FixtureType {
     WeaponRack,
 }
 
+impl FixtureType {
+    pub fn describe_count(&self, count: usize) -> String {
+        if count > 1 {
+            format!("{}s", self)
+        } else {
+            format!("{}", self)
+        }
+    }
+}
+
 impl Display for FixtureType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
+            FixtureType::Bucket => write!(f, "bucket"),
             FixtureType::Table => write!(f, "table"),
             FixtureType::Chair => write!(f, "chair"),
             FixtureType::Chest => write!(f, "chest"),
@@ -60,6 +72,7 @@ impl TaggedObject for FixtureType {
             FixtureType::WeaponRack => vec![ObjectTag::Fixture],
             FixtureType::Barrel => vec![ObjectTag::Fixture, ObjectTag::Container],
             FixtureType::Crate => vec![ObjectTag::Fixture, ObjectTag::Container],
+            FixtureType::Bucket => vec![ObjectTag::Fixture, ObjectTag::Container],
         }
     }
 }
@@ -128,6 +141,13 @@ impl BuiltWithMaterial for FixtureType {
                 Material::Gold,
                 Material::Iron,
                 Material::Steel,
+                Material::Stone,
+                Material::Wooden,
+            ],
+            FixtureType::Bucket => vec![
+                Material::Bone,
+                Material::Gold,
+                Material::Iron,
                 Material::Stone,
                 Material::Wooden,
             ],
