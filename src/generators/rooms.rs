@@ -12,9 +12,10 @@ use crate::components::{
     identifier::Identifier,
     non_player::NonPlayer,
     rooms::{descriptor::Descriptor, room::Room, room_type::RoomType},
-    size::Size,
     species::Species,
 };
+
+use self::{dimensions::build_dimensions, fixtures::build_fixture_positions};
 
 use super::{
     characters::CharacterPrototype, generator::Generator, non_players::NonPlayerPrototype,
@@ -30,72 +31,12 @@ pub struct RoomPrototype {
 }
 
 const SWITCH_GENERATOR_CHANCE: usize = 25;
-const NON_AVERAGE_HEIGHT_CHANGE: usize = 25;
-const NON_AVERAGE_WIDTH_CHANGE: usize = 50;
-const NON_AVERAGE_LENGTH_CHANGE: usize = 25;
 
 impl RoomPrototype {
-    fn non_average_heights() -> Vec<Size> {
-        vec![Size::Tall, Size::Squat]
-    }
-
-    fn non_average_widths() -> Vec<Size> {
-        vec![Size::Huge, Size::Massive, Size::Narrow, Size::Wide]
-    }
-
-    fn non_average_lengths() -> Vec<Size> {
-        vec![Size::Long]
-    }
-
     fn switch_npc_generator() -> bool {
         let mut rng = rand::thread_rng();
         let switch_gen_roll: usize = rng.gen_range(0..=100);
         switch_gen_roll <= SWITCH_GENERATOR_CHANCE
-    }
-
-    fn height() -> Size {
-        let mut rng = rand::thread_rng();
-        let non_average_roll: usize = rng.gen_range(0..=100);
-        if non_average_roll <= NON_AVERAGE_HEIGHT_CHANGE {
-            let possibilities = Self::non_average_heights();
-            let index = rng.gen_range(0..possibilities.len());
-            match possibilities.get(index) {
-                Some(height) => height.clone(),
-                None => Size::Average,
-            }
-        } else {
-            Size::Average
-        }
-    }
-
-    fn length() -> Size {
-        let mut rng = rand::thread_rng();
-        let non_average_roll: usize = rng.gen_range(0..=100);
-        if non_average_roll <= NON_AVERAGE_LENGTH_CHANGE {
-            let possibilities = Self::non_average_lengths();
-            let index = rng.gen_range(0..possibilities.len());
-            match possibilities.get(index) {
-                Some(length) => length.clone(),
-                None => Size::Average,
-            }
-        } else {
-            Size::Average
-        }
-    }
-
-    fn width() -> Size {
-        let mut rng = rand::thread_rng();
-        let non_average_roll: usize = rng.gen_range(0..=100);
-        if non_average_roll <= NON_AVERAGE_WIDTH_CHANGE {
-            let possibilities = Self::non_average_widths();
-            let index = rng.gen_range(0..possibilities.len());
-            match possibilities.get(index) {
-                Some(width) => width.clone(),
-                None => Size::Average,
-            }
-        } else {
-            Size::Average
-        }
     }
 }
 
@@ -143,9 +84,7 @@ impl Generator<Room> for RoomPrototype {
         }
 
         Room {
-            height: Self::height(),
-            width: Self::width(),
-            length: Self::length(),
+            dimensions: build_dimensions(),
             descriptors,
             non_players,
             identifier: Identifier {
@@ -153,7 +92,8 @@ impl Generator<Room> for RoomPrototype {
                 name: None,
             },
             room_type: self.room_type.clone(),
-            fixtures: Vec::new(),
+            fixture_positions: build_fixture_positions(&self.room_type),
+            npc_positions: Vec::new(),
         }
     }
 }
@@ -201,5 +141,19 @@ impl RoomType {
             RoomType::Room => Descriptor::into_enum_iter().collect(),
             RoomType::EntryWay => Descriptor::into_enum_iter().collect(),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::generators::generator::Generator;
+
+    use super::RoomPrototype;
+
+    #[test]
+    fn generate_room() {
+        let room_prototype = RoomPrototype::build_random(Vec::new(), 1..3);
+        let room = room_prototype.generate();
+        assert!(!format!("{}", &room).is_empty());
     }
 }
