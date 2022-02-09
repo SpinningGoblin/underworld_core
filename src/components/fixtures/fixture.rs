@@ -5,7 +5,7 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::components::material::Material;
+use crate::components::{material::Material, object_descriptor::ObjectDescriptor, size::Size};
 
 use super::fixture_type::FixtureType;
 
@@ -20,16 +20,25 @@ pub struct Fixture {
     pub fixture_type: FixtureType,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub material: Option<Material>,
+    pub size: Size,
+    pub descriptors: Vec<ObjectDescriptor>,
 }
 
 impl Display for Fixture {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let material_description = match &self.material {
-            Some(material) => format!("{}", material),
-            None => "".to_string(),
-        };
+        let mut descriptions: Vec<String> = Vec::new();
 
-        write!(f, "{} {}", material_description, self.fixture_type)
+        if !self.size.is_average() {
+            descriptions.push(format!("{}", &self.size));
+        }
+
+        match &self.material {
+            Some(material) => descriptions.push(format!("{}", material)),
+            None => {}
+        }
+
+        descriptions.push(format!("{}", &self.fixture_type));
+        write!(f, "{}", descriptions.join(" "))
     }
 }
 
@@ -44,6 +53,8 @@ mod display_tests {
         let fixture = Fixture {
             fixture_type: FixtureType::Chest,
             material: Some(Material::Steel),
+            size: crate::components::size::Size::Average,
+            descriptors: Vec::new(),
         };
 
         assert_eq!("steel chest", format!("{}", fixture));
