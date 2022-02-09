@@ -11,30 +11,38 @@ use serde::{Deserialize, Serialize};
 pub enum Size {
     Average,
     Huge,
+    Large,
     Massive,
     Long,
     Medium,
     Narrow,
     Short,
+    Small,
     Squat,
     Tall,
+    Tiny,
     Wide,
 }
 
 impl Display for Size {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match *self {
-            Size::Average => write!(f, "average"),
-            Size::Huge => write!(f, "huge"),
-            Size::Long => write!(f, "long"),
-            Size::Massive => write!(f, "massive"),
-            Size::Medium => write!(f, "medium"),
-            Size::Narrow => write!(f, "narrow"),
-            Size::Short => write!(f, "short"),
-            Size::Squat => write!(f, "squat"),
-            Size::Tall => write!(f, "tall"),
-            Size::Wide => write!(f, "wide"),
-        }
+        let text = match *self {
+            Size::Average => "average",
+            Size::Huge => "huge",
+            Size::Long => "long",
+            Size::Massive => "massive",
+            Size::Medium => "medium",
+            Size::Narrow => "narrow",
+            Size::Short => "short",
+            Size::Squat => "squat",
+            Size::Tall => "tall",
+            Size::Wide => "wide",
+            Size::Large => "large",
+            Size::Small => "small",
+            Size::Tiny => "tiny",
+        };
+
+        write!(f, "{}", text)
     }
 }
 
