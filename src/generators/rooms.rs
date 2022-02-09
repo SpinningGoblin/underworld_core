@@ -1,5 +1,7 @@
 mod dimensions;
 mod fixtures;
+mod npcs;
+
 use std::ops::Range;
 
 use enum_iterator::IntoEnumIterator;
