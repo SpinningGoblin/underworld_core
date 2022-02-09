@@ -1,4 +1,5 @@
 mod dimensions;
+mod fixtures;
 use std::ops::Range;
 
 use enum_iterator::IntoEnumIterator;
