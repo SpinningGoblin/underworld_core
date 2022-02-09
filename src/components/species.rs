@@ -37,6 +37,16 @@ impl Display for Species {
     }
 }
 
+impl Species {
+    pub fn describe_count(&self, count: usize) -> String {
+        if count > 1 {
+            format!("{}s", self)
+        } else {
+            format!("{}", self)
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use crate::components::species::Species;
