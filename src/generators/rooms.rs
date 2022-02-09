@@ -1,3 +1,4 @@
+mod dimensions;
 use std::ops::Range;
 
 use enum_iterator::IntoEnumIterator;
