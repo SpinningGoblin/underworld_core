@@ -1,7 +1,9 @@
 use core::hash::Hash;
 use std::collections::HashMap;
 
-pub fn sorted_frequencies<T: Iterator<Item = U>, U: Eq + Hash + Clone>(items: T) -> Vec<(U, usize)> {
+pub fn sorted_frequencies<T: Iterator<Item = U>, U: Eq + Hash + Clone>(
+    items: T,
+) -> Vec<(U, usize)> {
     let mut counts: HashMap<U, usize> = HashMap::new();
 
     for item in items {
