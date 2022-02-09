@@ -4,7 +4,7 @@ pub fn main() {
     {
         use underworld_core::generators::{generator::Generator, rooms::RoomPrototype};
 
-        let room_prototype = RoomPrototype::build_random(Vec::new(), 1..4);
+        let room_prototype = RoomPrototype::build_random(Vec::new(), 1..=3);
         let room = room_prototype.generate();
         let serialized = serde_json::to_string(&room);
 

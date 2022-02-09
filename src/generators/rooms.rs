@@ -2,7 +2,7 @@ mod dimensions;
 mod fixtures;
 mod npcs;
 
-use std::ops::Range;
+use std::ops::RangeInclusive;
 
 use enum_iterator::IntoEnumIterator;
 use rand::Rng;
@@ -24,8 +24,8 @@ use super::{
 pub struct RoomPrototype {
     pub possible_npc_names: Vec<String>,
     pub non_player_generators: Vec<Box<dyn Generator<NonPlayer>>>,
-    pub num_non_players: Range<usize>,
-    pub num_descriptors: Range<usize>,
+    pub num_non_players: RangeInclusive<usize>,
+    pub num_descriptors: RangeInclusive<usize>,
     pub room_type: RoomType,
     pub possible_descriptors: Vec<Descriptor>,
 }
@@ -99,7 +99,10 @@ impl Generator<Room> for RoomPrototype {
 }
 
 impl RoomPrototype {
-    pub fn build_random(npc_names: Vec<String>, num_non_players: Range<usize>) -> RoomPrototype {
+    pub fn build_random(
+        npc_names: Vec<String>,
+        num_non_players: RangeInclusive<usize>,
+    ) -> RoomPrototype {
         let mut npc_generators: Vec<Box<dyn Generator<NonPlayer>>> = Vec::new();
 
         for species in Species::into_enum_iter() {
@@ -126,7 +129,7 @@ impl RoomPrototype {
             possible_npc_names: npc_names,
             room_type: room_type.clone(),
             non_player_generators: npc_generators,
-            num_descriptors: 1..3,
+            num_descriptors: 1..=2,
             possible_descriptors: room_type.possible_descriptors(),
         }
     }
@@ -152,7 +155,7 @@ mod tests {
 
     #[test]
     fn generate_room() {
-        let room_prototype = RoomPrototype::build_random(Vec::new(), 1..3);
+        let room_prototype = RoomPrototype::build_random(Vec::new(), 1..=2);
         let room = room_prototype.generate();
         assert!(!format!("{}", &room).is_empty());
     }

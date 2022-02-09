@@ -1,4 +1,4 @@
-use std::ops::Range;
+use std::ops::RangeInclusive;
 
 use rand::Rng;
 
@@ -7,7 +7,7 @@ use crate::components::{health::Health, size::Size, species::Species, stats::Sta
 use super::generator::Generator;
 
 pub struct StatsPrototype {
-    pub health_range: Range<i32>,
+    pub health_range: RangeInclusive<i32>,
     pub has_health: bool,
     pub max_health: Option<i32>,
 }
@@ -16,7 +16,7 @@ impl StatsPrototype {
     pub fn bugbear(max_health: Option<i32>) -> Self {
         Self {
             max_health,
-            health_range: 10..16,
+            health_range: 10..=15,
             has_health: true,
         }
     }
@@ -24,7 +24,7 @@ impl StatsPrototype {
     pub fn goblin(max_health: Option<i32>) -> Self {
         Self {
             max_health,
-            health_range: 8..13,
+            health_range: 8..=12,
             has_health: true,
         }
     }
@@ -32,7 +32,7 @@ impl StatsPrototype {
     pub fn hobgoblin(max_health: Option<i32>) -> Self {
         Self {
             max_health,
-            health_range: 8..13,
+            health_range: 8..=12,
             has_health: true,
         }
     }
@@ -40,7 +40,7 @@ impl StatsPrototype {
     pub fn kobold(max_health: Option<i32>) -> Self {
         Self {
             max_health,
-            health_range: 8..13,
+            health_range: 8..=12,
             has_health: true,
         }
     }
@@ -48,7 +48,7 @@ impl StatsPrototype {
     pub fn ogre(max_health: Option<i32>) -> Self {
         Self {
             max_health,
-            health_range: 12..20,
+            health_range: 12..=20,
             has_health: true,
         }
     }
@@ -56,7 +56,7 @@ impl StatsPrototype {
     pub fn orc(max_health: Option<i32>) -> Self {
         Self {
             max_health,
-            health_range: 10..16,
+            health_range: 10..=15,
             has_health: true,
         }
     }
@@ -64,7 +64,7 @@ impl StatsPrototype {
     pub fn unknown(max_health: Option<i32>) -> Self {
         Self {
             max_health,
-            health_range: 3..20,
+            health_range: 3..=20,
             has_health: true,
         }
     }

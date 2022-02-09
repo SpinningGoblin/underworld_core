@@ -1,4 +1,4 @@
-use std::ops::Range;
+use std::ops::RangeInclusive;
 
 use rand::Rng;
 
@@ -13,7 +13,7 @@ use super::generator::Generator;
 
 struct WearablePrototype {
     pub wearable_type: WearableType,
-    pub num_descriptors: Range<usize>,
+    pub num_descriptors: RangeInclusive<usize>,
     pub defense: Option<Defense>,
     pub possible_materials: Vec<Material>,
 }
@@ -44,7 +44,7 @@ impl WearableGenerator {
 impl WearablePrototype {
     pub fn build(
         wearable_type: WearableType,
-        num_descriptors: Range<usize>,
+        num_descriptors: RangeInclusive<usize>,
         defense: Option<Defense>,
     ) -> WearablePrototype {
         let possible_materials = wearable_type.possible_materials();
@@ -59,7 +59,7 @@ impl WearablePrototype {
     pub fn breastplate() -> Self {
         Self::build(
             WearableType::Breastplate,
-            0..3,
+            0..=2,
             Some(Defense {
                 minimum: 1,
                 maximum: 3,
@@ -70,7 +70,7 @@ impl WearablePrototype {
     pub fn boots() -> Self {
         Self::build(
             WearableType::Boots,
-            0..3,
+            0..=2,
             Some(Defense {
                 minimum: 1,
                 maximum: 3,
@@ -81,7 +81,7 @@ impl WearablePrototype {
     pub fn gloves() -> Self {
         Self::build(
             WearableType::Gloves,
-            0..3,
+            0..=2,
             Some(Defense {
                 minimum: 1,
                 maximum: 3,
@@ -92,7 +92,7 @@ impl WearablePrototype {
     pub fn loin_cloth() -> Self {
         Self::build(
             WearableType::LoinCloth,
-            0..3,
+            0..=2,
             Some(Defense {
                 minimum: 0,
                 maximum: 2,
@@ -103,7 +103,7 @@ impl WearablePrototype {
     pub fn vest() -> Self {
         Self::build(
             WearableType::Vest,
-            0..3,
+            0..=2,
             Some(Defense {
                 minimum: 1,
                 maximum: 3,
@@ -114,7 +114,7 @@ impl WearablePrototype {
     pub fn cloak() -> Self {
         Self::build(
             WearableType::Cloak,
-            0..3,
+            0..=2,
             Some(Defense {
                 minimum: 1,
                 maximum: 3,
@@ -125,7 +125,7 @@ impl WearablePrototype {
     pub fn crown() -> Self {
         Self::build(
             WearableType::Crown,
-            0..3,
+            0..=2,
             Some(Defense {
                 minimum: 1,
                 maximum: 3,
@@ -136,7 +136,7 @@ impl WearablePrototype {
     pub fn mask() -> Self {
         Self::build(
             WearableType::Mask,
-            0..3,
+            0..=2,
             Some(Defense {
                 minimum: 1,
                 maximum: 3,
@@ -147,7 +147,7 @@ impl WearablePrototype {
     pub fn shirt() -> Self {
         Self::build(
             WearableType::Shirt,
-            0..3,
+            0..=2,
             Some(Defense {
                 minimum: 1,
                 maximum: 3,
@@ -158,7 +158,7 @@ impl WearablePrototype {
     pub fn trousers() -> Self {
         Self::build(
             WearableType::Trousers,
-            0..3,
+            0..=2,
             Some(Defense {
                 minimum: 1,
                 maximum: 3,
@@ -169,7 +169,7 @@ impl WearablePrototype {
     pub fn plate_helmet() -> Self {
         Self::build(
             WearableType::PlateHelmet,
-            0..3,
+            0..=2,
             Some(Defense {
                 minimum: 3,
                 maximum: 6,
@@ -180,7 +180,7 @@ impl WearablePrototype {
     pub fn plate_boots() -> Self {
         Self::build(
             WearableType::PlateBoots,
-            0..3,
+            0..=2,
             Some(Defense {
                 minimum: 3,
                 maximum: 6,
@@ -191,7 +191,7 @@ impl WearablePrototype {
     pub fn plate_gauntlets() -> Self {
         Self::build(
             WearableType::PlateGauntlets,
-            0..3,
+            0..=2,
             Some(Defense {
                 minimum: 3,
                 maximum: 6,
@@ -200,7 +200,7 @@ impl WearablePrototype {
     }
 
     pub fn shackles() -> Self {
-        Self::build(WearableType::Shackles, 0..3, None)
+        Self::build(WearableType::Shackles, 0..=2, None)
     }
 }
 

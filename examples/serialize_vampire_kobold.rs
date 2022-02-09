@@ -16,10 +16,10 @@ pub fn main() {
         let inventory_prototype = InventoryPrototype {
             weapon_types: WeaponType::all(),
             wearable_types: WearableType::all(),
-            num_equipped_weapons: 1..3,
-            num_equipped_wearables: 1..3,
-            num_carried_weapons: 1..2,
-            num_carried_wearables: 1..2,
+            num_equipped_weapons: 1..=2,
+            num_equipped_wearables: 1..=2,
+            num_carried_weapons: 1..=2,
+            num_carried_wearables: 1..=2,
             hidden_weapon_chance: 0,
             hidden_wearable_chance: 0,
         };

@@ -1,4 +1,4 @@
-use std::ops::Range;
+use std::ops::RangeInclusive;
 
 use rand::Rng;
 
@@ -34,7 +34,7 @@ impl WeaponGenerator {
 
 struct WeaponPrototype {
     pub weapon_type: WeaponType,
-    pub num_descriptors: Range<usize>,
+    pub num_descriptors: RangeInclusive<usize>,
     pub attack: Option<Attack>,
     pub possible_materials: Vec<Material>,
 }
@@ -42,7 +42,7 @@ struct WeaponPrototype {
 impl WeaponPrototype {
     pub fn build(
         weapon_type: WeaponType,
-        num_descriptors: Range<usize>,
+        num_descriptors: RangeInclusive<usize>,
         attack: Option<Attack>,
     ) -> Self {
         let possible_materials = weapon_type.possible_materials();
@@ -57,7 +57,7 @@ impl WeaponPrototype {
     pub fn buckler() -> Self {
         Self::build(
             WeaponType::Buckler,
-            0..3,
+            0..=2,
             Some(Attack {
                 minimum: 0,
                 maximum: 2,
@@ -68,7 +68,7 @@ impl WeaponPrototype {
     pub fn dagger() -> Self {
         Self::build(
             WeaponType::Dagger,
-            0..3,
+            0..=2,
             Some(Attack {
                 minimum: 1,
                 maximum: 3,
@@ -79,7 +79,7 @@ impl WeaponPrototype {
     pub fn dirk() -> Self {
         Self::build(
             WeaponType::Dirk,
-            0..3,
+            0..=2,
             Some(Attack {
                 minimum: 1,
                 maximum: 3,
@@ -90,7 +90,7 @@ impl WeaponPrototype {
     pub fn club() -> Self {
         Self::build(
             WeaponType::Club,
-            0..3,
+            0..=2,
             Some(Attack {
                 minimum: 1,
                 maximum: 3,
@@ -101,7 +101,7 @@ impl WeaponPrototype {
     pub fn great_sword() -> Self {
         Self::build(
             WeaponType::GreatSword,
-            0..3,
+            0..=2,
             Some(Attack {
                 minimum: 3,
                 maximum: 6,
@@ -112,7 +112,7 @@ impl WeaponPrototype {
     pub fn hammer() -> Self {
         Self::build(
             WeaponType::Hammer,
-            0..3,
+            0..=2,
             Some(Attack {
                 minimum: 1,
                 maximum: 3,
@@ -123,7 +123,7 @@ impl WeaponPrototype {
     pub fn long_sword() -> Self {
         Self::build(
             WeaponType::LongSword,
-            0..3,
+            0..=2,
             Some(Attack {
                 minimum: 2,
                 maximum: 4,
@@ -134,7 +134,7 @@ impl WeaponPrototype {
     pub fn mace() -> Self {
         Self::build(
             WeaponType::Mace,
-            0..3,
+            0..=2,
             Some(Attack {
                 minimum: 1,
                 maximum: 3,
@@ -145,7 +145,7 @@ impl WeaponPrototype {
     pub fn morningstar() -> Self {
         Self::build(
             WeaponType::Morningstar,
-            0..3,
+            0..=2,
             Some(Attack {
                 minimum: 1,
                 maximum: 3,
@@ -156,7 +156,7 @@ impl WeaponPrototype {
     pub fn short_sword() -> Self {
         Self::build(
             WeaponType::ShortSword,
-            0..3,
+            0..=2,
             Some(Attack {
                 minimum: 1,
                 maximum: 3,
@@ -167,7 +167,7 @@ impl WeaponPrototype {
     pub fn shield() -> Self {
         Self::build(
             WeaponType::Shield,
-            0..3,
+            0..=2,
             Some(Attack {
                 minimum: 1,
                 maximum: 3,
@@ -178,7 +178,7 @@ impl WeaponPrototype {
     pub fn whip() -> Self {
         Self::build(
             WeaponType::Whip,
-            0..3,
+            0..=2,
             Some(Attack {
                 minimum: 1,
                 maximum: 3,

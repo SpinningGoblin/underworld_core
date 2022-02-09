@@ -1,4 +1,4 @@
-use std::ops::Range;
+use std::ops::RangeInclusive;
 
 use enum_iterator::IntoEnumIterator;
 use rand::Rng;
@@ -18,10 +18,10 @@ use super::{generator::Generator, weapons::WeaponGenerator, wearables::WearableG
 pub struct InventoryPrototype {
     pub weapon_types: Vec<WeaponType>,
     pub wearable_types: Vec<WearableType>,
-    pub num_equipped_weapons: Range<usize>,
-    pub num_equipped_wearables: Range<usize>,
-    pub num_carried_weapons: Range<usize>,
-    pub num_carried_wearables: Range<usize>,
+    pub num_equipped_weapons: RangeInclusive<usize>,
+    pub num_equipped_wearables: RangeInclusive<usize>,
+    pub num_carried_weapons: RangeInclusive<usize>,
+    pub num_carried_wearables: RangeInclusive<usize>,
     pub hidden_weapon_chance: usize,
     pub hidden_wearable_chance: usize,
 }

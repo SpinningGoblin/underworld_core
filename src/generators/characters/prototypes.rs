@@ -1,4 +1,4 @@
-use std::ops::Range;
+use std::ops::RangeInclusive;
 
 use rand::Rng;
 
@@ -13,10 +13,10 @@ use crate::{
 use super::CharacterPrototype;
 
 struct CharacterArgs {
-    num_equipped_weapons: Range<usize>,
-    num_equipped_wearables: Range<usize>,
-    num_carried_weapons: Range<usize>,
-    num_carried_wearables: Range<usize>,
+    num_equipped_weapons: RangeInclusive<usize>,
+    num_equipped_wearables: RangeInclusive<usize>,
+    num_carried_weapons: RangeInclusive<usize>,
+    num_carried_wearables: RangeInclusive<usize>,
     species: Species,
     weapon_types: Vec<WeaponType>,
     wearable_types: Vec<WearableType>,
@@ -27,10 +27,10 @@ struct CharacterArgs {
 pub fn basic_character(species: Species) -> CharacterPrototype {
     let args = CharacterArgs {
         species,
-        num_equipped_weapons: 1..3,
-        num_equipped_wearables: 1..3,
-        num_carried_weapons: 0..2,
-        num_carried_wearables: 0..2,
+        num_equipped_weapons: 1..=2,
+        num_equipped_wearables: 1..=2,
+        num_carried_weapons: 0..=1,
+        num_carried_wearables: 0..=1,
         weapon_types: WeaponType::all(),
         wearable_types: WearableType::all(),
         life_modifier: None,
@@ -43,10 +43,10 @@ pub fn basic_character(species: Species) -> CharacterPrototype {
 pub fn overloaded_character(species: Species) -> CharacterPrototype {
     let args = CharacterArgs {
         species,
-        num_equipped_weapons: 1..3,
-        num_equipped_wearables: 2..5,
-        num_carried_weapons: 2..6,
-        num_carried_wearables: 2..6,
+        num_equipped_weapons: 1..=2,
+        num_equipped_wearables: 2..=3,
+        num_carried_weapons: 2..=5,
+        num_carried_wearables: 2..=5,
         weapon_types: WeaponType::all(),
         wearable_types: WearableType::all(),
         life_modifier: None,
@@ -58,7 +58,7 @@ pub fn overloaded_character(species: Species) -> CharacterPrototype {
 
 pub fn undead_character(species: Species) -> CharacterPrototype {
     let mut rng = rand::thread_rng();
-    let index: usize = rng.gen_range(0..2);
+    let index: usize = rng.gen_range(0..=1);
     let life_modifier = vec![LifeModifier::Vampire, LifeModifier::Zombie]
         .get(index)
         .cloned();
@@ -66,10 +66,10 @@ pub fn undead_character(species: Species) -> CharacterPrototype {
     let args = CharacterArgs {
         life_modifier,
         species,
-        num_equipped_weapons: 1..3,
-        num_equipped_wearables: 1..3,
-        num_carried_weapons: 0..2,
-        num_carried_wearables: 0..2,
+        num_equipped_weapons: 1..=2,
+        num_equipped_wearables: 1..=2,
+        num_carried_weapons: 0..=1,
+        num_carried_wearables: 0..=1,
         weapon_types: WeaponType::all(),
         wearable_types: WearableType::all(),
         has_inventory: true,
