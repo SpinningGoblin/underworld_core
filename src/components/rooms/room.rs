@@ -6,12 +6,12 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::components::{
-    fixtures::fixture::Fixture, identifier::Identifier, non_player::NonPlayer, size::Size,
-    species::Species,
-};
+use crate::components::{identifier::Identifier, non_player::NonPlayer, species::Species};
 
-use super::{descriptor::Descriptor, room_type::RoomType};
+use super::{
+    descriptor::Descriptor, dimensions::Dimensions, fixture_position::FixturePosition,
+    npc_position::NpcPosition, room_type::RoomType,
+};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -21,10 +21,9 @@ pub struct Room {
     pub descriptors: Vec<Descriptor>,
     pub room_type: RoomType,
     pub non_players: Vec<NonPlayer>,
-    pub fixtures: Vec<Fixture>,
-    pub height: Size,
-    pub width: Size,
-    pub length: Size,
+    pub fixture_positions: Vec<FixturePosition>,
+    pub dimensions: Dimensions,
+    pub npc_positions: Vec<NpcPosition>,
 }
 
 impl Display for Room {
@@ -83,16 +82,10 @@ impl Room {
     fn describe_room(&self) -> String {
         let mut parts: Vec<String> = vec!["It is a".to_string()];
 
-        if !self.height.is_average() {
-            parts.push(format!(" {}", &self.height));
-        }
+        let dimensions = format!("{}", &self.dimensions);
 
-        if !self.width.is_average() {
-            parts.push(format!(" {}", &self.width));
-        }
-
-        if !self.length.is_average() {
-            parts.push(format!(" {}", &self.length));
+        if !dimensions.is_empty() {
+            parts.push(dimensions);
         }
 
         self.descriptors
