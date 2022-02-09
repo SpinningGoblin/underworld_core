@@ -97,12 +97,14 @@ impl ObjectDescriptor {
                 ObjectTag::Blunt,
                 ObjectTag::Armour,
                 ObjectTag::Clothing,
+                ObjectTag::Fixture,
             ],
             ObjectDescriptor::Broken => vec![
                 ObjectTag::Armour,
                 ObjectTag::Blade,
                 ObjectTag::Blunt,
                 ObjectTag::Shield,
+                ObjectTag::Container,
             ],
             ObjectDescriptor::Chipped => vec![ObjectTag::Blade, ObjectTag::Blunt, ObjectTag::Bone],
             ObjectDescriptor::Colourful => vec![ObjectTag::Cloth, ObjectTag::Clothing],
@@ -111,7 +113,9 @@ impl ObjectDescriptor {
             ObjectDescriptor::Dingy => {
                 vec![ObjectTag::Cloth, ObjectTag::Clothing, ObjectTag::Leather]
             }
-            ObjectDescriptor::Dirty => vec![ObjectTag::Cloth, ObjectTag::Clothing],
+            ObjectDescriptor::Dirty => {
+                vec![ObjectTag::Cloth, ObjectTag::Clothing, ObjectTag::Fixture]
+            }
             ObjectDescriptor::Drab => vec![ObjectTag::Clothing],
             ObjectDescriptor::Dull => vec![ObjectTag::Blade],
             ObjectDescriptor::IllFitting => {
