@@ -15,58 +15,23 @@ use crate::components::{
     species::Species,
 };
 
-use self::{dimensions::build_dimensions, fixtures::build_fixture_positions};
+use self::{
+    dimensions::build_dimensions, fixtures::build_fixture_positions, npcs::build_npc_positions,
+};
 
 use super::{
     characters::CharacterPrototype, generator::Generator, non_players::NonPlayerPrototype,
 };
 
 pub struct RoomPrototype {
-    pub possible_npc_names: Vec<String>,
-    pub non_player_generators: Vec<Box<dyn Generator<NonPlayer>>>,
-    pub num_non_players: RangeInclusive<usize>,
     pub num_descriptors: RangeInclusive<usize>,
     pub room_type: RoomType,
     pub possible_descriptors: Vec<Descriptor>,
 }
 
-const SWITCH_GENERATOR_CHANCE: usize = 25;
-
-impl RoomPrototype {
-    fn switch_npc_generator() -> bool {
-        let mut rng = rand::thread_rng();
-        let switch_gen_roll: usize = rng.gen_range(0..=100);
-        switch_gen_roll <= SWITCH_GENERATOR_CHANCE
-    }
-}
-
 impl Generator<Room> for RoomPrototype {
     fn generate(&self) -> Room {
         let mut rng = rand::thread_rng();
-        let num_non_players = rng.gen_range(self.num_non_players.clone());
-
-        let mut non_players: Vec<NonPlayer> = Vec::new();
-        let non_player_range = 0..=num_non_players;
-        let mut names = self.possible_npc_names.clone();
-
-        if !non_player_range.is_empty() {
-            let npc_generator_index = rng.gen_range(0..self.non_player_generators.len());
-            let mut npc_generator = self.non_player_generators.get(npc_generator_index).unwrap();
-            for _ in 1..=num_non_players {
-                if Self::switch_npc_generator() {
-                    let generator_index = rng.gen_range(0..self.non_player_generators.len());
-                    npc_generator = self.non_player_generators.get(generator_index).unwrap();
-                }
-
-                let mut non_player = npc_generator.generate();
-                if !names.is_empty() {
-                    let name_index = rng.gen_range(0..names.len());
-                    let name = names.remove(name_index);
-                    non_player.set_name(&name);
-                }
-                non_players.push(non_player);
-            }
-        }
 
         let mut descriptors: Vec<Descriptor> = Vec::new();
         let num_descriptors = rng.gen_range(self.num_descriptors.clone());
@@ -88,22 +53,19 @@ impl Generator<Room> for RoomPrototype {
         Room {
             dimensions: build_dimensions(),
             descriptors,
-            non_players,
             identifier: Identifier {
                 id: Uuid::new_v4(),
                 name: None,
             },
             room_type: self.room_type.clone(),
             fixture_positions,
+            npc_positions: build_npc_positions(&self.room_type, used_fixtures),
         }
     }
 }
 
 impl RoomPrototype {
-    pub fn build_random(
-        npc_names: Vec<String>,
-        num_non_players: RangeInclusive<usize>,
-    ) -> RoomPrototype {
+    pub fn build_random() -> RoomPrototype {
         let mut npc_generators: Vec<Box<dyn Generator<NonPlayer>>> = Vec::new();
 
         for species in Species::into_enum_iter() {
@@ -126,10 +88,7 @@ impl RoomPrototype {
         let room_type = room_types.get(index).unwrap().clone();
 
         RoomPrototype {
-            num_non_players,
-            possible_npc_names: npc_names,
             room_type: room_type.clone(),
-            non_player_generators: npc_generators,
             num_descriptors: 1..=2,
             possible_descriptors: room_type.possible_descriptors(),
         }
@@ -156,7 +115,7 @@ mod tests {
 
     #[test]
     fn generate_room() {
-        let room_prototype = RoomPrototype::build_random(Vec::new(), 1..=2);
+        let room_prototype = RoomPrototype::build_random();
         let room = room_prototype.generate();
         assert!(!format!("{}", &room).is_empty());
     }
