@@ -13,18 +13,17 @@ use crate::{
     generators::{fixtures::get_generator, generator::Generator},
 };
 
-pub fn build_fixture_positions(room_type: &RoomType) -> Vec<FixturePosition> {
-    let mut positions: Vec<FixturePosition> = Vec::new();
-
+pub fn build_fixture_positions(room_type: &RoomType) -> (Vec<FixturePosition>, Vec<FixtureType>) {
     let num_groups_range = 0..num_groups(room_type);
     if num_groups_range.is_empty() {
-        return positions;
+        return (Vec::new(), Vec::new());
     }
 
     let mut rng = rand::thread_rng();
 
     let mut used_descriptors: Vec<FixturePositionDescriptor> = Vec::new();
     let mut used_fixtures: Vec<FixtureType> = Vec::new();
+    let mut positions: Vec<FixturePosition> = Vec::new();
     for _ in num_groups_range {
         let mut fixture_generators =
             FixtureGenerators::build_with_previous(room_type, &used_fixtures);
@@ -90,7 +89,7 @@ pub fn build_fixture_positions(room_type: &RoomType) -> Vec<FixturePosition> {
         });
     }
 
-    positions
+    (positions, used_fixtures)
 }
 
 fn current_possibilities(

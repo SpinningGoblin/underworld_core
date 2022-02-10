@@ -83,6 +83,8 @@ impl Generator<Room> for RoomPrototype {
             }
         }
 
+        let (fixture_positions, used_fixtures) = build_fixture_positions(&self.room_type);
+
         Room {
             dimensions: build_dimensions(),
             descriptors,
@@ -92,8 +94,7 @@ impl Generator<Room> for RoomPrototype {
                 name: None,
             },
             room_type: self.room_type.clone(),
-            fixture_positions: build_fixture_positions(&self.room_type),
-            npc_positions: Vec::new(),
+            fixture_positions,
         }
     }
 }
