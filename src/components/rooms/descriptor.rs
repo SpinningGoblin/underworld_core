@@ -6,6 +6,8 @@ use enum_iterator::IntoEnumIterator;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
+use crate::utils::sentences::first_letter_to_upper_case;
+
 use super::descriptor_position::DescriptorPosition;
 
 #[derive(Clone, Debug, IntoEnumIterator)]
@@ -63,13 +65,5 @@ impl Descriptor {
 
     pub fn as_sentence(&self) -> String {
         first_letter_to_upper_case(format!("{}.", self))
-    }
-}
-
-fn first_letter_to_upper_case(s1: String) -> String {
-    let mut c = s1.chars();
-    match c.next() {
-        None => String::new(),
-        Some(f) => f.to_uppercase().collect::<String>() + c.as_str(),
     }
 }
