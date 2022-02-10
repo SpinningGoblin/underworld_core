@@ -5,7 +5,7 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::components::non_player::NonPlayer;
+use crate::{components::non_player::NonPlayer, utils::sentences::first_letter_to_upper_case};
 
 use super::{group_descriptor::GroupDescriptor, npc_position_descriptor::NpcPositionDescriptor};
 
@@ -42,6 +42,10 @@ impl Display for NpcPosition {
 }
 
 impl NpcPosition {
+    pub fn display_as_sentence(&self) -> String {
+        first_letter_to_upper_case(format!("{}.", self))
+    }
+
     fn species_description(&self) -> String {
         let species_counts = crate::utils::frequencies::sorted_frequencies(
             self.npcs.iter().map(|n| n.character.species.clone()),

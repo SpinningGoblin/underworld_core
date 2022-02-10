@@ -5,7 +5,7 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::components::fixtures::fixture::Fixture;
+use crate::{components::fixtures::fixture::Fixture, utils::sentences::first_letter_to_upper_case};
 
 use super::{
     fixture_position_descriptor::FixturePositionDescriptor, group_descriptor::GroupDescriptor,
@@ -44,6 +44,10 @@ impl Display for FixturePosition {
 }
 
 impl FixturePosition {
+    pub fn display_as_sentence(&self) -> String {
+        first_letter_to_upper_case(format!("{}.", self))
+    }
+
     pub fn fixtures_description(&self) -> String {
         let counts = crate::utils::frequencies::sorted_frequencies(
             self.fixtures.iter().map(|f| f.fixture_type.clone()),
