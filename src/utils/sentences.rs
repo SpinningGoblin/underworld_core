@@ -63,3 +63,11 @@ impl SentenceJoiners {
         }
     }
 }
+
+pub fn first_letter_to_upper_case(s1: String) -> String {
+    let mut c = s1.chars();
+    match c.next() {
+        None => String::new(),
+        Some(f) => f.to_uppercase().collect::<String>() + c.as_str(),
+    }
+}
