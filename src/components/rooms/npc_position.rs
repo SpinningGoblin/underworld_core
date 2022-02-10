@@ -16,14 +16,14 @@ pub struct NpcPosition {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub group_descriptor: Option<GroupDescriptor>,
     pub npcs: Vec<NonPlayer>,
-    pub position_descriptors: Vec<NpcPositionDescriptor>,
+    pub position_descriptor: Option<NpcPositionDescriptor>,
 }
 
 impl Display for NpcPosition {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut parts: Vec<String> = Vec::new();
 
-        for descriptor in self.position_descriptors.iter().filter(|d| d.is_pre()) {
+        for descriptor in self.position_descriptor.iter().filter(|d| d.is_pre()) {
             parts.push(format!("{}", descriptor));
         }
 
@@ -33,7 +33,7 @@ impl Display for NpcPosition {
 
         parts.push(self.species_description());
 
-        for descriptor in self.position_descriptors.iter().filter(|d| d.is_post()) {
+        for descriptor in self.position_descriptor.iter().filter(|d| d.is_post()) {
             parts.push(format!("{}", descriptor));
         }
 
@@ -90,14 +90,11 @@ mod tests {
         let npc_position = NpcPosition {
             npcs,
             group_descriptor: Some(GroupDescriptor::AGangOf),
-            position_descriptors: vec![
-                NpcPositionDescriptor::InCornerStands,
-                NpcPositionDescriptor::GlaringAtYou,
-            ],
+            position_descriptor: Some(NpcPositionDescriptor::InCornerStands),
         };
 
         assert_eq!(
-            "in the corner stands a gang of goblins glaring at you",
+            "in the corner stands a gang of goblins",
             format!("{}", &npc_position)
         );
     }
