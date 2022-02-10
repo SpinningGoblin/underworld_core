@@ -25,6 +25,7 @@ pub enum NpcPositionDescriptor {
     AreLeaningAgainstTheTable,
     IsLeaningAgainstTheTable,
     StandsOnTheTable,
+    StandOnTheTable,
     AreStandingOnTheTable,
     IsStandingOnTheTable,
     IsSittingInAChair,
@@ -80,6 +81,7 @@ impl NpcPositionDescriptor {
             NpcPositionDescriptor::IsSittingAndDozingInCenterOfRoom => DescriptorPosition::Post,
             NpcPositionDescriptor::SittingInAChairIs => DescriptorPosition::Pre,
             NpcPositionDescriptor::IsRummagingThroughAChest => DescriptorPosition::Post,
+            NpcPositionDescriptor::StandOnTheTable => DescriptorPosition::Post,
         }
     }
 
@@ -117,6 +119,7 @@ impl NpcPositionDescriptor {
             NpcPositionDescriptor::SittingInAChairIs => false,
             NpcPositionDescriptor::IsRummagingThroughAChest => false,
             NpcPositionDescriptor::InTheCornerAre => false,
+            NpcPositionDescriptor::StandOnTheTable => false,
         }
     }
 
@@ -170,6 +173,7 @@ impl Display for NpcPositionDescriptor {
             NpcPositionDescriptor::SittingInAChairIs => "sitting in a chair is",
             NpcPositionDescriptor::IsRummagingThroughAChest => "is rummaging through a chest",
             NpcPositionDescriptor::InTheCornerAre => "in the corner are",
+            NpcPositionDescriptor::StandOnTheTable => "stand on the table",
         };
 
         write!(f, "{}", text)

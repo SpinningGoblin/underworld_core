@@ -259,11 +259,12 @@ fn table_positions(group_size: usize) -> Vec<NpcPositionDescriptor> {
         vec![
             NpcPositionDescriptor::IsStandingOnTheTable,
             NpcPositionDescriptor::IsLeaningAgainstTheTable,
+            NpcPositionDescriptor::StandsOnTheTable,
         ]
     } else {
         vec![
             NpcPositionDescriptor::AreLeaningAgainstTheTable,
-            NpcPositionDescriptor::StandsOnTheTable,
+            NpcPositionDescriptor::StandOnTheTable,
         ]
     }
 }
