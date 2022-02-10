@@ -20,7 +20,6 @@ pub struct Room {
     pub identifier: Identifier,
     pub descriptors: Vec<Descriptor>,
     pub room_type: RoomType,
-    pub non_players: Vec<NonPlayer>,
     pub fixture_positions: Vec<FixturePosition>,
     pub dimensions: Dimensions,
     pub npc_positions: Vec<NpcPosition>,
@@ -28,7 +27,11 @@ pub struct Room {
 
 impl Display for Room {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let parts: Vec<String> = vec![self.describe_room(), self.describe_inhabitants()];
+        let parts: Vec<String> = vec![
+            self.describe_room(),
+            self.describe_fixtures(),
+            self.describe_inhabitants(),
+        ];
 
         write!(f, "{}", parts.join(" "))
     }
@@ -48,19 +51,24 @@ fn get_count_text(original_count: &usize, current_count: &usize) -> String {
 
 impl Room {
     pub fn look_at_inhabitants(&self) -> String {
-        if self.non_players.is_empty() {
+        let non_players: Vec<&NonPlayer> = self
+            .npc_positions
+            .iter()
+            .flat_map(|npc_position| npc_position.npcs.iter())
+            .collect();
+        if non_players.is_empty() {
             return "".to_string();
         }
 
-        if self.non_players.len() == 1 {
-            let npc = self.non_players.get(0).unwrap();
+        if non_players.len() == 1 {
+            let npc = non_players.get(0).unwrap();
             return npc.look_at("");
         }
 
         let mut descriptions: Vec<String> = Vec::new();
-        let original_species_counts = self.species_counts();
+        let original_species_counts = self.species_counts(&non_players);
         let mut current_counts = original_species_counts.clone();
-        for npc in self.non_players.iter() {
+        for npc in non_players.iter() {
             let original_species_count =
                 original_species_counts.get(&npc.character.species).unwrap();
             let current_species_count = &current_counts.get(&npc.character.species).unwrap();
@@ -104,96 +112,54 @@ impl Room {
         parts.join("")
     }
 
-    fn species_counts(&self) -> HashMap<Species, usize> {
-        self.non_players
+    fn species_counts(&self, non_players: &[&NonPlayer]) -> HashMap<Species, usize> {
+        non_players.iter().fold(HashMap::new(), |mut acc, npc| {
+            let species = npc.character.species.clone();
+            *acc.entry(species).or_insert(0) += 1;
+            acc
+        })
+    }
+
+    fn describe_fixtures(&self) -> String {
+        if self.fixture_positions.is_empty() {
+            return "".to_string();
+        }
+
+        if self
+            .fixture_positions
             .iter()
-            .fold(HashMap::new(), |mut acc, npc| {
-                let species = npc.character.species.clone();
-                *acc.entry(species).or_insert(0) += 1;
-                acc
-            })
+            .all(|fixture_position| fixture_position.fixtures.is_empty())
+        {
+            return "".to_string();
+        }
+
+        let all_fixtures: Vec<String> = self
+            .fixture_positions
+            .iter()
+            .map(|fixture_position| fixture_position.display_as_sentence())
+            .collect();
+        all_fixtures.join(" ")
     }
 
     fn describe_inhabitants(&self) -> String {
-        if self.non_players.is_empty() {
+        if self.npc_positions.is_empty() {
             return Self::empty_room_description();
         }
 
-        let mut species_parts: Vec<String> = vec!["There".to_string()];
-        for (index, (species, count)) in self.species_counts().iter().enumerate() {
-            if index == 0 {
-                if *count == 1 {
-                    species_parts.push(" is ".to_string());
-                } else {
-                    species_parts.push(" are ".to_string());
-                }
-            } else {
-                species_parts.push(", and ".to_string());
-            }
-            let species_description = Self::species_description(format!("{}", species), *count);
-            species_parts.push(species_description);
+        if self
+            .npc_positions
+            .iter()
+            .all(|npc_position| npc_position.npcs.is_empty())
+        {
+            return Self::empty_room_description();
         }
 
-        format!("{}.", species_parts.join(""))
-    }
-
-    fn species_description(species_description: String, count: usize) -> String {
-        if count == 1 {
-            Self::single_species_description(species_description)
-        } else if count == 2 {
-            Self::two_species_description(species_description)
-        } else {
-            Self::multiple_species_description(species_description)
-        }
-    }
-
-    fn two_species_description(species_description: String) -> String {
-        let descriptions = vec![
-            format!("a couple of {}s loitering about", species_description),
-            format!("a couple of {}s standing around", species_description),
-            format!("a couple of {}s", species_description),
-            format!(
-                "a couple of {}s glaring at you from nearby",
-                species_description
-            ),
-        ];
-
-        let mut rng = rand::thread_rng();
-        let index = rng.gen_range(0..descriptions.len());
-        match descriptions.get(index) {
-            Some(it) => it.clone(),
-            _ => format!("a couple of {}s", species_description),
-        }
-    }
-
-    fn multiple_species_description(species_description: String) -> String {
-        let descriptions = vec![
-            format!("a few {}s loitering around", species_description),
-            format!("some {}s standing nearby", species_description),
-            format!("some {}s", species_description),
-            format!("a few {}s mulling about", species_description),
-        ];
-
-        let mut rng = rand::thread_rng();
-        let index = rng.gen_range(0..descriptions.len());
-        match descriptions.get(index) {
-            Some(it) => it.clone(),
-            _ => format!("a few {}s", species_description),
-        }
-    }
-
-    fn single_species_description(species_description: String) -> String {
-        let descriptions = vec![
-            format!("a lone {} glaring at you", species_description),
-            format!("a single {}", species_description),
-        ];
-
-        let mut rng = rand::thread_rng();
-        let index = rng.gen_range(0..descriptions.len());
-        match descriptions.get(index) {
-            Some(it) => it.clone(),
-            _ => format!("a lone {}", species_description),
-        }
+        let all_groups: Vec<String> = self
+            .npc_positions
+            .iter()
+            .map(|npc_position| npc_position.display_as_sentence())
+            .collect();
+        all_groups.join(" ")
     }
 
     fn empty_room_description() -> String {
