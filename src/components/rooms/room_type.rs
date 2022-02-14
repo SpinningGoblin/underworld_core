@@ -18,16 +18,28 @@ pub enum RoomType {
     PrisonCell,
     Room,
     EntryWay,
+    TavernHall,
+    Mausoleum,
+    Cemetery,
+    Crypt,
+    TempleHall,
 }
 
 impl Display for RoomType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match *self {
-            Self::Cave => write!(f, "cave"),
-            Self::Cavern => write!(f, "cavern"),
-            Self::EntryWay => write!(f, "entryway"),
-            Self::PrisonCell => write!(f, "prison cell"),
-            Self::Room => write!(f, "room"),
-        }
+        let text = match *self {
+            RoomType::Cave => "cave",
+            RoomType::Cavern => "cavern",
+            RoomType::EntryWay => "entryway",
+            RoomType::PrisonCell => "prison cell",
+            RoomType::Room => "room",
+            RoomType::TavernHall => "tavern hall",
+            RoomType::Mausoleum => "mausoleum",
+            RoomType::Cemetery => "cemetery",
+            RoomType::Crypt => "crypt",
+            RoomType::TempleHall => "temple hall",
+        };
+
+        write!(f, "{}", text)
     }
 }

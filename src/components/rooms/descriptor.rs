@@ -6,8 +6,6 @@ use enum_iterator::IntoEnumIterator;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::utils::sentences::first_letter_to_upper_case;
-
 use super::descriptor_position::DescriptorPosition;
 
 #[derive(Clone, Debug, IntoEnumIterator)]
@@ -23,9 +21,6 @@ pub enum Descriptor {
     Dim,
     Grimy,
     Moist,
-    AStrangeBreezeBlows,
-    MoldMossCoversWalls,
-    UnseenLightsFlickerWalls,
 }
 
 impl Display for Descriptor {
@@ -36,11 +31,6 @@ impl Display for Descriptor {
             Descriptor::Dim => write!(f, "dim"),
             Descriptor::Grimy => write!(f, "grimy"),
             Descriptor::Moist => write!(f, "moist"),
-            Descriptor::AStrangeBreezeBlows => write!(f, "a strange breeze blows"),
-            Descriptor::MoldMossCoversWalls => write!(f, "mold and moss cover the walls"),
-            Descriptor::UnseenLightsFlickerWalls => {
-                write!(f, "unseen lights flicker across the walls")
-            }
         }
     }
 }
@@ -53,17 +43,10 @@ impl Descriptor {
             Descriptor::Dim => DescriptorPosition::Pre,
             Descriptor::Grimy => DescriptorPosition::Pre,
             Descriptor::Moist => DescriptorPosition::Pre,
-            Descriptor::AStrangeBreezeBlows => DescriptorPosition::Post,
-            Descriptor::MoldMossCoversWalls => DescriptorPosition::Post,
-            Descriptor::UnseenLightsFlickerWalls => DescriptorPosition::Post,
         }
     }
 
     pub fn is_pre(&self) -> bool {
         self.get_position() == DescriptorPosition::Pre
-    }
-
-    pub fn as_sentence(&self) -> String {
-        first_letter_to_upper_case(format!("{}.", self))
     }
 }

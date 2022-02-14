@@ -24,9 +24,13 @@ pub enum FixtureType {
     Bucket,
     Chair,
     Chest,
+    Coffin,
     Cot,
     Crate,
+    Pillar,
     SleepingRoll,
+    StatueTentacledMonstrosity,
+    StatueWarrior,
     Table,
     WeaponRack,
 }
@@ -43,18 +47,24 @@ impl FixtureType {
 
 impl Display for FixtureType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match *self {
-            FixtureType::Bucket => write!(f, "bucket"),
-            FixtureType::Table => write!(f, "table"),
-            FixtureType::Chair => write!(f, "chair"),
-            FixtureType::Chest => write!(f, "chest"),
-            FixtureType::WeaponRack => write!(f, "weapon rack"),
-            FixtureType::Bed => write!(f, "bed"),
-            FixtureType::Cot => write!(f, "cot"),
-            FixtureType::SleepingRoll => write!(f, "sleeping roll"),
-            FixtureType::Barrel => write!(f, "barrel"),
-            FixtureType::Crate => write!(f, "crate"),
-        }
+        let text = match *self {
+            FixtureType::Bucket => "bucket",
+            FixtureType::Table => "table",
+            FixtureType::Chair => "chair",
+            FixtureType::Chest => "chest",
+            FixtureType::WeaponRack => "weapon rack",
+            FixtureType::Bed => "bed",
+            FixtureType::Cot => "cot",
+            FixtureType::SleepingRoll => "sleeping roll",
+            FixtureType::Barrel => "barrel",
+            FixtureType::Crate => "crate",
+            FixtureType::Coffin => "coffin",
+            FixtureType::Pillar => "pillar",
+            FixtureType::StatueTentacledMonstrosity => "statue of tentacled monstrosity",
+            FixtureType::StatueWarrior => "statue of a warrior",
+        };
+
+        write!(f, "{}", text)
     }
 }
 
@@ -73,6 +83,8 @@ impl TaggedObject for FixtureType {
             FixtureType::Barrel => vec![ObjectTag::Fixture, ObjectTag::Container],
             FixtureType::Crate => vec![ObjectTag::Fixture, ObjectTag::Container],
             FixtureType::Bucket => vec![ObjectTag::Fixture, ObjectTag::Container],
+            FixtureType::Coffin => vec![ObjectTag::Fixture, ObjectTag::Container],
+            _ => vec![ObjectTag::Fixture],
         }
     }
 }
@@ -150,6 +162,20 @@ impl BuiltWithMaterial for FixtureType {
                 Material::Iron,
                 Material::Stone,
                 Material::Wooden,
+            ],
+            FixtureType::Coffin => vec![
+                Material::Bone,
+                Material::Gold,
+                Material::Wooden,
+                Material::Stone,
+            ],
+            FixtureType::Pillar => vec![Material::Bone, Material::Gold, Material::Stone],
+            FixtureType::StatueTentacledMonstrosity => vec![Material::Bone, Material::Stone],
+            FixtureType::StatueWarrior => vec![
+                Material::Gold,
+                Material::Stone,
+                Material::Steel,
+                Material::Iron,
             ],
         }
     }

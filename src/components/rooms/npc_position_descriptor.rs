@@ -85,44 +85,6 @@ impl NpcPositionDescriptor {
         }
     }
 
-    pub fn unable_to_be_used_with(&self, other: NpcPositionDescriptor) -> bool {
-        match *self {
-            NpcPositionDescriptor::AreGlaringAtYou => other.is_post(),
-            NpcPositionDescriptor::AreGlaringAtYouFromNearby => other.is_post(),
-            NpcPositionDescriptor::AreInTheCorner => other.is_pre(),
-            NpcPositionDescriptor::InCornerStands => other.is_pre(),
-            NpcPositionDescriptor::AreLoiteringAbout => other.is_post(),
-            NpcPositionDescriptor::AreStandingAround => other.is_post(),
-            NpcPositionDescriptor::IsGlaringAtYou => other.is_post(),
-            NpcPositionDescriptor::IsGlaringAtYouFromNearby => false,
-            NpcPositionDescriptor::IsStandingAround => false,
-            NpcPositionDescriptor::LeansAgainstTheTable => false,
-            NpcPositionDescriptor::AreLeaningAgainstTheTable => false,
-            NpcPositionDescriptor::IsLeaningAgainstTheTable => false,
-            NpcPositionDescriptor::StandsOnTheTable => false,
-            NpcPositionDescriptor::AreStandingOnTheTable => false,
-            NpcPositionDescriptor::IsStandingOnTheTable => false,
-            NpcPositionDescriptor::IsSittingInAChair => false,
-            NpcPositionDescriptor::AreSittingInChairs => false,
-            NpcPositionDescriptor::IsStandingInABarrel => false,
-            NpcPositionDescriptor::IsSleepingInTheBed => false,
-            NpcPositionDescriptor::IsSleepingInACot => false,
-            NpcPositionDescriptor::IsSleepingInSleepingRoll => false,
-            NpcPositionDescriptor::AreLeaningOnACrate => false,
-            NpcPositionDescriptor::IsLeaningOnACrate => false,
-            NpcPositionDescriptor::AreLookingAtTheWeaponRack => false,
-            NpcPositionDescriptor::IsLookingAtTheWeaponRack => false,
-            NpcPositionDescriptor::IsCrouchedOverChest => false,
-            NpcPositionDescriptor::AreCrouchedInTheCenterOfRoom => false,
-            NpcPositionDescriptor::IsCrouchedInTheCenterOfRoom => false,
-            NpcPositionDescriptor::IsSittingAndDozingInCenterOfRoom => false,
-            NpcPositionDescriptor::SittingInAChairIs => false,
-            NpcPositionDescriptor::IsRummagingThroughAChest => false,
-            NpcPositionDescriptor::InTheCornerAre => false,
-            NpcPositionDescriptor::StandOnTheTable => false,
-        }
-    }
-
     pub fn is_pre(&self) -> bool {
         self.descriptor_position() == DescriptorPosition::Pre
     }

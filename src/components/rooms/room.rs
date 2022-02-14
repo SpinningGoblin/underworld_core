@@ -10,7 +10,7 @@ use crate::components::{identifier::Identifier, non_player::NonPlayer, species::
 
 use super::{
     descriptor::Descriptor, dimensions::Dimensions, fixture_position::FixturePosition,
-    npc_position::NpcPosition, room_type::RoomType,
+    flavour::Flavour, npc_position::NpcPosition, room_type::RoomType,
 };
 
 #[derive(Clone, Debug)]
@@ -23,6 +23,7 @@ pub struct Room {
     pub fixture_positions: Vec<FixturePosition>,
     pub dimensions: Dimensions,
     pub npc_positions: Vec<NpcPosition>,
+    pub flavour: Option<Flavour>,
 }
 
 impl Display for Room {
@@ -104,10 +105,9 @@ impl Room {
         parts.push(format!(" {}", &self.room_type));
         parts.push(".".to_string());
 
-        self.descriptors
-            .iter()
-            .filter(|descriptor| !descriptor.is_pre())
-            .for_each(|descriptor| parts.push(format!(" {}", descriptor.as_sentence())));
+        if let Some(flavour) = &self.flavour {
+            parts.push(format!(" {}", flavour.as_sentence()));
+        }
 
         parts.join("")
     }
@@ -167,6 +167,9 @@ impl Room {
             "There is no one around.",
             "It is empty.",
             "It is eerily empty.",
+            "You are alone in the room.",
+            "You see no one else.",
+            "All that's here are crickets. Invisible crickets.",
         ];
 
         let mut rng = rand::thread_rng();

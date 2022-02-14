@@ -11,7 +11,7 @@ use uuid::Uuid;
 use crate::components::{
     identifier::Identifier,
     non_player::NonPlayer,
-    rooms::{descriptor::Descriptor, room::Room, room_type::RoomType},
+    rooms::{descriptor::Descriptor, flavour::Flavour, room::Room, room_type::RoomType},
     species::Species,
 };
 
@@ -48,6 +48,10 @@ impl Generator<Room> for RoomPrototype {
             }
         }
 
+        let flavour_options = self.room_type.possible_flavours();
+        let index = rng.gen_range(0..flavour_options.len());
+        let flavour = flavour_options.get(index).cloned();
+
         let (fixture_positions, used_fixtures) = build_fixture_positions(&self.room_type);
 
         Room {
@@ -60,6 +64,7 @@ impl Generator<Room> for RoomPrototype {
             room_type: self.room_type.clone(),
             fixture_positions,
             npc_positions: build_npc_positions(&self.room_type, used_fixtures),
+            flavour,
         }
     }
 }
@@ -98,11 +103,13 @@ impl RoomPrototype {
 impl RoomType {
     fn possible_descriptors(&self) -> Vec<Descriptor> {
         match *self {
-            RoomType::Cave => Descriptor::into_enum_iter().collect(),
-            RoomType::Cavern => Descriptor::into_enum_iter().collect(),
-            RoomType::PrisonCell => Descriptor::into_enum_iter().collect(),
-            RoomType::Room => Descriptor::into_enum_iter().collect(),
-            RoomType::EntryWay => Descriptor::into_enum_iter().collect(),
+            _ => Descriptor::into_enum_iter().collect(),
+        }
+    }
+
+    fn possible_flavours(&self) -> Vec<Flavour> {
+        match *self {
+            _ => Flavour::into_enum_iter().collect(),
         }
     }
 }

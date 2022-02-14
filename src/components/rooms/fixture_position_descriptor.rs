@@ -19,6 +19,7 @@ pub enum FixturePositionDescriptor {
     SitAlongOneSide,
     SitsAlongOneSide,
     StandsInTheCorner,
+    CrackedAndBrokenOnTheGround,
 }
 
 impl FixturePositionDescriptor {
@@ -31,6 +32,7 @@ impl FixturePositionDescriptor {
             FixturePositionDescriptor::SitAlongOneSide => DescriptorPosition::Post,
             FixturePositionDescriptor::SitsAlongOneSide => DescriptorPosition::Post,
             FixturePositionDescriptor::StandsInTheCorner => DescriptorPosition::Post,
+            FixturePositionDescriptor::CrackedAndBrokenOnTheGround => DescriptorPosition::Post,
         }
     }
 
@@ -61,6 +63,9 @@ impl Display for FixturePositionDescriptor {
             FixturePositionDescriptor::SitAlongOneSide => "sit along one side",
             FixturePositionDescriptor::SitsAlongOneSide => "sits along one side",
             FixturePositionDescriptor::StandsInTheCorner => "stands in the corner",
+            FixturePositionDescriptor::CrackedAndBrokenOnTheGround => {
+                "cracked and broken on the ground"
+            }
         };
 
         write!(f, "{}", text)

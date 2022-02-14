@@ -63,11 +63,10 @@ pub fn build_npc_positions(
 
 fn num_groups(room_type: &RoomType) -> usize {
     let range = match *room_type {
-        RoomType::Cave => 1..=2,
-        RoomType::Cavern => 1..=2,
         RoomType::PrisonCell => 0..=1,
         RoomType::Room => 1..=1,
         RoomType::EntryWay => 0..=1,
+        _ => 1..=2,
     };
     let mut rng = rand::thread_rng();
     rng.gen_range(range)
@@ -91,7 +90,10 @@ fn switch_species(species: &Species) -> Species {
     };
 
     let index = rng.gen_range(0..choices.len());
-    choices.get(index).cloned().unwrap_or_else(|| species.clone())
+    choices
+        .get(index)
+        .cloned()
+        .unwrap_or_else(|| species.clone())
 }
 
 fn choose_species() -> Species {

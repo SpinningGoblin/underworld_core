@@ -27,7 +27,7 @@ pub fn build_fixture_positions(room_type: &RoomType) -> (Vec<FixturePosition>, V
     for _ in num_groups_range {
         let mut fixture_generators =
             FixtureGenerators::build_with_previous(room_type, &used_fixtures);
-        let fixtures: Vec<Fixture> = (0..=group_size(room_type))
+        let fixtures: Vec<Fixture> = (0..group_size(room_type))
             .filter_map(|_| {
                 if let Some(generator) = fixture_generators.next() {
                     let fixture = generator.generate();
@@ -41,6 +41,8 @@ pub fn build_fixture_positions(room_type: &RoomType) -> (Vec<FixturePosition>, V
             })
             .collect();
 
+        let current_fixtures: Vec<FixtureType> =
+            fixtures.iter().map(|f| f.fixture_type.clone()).collect();
         let counts = crate::utils::frequencies::sorted_frequencies(
             fixtures.iter().map(|f| f.fixture_type.clone()),
         );
@@ -53,13 +55,7 @@ pub fn build_fixture_positions(room_type: &RoomType) -> (Vec<FixturePosition>, V
         // Base the group descriptor off of how many fixtures are in the start.
         let index = rng.gen_range(0..possible_groups.len());
         let group_descriptor = possible_groups.get(index);
-
-        let all_count: usize = counts.iter().map(|item| item.1).sum();
-        let possible_positions = if all_count > 1 {
-            multi_possible_positions()
-        } else {
-            single_possible_positions()
-        };
+        let possible_positions = possible_positions(&current_fixtures);
 
         let mut num_position_descriptors: usize = rng.gen_range(1..=2);
         let mut position_descriptors: Vec<FixturePositionDescriptor> = Vec::new();
@@ -113,6 +109,29 @@ fn current_possibilities(
         .collect()
 }
 
+fn possible_positions(fixture_types: &[FixtureType]) -> Vec<FixturePositionDescriptor> {
+    let mut possibilities = if fixture_types.len() == 1 {
+        single_possible_positions()
+    } else {
+        multi_possible_positions()
+    };
+
+    let can_be_broken_on_ground = vec![
+        FixtureType::StatueWarrior,
+        FixtureType::StatueTentacledMonstrosity,
+        FixtureType::Pillar,
+    ];
+
+    if fixture_types
+        .iter()
+        .all(|fixture_type| can_be_broken_on_ground.contains(fixture_type))
+    {
+        possibilities.push(FixturePositionDescriptor::CrackedAndBrokenOnTheGround);
+    }
+
+    possibilities
+}
+
 fn single_possible_positions() -> Vec<FixturePositionDescriptor> {
     vec![
         FixturePositionDescriptor::IsInTheCorner,
@@ -144,11 +163,10 @@ fn multi_group_descriptors() -> Vec<GroupDescriptor> {
 
 fn num_groups(room_type: &RoomType) -> usize {
     let range = match *room_type {
-        RoomType::Cave => 0..=2,
-        RoomType::Cavern => 0..=2,
         RoomType::PrisonCell => 0..=1,
         RoomType::Room => 0..=1,
         RoomType::EntryWay => 0..=1,
+        _ => 0..=2,
     };
 
     let mut rng = rand::thread_rng();
@@ -157,11 +175,9 @@ fn num_groups(room_type: &RoomType) -> usize {
 
 fn group_size(room_type: &RoomType) -> usize {
     let range = match *room_type {
-        RoomType::Cave => 1..=3,
-        RoomType::Cavern => 1..=3,
         RoomType::PrisonCell => 1..=2,
-        RoomType::Room => 1..=3,
         RoomType::EntryWay => 1..=2,
+        _ => 1..=3,
     };
     let mut rng = rand::thread_rng();
     rng.gen_range(range)
@@ -210,7 +226,7 @@ impl FixtureGenerators {
         }
 
         // I don't really want to switch up generators all that often
-        if roll <= 90 {
+        if roll <= 95 {
             return Some(get_generator(last_generated));
         }
 
@@ -223,14 +239,11 @@ impl FixtureGenerators {
 
 fn possible_fixtures(room_type: &RoomType) -> Vec<FixtureType> {
     match *room_type {
-        RoomType::Cave => FixtureType::into_enum_iter().collect(),
-        RoomType::Cavern => FixtureType::into_enum_iter().collect(),
         RoomType::PrisonCell => vec![
             FixtureType::Bucket,
             FixtureType::Cot,
             FixtureType::SleepingRoll,
         ],
-        RoomType::Room => FixtureType::into_enum_iter().collect(),
         RoomType::EntryWay => vec![
             FixtureType::Barrel,
             FixtureType::Bucket,
@@ -238,5 +251,13 @@ fn possible_fixtures(room_type: &RoomType) -> Vec<FixtureType> {
             FixtureType::Chest,
             FixtureType::WeaponRack,
         ],
+        RoomType::TavernHall => vec![
+            FixtureType::Chair,
+            FixtureType::Table,
+            FixtureType::Barrel,
+            FixtureType::Crate,
+            FixtureType::Bucket,
+        ],
+        _ => FixtureType::into_enum_iter().collect(),
     }
 }
