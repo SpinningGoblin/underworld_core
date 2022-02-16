@@ -7,6 +7,7 @@ pub mod fixtures;
 pub mod health;
 pub mod identifier;
 pub mod inventory;
+pub mod items;
 pub mod life_modifier;
 pub mod material;
 pub mod non_player;
