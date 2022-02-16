@@ -14,7 +14,7 @@ use super::{descriptor::Descriptor, item_type::ItemType};
 #[cfg_attr(
     feature = "serialization",
     derive(Deserialize, Serialize),
-    serde(tag = "type", rename_all = "snake_case")
+    serde(rename_all = "snake_case")
 )]
 pub struct Item {
     pub item_type: ItemType,

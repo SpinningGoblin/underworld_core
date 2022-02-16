@@ -7,7 +7,11 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
-#[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
+#[cfg_attr(
+    feature = "serialization",
+    derive(Deserialize, Serialize),
+    serde(rename_all = "snake_case")
+)]
 pub enum Size {
     Average,
     Huge,
