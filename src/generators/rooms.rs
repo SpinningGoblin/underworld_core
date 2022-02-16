@@ -102,15 +102,11 @@ impl RoomPrototype {
 
 impl RoomType {
     fn possible_descriptors(&self) -> Vec<Descriptor> {
-        match *self {
-            _ => Descriptor::into_enum_iter().collect(),
-        }
+        Descriptor::into_enum_iter().collect()
     }
 
     fn possible_flavours(&self) -> Vec<Flavour> {
-        match *self {
-            _ => Flavour::into_enum_iter().collect(),
-        }
+        Flavour::into_enum_iter().collect()
     }
 }
 
