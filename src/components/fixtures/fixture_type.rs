@@ -8,7 +8,7 @@ use std::fmt::Display;
 
 use crate::components::{
     material::{BuiltWithMaterial, Material},
-    object_tag::{ObjectTag, TaggedObject},
+    tag::{Tag, Tagged},
 };
 
 #[derive(Clone, Debug, IntoEnumIterator, PartialEq, Eq, Hash)]
@@ -68,23 +68,23 @@ impl Display for FixtureType {
     }
 }
 
-impl TaggedObject for FixtureType {
-    fn tags(&self) -> Vec<ObjectTag> {
+impl Tagged for FixtureType {
+    fn tags(&self) -> Vec<Tag> {
         match *self {
-            FixtureType::Bed => vec![ObjectTag::Cloth, ObjectTag::Fixture],
-            FixtureType::Chair => vec![ObjectTag::Fixture],
-            FixtureType::Chest => vec![ObjectTag::Fixture, ObjectTag::Container],
-            FixtureType::Cot => vec![ObjectTag::Fixture, ObjectTag::Cloth],
+            FixtureType::Bed => vec![Tag::Cloth, Tag::Fixture],
+            FixtureType::Chair => vec![Tag::Fixture],
+            FixtureType::Chest => vec![Tag::Fixture, Tag::Container],
+            FixtureType::Cot => vec![Tag::Fixture, Tag::Cloth],
             FixtureType::SleepingRoll => {
-                vec![ObjectTag::Fixture, ObjectTag::Cloth, ObjectTag::Leather]
+                vec![Tag::Fixture, Tag::Cloth, Tag::Leather]
             }
-            FixtureType::Table => vec![ObjectTag::Fixture],
-            FixtureType::WeaponRack => vec![ObjectTag::Fixture],
-            FixtureType::Barrel => vec![ObjectTag::Fixture, ObjectTag::Container],
-            FixtureType::Crate => vec![ObjectTag::Fixture, ObjectTag::Container],
-            FixtureType::Bucket => vec![ObjectTag::Fixture, ObjectTag::Container],
-            FixtureType::Coffin => vec![ObjectTag::Fixture, ObjectTag::Container],
-            _ => vec![ObjectTag::Fixture],
+            FixtureType::Table => vec![Tag::Fixture],
+            FixtureType::WeaponRack => vec![Tag::Fixture],
+            FixtureType::Barrel => vec![Tag::Fixture, Tag::Container],
+            FixtureType::Crate => vec![Tag::Fixture, Tag::Container],
+            FixtureType::Bucket => vec![Tag::Fixture, Tag::Container],
+            FixtureType::Coffin => vec![Tag::Fixture, Tag::Container],
+            _ => vec![Tag::Fixture],
         }
     }
 }
