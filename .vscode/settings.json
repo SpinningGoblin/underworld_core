@@ -1,17 +1,15 @@
 {
-    "editor.tabSize": 4,
-    "editor.detectIndentation": false,
-    "files.exclude": {
-        "**/.git": true,
-        "**/.svn": true,
-        "**/.hg": true,
-        "**/CVS": true,
-        "**/.DS_Store": true,
-        "**/Thumbs.db": true,
-        "target/": true
-    },
-    "rust-analyzer.cargo.allFeatures": true,
-    "cSpell.words": [
-        "Equippable"
-    ]
+  "editor.tabSize": 4,
+  "editor.detectIndentation": false,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "target/": true
+  },
+  "rust-analyzer.cargo.allFeatures": true,
+  "cSpell.words": ["Equippable"]
 }
