@@ -19,5 +19,6 @@ pub mod rooms;
 pub mod size;
 pub mod species;
 pub mod stats;
+pub mod tag;
 pub mod weapons;
 pub mod wearables;
