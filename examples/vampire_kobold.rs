@@ -1,8 +1,6 @@
+use enum_iterator::IntoEnumIterator;
 use underworld_core::{
-    components::{
-        life_modifier::LifeModifier, weapons::weapon_type::WeaponType,
-        wearables::wearable_type::WearableType,
-    },
+    components::{items::item_type::ItemType, life_modifier::LifeModifier},
     generators::{
         characters::CharacterPrototype, generator::Generator, inventory::InventoryPrototype,
     },
@@ -10,8 +8,7 @@ use underworld_core::{
 
 pub fn main() {
     let inventory_prototype = InventoryPrototype {
-        weapon_types: WeaponType::all(),
-        wearable_types: WearableType::all(),
+        item_types: ItemType::into_enum_iter().collect(),
         num_equipped_weapons: 1..=3,
         num_equipped_wearables: 1..=3,
         num_carried_weapons: 1..=2,

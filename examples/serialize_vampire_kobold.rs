@@ -2,11 +2,10 @@ pub fn main() {
     #[cfg(feature = "serialization")]
     #[cfg(feature = "json")]
     {
+        use enum_iterator::IntoEnumIterator;
+        use underworld_core::components::items::item_type::ItemType;
         use underworld_core::{
-            components::{
-                life_modifier::LifeModifier, weapons::weapon_type::WeaponType,
-                wearables::wearable_type::WearableType,
-            },
+            components::life_modifier::LifeModifier,
             generators::{
                 characters::CharacterPrototype, generator::Generator,
                 inventory::InventoryPrototype, non_players::NonPlayerPrototype,
@@ -14,8 +13,7 @@ pub fn main() {
         };
 
         let inventory_prototype = InventoryPrototype {
-            weapon_types: WeaponType::all(),
-            wearable_types: WearableType::all(),
+            item_types: ItemType::into_enum_iter().collect(),
             num_equipped_weapons: 1..=2,
             num_equipped_wearables: 1..=2,
             num_carried_weapons: 1..=2,
