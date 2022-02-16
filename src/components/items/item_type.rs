@@ -15,7 +15,7 @@ use super::descriptor::Descriptor;
 #[cfg_attr(
     feature = "serialization",
     derive(Deserialize, Serialize),
-    serde(tag = "type", rename_all = "snake_case")
+    serde(rename_all = "snake_case")
 )]
 pub enum ItemType {
     Breastplate,

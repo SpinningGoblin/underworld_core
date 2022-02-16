@@ -14,7 +14,7 @@ use super::fixture_type::FixtureType;
 #[cfg_attr(
     feature = "serialization",
     derive(Deserialize, Serialize),
-    serde(tag = "type", rename_all = "snake_case")
+    serde(rename_all = "snake_case")
 )]
 pub struct Fixture {
     pub fixture_type: FixtureType,
