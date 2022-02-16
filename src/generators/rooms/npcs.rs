@@ -4,6 +4,7 @@ use rand::Rng;
 use crate::{
     components::{
         fixtures::fixture_type::FixtureType,
+        items::item_type::ItemType,
         life_modifier::LifeModifier,
         non_player::NonPlayer,
         rooms::{
@@ -11,8 +12,6 @@ use crate::{
             npc_position_descriptor::NpcPositionDescriptor, room_type::RoomType,
         },
         species::Species,
-        weapons::weapon_type::WeaponType,
-        wearables::wearable_type::WearableType,
     },
     generators::{
         characters::CharacterPrototype, generator::Generator, inventory::InventoryPrototype,
@@ -299,8 +298,7 @@ fn life_modifier() -> Option<LifeModifier> {
 
 fn npc_prototype(species: &Species, life_modifier: Option<LifeModifier>) -> NonPlayerPrototype {
     let inventory_prototype = InventoryPrototype {
-        weapon_types: WeaponType::into_enum_iter().collect(),
-        wearable_types: WearableType::into_enum_iter().collect(),
+        item_types: ItemType::into_enum_iter().collect(),
         num_equipped_weapons: 0..=2,
         num_equipped_wearables: 0..=5,
         num_carried_weapons: 0..=1,

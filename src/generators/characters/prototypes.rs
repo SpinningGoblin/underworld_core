@@ -1,12 +1,10 @@
 use std::ops::RangeInclusive;
 
+use enum_iterator::IntoEnumIterator;
 use rand::Rng;
 
 use crate::{
-    components::{
-        life_modifier::LifeModifier, species::Species, weapons::weapon_type::WeaponType,
-        wearables::wearable_type::WearableType,
-    },
+    components::{items::item_type::ItemType, life_modifier::LifeModifier, species::Species},
     generators::inventory::InventoryPrototype,
 };
 
@@ -18,8 +16,7 @@ struct CharacterArgs {
     num_carried_weapons: RangeInclusive<usize>,
     num_carried_wearables: RangeInclusive<usize>,
     species: Species,
-    weapon_types: Vec<WeaponType>,
-    wearable_types: Vec<WearableType>,
+    item_types: Vec<ItemType>,
     life_modifier: Option<LifeModifier>,
     has_inventory: bool,
 }
@@ -31,8 +28,7 @@ pub fn basic_character(species: Species) -> CharacterPrototype {
         num_equipped_wearables: 1..=2,
         num_carried_weapons: 0..=1,
         num_carried_wearables: 0..=1,
-        weapon_types: WeaponType::all(),
-        wearable_types: WearableType::all(),
+        item_types: ItemType::into_enum_iter().collect(),
         life_modifier: None,
         has_inventory: true,
     };
@@ -47,8 +43,7 @@ pub fn overloaded_character(species: Species) -> CharacterPrototype {
         num_equipped_wearables: 2..=3,
         num_carried_weapons: 2..=5,
         num_carried_wearables: 2..=5,
-        weapon_types: WeaponType::all(),
-        wearable_types: WearableType::all(),
+        item_types: ItemType::into_enum_iter().collect(),
         life_modifier: None,
         has_inventory: true,
     };
@@ -70,8 +65,7 @@ pub fn undead_character(species: Species) -> CharacterPrototype {
         num_equipped_wearables: 1..=2,
         num_carried_weapons: 0..=1,
         num_carried_wearables: 0..=1,
-        weapon_types: WeaponType::all(),
-        wearable_types: WearableType::all(),
+        item_types: ItemType::into_enum_iter().collect(),
         has_inventory: true,
     };
 
@@ -80,8 +74,7 @@ pub fn undead_character(species: Species) -> CharacterPrototype {
 
 fn character(args: CharacterArgs) -> CharacterPrototype {
     let inventory_prototype = InventoryPrototype {
-        weapon_types: args.weapon_types,
-        wearable_types: args.wearable_types,
+        item_types: args.item_types,
         num_equipped_weapons: args.num_equipped_weapons,
         num_equipped_wearables: args.num_equipped_wearables,
         num_carried_weapons: args.num_carried_weapons,

@@ -4,20 +4,16 @@ use enum_iterator::IntoEnumIterator;
 use rand::Rng;
 
 use crate::components::{
-    character_item::CharacterItem,
-    equipment::{location_descriptor::LocationDescriptor, Equipment},
+    equipment::{location_descriptor::LocationDescriptor, location_tag::LocationTag},
     inventory::Inventory,
-    object::Object,
-    object_tag::TaggedObject,
-    weapons::{weapon::Weapon, weapon_type::WeaponType},
-    wearables::{wearable::Wearable, wearable_type::WearableType},
+    items::{character_item::CharacterItem, item_type::ItemType},
+    tag::Tagged,
 };
 
-use super::{generator::Generator, weapons::WeaponGenerator, wearables::WearableGenerator};
+use super::{generator::Generator, items::item_generator};
 
 pub struct InventoryPrototype {
-    pub weapon_types: Vec<WeaponType>,
-    pub wearable_types: Vec<WearableType>,
+    pub item_types: Vec<ItemType>,
     pub num_equipped_weapons: RangeInclusive<usize>,
     pub num_equipped_wearables: RangeInclusive<usize>,
     pub num_carried_weapons: RangeInclusive<usize>,
@@ -27,7 +23,7 @@ pub struct InventoryPrototype {
 }
 
 impl InventoryPrototype {
-    fn equipped_weapons(&self) -> Vec<CharacterItem<Weapon>> {
+    fn equipped_weapons(&self) -> Vec<CharacterItem> {
         let mut rng = rand::thread_rng();
         let count = rng.gen_range(self.num_equipped_weapons.clone());
 
@@ -36,20 +32,25 @@ impl InventoryPrototype {
         }
 
         let mut used_descriptors: Vec<LocationDescriptor> = Vec::new();
-        let mut equipped_weapons: Vec<CharacterItem<Weapon>> = Vec::new();
+        let mut equipped_weapons: Vec<CharacterItem> = Vec::new();
+        let weapon_types: Vec<&ItemType> = self
+            .item_types
+            .iter()
+            .filter(|item_type| item_type.is_for_weapon())
+            .collect();
         for _ in 1..=count {
-            let index = rng.gen_range(0..self.weapon_types.len());
-            let weapon_type = match &self.weapon_types.get(index) {
+            let index = rng.gen_range(0..weapon_types.len());
+            let weapon_type = match &weapon_types.get(index) {
                 Some(it) => *it,
                 None => continue,
             };
-            let generator = WeaponGenerator::for_weapon_type(weapon_type);
+            let generator = item_generator(weapon_type);
             let weapon = generator.generate();
 
             let possibilities: Vec<LocationDescriptor> = LocationDescriptor::into_enum_iter()
                 .filter(|descriptor| {
-                    descriptor.matches_any_location_tags(weapon.character_location_tags())
-                        && descriptor.matches_any_item_tags(weapon.weapon_type.tags())
+                    descriptor.matches_any_location_tags(character_location_tags(weapon_type))
+                        && descriptor.matches_any_item_tags(weapon_type.tags())
                 })
                 .filter(|descriptor| {
                     if used_descriptors.is_empty() {
@@ -78,12 +79,13 @@ impl InventoryPrototype {
             used_descriptors.push(equipped_location.clone());
 
             let hidden_roll: usize = rng.gen_range(0..=100);
-            let multiple = weapon.is_multiple();
+            let multiple = weapon_type.is_multiple();
 
             equipped_weapons.push(CharacterItem {
                 is_multiple: multiple,
                 item: weapon,
                 is_hidden: hidden_roll <= self.hidden_weapon_chance,
+                equipped_location_tags: equipped_location.tags(),
                 location_descriptor: equipped_location,
             })
         }
@@ -91,7 +93,7 @@ impl InventoryPrototype {
         equipped_weapons
     }
 
-    fn equipped_wearables(&self) -> Vec<CharacterItem<Wearable>> {
+    fn equipped_wearables(&self) -> Vec<CharacterItem> {
         let mut rng = rand::thread_rng();
         let count = rng.gen_range(self.num_equipped_wearables.clone());
 
@@ -100,12 +102,13 @@ impl InventoryPrototype {
         }
 
         let mut used_descriptors: Vec<LocationDescriptor> = Vec::new();
-        let mut equipped_wearables: Vec<CharacterItem<Wearable>> = Vec::new();
-        let mut used_types: Vec<WearableType> = Vec::new();
+        let mut equipped_wearables: Vec<CharacterItem> = Vec::new();
+        let mut used_types: Vec<ItemType> = Vec::new();
         for _ in 1..=count {
-            let possible_types: Vec<WearableType> = self
-                .wearable_types
+            let possible_types: Vec<ItemType> = self
+                .item_types
                 .iter()
+                .filter(|item_type| item_type.is_for_wearable())
                 .filter(|w_t| {
                     // Return true only if it can be used with all of the used_types
                     if used_types.is_empty() {
@@ -122,15 +125,19 @@ impl InventoryPrototype {
             }
 
             let index = rng.gen_range(0..possible_types.len());
-            let wearable_type = possible_types.get(index).unwrap();
+            let wearable_type = match &possible_types.get(index) {
+                Some(it) => *it,
+                _ => continue,
+            };
+
             used_types.push(wearable_type.clone());
-            let generator = WearableGenerator::for_wearable_type(wearable_type);
+            let generator = item_generator(wearable_type);
             let wearable = generator.generate();
 
             let possibilities: Vec<LocationDescriptor> = LocationDescriptor::into_enum_iter()
                 .filter(|descriptor| {
-                    descriptor.matches_any_location_tags(wearable.character_location_tags())
-                        && descriptor.matches_any_item_tags(wearable.wearable_type.tags())
+                    descriptor.matches_any_location_tags(character_location_tags(wearable_type))
+                        && descriptor.matches_any_item_tags(wearable_type.tags())
                 })
                 .filter(|descriptor| {
                     if used_descriptors.is_empty() {
@@ -159,14 +166,21 @@ impl InventoryPrototype {
                 used_descriptors.push(equipped_location.clone());
             };
 
+            let equipped_location_tags = if equipped_location == LocationDescriptor::None {
+                vec![LocationTag::Equipped]
+            } else {
+                equipped_location.tags()
+            };
+
             let hidden_roll: usize = rng.gen_range(0..=100);
-            let multiple = wearable.is_multiple();
+            let multiple = wearable_type.is_multiple();
 
             equipped_wearables.push(CharacterItem {
                 is_multiple: multiple,
                 item: wearable,
                 is_hidden: hidden_roll <= self.hidden_wearable_chance,
                 location_descriptor: equipped_location,
+                equipped_location_tags,
             })
         }
 
@@ -180,8 +194,49 @@ impl Generator<Inventory> for InventoryPrototype {
         let equipped_wearables = self.equipped_wearables();
 
         Inventory {
-            weapons: equipped_weapons,
-            wearables: equipped_wearables,
+            items: equipped_weapons
+                .into_iter()
+                .chain(equipped_wearables.into_iter())
+                .collect(),
         }
+    }
+}
+
+fn character_location_tags(item_type: &ItemType) -> Vec<LocationTag> {
+    match *item_type {
+        ItemType::Buckler => vec![LocationTag::Hand],
+        ItemType::Club => vec![LocationTag::Hand, LocationTag::Hip],
+        ItemType::Dagger => vec![LocationTag::Hand, LocationTag::Hip, LocationTag::HipSheath],
+        ItemType::Dirk => vec![LocationTag::Hand, LocationTag::Hip, LocationTag::HipSheath],
+        ItemType::GreatSword => vec![LocationTag::Hand, LocationTag::Back],
+        ItemType::Hammer => vec![LocationTag::Hand, LocationTag::Hip],
+        ItemType::LongSword => vec![
+            LocationTag::Hand,
+            LocationTag::Hip,
+            LocationTag::HipSheath,
+            LocationTag::Back,
+        ],
+        ItemType::Mace => vec![LocationTag::Hand, LocationTag::Hip],
+        ItemType::Morningstar => vec![LocationTag::Hand, LocationTag::Hip],
+        ItemType::Shield => vec![LocationTag::Hand, LocationTag::Back],
+        ItemType::ShortSword => {
+            vec![LocationTag::Hand, LocationTag::Hip, LocationTag::HipSheath]
+        }
+        ItemType::Whip => vec![LocationTag::Hand, LocationTag::Hip],
+        ItemType::Breastplate => vec![LocationTag::Body],
+        ItemType::Mask => vec![LocationTag::Head],
+        ItemType::Cloak => vec![LocationTag::Shoulder],
+        ItemType::Shirt => vec![LocationTag::Body],
+        ItemType::Trousers => vec![LocationTag::Leg],
+        ItemType::Crown => vec![LocationTag::Head],
+        ItemType::Boots => vec![LocationTag::Feet],
+        ItemType::Gloves => vec![LocationTag::Hand],
+        ItemType::LoinCloth => vec![LocationTag::Waist],
+        ItemType::PlateBoots => vec![LocationTag::Feet],
+        ItemType::PlateGauntlets => vec![LocationTag::Hand],
+        ItemType::PlateHelmet => vec![LocationTag::Head],
+        ItemType::Shackles => vec![LocationTag::Ankle, LocationTag::Wrist],
+        ItemType::Vest => vec![LocationTag::Body],
+        ItemType::Helm => vec![LocationTag::Head],
     }
 }
