@@ -5,7 +5,7 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::components::{material::Material, object_descriptor::ObjectDescriptor, size::Size};
+use crate::components::{items::descriptor::Descriptor, material::Material, size::Size};
 
 use super::fixture_type::FixtureType;
 
@@ -21,7 +21,7 @@ pub struct Fixture {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub material: Option<Material>,
     pub size: Size,
-    pub descriptors: Vec<ObjectDescriptor>,
+    pub descriptors: Vec<Descriptor>,
 }
 
 impl Display for Fixture {

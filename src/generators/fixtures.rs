@@ -2,8 +2,8 @@ use rand::Rng;
 
 use crate::components::{
     fixtures::{fixture::Fixture, fixture_type::FixtureType},
+    items::descriptor::Descriptor,
     material::BuiltWithMaterial,
-    object_descriptor::ObjectDescriptor,
     size::Size,
 };
 
@@ -48,11 +48,11 @@ impl Generator<Fixture> for FixturePrototype {
         };
 
         let mut num_descriptors = rng.gen_range(0..=2);
-        let mut possible_descriptors: Vec<ObjectDescriptor> = match &material {
-            Some(material) => ObjectDescriptor::matches_two_tagged(&self.fixture_type, material),
-            None => ObjectDescriptor::matches_tagged(&self.fixture_type),
+        let mut possible_descriptors: Vec<Descriptor> = match &material {
+            Some(material) => Descriptor::matches_two_tagged(&self.fixture_type, material),
+            None => Descriptor::matches_tagged(&self.fixture_type),
         };
-        let mut descriptors: Vec<ObjectDescriptor> = Vec::new();
+        let mut descriptors: Vec<Descriptor> = Vec::new();
         while num_descriptors > 0 {
             if possible_descriptors.is_empty() {
                 break;
