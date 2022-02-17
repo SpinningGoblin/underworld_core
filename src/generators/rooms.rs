@@ -20,7 +20,8 @@ use self::{
 };
 
 use super::{
-    characters::CharacterPrototype, generator::Generator, non_players::NonPlayerPrototype,
+    characters::CharacterPrototype, generator::Generator, name::generate_name,
+    non_players::NonPlayerPrototype,
 };
 
 pub struct RoomPrototype {
@@ -76,7 +77,7 @@ impl RoomPrototype {
         for species in Species::into_enum_iter() {
             npc_generators.push(Box::new(NonPlayerPrototype {
                 character_generator: Box::new(CharacterPrototype::overloaded_character(species)),
-                name: None,
+                name: generate_name(),
             }));
         }
 

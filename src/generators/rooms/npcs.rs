@@ -15,7 +15,7 @@ use crate::{
     },
     generators::{
         characters::CharacterPrototype, generator::Generator, inventory::InventoryPrototype,
-        non_players::NonPlayerPrototype,
+        name::generate_name, non_players::NonPlayerPrototype,
     },
 };
 
@@ -315,7 +315,7 @@ fn npc_prototype(species: &Species, life_modifier: Option<LifeModifier>) -> NonP
     };
 
     NonPlayerPrototype {
-        name: None,
+        name: generate_name(),
         character_generator: Box::new(character_prototype),
     }
 }
