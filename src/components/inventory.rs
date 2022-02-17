@@ -158,7 +158,7 @@ impl Inventory {
 #[cfg(test)]
 mod inventory_tests {
     use crate::components::{
-        equipment::location_descriptor::LocationDescriptor,
+        equipment::{location_descriptor::LocationDescriptor, location_tag::LocationTag},
         items::{
             character_item::CharacterItem, descriptor::Descriptor, item::Item, item_type::ItemType,
         },
@@ -176,14 +176,14 @@ mod inventory_tests {
             descriptors: vec![Descriptor::Broken],
             material: None,
             defense: None,
-            tags: Vec::new(),
+            tags: vec![Tag::Blade],
         };
         let short_sword = Item {
             attack: None,
             item_type: ItemType::ShortSword,
             descriptors: vec![Descriptor::Rusty, Descriptor::Dull],
             material: None,
-            tags: Vec::new(),
+            tags: vec![Tag::Blade],
             defense: None,
         };
         let inventory = Inventory {
@@ -193,14 +193,14 @@ mod inventory_tests {
                     is_hidden: false,
                     location_descriptor: LocationDescriptor::None,
                     is_multiple: false,
-                    equipped_location_tags: Vec::new(),
+                    equipped_location_tags: vec![LocationTag::Equipped],
                 },
                 CharacterItem {
                     item: short_sword,
                     is_hidden: false,
                     location_descriptor: LocationDescriptor::SheathedAtHip,
                     is_multiple: false,
-                    equipped_location_tags: Vec::new(),
+                    equipped_location_tags: vec![LocationTag::Equipped],
                 },
             ],
         };
@@ -227,7 +227,7 @@ mod inventory_tests {
                 is_hidden: false,
                 location_descriptor: LocationDescriptor::None,
                 is_multiple: false,
-                equipped_location_tags: Vec::new(),
+                equipped_location_tags: vec![LocationTag::Equipped],
             }],
         };
 
@@ -251,7 +251,7 @@ mod inventory_tests {
             item_type: ItemType::ShortSword,
             descriptors: vec![Descriptor::Rusty, Descriptor::Dull],
             material: None,
-            tags: Vec::new(),
+            tags: vec![Tag::Blade],
             defense: None,
         };
         let inventory = Inventory {
@@ -261,14 +261,14 @@ mod inventory_tests {
                     is_hidden: false,
                     location_descriptor: LocationDescriptor::None,
                     is_multiple: false,
-                    equipped_location_tags: Vec::new(),
+                    equipped_location_tags: vec![LocationTag::Equipped],
                 },
                 CharacterItem {
                     item: short_sword,
                     is_hidden: true,
                     location_descriptor: LocationDescriptor::StrappedToThigh,
                     is_multiple: false,
-                    equipped_location_tags: Vec::new(),
+                    equipped_location_tags: vec![LocationTag::Equipped],
                 },
             ],
         };
@@ -286,7 +286,7 @@ mod inventory_tests {
             descriptors: vec![Descriptor::SetOf, Descriptor::Drab],
             defense: None,
             attack: None,
-            tags: Vec::new(),
+            tags: vec![Tag::Armour],
         };
 
         let inventory = Inventory {
@@ -295,7 +295,7 @@ mod inventory_tests {
                 is_hidden: false,
                 location_descriptor: LocationDescriptor::None,
                 is_multiple: false,
-                equipped_location_tags: Vec::new(),
+                equipped_location_tags: vec![LocationTag::Equipped],
             }],
         };
 
@@ -312,7 +312,7 @@ mod inventory_tests {
             descriptors: vec![Descriptor::SetOf, Descriptor::Drab],
             defense: None,
             attack: None,
-            tags: Vec::new(),
+            tags: vec![Tag::Armour],
         };
 
         let shackles = Item {
@@ -321,7 +321,7 @@ mod inventory_tests {
             descriptors: vec![Descriptor::Rusty],
             defense: None,
             attack: None,
-            tags: Vec::new(),
+            tags: vec![Tag::Accessory],
         };
 
         let inventory = Inventory {
@@ -331,14 +331,14 @@ mod inventory_tests {
                     is_hidden: false,
                     location_descriptor: LocationDescriptor::None,
                     is_multiple: false,
-                    equipped_location_tags: Vec::new(),
+                    equipped_location_tags: vec![LocationTag::Equipped],
                 },
                 CharacterItem {
                     item: shackles,
                     is_hidden: false,
                     location_descriptor: LocationDescriptor::DanglingFromWrists,
                     is_multiple: true,
-                    equipped_location_tags: Vec::new(),
+                    equipped_location_tags: vec![LocationTag::Equipped],
                 },
             ],
         };
