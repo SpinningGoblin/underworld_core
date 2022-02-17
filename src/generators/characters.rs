@@ -110,6 +110,5 @@ mod goblin_tests {
         let prototype = CharacterPrototype::basic_goblin();
         let goblin = prototype.generate();
         assert!(goblin.inventory.is_some());
-        println!("{}", goblin.inventory.unwrap());
     }
 }
