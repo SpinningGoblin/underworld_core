@@ -40,11 +40,11 @@ impl Default for LocationDescriptor {
 }
 
 impl LocationDescriptor {
-    pub fn matches_any_location_tags(&self, tags: Vec<LocationTag>) -> bool {
+    pub fn matches_any_location_tags(&self, tags: &[LocationTag]) -> bool {
         tags.iter().any(|tag| self.tags().contains(tag))
     }
 
-    pub fn matches_any_item_tags(&self, tags: Vec<Tag>) -> bool {
+    pub fn matches_any_item_tags(&self, tags: &[Tag]) -> bool {
         tags.iter().any(|tag| self.item_tags().contains(tag))
     }
 

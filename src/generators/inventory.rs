@@ -49,8 +49,8 @@ impl InventoryPrototype {
 
             let possibilities: Vec<LocationDescriptor> = LocationDescriptor::into_enum_iter()
                 .filter(|descriptor| {
-                    descriptor.matches_any_location_tags(character_location_tags(weapon_type))
-                        && descriptor.matches_any_item_tags(weapon_type.tags())
+                    descriptor.matches_any_location_tags(&character_location_tags(weapon_type))
+                        && descriptor.matches_any_item_tags(&weapon_type.tags())
                 })
                 .filter(|descriptor| {
                     if used_descriptors.is_empty() {
@@ -133,11 +133,12 @@ impl InventoryPrototype {
             used_types.push(wearable_type.clone());
             let generator = item_generator(wearable_type);
             let wearable = generator.generate();
+            let character_tags = character_location_tags(wearable_type);
 
             let possibilities: Vec<LocationDescriptor> = LocationDescriptor::into_enum_iter()
                 .filter(|descriptor| {
-                    descriptor.matches_any_location_tags(character_location_tags(wearable_type))
-                        && descriptor.matches_any_item_tags(wearable_type.tags())
+                    descriptor.matches_any_location_tags(&character_tags)
+                        && descriptor.matches_any_item_tags(&wearable_type.tags())
                 })
                 .filter(|descriptor| {
                     if used_descriptors.is_empty() {
@@ -167,7 +168,10 @@ impl InventoryPrototype {
             };
 
             let equipped_location_tags = if equipped_location == LocationDescriptor::None {
-                vec![LocationTag::Equipped]
+                character_tags
+                    .into_iter()
+                    .chain(vec![LocationTag::Equipped].into_iter())
+                    .collect()
             } else {
                 equipped_location.tags()
             };
