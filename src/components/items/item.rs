@@ -95,17 +95,10 @@ impl Item {
         }
     }
 
-    pub fn describe(&self, is_equipped: bool) -> String {
+    pub fn describe(&self) -> String {
         let mut descriptions: Vec<String> = Vec::new();
         self.descriptors
             .iter()
-            .filter(|descriptor| {
-                if !is_equipped {
-                    !descriptor.is_for_equipped()
-                } else {
-                    true
-                }
-            })
             .for_each(|descriptor| descriptions.push(descriptor.to_string()));
 
         if let Some(material) = &self.material {
@@ -113,13 +106,12 @@ impl Item {
         }
 
         descriptions.push(self.item_type.to_string());
-
         descriptions.join(" ")
     }
 }
 
 impl Display for Item {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.describe(false))
+        write!(f, "{}", self.describe())
     }
 }

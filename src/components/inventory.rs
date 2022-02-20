@@ -75,13 +75,9 @@ impl Inventory {
                 weapons.push(format!("{} ", starters.get_starter(weapon.is_multiple)));
             }
 
-            let description = format!(
-                "{} {}",
-                weapon.item.describe(true),
-                weapon.location_descriptor
-            )
-            .trim_end()
-            .to_string();
+            let description = format!("{} {}", weapon.item.describe(), weapon.location_descriptor)
+                .trim_end()
+                .to_string();
 
             if index == inventory_weapons.len() - 1 && inventory_weapons.len() != 1 {
                 weapons.push(", and ".to_string());
@@ -126,7 +122,7 @@ impl Inventory {
 
             let description = format!(
                 "{} {}",
-                wearable.item.describe(true),
+                wearable.item.describe(),
                 wearable.location_descriptor
             )
             .trim_end()

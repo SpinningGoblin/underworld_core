@@ -73,11 +73,7 @@ impl ItemPrototype {
             return Vec::new();
         }
 
-        let mut possible_descriptors: Vec<Descriptor> = match &material {
-            Some(material) => Descriptor::matches_two_tagged(&self.item_type, material),
-            None => Descriptor::matches_tagged(&self.item_type),
-        };
-
+        let mut possible_descriptors: Vec<Descriptor> = self.possible_descriptors(&material);
         num_descriptor_range
             .filter_map(|_| {
                 if possible_descriptors.is_empty() {
@@ -88,6 +84,22 @@ impl ItemPrototype {
                 }
             })
             .collect()
+    }
+
+    fn possible_descriptors(&self, material: &Option<Material>) -> Vec<Descriptor> {
+        match material {
+            Some(material) => Descriptor::matches_two_tagged(&self.item_type, material),
+            None => Descriptor::matches_tagged(&self.item_type),
+        }
+        .into_iter()
+        .filter(|descriptor| {
+            if !self.is_equipped && descriptor.is_for_equipped() {
+                false
+            } else {
+                true
+            }
+        })
+        .collect()
     }
 
     fn num_attack_rolls(&self) -> Option<usize> {
