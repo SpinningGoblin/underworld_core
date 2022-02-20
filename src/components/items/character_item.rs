@@ -3,11 +3,7 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::components::equipment::{
-    location_descriptor::LocationDescriptor, location_tag::LocationTag,
-};
-
-use super::item::Item;
+use super::{item::Item, location_descriptor::LocationDescriptor, location_tag::LocationTag};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]

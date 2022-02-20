@@ -4,9 +4,8 @@ use enum_iterator::IntoEnumIterator;
 use rand::Rng;
 
 use crate::components::{
-    equipment::{location_descriptor::LocationDescriptor, location_tag::LocationTag},
     inventory::Inventory,
-    items::{character_item::CharacterItem, item_type::ItemType},
+    items::{character_item::CharacterItem, item_type::ItemType, location_descriptor::LocationDescriptor, location_tag::LocationTag},
     tag::Tagged,
 };
 

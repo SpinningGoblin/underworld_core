@@ -158,9 +158,8 @@ impl Inventory {
 #[cfg(test)]
 mod inventory_tests {
     use crate::components::{
-        equipment::{location_descriptor::LocationDescriptor, location_tag::LocationTag},
         items::{
-            character_item::CharacterItem, descriptor::Descriptor, item::Item, item_type::ItemType,
+            character_item::CharacterItem, descriptor::Descriptor, item::Item, item_type::ItemType, location_descriptor::LocationDescriptor, location_tag::LocationTag,
         },
         material::Material,
         tag::Tag,
