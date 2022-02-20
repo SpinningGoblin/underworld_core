@@ -77,7 +77,7 @@ impl Inventory {
 
             let description = format!(
                 "{} {}",
-                weapon.item.look_at(true),
+                weapon.item.describe(true),
                 weapon.location_descriptor
             )
             .trim_end()
@@ -126,7 +126,7 @@ impl Inventory {
 
             let description = format!(
                 "{} {}",
-                wearable.item.look_at(true),
+                wearable.item.describe(true),
                 wearable.location_descriptor
             )
             .trim_end()
@@ -159,7 +159,8 @@ impl Inventory {
 mod inventory_tests {
     use crate::components::{
         items::{
-            character_item::CharacterItem, descriptor::Descriptor, item::Item, item_type::ItemType, location_descriptor::LocationDescriptor, location_tag::LocationTag,
+            character_item::CharacterItem, descriptor::Descriptor, item::Item, item_type::ItemType,
+            location_descriptor::LocationDescriptor, location_tag::LocationTag,
         },
         material::Material,
         tag::Tag,

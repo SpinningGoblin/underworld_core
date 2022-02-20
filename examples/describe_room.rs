@@ -6,5 +6,5 @@ pub fn main() {
 
     println!("{}", &room);
     println!();
-    println!("{}", &room.look_at_inhabitants());
+    println!("{}", &room.describe_inhabitants());
 }

@@ -29,9 +29,9 @@ pub struct Room {
 impl Display for Room {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let parts: Vec<String> = vec![
-            self.describe_room(),
-            self.describe_fixtures(),
-            self.describe_inhabitants(),
+            self.display_room(),
+            self.display_fixtures(),
+            self.display_inhabitants(),
         ];
 
         write!(f, "{}", parts.join(" "))
@@ -51,7 +51,7 @@ fn get_count_text(original_count: &usize, current_count: &usize) -> String {
 }
 
 impl Room {
-    pub fn look_at_inhabitants(&self) -> String {
+    pub fn describe_inhabitants(&self) -> String {
         let non_players: Vec<&NonPlayer> = self
             .npc_positions
             .iter()
@@ -63,7 +63,7 @@ impl Room {
 
         if non_players.len() == 1 {
             let npc = non_players.get(0).unwrap();
-            return npc.look_at("");
+            return npc.describe("");
         }
 
         let mut descriptions: Vec<String> = Vec::new();
@@ -74,10 +74,10 @@ impl Room {
                 original_species_counts.get(&npc.character.species).unwrap();
             let current_species_count = &current_counts.get(&npc.character.species).unwrap();
             if original_species_count.eq(&1) {
-                descriptions.push(npc.look_at(""));
+                descriptions.push(npc.describe(""));
             } else {
                 let starter = get_count_text(original_species_count, current_species_count);
-                descriptions.push(npc.look_at(&starter));
+                descriptions.push(npc.describe(&starter));
                 let new_count = *current_species_count - 1;
                 current_counts
                     .insert(npc.character.species.clone(), new_count)
@@ -88,7 +88,7 @@ impl Room {
         descriptions.join(" ")
     }
 
-    fn describe_room(&self) -> String {
+    fn display_room(&self) -> String {
         let mut parts: Vec<String> = vec!["It is a".to_string()];
 
         let dimensions = format!("{}", &self.dimensions);
@@ -120,7 +120,7 @@ impl Room {
         })
     }
 
-    fn describe_fixtures(&self) -> String {
+    fn display_fixtures(&self) -> String {
         if self.fixture_positions.is_empty() {
             return "".to_string();
         }
@@ -141,7 +141,7 @@ impl Room {
         all_fixtures.join(" ")
     }
 
-    fn describe_inhabitants(&self) -> String {
+    fn display_inhabitants(&self) -> String {
         if self.npc_positions.is_empty() {
             return Self::empty_room_description();
         }

@@ -25,7 +25,7 @@ impl NonPlayer {
         self.identifier.set_name(name);
     }
 
-    pub fn look_at(&self, starter: &str) -> String {
+    pub fn describe(&self, starter: &str) -> String {
         let descriptions: Vec<String> = vec![self.character.describe_inventory(starter)];
 
         descriptions.join("")

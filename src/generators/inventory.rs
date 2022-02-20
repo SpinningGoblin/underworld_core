@@ -5,7 +5,10 @@ use rand::Rng;
 
 use crate::components::{
     inventory::Inventory,
-    items::{character_item::CharacterItem, item_type::ItemType, location_descriptor::LocationDescriptor, location_tag::LocationTag},
+    items::{
+        character_item::CharacterItem, item_type::ItemType,
+        location_descriptor::LocationDescriptor, location_tag::LocationTag,
+    },
     tag::Tagged,
 };
 
