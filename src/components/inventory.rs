@@ -13,7 +13,7 @@ use super::items::character_item::CharacterItem;
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct Inventory {
-    pub items: Vec<CharacterItem>,
+    pub equipment: Vec<CharacterItem>,
 }
 
 impl Display for Inventory {
@@ -24,7 +24,7 @@ impl Display for Inventory {
 
 impl Inventory {
     pub fn equipped_wearables(&self) -> Vec<CharacterItem> {
-        self.items
+        self.equipment
             .iter()
             .filter(|item| item.is_wearable() && item.is_equipped())
             .cloned()
@@ -32,7 +32,7 @@ impl Inventory {
     }
 
     pub fn equipped_weapons(&self) -> Vec<CharacterItem> {
-        self.items
+        self.equipment
             .iter()
             .filter(|item| item.is_weapon() && item.is_equipped())
             .cloned()
@@ -186,7 +186,7 @@ mod inventory_tests {
             defense: None,
         };
         let inventory = Inventory {
-            items: vec![
+            equipment: vec![
                 CharacterItem {
                     item: long_sword,
                     is_hidden: false,
@@ -221,7 +221,7 @@ mod inventory_tests {
             defense: None,
         };
         let inventory = Inventory {
-            items: vec![CharacterItem {
+            equipment: vec![CharacterItem {
                 item: long_sword,
                 is_hidden: false,
                 location_descriptor: LocationDescriptor::None,
@@ -254,7 +254,7 @@ mod inventory_tests {
             defense: None,
         };
         let inventory = Inventory {
-            items: vec![
+            equipment: vec![
                 CharacterItem {
                     item: long_sword,
                     is_hidden: false,
@@ -289,7 +289,7 @@ mod inventory_tests {
         };
 
         let inventory = Inventory {
-            items: vec![CharacterItem {
+            equipment: vec![CharacterItem {
                 item: chain_mail,
                 is_hidden: false,
                 location_descriptor: LocationDescriptor::None,
@@ -324,7 +324,7 @@ mod inventory_tests {
         };
 
         let inventory = Inventory {
-            items: vec![
+            equipment: vec![
                 CharacterItem {
                     item: chain_mail,
                     is_hidden: false,

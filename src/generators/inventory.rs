@@ -197,7 +197,7 @@ impl Generator<Inventory> for InventoryPrototype {
         let equipped_wearables = self.equipped_wearables();
 
         Inventory {
-            items: equipped_weapons
+            equipment: equipped_weapons
                 .into_iter()
                 .chain(equipped_wearables.into_iter())
                 .collect(),
