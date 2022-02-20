@@ -1,7 +1,5 @@
-use std::ops::RangeInclusive;
-
-use enum_iterator::IntoEnumIterator;
 use rand::Rng;
+use std::ops::RangeInclusive;
 
 use crate::components::{
     attack::Attack,
@@ -13,24 +11,12 @@ use crate::components::{
 
 use super::generator::Generator;
 
-pub fn random_item_generator() -> impl Generator<Item> {
-    let mut rng = rand::thread_rng();
-    let item_types: Vec<ItemType> = ItemType::into_enum_iter().collect();
-    let index = rng.gen_range(0..item_types.len());
-    let item_type = item_types.get(index).unwrap();
-    let materials = possible_materials(item_type);
-    ItemPrototype {
-        materials,
-        item_type: item_type.clone(),
-        num_descriptors: 1..=2,
-    }
-}
-
-pub fn item_generator(item_type: &ItemType) -> impl Generator<Item> {
+pub fn item_generator(item_type: &ItemType, is_equipped: bool) -> impl Generator<Item> {
     ItemPrototype {
         item_type: item_type.clone(),
         num_descriptors: 1..=2,
         materials: possible_materials(item_type),
+        is_equipped,
     }
 }
 
@@ -38,6 +24,7 @@ pub struct ItemPrototype {
     pub item_type: ItemType,
     pub num_descriptors: RangeInclusive<usize>,
     pub materials: Vec<Material>,
+    pub is_equipped: bool,
 }
 
 impl Generator<Item> for ItemPrototype {
