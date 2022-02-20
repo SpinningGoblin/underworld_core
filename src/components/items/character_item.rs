@@ -3,7 +3,11 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use super::{item::Item, location_descriptor::LocationDescriptor, location_tag::LocationTag};
+use super::{
+    item::{Item, ItemView},
+    location_descriptor::LocationDescriptor,
+    location_tag::LocationTag,
+};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -11,6 +15,17 @@ use super::{item::Item, location_descriptor::LocationDescriptor, location_tag::L
 pub struct CharacterItem {
     pub item: Item,
     pub is_hidden: bool,
+    pub location_descriptor: LocationDescriptor,
+    pub equipped_location_tags: Vec<LocationTag>,
+    pub is_multiple: bool,
+}
+
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
+pub struct CharacterItemView {
+    pub item: ItemView,
+    pub is_hidden: Option<bool>,
     pub location_descriptor: LocationDescriptor,
     pub equipped_location_tags: Vec<LocationTag>,
     pub is_multiple: bool,
