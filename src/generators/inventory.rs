@@ -46,7 +46,7 @@ impl InventoryPrototype {
                 Some(it) => *it,
                 None => continue,
             };
-            let generator = item_generator(weapon_type);
+            let generator = item_generator(weapon_type, true);
             let weapon = generator.generate();
 
             let possibilities: Vec<LocationDescriptor> = LocationDescriptor::into_enum_iter()
@@ -133,7 +133,7 @@ impl InventoryPrototype {
             };
 
             used_types.push(wearable_type.clone());
-            let generator = item_generator(wearable_type);
+            let generator = item_generator(wearable_type, true);
             let wearable = generator.generate();
             let character_tags = character_location_tags(wearable_type);
 
