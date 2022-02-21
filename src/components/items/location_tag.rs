@@ -31,3 +31,12 @@ pub enum LocationTag {
     Waist,
     Wrist,
 }
+
+impl LocationTag {
+    pub fn hides_full_item(&self) -> bool {
+        matches!(
+            *self,
+            LocationTag::HipSheath | LocationTag::Packed | LocationTag::Pockets
+        )
+    }
+}
