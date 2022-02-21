@@ -12,7 +12,14 @@ use crate::components::{
     tag::Tagged,
 };
 
-use super::{generator::Generator, items::item_generator, utils::item_types::{type_inherently_multiple, type_cannot_be_used_with, type_is_for_wearable, type_is_for_weapon}};
+use super::{
+    generator::Generator,
+    items::item_generator,
+    utils::item_types::{
+        type_cannot_be_used_with, type_inherently_multiple, type_is_for_weapon,
+        type_is_for_wearable,
+    },
+};
 
 pub struct InventoryPrototype {
     pub item_types: Vec<ItemType>,
@@ -81,7 +88,7 @@ impl InventoryPrototype {
             used_descriptors.push(equipped_location.clone());
 
             let hidden_roll: usize = rng.gen_range(0..=100);
-            let multiple = type_inherently_multiple(&weapon_type);
+            let multiple = type_inherently_multiple(weapon_type);
 
             equipped_weapons.push(CharacterItem {
                 is_multiple: multiple,
@@ -179,7 +186,7 @@ impl InventoryPrototype {
             };
 
             let hidden_roll: usize = rng.gen_range(0..=100);
-            let multiple = type_inherently_multiple(&wearable_type);
+            let multiple = type_inherently_multiple(wearable_type);
 
             equipped_wearables.push(CharacterItem {
                 is_multiple: multiple,

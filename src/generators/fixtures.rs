@@ -8,10 +8,7 @@ use crate::components::{
     tag::{Tag, Tagged},
 };
 
-use super::{
-    generator::Generator,
-    utils::item_descriptors::matches_tags,
-};
+use super::{generator::Generator, utils::item_descriptors::matches_tags};
 
 const HAS_MATERIAL_CHANCE: usize = 90;
 const HAS_NON_STANDARD_SIZE: usize = 50;

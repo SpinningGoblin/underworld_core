@@ -1,9 +1,6 @@
 use enum_iterator::IntoEnumIterator;
 
-use crate::components::{
-    items::descriptor::Descriptor,
-    tag::Tag,
-};
+use crate::components::{items::descriptor::Descriptor, tag::Tag};
 
 pub fn descriptor_for_equipped(descriptor: &Descriptor) -> bool {
     tags_for_descriptor(descriptor).contains(&Tag::Equipped)

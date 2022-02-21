@@ -6,7 +6,7 @@ use crate::components::{
     defense::Defense,
     items::{descriptor::Descriptor, item::Item, item_type::ItemType},
     material::Material,
-    tag::{Tagged, Tag},
+    tag::{Tag, Tagged},
 };
 
 use super::{
@@ -76,8 +76,8 @@ impl ItemPrototype {
             return Vec::new();
         }
 
-        let mut possible_descriptors: Vec<Descriptor> = self.possible_descriptors(&material);
-        let descriptors: Vec<Descriptor> = num_descriptor_range
+        let mut possible_descriptors: Vec<Descriptor> = self.possible_descriptors(material);
+        let descriptors = num_descriptor_range
             .filter_map(|_| {
                 if possible_descriptors.is_empty() {
                     None
@@ -85,8 +85,7 @@ impl ItemPrototype {
                     let index = rng.gen_range(0..possible_descriptors.len());
                     Some(possible_descriptors.remove(index))
                 }
-            })
-            .collect();
+            });
 
         descriptors
             .into_iter()
@@ -111,16 +110,12 @@ impl ItemPrototype {
                     .chain(material.tags().into_iter())
                     .collect();
                 matches_tags(&tags)
-            },
+            }
             None => matches_tags(&self.item_type.tags()),
         }
         .into_iter()
         .filter(|descriptor| {
-            if !self.is_equipped && descriptor_for_equipped(descriptor) {
-                false
-            } else {
-                true
-            }
+            self.is_equipped || !descriptor_for_equipped(descriptor)
         })
         .collect()
     }
