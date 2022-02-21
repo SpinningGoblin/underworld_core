@@ -70,6 +70,12 @@ impl CharacterItem {
         self.equipped_location_tags.contains(&LocationTag::Equipped)
     }
 
+    pub fn is_packed(&self) -> bool {
+        self.equipped_location_tags
+            .iter()
+            .any(|tag| tag == &LocationTag::Packed || tag == &LocationTag::Pockets)
+    }
+
     pub fn is_in_hand(&self) -> bool {
         self.equipped_location_tags.contains(&LocationTag::Equipped)
             && self.equipped_location_tags.contains(&LocationTag::Hand)
