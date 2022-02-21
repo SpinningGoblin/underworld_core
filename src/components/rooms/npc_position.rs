@@ -5,7 +5,13 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::{components::non_player::NonPlayer, utils::sentences::first_letter_to_upper_case};
+use crate::{
+    components::{
+        character::CharacterViewArgs,
+        non_player::{NonPlayer, NonPlayerView},
+    },
+    utils::sentences::first_letter_to_upper_case,
+};
 
 use super::{group_descriptor::GroupDescriptor, npc_position_descriptor::NpcPositionDescriptor};
 
@@ -16,6 +22,16 @@ pub struct NpcPosition {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub group_descriptor: Option<GroupDescriptor>,
     pub npcs: Vec<NonPlayer>,
+    pub position_descriptor: Option<NpcPositionDescriptor>,
+}
+
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
+pub struct NpcPositionView {
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub group_descriptor: Option<GroupDescriptor>,
+    pub npcs: Vec<NonPlayerView>,
     pub position_descriptor: Option<NpcPositionDescriptor>,
 }
 
@@ -41,7 +57,38 @@ impl Display for NpcPosition {
     }
 }
 
+#[derive(Clone, Debug)]
+pub struct NpcPositionViewArgs {
+    pub character_args: CharacterViewArgs,
+    pub knows_name: bool,
+}
+
 impl NpcPosition {
+    pub fn look_at(
+        &self,
+        npc_position_args: &NpcPositionViewArgs,
+        knows_all: bool,
+    ) -> NpcPositionView {
+        let npcs: Vec<NonPlayerView> = self
+            .npcs
+            .iter()
+            .map(|npc| {
+                npc.look_at(
+                    &npc_position_args.character_args,
+                    npc_position_args.knows_name,
+                    knows_all,
+                )
+            })
+            .into_iter()
+            .collect();
+
+        NpcPositionView {
+            group_descriptor: self.group_descriptor.clone(),
+            npcs,
+            position_descriptor: self.position_descriptor.clone(),
+        }
+    }
+
     pub fn display_as_sentence(&self) -> String {
         first_letter_to_upper_case(format!("{}.", self))
     }
