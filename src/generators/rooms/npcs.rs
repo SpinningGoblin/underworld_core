@@ -285,14 +285,14 @@ fn life_modifier() -> Option<LifeModifier> {
     let roll: usize = rng.gen_range(0..=100);
 
     if roll < UNDEAD_CHANCE {
-        None
-    } else {
         let type_roll: usize = rng.gen_range(0..=100);
         match type_roll {
             0..=33 => Some(LifeModifier::Skeleton),
             34..=66 => Some(LifeModifier::Vampire),
             _ => Some(LifeModifier::Zombie),
         }
+    } else {
+        None
     }
 }
 
