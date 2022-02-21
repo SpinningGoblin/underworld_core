@@ -41,7 +41,7 @@ impl Inventory {
             .iter()
             .filter(|item| item.is_equipped())
             .filter_map(|item| {
-                if !item.is_hidden || (item.is_hidden && knows_hidden) || knows_all {
+                if !item.is_hidden || knows_hidden || knows_all {
                     Some(item.look_at(knows_hidden, knows_all))
                 } else {
                     None
