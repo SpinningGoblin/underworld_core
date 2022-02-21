@@ -7,13 +7,20 @@ use std::fmt::Display;
 
 use crate::utils::sentences::{SentenceJoiners, SentenceStarters};
 
-use super::items::character_item::CharacterItem;
+use super::items::character_item::{CharacterItem, CharacterItemView};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct Inventory {
     pub equipment: Vec<CharacterItem>,
+}
+
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
+pub struct InventoryView {
+    pub equipment: Vec<CharacterItemView>,
 }
 
 impl Display for Inventory {
@@ -23,6 +30,41 @@ impl Display for Inventory {
 }
 
 impl Inventory {
+    pub fn look_at(
+        &self,
+        knows_hidden: bool,
+        knows_packed: bool,
+        knows_all: bool,
+    ) -> InventoryView {
+        let equipped_items = self
+            .equipment
+            .iter()
+            .filter(|item| item.is_equipped())
+            .filter_map(|item| {
+                if !item.is_hidden || (item.is_hidden && knows_hidden) || knows_all {
+                    Some(item.look_at(knows_hidden, knows_all))
+                } else {
+                    None
+                }
+            });
+
+        let packed_items = self
+            .equipment
+            .iter()
+            .filter(|item| item.is_packed())
+            .filter_map(|item| {
+                if knows_packed || knows_all {
+                    Some(item.look_at(true, knows_all))
+                } else {
+                    None
+                }
+            });
+
+        InventoryView {
+            equipment: equipped_items.chain(packed_items).collect(),
+        }
+    }
+
     pub fn equipped_wearables(&self) -> Vec<CharacterItem> {
         self.equipment
             .iter()
