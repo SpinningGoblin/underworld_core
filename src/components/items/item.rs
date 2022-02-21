@@ -56,6 +56,14 @@ pub struct ItemView {
 }
 
 impl Item {
+    pub fn is_weapon(&self) -> bool {
+        self.tags.iter().any(|tag| tag.is_weapon())
+    }
+
+    pub fn is_wearable(&self) -> bool {
+        self.tags.iter().any(|tag| tag.is_wearable())
+    }
+
     pub fn look_at(&self, sees_full_item: bool, knows_all: bool) -> ItemView {
         let (descriptors, descriptors_known) = if sees_full_item || knows_all {
             (self.descriptors.clone(), true)

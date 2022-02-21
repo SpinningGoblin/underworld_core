@@ -82,10 +82,10 @@ impl CharacterItem {
     }
 
     pub fn is_weapon(&self) -> bool {
-        self.item.tags.iter().any(|tag| tag.is_weapon())
+        self.item.is_weapon()
     }
 
     pub fn is_wearable(&self) -> bool {
-        self.item.tags.iter().any(|tag| tag.is_wearable())
+        self.item.is_wearable()
     }
 }
