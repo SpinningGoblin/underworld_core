@@ -7,7 +7,7 @@ use crate::components::{
     size::Size,
 };
 
-use super::generator::Generator;
+use super::{generator::Generator, utils::item_descriptors::{matches_two_tagged, matches_tagged}};
 
 const HAS_MATERIAL_CHANCE: usize = 90;
 const HAS_NON_STANDARD_SIZE: usize = 50;
@@ -49,8 +49,8 @@ impl Generator<Fixture> for FixturePrototype {
 
         let mut num_descriptors = rng.gen_range(0..=2);
         let mut possible_descriptors: Vec<Descriptor> = match &material {
-            Some(material) => Descriptor::matches_two_tagged(&self.fixture_type, material),
-            None => Descriptor::matches_tagged(&self.fixture_type),
+            Some(material) => matches_two_tagged(&self.fixture_type, material),
+            None => matches_tagged(&self.fixture_type),
         };
         let mut descriptors: Vec<Descriptor> = Vec::new();
         while num_descriptors > 0 {

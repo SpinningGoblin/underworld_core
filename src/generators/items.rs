@@ -9,7 +9,7 @@ use crate::components::{
     tag::Tagged,
 };
 
-use super::generator::Generator;
+use super::{generator::Generator, utils::item_descriptors::{matches_two_tagged, matches_tagged, descriptor_for_equipped}};
 
 pub fn item_generator(item_type: &ItemType, is_equipped: bool) -> impl Generator<Item> {
     ItemPrototype {
@@ -88,12 +88,12 @@ impl ItemPrototype {
 
     fn possible_descriptors(&self, material: &Option<Material>) -> Vec<Descriptor> {
         match material {
-            Some(material) => Descriptor::matches_two_tagged(&self.item_type, material),
-            None => Descriptor::matches_tagged(&self.item_type),
+            Some(material) => matches_two_tagged(&self.item_type, material),
+            None => matches_tagged(&self.item_type),
         }
         .into_iter()
         .filter(|descriptor| {
-            if !self.is_equipped && descriptor.is_for_equipped() {
+            if !self.is_equipped && descriptor_for_equipped(descriptor) {
                 false
             } else {
                 true
