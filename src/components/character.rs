@@ -104,20 +104,19 @@ impl Character {
             descriptions.push(format!("{}", self.stats.height));
         }
 
-        descriptions.push(self.species.to_string());
-
         if let Some(life_modifier) = &self.life_modifier {
             descriptions.push(life_modifier.to_string());
         }
 
+        descriptions.push(self.species.to_string());
         descriptions.join(" ")
     }
 
     pub fn describe_inventory(&self, starter: &str) -> String {
         let sentence_starter = if starter.is_empty() {
-            format!("The {}", self.species)
+            format!("The {}", self.describe_species())
         } else {
-            format!("{} {}", starter, self.species)
+            format!("{} {}", starter, self.describe_species())
         };
 
         match &self.inventory {
