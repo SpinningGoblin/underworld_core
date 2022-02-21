@@ -7,7 +7,10 @@ use crate::components::{
     size::Size,
 };
 
-use super::{generator::Generator, utils::item_descriptors::{matches_two_tagged, matches_tagged}};
+use super::{
+    generator::Generator,
+    utils::item_descriptors::{matches_tagged, matches_two_tagged},
+};
 
 const HAS_MATERIAL_CHANCE: usize = 90;
 const HAS_NON_STANDARD_SIZE: usize = 50;
