@@ -16,6 +16,9 @@ pub struct NonPlayer {
     pub identifier: Identifier,
 }
 
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct NonPlayerView {
     pub character: CharacterView,
     pub identifier: IdentifierView,
@@ -24,7 +27,7 @@ pub struct NonPlayerView {
 impl NonPlayer {
     pub fn look_at(
         &self,
-        character_args: CharacterViewArgs,
+        character_args: &CharacterViewArgs,
         knows_name: bool,
         knows_all: bool,
     ) -> NonPlayerView {

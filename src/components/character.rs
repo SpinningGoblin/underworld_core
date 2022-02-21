@@ -38,6 +38,7 @@ pub struct CharacterView {
     pub inventory_known: bool,
 }
 
+#[derive(Clone, Debug)]
 pub struct CharacterViewArgs {
     pub knows_health: bool,
     pub knows_species: bool,
@@ -48,7 +49,7 @@ pub struct CharacterViewArgs {
 }
 
 impl Character {
-    pub fn look_at(&self, args: CharacterViewArgs, knows_all: bool) -> CharacterView {
+    pub fn look_at(&self, args: &CharacterViewArgs, knows_all: bool) -> CharacterView {
         let (health, health_known) = if args.knows_health || knows_all {
             (self.stats.health.clone(), true)
         } else {
