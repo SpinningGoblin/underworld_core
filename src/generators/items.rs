@@ -77,15 +77,14 @@ impl ItemPrototype {
         }
 
         let mut possible_descriptors: Vec<Descriptor> = self.possible_descriptors(material);
-        let descriptors = num_descriptor_range
-            .filter_map(|_| {
-                if possible_descriptors.is_empty() {
-                    None
-                } else {
-                    let index = rng.gen_range(0..possible_descriptors.len());
-                    Some(possible_descriptors.remove(index))
-                }
-            });
+        let descriptors = num_descriptor_range.filter_map(|_| {
+            if possible_descriptors.is_empty() {
+                None
+            } else {
+                let index = rng.gen_range(0..possible_descriptors.len());
+                Some(possible_descriptors.remove(index))
+            }
+        });
 
         descriptors
             .into_iter()
@@ -114,9 +113,7 @@ impl ItemPrototype {
             None => matches_tags(&self.item_type.tags()),
         }
         .into_iter()
-        .filter(|descriptor| {
-            self.is_equipped || !descriptor_for_equipped(descriptor)
-        })
+        .filter(|descriptor| self.is_equipped || !descriptor_for_equipped(descriptor))
         .collect()
     }
 
