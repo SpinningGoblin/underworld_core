@@ -24,6 +24,32 @@ pub struct Fixture {
     pub descriptors: Vec<Descriptor>,
 }
 
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(
+    feature = "serialization",
+    derive(Deserialize, Serialize),
+    serde(rename_all = "snake_case")
+)]
+pub struct FixtureView {
+    pub fixture_type: FixtureType,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub material: Option<Material>,
+    pub size: Size,
+    pub descriptors: Vec<Descriptor>,
+}
+
+impl Fixture {
+    pub fn look_at(&self) -> FixtureView {
+        FixtureView {
+            fixture_type: self.fixture_type.clone(),
+            material: self.material.clone(),
+            size: self.size.clone(),
+            descriptors: self.descriptors.clone(),
+        }
+    }
+}
+
 impl Display for Fixture {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut descriptions: Vec<String> = Vec::new();
