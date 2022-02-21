@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 
 use std::fmt::Display;
 
-use crate::utils::sentences::{SentenceJoiners, SentenceStarters};
+use crate::utils::sentences::starters_and_joiners;
 
 use super::items::character_item::{CharacterItem, CharacterItemView};
 
@@ -98,98 +98,59 @@ impl Inventory {
     }
 
     pub fn weapon_description(&self, starter: &str) -> String {
-        let inventory_weapons = self.equipped_weapons();
+        let equipped_weapons = self.equipped_weapons();
 
-        let visible_weapons: Vec<&CharacterItem> = inventory_weapons
-            .iter()
-            .filter(|weapon| !weapon.is_hidden)
-            .collect();
-        if visible_weapons.is_empty() {
-            return format!("{} has no visible weapons.", starter);
-        }
-
-        let starters = SentenceStarters::weapon_starters();
-        let joiners = SentenceJoiners::weapon_joiners();
-        let mut weapons: Vec<String> = vec![format!("{} ", starter)];
-
-        for (index, weapon) in visible_weapons.iter().enumerate() {
-            if index == 0 {
-                weapons.push(format!("{} ", starters.get_starter(weapon.is_multiple)));
-            }
-
-            let description = format!("{} {}", weapon.item.describe(), weapon.location_descriptor)
-                .trim_end()
-                .to_string();
-
-            if index == inventory_weapons.len() - 1 && inventory_weapons.len() != 1 {
-                weapons.push(", and ".to_string());
-            } else if index > 0 {
-                weapons.push(", ".to_string());
-            }
-
-            if index == 0 {
-                weapons.push(description);
-            } else {
-                weapons.push(format!(
-                    "{} {}",
-                    joiners.get_joiner(weapon.is_multiple),
-                    description
-                ));
-            }
-        }
-
-        weapons.push(".".to_string());
-        weapons.join("")
+        self.item_description(equipped_weapons, "has no visible weapons.", starter)
     }
 
     pub fn wearables_description(&self, starter: &str) -> String {
-        let inventory_wearables = self.equipped_wearables();
-        let visible_wearables: Vec<&CharacterItem> = inventory_wearables
-            .iter()
-            .filter(|equipped_wearable| !equipped_wearable.is_hidden)
-            .collect();
+        let equipped_wearables = self.equipped_wearables();
+        self.item_description(equipped_wearables, "is wearing... nothing?", starter)
+    }
 
-        if visible_wearables.is_empty() {
-            return format!("{} is wearing... nothing?", starter);
+    fn item_description(
+        &self,
+        items: Vec<CharacterItem>,
+        none_visible_text: &str,
+        starter: &str,
+    ) -> String {
+        let visible_items: Vec<&CharacterItem> =
+            items.iter().filter(|weapon| !weapon.is_hidden).collect();
+        if visible_items.is_empty() {
+            return format!("{} {}", starter, none_visible_text);
         }
 
-        let starters = SentenceStarters::wearable_starters();
-        let joiners = SentenceJoiners::wearable_joiners();
-        let mut wearables: Vec<String> = vec![format!("{} is ", starter)];
+        let mut item_text: Vec<String> = vec![format!("{} ", starter)];
 
-        for (index, wearable) in visible_wearables.iter().enumerate() {
+        for (index, item) in visible_items.iter().enumerate() {
+            let (starters, joiners) = starters_and_joiners(&item.item);
             if index == 0 {
-                wearables.push(format!("{} ", starters.get_starter(wearable.is_multiple)));
+                item_text.push(format!("{} ", starters.get_starter(item.is_multiple)));
             }
 
-            let description = format!(
-                "{} {}",
-                wearable.item.describe(),
-                wearable.location_descriptor
-            )
-            .trim_end()
-            .to_string();
+            let description = format!("{} {}", item.item.describe(), item.location_descriptor)
+                .trim_end()
+                .to_string();
 
-            if index == inventory_wearables.len() - 1 && inventory_wearables.len() != 1 {
-                wearables.push(", and ".to_string());
+            if index == visible_items.len() - 1 && visible_items.len() != 1 {
+                item_text.push(", and ".to_string());
             } else if index > 0 {
-                wearables.push(", ".to_string());
+                item_text.push(", ".to_string());
             }
 
             if index == 0 {
-                wearables.push(description);
+                item_text.push(description);
             } else {
-                wearables.push(format!(
+                item_text.push(format!(
                     "{} {}",
-                    joiners.get_joiner(wearable.is_multiple),
+                    joiners.get_joiner(item.is_multiple),
                     description
                 ));
             }
         }
 
-        wearables.push(".".to_string());
-
-        wearables.join("")
+        item_text.push(".".to_string());
+        item_text.join("")
     }
 }
 
