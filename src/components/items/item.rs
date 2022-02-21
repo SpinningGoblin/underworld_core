@@ -57,13 +57,13 @@ pub struct ItemView {
 
 impl Item {
     pub fn look_at(&self, sees_full_item: bool, knows_all: bool) -> ItemView {
-        let (descriptors, descriptors_known) = if sees_full_item {
+        let (descriptors, descriptors_known) = if sees_full_item || knows_all {
             (self.descriptors.clone(), true)
         } else {
             (Vec::new(), false)
         };
 
-        let (material, material_known) = if sees_full_item {
+        let (material, material_known) = if sees_full_item || knows_all {
             (self.material.clone(), true)
         } else {
             (None, false)
