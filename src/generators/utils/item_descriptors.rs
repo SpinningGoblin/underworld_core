@@ -1,11 +1,13 @@
 use enum_iterator::IntoEnumIterator;
 
-use crate::components::{items::descriptor::Descriptor, tag::{Tagged, Tag}};
+use crate::components::{
+    items::descriptor::Descriptor,
+    tag::{Tag, Tagged},
+};
 
 pub fn descriptor_for_equipped(descriptor: &Descriptor) -> bool {
     tags_for_descriptor(descriptor).contains(&Tag::Equipped)
 }
-
 
 pub fn matches_tagged(tagged: &impl Tagged) -> Vec<Descriptor> {
     matches_tags(tagged.tags())
@@ -90,7 +92,10 @@ fn tags_for_descriptor(descriptor: &Descriptor) -> Vec<Tag> {
 
 #[cfg(test)]
 mod tests {
-    use crate::{components::{items::item_type::ItemType, material::Material}, generators::utils::item_descriptors::{matches_two_tagged, matches_tagged}};
+    use crate::{
+        components::{items::item_type::ItemType, material::Material},
+        generators::utils::item_descriptors::{matches_tagged, matches_two_tagged},
+    };
 
     #[test]
     fn get_descriptors_for_weapon() {
