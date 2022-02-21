@@ -5,7 +5,10 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::{components::fixtures::fixture::Fixture, utils::sentences::first_letter_to_upper_case};
+use crate::{
+    components::fixtures::fixture::{Fixture, FixtureView},
+    utils::sentences::first_letter_to_upper_case,
+};
 
 use super::{
     fixture_position_descriptor::FixturePositionDescriptor, group_descriptor::GroupDescriptor,
@@ -18,6 +21,16 @@ pub struct FixturePosition {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub group_descriptor: Option<GroupDescriptor>,
     pub fixtures: Vec<Fixture>,
+    pub position_descriptors: Vec<FixturePositionDescriptor>,
+}
+
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
+pub struct FixturePositionView {
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub group_descriptor: Option<GroupDescriptor>,
+    pub fixtures: Vec<FixtureView>,
     pub position_descriptors: Vec<FixturePositionDescriptor>,
 }
 
@@ -44,6 +57,19 @@ impl Display for FixturePosition {
 }
 
 impl FixturePosition {
+    pub fn look_at(&self) -> FixturePositionView {
+        FixturePositionView {
+            group_descriptor: self.group_descriptor.clone(),
+            fixtures: self
+                .fixtures
+                .iter()
+                .map(|f| f.look_at())
+                .into_iter()
+                .collect(),
+            position_descriptors: self.position_descriptors.clone(),
+        }
+    }
+
     pub fn display_as_sentence(&self) -> String {
         first_letter_to_upper_case(format!("{}.", self))
     }
