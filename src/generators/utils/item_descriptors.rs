@@ -2,25 +2,14 @@ use enum_iterator::IntoEnumIterator;
 
 use crate::components::{
     items::descriptor::Descriptor,
-    tag::{Tag, Tagged},
+    tag::Tag,
 };
 
 pub fn descriptor_for_equipped(descriptor: &Descriptor) -> bool {
     tags_for_descriptor(descriptor).contains(&Tag::Equipped)
 }
 
-pub fn matches_tagged(tagged: &impl Tagged) -> Vec<Descriptor> {
-    matches_tags(tagged.tags())
-}
-
-pub fn matches_two_tagged(tagged_1: &impl Tagged, tagged_2: &impl Tagged) -> Vec<Descriptor> {
-    let mut tags = tagged_1.tags();
-    let mut tags_2 = tagged_2.tags();
-    tags.append(&mut tags_2);
-    matches_tags(tags)
-}
-
-fn matches_tags(tags: Vec<Tag>) -> Vec<Descriptor> {
+pub fn matches_tags(tags: &[Tag]) -> Vec<Descriptor> {
     Descriptor::into_enum_iter()
         .filter(|descriptor| {
             tags_for_descriptor(descriptor)
@@ -87,31 +76,5 @@ fn tags_for_descriptor(descriptor: &Descriptor) -> Vec<Tag> {
             vec![Tag::Bone, Tag::Leather, Tag::Wood]
         }
         Descriptor::Rotting => vec![Tag::Cloth, Tag::Clothing],
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use crate::{
-        components::{items::item_type::ItemType, material::Material},
-        generators::utils::item_descriptors::{matches_tagged, matches_two_tagged},
-    };
-
-    #[test]
-    fn get_descriptors_for_weapon() {
-        let descriptors = matches_two_tagged(&ItemType::Whip, &Material::Leather);
-        assert!(!descriptors.is_empty());
-    }
-
-    #[test]
-    fn get_descriptors_for_wearable() {
-        let descriptors = matches_two_tagged(&ItemType::LoinCloth, &Material::Wool);
-        assert!(!descriptors.is_empty());
-    }
-
-    #[test]
-    fn get_descriptors_single_wearable() {
-        let descriptors = matches_tagged(&ItemType::LoinCloth);
-        assert!(!descriptors.is_empty());
     }
 }

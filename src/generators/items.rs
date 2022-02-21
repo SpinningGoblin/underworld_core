@@ -6,12 +6,12 @@ use crate::components::{
     defense::Defense,
     items::{descriptor::Descriptor, item::Item, item_type::ItemType},
     material::Material,
-    tag::Tagged,
+    tag::{Tagged, Tag},
 };
 
 use super::{
     generator::Generator,
-    utils::item_descriptors::{descriptor_for_equipped, matches_tagged, matches_two_tagged},
+    utils::item_descriptors::{descriptor_for_equipped, matches_tags},
 };
 
 pub fn item_generator(item_type: &ItemType, is_equipped: bool) -> impl Generator<Item> {
@@ -103,8 +103,16 @@ impl ItemPrototype {
 
     fn possible_descriptors(&self, material: &Option<Material>) -> Vec<Descriptor> {
         match material {
-            Some(material) => matches_two_tagged(&self.item_type, material),
-            None => matches_tagged(&self.item_type),
+            Some(material) => {
+                let tags: Vec<Tag> = self
+                    .item_type
+                    .tags()
+                    .into_iter()
+                    .chain(material.tags().into_iter())
+                    .collect();
+                matches_tags(&tags)
+            },
+            None => matches_tags(&self.item_type.tags()),
         }
         .into_iter()
         .filter(|descriptor| {

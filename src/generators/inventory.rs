@@ -12,7 +12,7 @@ use crate::components::{
     tag::Tagged,
 };
 
-use super::{generator::Generator, items::item_generator};
+use super::{generator::Generator, items::item_generator, utils::item_types::{type_inherently_multiple, type_cannot_be_used_with, type_is_for_wearable, type_is_for_weapon}};
 
 pub struct InventoryPrototype {
     pub item_types: Vec<ItemType>,
@@ -38,7 +38,7 @@ impl InventoryPrototype {
         let weapon_types: Vec<&ItemType> = self
             .item_types
             .iter()
-            .filter(|item_type| item_type.is_for_weapon())
+            .filter(|item_type| type_is_for_weapon(item_type))
             .collect();
         for _ in 1..=count {
             let index = rng.gen_range(0..weapon_types.len());
@@ -81,7 +81,7 @@ impl InventoryPrototype {
             used_descriptors.push(equipped_location.clone());
 
             let hidden_roll: usize = rng.gen_range(0..=100);
-            let multiple = weapon_type.is_multiple();
+            let multiple = type_inherently_multiple(&weapon_type);
 
             equipped_weapons.push(CharacterItem {
                 is_multiple: multiple,
@@ -110,13 +110,13 @@ impl InventoryPrototype {
             let possible_types: Vec<ItemType> = self
                 .item_types
                 .iter()
-                .filter(|item_type| item_type.is_for_wearable())
+                .filter(|item_type| type_is_for_wearable(item_type))
                 .filter(|w_t| {
                     // Return true only if it can be used with all of the used_types
                     if used_types.is_empty() {
                         true
                     } else {
-                        used_types.iter().all(|w| !w.unable_to_be_used_with(w_t))
+                        used_types.iter().all(|w| !type_cannot_be_used_with(w, w_t))
                     }
                 })
                 .cloned()
@@ -179,7 +179,7 @@ impl InventoryPrototype {
             };
 
             let hidden_roll: usize = rng.gen_range(0..=100);
-            let multiple = wearable_type.is_multiple();
+            let multiple = type_inherently_multiple(&wearable_type);
 
             equipped_wearables.push(CharacterItem {
                 is_multiple: multiple,
