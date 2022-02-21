@@ -10,19 +10,14 @@ use uuid::Uuid;
 
 use crate::components::{
     identifier::Identifier,
-    non_player::NonPlayer,
     rooms::{descriptor::Descriptor, flavour::Flavour, room::Room, room_type::RoomType},
-    species::Species,
 };
 
 use self::{
     dimensions::build_dimensions, fixtures::build_fixture_positions, npcs::build_npc_positions,
 };
 
-use super::{
-    characters::CharacterPrototype, generator::Generator, name::generate_name,
-    non_players::NonPlayerPrototype,
-};
+use super::generator::Generator;
 
 pub struct RoomPrototype {
     pub num_descriptors: RangeInclusive<usize>,
@@ -72,15 +67,6 @@ impl Generator<Room> for RoomPrototype {
 
 impl RoomPrototype {
     pub fn build_random() -> RoomPrototype {
-        let mut npc_generators: Vec<Box<dyn Generator<NonPlayer>>> = Vec::new();
-
-        for species in Species::into_enum_iter() {
-            npc_generators.push(Box::new(NonPlayerPrototype {
-                character_generator: Box::new(CharacterPrototype::overloaded_character(species)),
-                name: generate_name(),
-            }));
-        }
-
         let room_types = vec![
             RoomType::Cave,
             RoomType::Cavern,
