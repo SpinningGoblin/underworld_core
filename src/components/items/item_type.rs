@@ -8,8 +8,6 @@ use serde::{Deserialize, Serialize};
 
 use crate::components::tag::{Tag, Tagged};
 
-use super::descriptor::Descriptor;
-
 #[derive(Clone, Debug, IntoEnumIterator, PartialEq)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
@@ -135,13 +133,6 @@ impl ItemType {
             *self,
             ItemType::Shackles | ItemType::Boots | ItemType::PlateBoots
         )
-    }
-
-    pub fn necessary_descriptors(&self) -> Vec<Descriptor> {
-        match *self {
-            ItemType::Shackles => vec![Descriptor::SetOf],
-            _ => Vec::new(),
-        }
     }
 }
 
