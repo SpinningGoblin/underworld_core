@@ -137,7 +137,6 @@ fn single_possible_positions() -> Vec<FixturePositionDescriptor> {
         FixturePositionDescriptor::IsInTheCorner,
         FixturePositionDescriptor::SitsAlongOneSide,
         FixturePositionDescriptor::StandsInTheCorner,
-        FixturePositionDescriptor::AreScatteredAboutTheRoom,
     ]
 }
 
