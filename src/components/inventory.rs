@@ -120,7 +120,13 @@ impl Inventory {
             return format!("{} {}", starter, none_visible_text);
         }
 
-        let mut item_text: Vec<String> = vec![format!("{} ", starter)];
+        let intro_text = if starter == "It" {
+            format!("{} is ", &starter)
+        } else {
+            format!("{} ", &starter)
+        };
+
+        let mut item_text: Vec<String> = vec![intro_text];
 
         for (index, item) in visible_items.iter().enumerate() {
             let (starters, joiners) = starters_and_joiners(&item.item);
