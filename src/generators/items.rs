@@ -2,11 +2,9 @@ use rand::Rng;
 use std::ops::RangeInclusive;
 
 use crate::components::{
-    attack::Attack,
-    defense::Defense,
     items::{descriptor::Descriptor, item::Item, item_type::ItemType},
     material::Material,
-    tag::{Tag, Tagged},
+    tag::{Tag, Tagged}, damage::{Attack, Defense},
 };
 
 use super::{

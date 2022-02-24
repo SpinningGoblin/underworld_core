@@ -5,7 +5,7 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::components::{attack::Attack, defense::Defense, material::Material, tag::Tag};
+use crate::components::{material::Material, tag::Tag, damage::{Attack, Defense}};
 
 use super::{descriptor::Descriptor, item_type::ItemType};
 

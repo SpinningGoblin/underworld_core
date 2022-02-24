@@ -1,8 +1,6 @@
-pub mod attack;
 pub mod character;
-pub mod defense;
+pub mod damage;
 pub mod fixtures;
-pub mod health;
 pub mod identifier;
 pub mod inventory;
 pub mod items;

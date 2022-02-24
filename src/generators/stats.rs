@@ -2,7 +2,7 @@ use std::ops::RangeInclusive;
 
 use rand::Rng;
 
-use crate::components::{health::Health, size::Size, species::Species, stats::Stats};
+use crate::components::{size::Size, species::Species, stats::Stats, damage::Health};
 
 use super::generator::Generator;
 

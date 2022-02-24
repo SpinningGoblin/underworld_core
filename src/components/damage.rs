@@ -3,22 +3,26 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use super::{size::Size, damage::Health};
-
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
-pub struct Stats {
-    #[cfg_attr(feature = "serialization", serde(default))]
-    pub health: Option<Health>,
-    pub height: Size,
+pub struct Attack {
+    pub num_rolls: usize,
+    pub modifier: i32,
 }
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
-pub struct StatsView {
-    pub health: Option<Health>,
-    pub health_known: bool,
-    pub height: Size,
+pub struct Defense {
+    pub num_rolls: usize,
+    pub modifier: i32,
+}
+
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
+pub struct Health {
+    pub current: i32,
+    pub max: i32,
 }
