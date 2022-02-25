@@ -5,7 +5,12 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::components::{items::descriptor::Descriptor, material::Material, size::Size};
+use crate::components::{
+    identifier::{Identifier, IdentifierView},
+    items::descriptor::Descriptor,
+    material::Material,
+    size::Size,
+};
 
 use super::fixture_type::FixtureType;
 
@@ -17,6 +22,7 @@ use super::fixture_type::FixtureType;
     serde(rename_all = "snake_case")
 )]
 pub struct Fixture {
+    pub identifier: Identifier,
     pub fixture_type: FixtureType,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub material: Option<Material>,
@@ -32,6 +38,7 @@ pub struct Fixture {
     serde(rename_all = "snake_case")
 )]
 pub struct FixtureView {
+    pub identifier: IdentifierView,
     pub fixture_type: FixtureType,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub material: Option<Material>,
@@ -42,6 +49,11 @@ pub struct FixtureView {
 impl Fixture {
     pub fn look_at(&self) -> FixtureView {
         FixtureView {
+            identifier: IdentifierView {
+                id: self.identifier.id,
+                name: self.identifier.name.clone(),
+                name_known: true,
+            },
             fixture_type: self.fixture_type.clone(),
             material: self.material.clone(),
             size: self.size.clone(),
@@ -70,7 +82,11 @@ impl Display for Fixture {
 
 #[cfg(test)]
 mod display_tests {
-    use crate::components::{fixtures::fixture_type::FixtureType, material::Material};
+    use uuid::Uuid;
+
+    use crate::components::{
+        fixtures::fixture_type::FixtureType, identifier::Identifier, material::Material,
+    };
 
     use super::Fixture;
 
@@ -81,6 +97,10 @@ mod display_tests {
             material: Some(Material::Steel),
             size: crate::components::size::Size::Average,
             descriptors: Vec::new(),
+            identifier: Identifier {
+                id: Uuid::new_v4(),
+                name: None,
+            },
         };
 
         assert_eq!("steel chest", format!("{}", fixture));
