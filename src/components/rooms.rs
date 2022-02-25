@@ -9,3 +9,4 @@ pub mod npc_position;
 pub mod npc_position_descriptor;
 pub mod room;
 pub mod room_type;
+pub mod room_view;

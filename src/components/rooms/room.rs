@@ -6,20 +6,11 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::components::{
-    character::CharacterViewArgs,
-    identifier::{Identifier, IdentifierView},
-    non_player::NonPlayer,
-    species::Species,
-};
+use crate::components::{identifier::Identifier, non_player::NonPlayer, species::Species};
 
 use super::{
-    descriptor::Descriptor,
-    dimensions::Dimensions,
-    fixture_position::{FixturePosition, FixturePositionView},
-    flavour::Flavour,
-    npc_position::{NpcPosition, NpcPositionView, NpcPositionViewArgs},
-    room_type::RoomType,
+    descriptor::Descriptor, dimensions::Dimensions, fixture_position::FixturePosition,
+    flavour::Flavour, npc_position::NpcPosition, room_type::RoomType,
 };
 
 #[derive(Clone, Debug)]
@@ -32,19 +23,6 @@ pub struct Room {
     pub fixture_positions: Vec<FixturePosition>,
     pub dimensions: Dimensions,
     pub npc_positions: Vec<NpcPosition>,
-    pub flavour: Option<Flavour>,
-}
-
-#[derive(Clone, Debug)]
-#[cfg_attr(feature = "bevy_components", derive(Component))]
-#[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
-pub struct RoomView {
-    pub identifier: IdentifierView,
-    pub descriptors: Vec<Descriptor>,
-    pub room_type: RoomType,
-    pub fixture_positions: Vec<FixturePositionView>,
-    pub dimensions: Dimensions,
-    pub npc_positions: Vec<NpcPositionView>,
     pub flavour: Option<Flavour>,
 }
 
@@ -72,76 +50,7 @@ fn get_count_text(original_count: &usize, current_count: &usize) -> String {
     }
 }
 
-#[derive(Clone, Debug)]
-pub struct RoomViewArgs {
-    pub can_see_hidden: bool,
-    pub can_see_packed: bool,
-    pub knows_character_health: bool,
-    pub knows_names: bool,
-}
-
 impl Room {
-    pub fn quick_look(&self) -> RoomView {
-        let npc_position_args = NpcPositionViewArgs {
-            character_args: CharacterViewArgs {
-                knows_health: false,
-                knows_species: true,
-                knows_life_modifier: true,
-                knows_inventory: false,
-                knows_hidden_in_inventory: false,
-                knows_packed_in_inventory: false,
-            },
-            knows_name: false,
-        };
-
-        self.room_view(npc_position_args, false)
-    }
-
-    pub fn look_at(&self, args: RoomViewArgs, knows_all: bool) -> RoomView {
-        let npc_position_args = NpcPositionViewArgs {
-            character_args: CharacterViewArgs {
-                knows_health: args.knows_character_health,
-                knows_species: true,
-                knows_life_modifier: true,
-                knows_inventory: true,
-                knows_hidden_in_inventory: args.can_see_hidden,
-                knows_packed_in_inventory: args.can_see_packed,
-            },
-            knows_name: args.knows_names,
-        };
-
-        self.room_view(npc_position_args, knows_all)
-    }
-
-    fn room_view(&self, npc_position_args: NpcPositionViewArgs, knows_all: bool) -> RoomView {
-        let fixture_positions: Vec<FixturePositionView> = self
-            .fixture_positions
-            .iter()
-            .map(|fixture_position| fixture_position.look_at())
-            .into_iter()
-            .collect();
-        let npc_positions: Vec<NpcPositionView> = self
-            .npc_positions
-            .iter()
-            .map(|npc_position| npc_position.look_at(&npc_position_args, knows_all))
-            .into_iter()
-            .collect();
-
-        RoomView {
-            identifier: IdentifierView {
-                id: self.identifier.id,
-                name: self.identifier.name.clone(),
-                name_known: true,
-            },
-            descriptors: self.descriptors.clone(),
-            room_type: self.room_type.clone(),
-            fixture_positions,
-            dimensions: self.dimensions.clone(),
-            npc_positions,
-            flavour: self.flavour.clone(),
-        }
-    }
-
     pub fn describe_inhabitants(&self) -> String {
         let non_players: Vec<&NonPlayer> = self
             .npc_positions
