@@ -2,9 +2,10 @@ use rand::Rng;
 use std::ops::RangeInclusive;
 
 use crate::components::{
+    damage::{Attack, Defense},
     items::{descriptor::Descriptor, item::Item, item_type::ItemType},
     material::Material,
-    tag::{Tag, Tagged}, damage::{Attack, Defense},
+    tag::{Tag, Tagged},
 };
 
 use super::{
@@ -262,6 +263,24 @@ fn possible_materials(item_type: &ItemType) -> Vec<Material> {
             Material::Steel,
             Material::Leather,
             Material::Fur,
+        ],
+        ItemType::Halberd => vec![
+            Material::Bone,
+            Material::Wooden,
+            Material::Steel,
+            Material::Iron,
+        ],
+        ItemType::Pike => vec![
+            Material::Bone,
+            Material::Wooden,
+            Material::Steel,
+            Material::Iron,
+        ],
+        ItemType::Spear => vec![
+            Material::Bone,
+            Material::Wooden,
+            Material::Steel,
+            Material::Iron,
         ],
     }
 }

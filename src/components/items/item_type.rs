@@ -26,6 +26,7 @@ pub enum ItemType {
     Dirk,
     Gloves,
     GreatSword,
+    Halberd,
     Hammer,
     Helm,
     LoinCloth,
@@ -33,6 +34,7 @@ pub enum ItemType {
     Mace,
     Mask,
     Morningstar,
+    Pike,
     PlateBoots,
     PlateGauntlets,
     PlateHelmet,
@@ -40,6 +42,7 @@ pub enum ItemType {
     ShortSword,
     Shirt,
     Shackles,
+    Spear,
     Trousers,
     Vest,
     Whip,
@@ -106,6 +109,9 @@ impl Tagged for ItemType {
             ItemType::Trousers => vec![Tag::Clothing],
             ItemType::Vest => vec![Tag::Clothing],
             ItemType::Whip => vec![Tag::Whip, Tag::Rope, Tag::Damage],
+            ItemType::Halberd => vec![Tag::Damage],
+            ItemType::Pike => vec![Tag::Damage],
+            ItemType::Spear => vec![Tag::Damage],
         }
     }
 }
@@ -140,6 +146,9 @@ impl Display for ItemType {
             ItemType::Trousers => "trousers",
             ItemType::Vest => "vest",
             ItemType::Whip => "whip",
+            ItemType::Halberd => "halberd",
+            ItemType::Pike => "pike",
+            ItemType::Spear => "spear",
         };
 
         write!(f, "{}", text)

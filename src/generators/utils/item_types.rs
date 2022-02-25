@@ -10,33 +10,36 @@ pub fn type_is_for_wearable(item_type: &ItemType) -> bool {
 
 pub fn type_inherently_multiple(item_type: &ItemType) -> bool {
     match *item_type {
-        ItemType::Club => false,
-        ItemType::Dagger => false,
-        ItemType::Hammer => false,
-        ItemType::LongSword => false,
-        ItemType::ShortSword => false,
-        ItemType::Buckler => false,
-        ItemType::Dirk => false,
-        ItemType::GreatSword => false,
-        ItemType::Mace => false,
-        ItemType::Morningstar => false,
-        ItemType::Shield => false,
-        ItemType::Whip => false,
-        ItemType::Breastplate => true,
-        ItemType::Cloak => false,
-        ItemType::Shirt => false,
-        ItemType::PlateHelmet => false,
-        ItemType::Shackles => false,
-        ItemType::Mask => false,
-        ItemType::Trousers => true,
-        ItemType::Crown => false,
-        ItemType::Boots => true,
-        ItemType::Gloves => true,
-        ItemType::LoinCloth => false,
-        ItemType::PlateBoots => true,
-        ItemType::PlateGauntlets => true,
-        ItemType::Vest => false,
-        ItemType::Helm => false,
+        ItemType::Club
+        | ItemType::Dagger
+        | ItemType::Hammer
+        | ItemType::LongSword
+        | ItemType::ShortSword
+        | ItemType::Buckler
+        | ItemType::Dirk
+        | ItemType::GreatSword
+        | ItemType::Mace
+        | ItemType::Morningstar
+        | ItemType::Shield
+        | ItemType::Whip
+        | ItemType::Cloak
+        | ItemType::Shirt
+        | ItemType::PlateHelmet
+        | ItemType::Shackles
+        | ItemType::Mask
+        | ItemType::Crown
+        | ItemType::LoinCloth
+        | ItemType::Vest
+        | ItemType::Helm
+        | ItemType::Halberd
+        | ItemType::Pike
+        | ItemType::Spear => false,
+        ItemType::Trousers
+        | ItemType::Breastplate
+        | ItemType::Boots
+        | ItemType::Gloves
+        | ItemType::PlateBoots
+        | ItemType::PlateGauntlets => true,
     }
 }
 

@@ -251,5 +251,8 @@ fn character_location_tags(item_type: &ItemType) -> Vec<LocationTag> {
         ItemType::Shackles => vec![LocationTag::Ankle, LocationTag::Wrist],
         ItemType::Vest => vec![LocationTag::Body],
         ItemType::Helm => vec![LocationTag::Head],
+        ItemType::Halberd => vec![LocationTag::Hand, LocationTag::Back],
+        ItemType::Pike => vec![LocationTag::Hand, LocationTag::Back],
+        ItemType::Spear => vec![LocationTag::Hand, LocationTag::Back],
     }
 }
