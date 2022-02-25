@@ -2,7 +2,7 @@ use std::ops::RangeInclusive;
 
 use rand::Rng;
 
-use crate::components::{size::Size, species::Species, stats::Stats, damage::Health};
+use crate::components::{damage::Health, size::Size, species::Species, stats::Stats};
 
 use super::generator::Generator;
 
@@ -76,8 +76,8 @@ impl StatsPrototype {
             Species::Kobold => Self::kobold(Some(max_health)),
             Species::Ogre => Self::ogre(Some(max_health)),
             Species::Orc => Self::orc(Some(max_health)),
-            Species::Unknown => Self::unknown(Some(max_health)),
             Species::Hobgoblin => Self::hobgoblin(Some(max_health)),
+            _ => Self::unknown(Some(max_health)),
         }
     }
 }
@@ -90,8 +90,9 @@ impl From<&Species> for StatsPrototype {
             Species::Kobold => Self::kobold(None),
             Species::Ogre => Self::ogre(None),
             Species::Orc => Self::orc(None),
-            Species::Unknown => Self::unknown(None),
+            Species::Shadow => Self::unknown(None),
             Species::Hobgoblin => Self::hobgoblin(None),
+            _ => Self::unknown(None),
         }
     }
 }

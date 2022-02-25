@@ -15,25 +15,35 @@ use std::fmt::Display;
 )]
 pub enum Species {
     Bugbear,
+    Dragonkin,
+    Frogkin,
     Goblin,
     Hobgoblin,
     Kobold,
+    Lizardkin,
     Ogre,
     Orc,
-    Unknown,
+    Phantom,
+    Shadow,
 }
 
 impl Display for Species {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match *self {
-            Species::Bugbear => write!(f, "bugbear"),
-            Species::Goblin => write!(f, "goblin"),
-            Species::Kobold => write!(f, "kobold"),
-            Species::Ogre => write!(f, "ogre"),
-            Species::Orc => write!(f, "orc"),
-            Species::Hobgoblin => write!(f, "hobgoblin"),
-            Species::Unknown => write!(f, "unknown creature"),
-        }
+        let text = match *self {
+            Species::Bugbear => "bugbear",
+            Species::Goblin => "goblin",
+            Species::Kobold => "kobold",
+            Species::Ogre => "ogre",
+            Species::Orc => "orc",
+            Species::Hobgoblin => "hobgoblin",
+            Species::Shadow => "shadow",
+            Species::Dragonkin => "dragonkin",
+            Species::Frogkin => "frogkin",
+            Species::Lizardkin => "lizardkin",
+            Species::Phantom => "phantom",
+        };
+
+        write!(f, "{}", text)
     }
 }
 
@@ -73,6 +83,6 @@ mod tests {
 
     #[test]
     fn to_string_when_unknown() {
-        assert_eq!("unknown creature", Species::Unknown.to_string());
+        assert_eq!("unknown creature", Species::Shadow.to_string());
     }
 }

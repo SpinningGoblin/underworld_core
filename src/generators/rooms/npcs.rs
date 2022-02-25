@@ -38,7 +38,7 @@ pub fn build_npc_positions(
             let starter_species = choose_species();
             // Get the group size based on the species.
             let group_size = group_size(&starter_species);
-            let life_modifier = life_modifier();
+            let life_modifier = life_modifier(&starter_species);
             let mut species = starter_species.clone();
             let mut prototype = npc_prototype(&starter_species, life_modifier.clone());
             let npcs: Vec<NonPlayer> = (0..group_size)
@@ -85,7 +85,11 @@ fn switch_species(species: &Species) -> Species {
         Species::Kobold => vec![Species::Kobold, Species::Bugbear],
         Species::Ogre => vec![Species::Ogre],
         Species::Orc => vec![Species::Orc, Species::Bugbear],
-        Species::Unknown => vec![Species::Unknown],
+        Species::Shadow => vec![Species::Shadow],
+        Species::Dragonkin => vec![Species::Dragonkin],
+        Species::Frogkin => vec![Species::Lizardkin, Species::Frogkin],
+        Species::Lizardkin => vec![Species::Lizardkin, Species::Frogkin],
+        Species::Phantom => vec![Species::Phantom],
     };
 
     let index = rng.gen_range(0..choices.len());
@@ -99,18 +103,14 @@ fn choose_species() -> Species {
     let all_species: Vec<Species> = Species::into_enum_iter().collect();
     let mut rng = rand::thread_rng();
     let index = rng.gen_range(0..all_species.len());
-    all_species.get(index).cloned().unwrap_or(Species::Unknown)
+    all_species.get(index).cloned().unwrap_or(Species::Shadow)
 }
 
 fn group_size(species: &Species) -> usize {
     let range = match *species {
-        Species::Bugbear => 1..=2,
-        Species::Goblin => 1..=3,
-        Species::Hobgoblin => 1..=2,
-        Species::Kobold => 1..=3,
-        Species::Ogre => 1..=1,
-        Species::Orc => 1..=1,
-        Species::Unknown => 1..=1,
+        Species::Bugbear | Species::Hobgoblin => 1..=2,
+        Species::Goblin | Species::Kobold => 1..=3,
+        _ => 1..=1,
     };
 
     let mut rng = rand::thread_rng();
@@ -280,9 +280,13 @@ fn weapon_rack_positions(group_size: usize) -> Vec<NpcPositionDescriptor> {
 
 const UNDEAD_CHANCE: usize = 15;
 
-fn life_modifier() -> Option<LifeModifier> {
+fn life_modifier(species: &Species) -> Option<LifeModifier> {
     let mut rng = rand::thread_rng();
     let roll: usize = rng.gen_range(0..=100);
+
+    if matches!(species, &Species::Phantom | &Species::Shadow) {
+        return None;
+    }
 
     if roll < UNDEAD_CHANCE {
         let type_roll: usize = rng.gen_range(0..=100);

@@ -54,10 +54,10 @@ impl CharacterPrototype {
             Species::Kobold,
             Species::Ogre,
             Species::Orc,
-            Species::Unknown,
+            Species::Shadow,
         ];
         let index = rng.gen_range(0..all_species.len());
-        let species = all_species.get(index).cloned().unwrap_or(Species::Unknown);
+        let species = all_species.get(index).cloned().unwrap_or(Species::Shadow);
 
         basic_character(species)
     }
@@ -70,10 +70,10 @@ impl CharacterPrototype {
             Species::Kobold,
             Species::Ogre,
             Species::Orc,
-            Species::Unknown,
+            Species::Shadow,
         ];
         let index = rng.gen_range(0..all_species.len());
-        let species = all_species.get(index).cloned().unwrap_or(Species::Unknown);
+        let species = all_species.get(index).cloned().unwrap_or(Species::Shadow);
 
         overloaded_character(species)
     }
