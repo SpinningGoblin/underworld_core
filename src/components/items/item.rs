@@ -4,6 +4,8 @@ use std::fmt::Display;
 use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
+#[cfg(feature = "openapi")]
+use poem_openapi::Object;
 
 use crate::components::{
     damage::{Attack, Defense},
@@ -41,6 +43,7 @@ pub struct Item {
     derive(Deserialize, Serialize),
     serde(rename_all = "snake_case")
 )]
+#[cfg_attr(feature = "openapi", derive(Object))]
 pub struct ItemView {
     pub item_type: ItemType,
     #[cfg_attr(feature = "serialization", serde(default))]

@@ -5,6 +5,8 @@ use bevy_ecs::prelude::Component;
 use enum_iterator::IntoEnumIterator;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
+#[cfg(feature = "openapi")]
+use poem_openapi::Enum;
 
 use crate::utils::sentences::first_letter_to_upper_case;
 
@@ -15,6 +17,7 @@ use crate::utils::sentences::first_letter_to_upper_case;
     derive(Deserialize, Serialize),
     serde(rename_all = "snake_case")
 )]
+#[cfg_attr(feature = "openapi", derive(Enum), oai(rename_all ="snake_case"))]
 pub enum Flavour {
     AStrangeBreezeBlows,
     MoldMossCoversWalls,

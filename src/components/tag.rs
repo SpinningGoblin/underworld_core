@@ -2,6 +2,8 @@
 use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
+#[cfg(feature = "openapi")]
+use poem_openapi::Enum;
 
 pub trait Tagged {
     fn tags(&self) -> Vec<Tag>;
@@ -14,6 +16,7 @@ pub trait Tagged {
     derive(Deserialize, Serialize),
     serde(rename_all = "snake_case")
 )]
+#[cfg_attr(feature = "openapi", derive(Enum), oai(rename_all ="snake_case"))]
 pub enum Tag {
     Accessory,
     Armour,

@@ -3,6 +3,8 @@ use bevy_ecs::prelude::Component;
 use enum_iterator::IntoEnumIterator;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
+#[cfg(feature = "openapi")]
+use poem_openapi::Enum;
 
 use std::fmt::Display;
 
@@ -13,6 +15,7 @@ use std::fmt::Display;
     derive(Deserialize, Serialize),
     serde(rename_all = "snake_case")
 )]
+#[cfg_attr(feature = "openapi", derive(Enum), oai(rename_all ="snake_case"))]
 pub enum Species {
     Bugbear,
     Dragonkin,

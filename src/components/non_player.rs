@@ -2,6 +2,8 @@
 use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
+#[cfg(feature = "openapi")]
+use poem_openapi::Object;
 
 use super::{
     character::{Character, CharacterView, CharacterViewArgs},
@@ -19,6 +21,7 @@ pub struct NonPlayer {
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
+#[cfg_attr(feature = "openapi", derive(Object))]
 pub struct NonPlayerView {
     pub character: CharacterView,
     pub identifier: IdentifierView,
@@ -33,13 +36,13 @@ impl NonPlayer {
     ) -> NonPlayerView {
         let identifier = if knows_name || knows_all {
             IdentifierView {
-                id: self.identifier.id,
+                id: self.identifier.id.to_string(),
                 name: self.identifier.name.clone(),
                 name_known: true,
             }
         } else {
             IdentifierView {
-                id: self.identifier.id,
+                id: self.identifier.id.to_string(),
                 name: None,
                 name_known: false,
             }

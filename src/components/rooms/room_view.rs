@@ -2,6 +2,8 @@
 use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
+#[cfg(feature = "openapi")]
+use poem_openapi::Object;
 
 use crate::components::{character::CharacterViewArgs, identifier::IdentifierView};
 
@@ -18,6 +20,7 @@ use super::{
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
+#[cfg_attr(feature = "openapi", derive(Object))]
 pub struct RoomView {
     pub identifier: IdentifierView,
     pub descriptors: Vec<Descriptor>,
@@ -85,7 +88,7 @@ impl Room {
 
         RoomView {
             identifier: IdentifierView {
-                id: self.identifier.id,
+                id: self.identifier.id.to_string(),
                 name: self.identifier.name.clone(),
                 name_known: true,
             },

@@ -2,6 +2,8 @@
 use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
+#[cfg(feature = "openapi")]
+use poem_openapi::Object;
 use uuid::Uuid;
 
 use std::fmt::Display;
@@ -18,8 +20,9 @@ pub struct Identifier {
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
+#[cfg_attr(feature = "openapi", derive(Object))]
 pub struct IdentifierView {
-    pub id: Uuid,
+    pub id: String,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub name: Option<String>,
     pub name_known: bool,

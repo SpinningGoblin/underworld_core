@@ -5,6 +5,8 @@ use bevy_ecs::prelude::Component;
 use enum_iterator::IntoEnumIterator;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
+#[cfg(feature = "openapi")]
+use poem_openapi::Enum;
 
 #[derive(Clone, Debug, IntoEnumIterator, PartialEq)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -13,6 +15,7 @@ use serde::{Deserialize, Serialize};
     derive(Deserialize, Serialize),
     serde(rename_all = "snake_case")
 )]
+#[cfg_attr(feature = "openapi", derive(Enum), oai(rename_all ="snake_case"))]
 pub enum Descriptor {
     Beaten,
     Bleached,

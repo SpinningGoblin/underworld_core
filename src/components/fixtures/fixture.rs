@@ -4,6 +4,8 @@ use std::fmt::Display;
 use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
+#[cfg(feature = "openapi")]
+use poem_openapi::Object;
 
 use crate::components::{
     identifier::{Identifier, IdentifierView},
@@ -37,6 +39,7 @@ pub struct Fixture {
     derive(Deserialize, Serialize),
     serde(rename_all = "snake_case")
 )]
+#[cfg_attr(feature = "openapi", derive(Object))]
 pub struct FixtureView {
     pub identifier: IdentifierView,
     pub fixture_type: FixtureType,
@@ -50,7 +53,7 @@ impl Fixture {
     pub fn look_at(&self) -> FixtureView {
         FixtureView {
             identifier: IdentifierView {
-                id: self.identifier.id,
+                id: self.identifier.id.to_string(),
                 name: self.identifier.name.clone(),
                 name_known: true,
             },
