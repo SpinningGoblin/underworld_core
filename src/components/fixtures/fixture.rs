@@ -2,10 +2,10 @@ use std::fmt::Display;
 
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
-#[cfg(feature = "serialization")]
-use serde::{Deserialize, Serialize};
 #[cfg(feature = "openapi")]
 use poem_openapi::Object;
+#[cfg(feature = "serialization")]
+use serde::{Deserialize, Serialize};
 
 use crate::components::{
     identifier::{Identifier, IdentifierView},
