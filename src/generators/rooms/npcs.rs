@@ -41,7 +41,7 @@ pub fn build_npc_positions(
             let life_modifier = life_modifier(&starter_species);
             let mut species = starter_species.clone();
             let mut prototype = npc_prototype(&starter_species, life_modifier.clone());
-            let npcs: Vec<NonPlayer> = (0..group_size)
+            let mut npcs: Vec<NonPlayer> = (0..group_size)
                 .map(|index| {
                     if index > 0 {
                         species = switch_species(&species);
@@ -51,9 +51,19 @@ pub fn build_npc_positions(
                 })
                 .collect();
 
+            let position_descriptor = position_descriptor(npcs.len(), &fixtures_in_room);
+
+            if position_descriptor == Some(NpcPositionDescriptor::LyingInPoolBlood)
+                && life_modifier == None
+            {
+                npcs.iter_mut().for_each(|npc| {
+                    npc.kill();
+                });
+            }
+
             NpcPosition {
                 group_descriptor: group_descriptor(npcs.len()),
-                position_descriptor: position_descriptor(npcs.len(), &fixtures_in_room),
+                position_descriptor,
                 npcs,
             }
         })
@@ -80,16 +90,13 @@ fn switch_species(species: &Species) -> Species {
 
     let choices = match *species {
         Species::Bugbear => vec![Species::Kobold, Species::Bugbear, Species::Orc],
-        Species::Goblin => vec![Species::Goblin, Species::Hobgoblin],
-        Species::Hobgoblin => vec![Species::Goblin, Species::Hobgoblin],
+        Species::Goblin | Species::Hobgoblin => vec![Species::Goblin, Species::Hobgoblin],
         Species::Kobold => vec![Species::Kobold, Species::Bugbear],
-        Species::Ogre => vec![Species::Ogre],
         Species::Orc => vec![Species::Orc, Species::Bugbear],
-        Species::Shadow => vec![Species::Shadow],
-        Species::Dragonkin => vec![Species::Dragonkin],
-        Species::Frogkin => vec![Species::Lizardkin, Species::Frogkin],
-        Species::Lizardkin => vec![Species::Lizardkin, Species::Frogkin],
-        Species::Phantom => vec![Species::Phantom],
+        Species::Frogkin | Species::Lizardkin | Species::Turtlekin => {
+            vec![Species::Lizardkin, Species::Frogkin, Species::Turtlekin]
+        }
+        _ => vec![species.clone()],
     };
 
     let index = rng.gen_range(0..choices.len());
@@ -181,6 +188,7 @@ fn other_positions(group_size: usize) -> Vec<NpcPositionDescriptor> {
             NpcPositionDescriptor::IsGlaringAtYouFromNearby,
             NpcPositionDescriptor::InCornerStands,
             NpcPositionDescriptor::IsStandingAround,
+            NpcPositionDescriptor::LyingInPoolBlood,
         ]
     } else {
         vec![
