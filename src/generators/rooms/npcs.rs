@@ -53,7 +53,7 @@ pub fn build_npc_positions(
 
             let position_descriptor = position_descriptor(npcs.len(), &fixtures_in_room);
 
-            if position_descriptor == Some(NpcPositionDescriptor::LyingInPoolBlood) {
+            if position_descriptor == Some(NpcPositionDescriptor::IsLyingInPoolBlood) {
                 npcs.iter_mut().for_each(|npc| {
                     if !matches!(&npc.character.species, Species::Phantom | Species::Shadow)
                         && npc.character.life_modifier == None
@@ -190,7 +190,7 @@ fn other_positions(group_size: usize) -> Vec<NpcPositionDescriptor> {
             NpcPositionDescriptor::IsGlaringAtYouFromNearby,
             NpcPositionDescriptor::InCornerStands,
             NpcPositionDescriptor::IsStandingAround,
-            NpcPositionDescriptor::LyingInPoolBlood,
+            NpcPositionDescriptor::IsLyingInPoolBlood,
         ]
     } else {
         vec![
