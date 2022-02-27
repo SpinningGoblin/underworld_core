@@ -128,6 +128,21 @@ impl Character {
             _ => "".to_string(),
         }
     }
+
+    pub fn get_current_health(&self) -> Option<i32> {
+        self.stats.health.as_ref().map(|health| health.current)
+    }
+
+    pub fn damage(&mut self, damage: i32) {
+        if let Some(mut health) = self.stats.health.as_mut() {
+            if damage >= health.current {
+                health.current = 0;
+                self.life_modifier = Some(LifeModifier::Dead);
+            } else {
+                health.current -= damage;
+            }
+        }
+    }
 }
 
 #[cfg(test)]
