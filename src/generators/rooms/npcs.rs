@@ -53,11 +53,13 @@ pub fn build_npc_positions(
 
             let position_descriptor = position_descriptor(npcs.len(), &fixtures_in_room);
 
-            if position_descriptor == Some(NpcPositionDescriptor::LyingInPoolBlood)
-                && life_modifier == None
-            {
+            if position_descriptor == Some(NpcPositionDescriptor::LyingInPoolBlood) {
                 npcs.iter_mut().for_each(|npc| {
-                    npc.kill();
+                    if !matches!(&npc.character.species, Species::Phantom | Species::Shadow)
+                        && npc.character.life_modifier == None
+                    {
+                        npc.kill();
+                    }
                 });
             }
 
