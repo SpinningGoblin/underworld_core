@@ -42,4 +42,20 @@ impl Identifier {
     pub fn set_name(&mut self, name: &str) {
         self.name = Some(name.to_string());
     }
+
+    pub fn to_view(&self, name_known: bool) -> IdentifierView {
+        if name_known {
+            IdentifierView {
+                id: self.id.to_string(),
+                name: self.name.clone(),
+                name_known,
+            }
+        } else {
+            IdentifierView {
+                id: self.id.to_string(),
+                name: None,
+                name_known,
+            }
+        }
+    }
 }

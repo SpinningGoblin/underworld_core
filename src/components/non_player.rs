@@ -34,19 +34,7 @@ impl NonPlayer {
         knows_name: bool,
         knows_all: bool,
     ) -> NonPlayerView {
-        let identifier = if knows_name || knows_all {
-            IdentifierView {
-                id: self.identifier.id.to_string(),
-                name: self.identifier.name.clone(),
-                name_known: true,
-            }
-        } else {
-            IdentifierView {
-                id: self.identifier.id.to_string(),
-                name: None,
-                name_known: false,
-            }
-        };
+        let identifier = self.identifier.to_view(knows_name || knows_all);
 
         NonPlayerView {
             identifier,

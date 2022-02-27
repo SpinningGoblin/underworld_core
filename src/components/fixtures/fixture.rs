@@ -52,11 +52,7 @@ pub struct FixtureView {
 impl Fixture {
     pub fn look_at(&self) -> FixtureView {
         FixtureView {
-            identifier: IdentifierView {
-                id: self.identifier.id.to_string(),
-                name: self.identifier.name.clone(),
-                name_known: true,
-            },
+            identifier: self.identifier.to_view(true),
             fixture_type: self.fixture_type.clone(),
             material: self.material.clone(),
             size: self.size.clone(),

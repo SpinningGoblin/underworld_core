@@ -87,11 +87,7 @@ impl Room {
             .collect();
 
         RoomView {
-            identifier: IdentifierView {
-                id: self.identifier.id.to_string(),
-                name: self.identifier.name.clone(),
-                name_known: true,
-            },
+            identifier: self.identifier.to_view(true),
             descriptors: self.descriptors.clone(),
             room_type: self.room_type.clone(),
             fixture_positions,
