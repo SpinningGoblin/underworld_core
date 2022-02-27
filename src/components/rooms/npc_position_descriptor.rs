@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 
 use super::descriptor_position::DescriptorPosition;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, PartialEq, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
     feature = "serialization",
@@ -51,6 +51,7 @@ pub enum NpcPositionDescriptor {
     IsCrouchedInTheCenterOfRoom,
     IsSittingAndDozingInCenterOfRoom,
     SittingInAChairIs,
+    LyingInPoolBlood,
 }
 
 impl NpcPositionDescriptor {
@@ -89,6 +90,7 @@ impl NpcPositionDescriptor {
             NpcPositionDescriptor::SittingInAChairIs => DescriptorPosition::Pre,
             NpcPositionDescriptor::IsRummagingThroughAChest => DescriptorPosition::Post,
             NpcPositionDescriptor::StandOnTheTable => DescriptorPosition::Post,
+            NpcPositionDescriptor::LyingInPoolBlood => DescriptorPosition::Post,
         }
     }
 
@@ -143,6 +145,7 @@ impl Display for NpcPositionDescriptor {
             NpcPositionDescriptor::IsRummagingThroughAChest => "is rummaging through a chest",
             NpcPositionDescriptor::InTheCornerAre => "in the corner are",
             NpcPositionDescriptor::StandOnTheTable => "stand on the table",
+            NpcPositionDescriptor::LyingInPoolBlood => "lying in a pool of blood",
         };
 
         write!(f, "{}", text)
