@@ -28,7 +28,7 @@ impl LookAtTarget {
     }
 
     fn id(&self, value: &str) -> Option<Uuid> {
-        Uuid::from_str(value).map_or(None, |id| Some(id))
+        Uuid::from_str(value).ok()
     }
 }
 
