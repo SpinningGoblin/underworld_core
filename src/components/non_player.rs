@@ -58,4 +58,10 @@ impl NonPlayer {
 
         descriptions.join("")
     }
+
+    pub fn kill(&mut self) {
+        if let Some(current) = self.character.get_current_health() {
+            self.character.damage(current)
+        }
+    }
 }
