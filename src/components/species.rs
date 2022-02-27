@@ -24,10 +24,13 @@ pub enum Species {
     Hobgoblin,
     Kobold,
     Lizardkin,
+    Moblin,
     Ogre,
     Orc,
     Phantom,
+    Rockoblin,
     Shadow,
+    Turtlekin,
 }
 
 impl Display for Species {
@@ -44,6 +47,9 @@ impl Display for Species {
             Species::Frogkin => "frogkin",
             Species::Lizardkin => "lizardkin",
             Species::Phantom => "phantom",
+            Species::Rockoblin => "rockoblin",
+            Species::Moblin => "moblin",
+            Species::Turtlekin => "turtlekin",
         };
 
         write!(f, "{}", text)
