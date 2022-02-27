@@ -26,6 +26,7 @@ fn name_parts() -> Vec<&'static str> {
     vec![
         "gon", "gro", "grub", "num", "gorg", "zerg", "and", "por", "mer", "mog", "og", "zola",
         "mar", "ar", "la", "zo", "mank", "mang", "grap", "log", "lorg", "glor", "bor", "bob",
-        "plo", "nor", "norn", "mac", "oor", "onk", "rok", "ron",
+        "plo", "nor", "norn", "mac", "oor", "onk", "rok", "ron", "car", "toe", "pan", "flick",
+        "lerg", "wod", "saw", "grum", "crum", "rin", "bal", "rog",
     ]
 }
