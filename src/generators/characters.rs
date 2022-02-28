@@ -8,7 +8,7 @@ use crate::components::{
 
 use self::prototypes::{basic_character, overloaded_character, undead_character};
 
-use super::{generator::Generator, stats::StatsPrototype};
+use super::{generator::Generator, stats::build_default_health_rolls};
 
 pub struct CharacterPrototype {
     pub inventory_generator: Box<dyn Generator<Inventory>>,
@@ -87,7 +87,7 @@ impl Generator<Character> for CharacterPrototype {
             None
         };
 
-        let stats_generator = StatsPrototype::from(&self.species);
+        let stats_generator = build_default_health_rolls(&self.species);
         let stats = stats_generator.generate();
 
         Character {
