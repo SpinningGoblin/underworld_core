@@ -1,12 +1,13 @@
 use rand::Rng;
-use uuid::Uuid;
 use std::ops::RangeInclusive;
+use uuid::Uuid;
 
 use crate::components::{
     damage::{Attack, Defense},
+    identifier::Identifier,
     items::{descriptor::Descriptor, item::Item, item_type::ItemType},
     material::Material,
-    tag::{Tag, Tagged}, identifier::Identifier,
+    tag::{Tag, Tagged},
 };
 
 use super::{

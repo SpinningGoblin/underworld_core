@@ -1,13 +1,13 @@
 use rand::Rng;
 
-use crate::components::items::item::Item;
+use crate::components::items::item::ItemView;
 
 pub struct SentenceStarters {
     singular: Vec<String>,
     plural: Vec<String>,
 }
 
-pub fn starters_and_joiners(item: &Item) -> (SentenceStarters, SentenceJoiners) {
+pub fn starters_and_joiners(item: &ItemView) -> (SentenceStarters, SentenceJoiners) {
     if item.is_weapon() {
         (
             SentenceStarters::weapon_starters(),

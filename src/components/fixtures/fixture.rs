@@ -32,6 +32,18 @@ pub struct Fixture {
     pub descriptors: Vec<Descriptor>,
 }
 
+impl Fixture {
+    pub fn look_at(&self) -> FixtureView {
+        FixtureView {
+            identifier: self.identifier.to_view(true),
+            fixture_type: self.fixture_type.clone(),
+            material: self.material.clone(),
+            size: self.size.clone(),
+            descriptors: self.descriptors.clone(),
+        }
+    }
+}
+
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
@@ -49,20 +61,14 @@ pub struct FixtureView {
     pub descriptors: Vec<Descriptor>,
 }
 
-impl Fixture {
-    pub fn look_at(&self) -> FixtureView {
-        FixtureView {
-            identifier: self.identifier.to_view(true),
-            fixture_type: self.fixture_type.clone(),
-            material: self.material.clone(),
-            size: self.size.clone(),
-            descriptors: self.descriptors.clone(),
-        }
+impl Display for FixtureView {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.describe())
     }
 }
 
-impl Display for Fixture {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl FixtureView {
+    pub fn describe(&self) -> String {
         let mut descriptions: Vec<String> = Vec::new();
 
         if !self.size.is_average() {
@@ -75,7 +81,7 @@ impl Display for Fixture {
         }
 
         descriptions.push(format!("{}", &self.fixture_type));
-        write!(f, "{}", descriptions.join(" "))
+        descriptions.join(" ")
     }
 }
 
@@ -102,6 +108,6 @@ mod display_tests {
             },
         };
 
-        assert_eq!("steel chest", format!("{}", fixture));
+        assert_eq!("steel chest", format!("{}", fixture.look_at()));
     }
 }

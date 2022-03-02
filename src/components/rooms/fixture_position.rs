@@ -37,7 +37,7 @@ pub struct FixturePositionView {
     pub position_descriptors: Vec<FixturePositionDescriptor>,
 }
 
-impl Display for FixturePosition {
+impl Display for FixturePositionView {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut parts: Vec<String> = Vec::new();
 
@@ -59,20 +59,7 @@ impl Display for FixturePosition {
     }
 }
 
-impl FixturePosition {
-    pub fn look_at(&self) -> FixturePositionView {
-        FixturePositionView {
-            group_descriptor: self.group_descriptor.clone(),
-            fixtures: self
-                .fixtures
-                .iter()
-                .map(|f| f.look_at())
-                .into_iter()
-                .collect(),
-            position_descriptors: self.position_descriptors.clone(),
-        }
-    }
-
+impl FixturePositionView {
     pub fn display_as_sentence(&self) -> String {
         first_letter_to_upper_case(format!("{}.", self))
     }
@@ -89,6 +76,21 @@ impl FixturePosition {
         }
 
         parts.join(" and ")
+    }
+}
+
+impl FixturePosition {
+    pub fn look_at(&self) -> FixturePositionView {
+        FixturePositionView {
+            group_descriptor: self.group_descriptor.clone(),
+            fixtures: self
+                .fixtures
+                .iter()
+                .map(|f| f.look_at())
+                .into_iter()
+                .collect(),
+            position_descriptors: self.position_descriptors.clone(),
+        }
     }
 }
 
@@ -138,7 +140,7 @@ mod tests {
 
         assert_eq!(
             "a table and chairs is in the corner",
-            format!("{}", &fixture_position)
+            format!("{}", &fixture_position.look_at())
         )
     }
 }

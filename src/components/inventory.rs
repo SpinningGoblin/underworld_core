@@ -18,20 +18,6 @@ pub struct Inventory {
     pub equipment: Vec<CharacterItem>,
 }
 
-#[derive(Clone, Debug)]
-#[cfg_attr(feature = "bevy_components", derive(Component))]
-#[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
-#[cfg_attr(feature = "openapi", derive(Object))]
-pub struct InventoryView {
-    pub equipment: Vec<CharacterItemView>,
-}
-
-impl Display for Inventory {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.describe("It", "It"))
-    }
-}
-
 impl Inventory {
     pub fn look_at(
         &self,
@@ -83,7 +69,17 @@ impl Inventory {
             .cloned()
             .collect()
     }
+}
 
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
+#[cfg_attr(feature = "openapi", derive(Object))]
+pub struct InventoryView {
+    pub equipment: Vec<CharacterItemView>,
+}
+
+impl InventoryView {
     pub fn describe(&self, weapon_starter: &str, wearable_starter: &str) -> String {
         let mut descriptions: Vec<String> = Vec::new();
 
@@ -113,12 +109,14 @@ impl Inventory {
 
     fn item_description(
         &self,
-        items: Vec<CharacterItem>,
+        items: Vec<CharacterItemView>,
         none_visible_text: &str,
         starter: &str,
     ) -> String {
-        let visible_items: Vec<&CharacterItem> =
-            items.iter().filter(|weapon| !weapon.is_hidden).collect();
+        let visible_items: Vec<&CharacterItemView> = items
+            .iter()
+            .filter(|character_item| !character_item.is_hidden.unwrap_or(false))
+            .collect();
         if visible_items.is_empty() {
             return format!("{} {}", starter, none_visible_text);
         }
@@ -137,9 +135,14 @@ impl Inventory {
                 item_text.push(format!("{} ", starters.get_starter(item.is_multiple)));
             }
 
-            let description = format!("{} {}", item.item.describe(), item.location_descriptor)
-                .trim_end()
-                .to_string();
+            let description = match &item.location_descriptor {
+                Some(location_descriptor) => {
+                    format!("{} {}", item.item.describe(), location_descriptor)
+                        .trim()
+                        .to_string()
+                }
+                None => item.item.describe(),
+            };
 
             if index == visible_items.len() - 1 && visible_items.len() != 1 {
                 item_text.push(", and ".to_string());
@@ -160,6 +163,28 @@ impl Inventory {
 
         item_text.push(".".to_string());
         item_text.join("")
+    }
+
+    pub fn equipped_wearables(&self) -> Vec<CharacterItemView> {
+        self.equipment
+            .iter()
+            .filter(|item| item.is_wearable() && item.is_equipped())
+            .cloned()
+            .collect()
+    }
+
+    pub fn equipped_weapons(&self) -> Vec<CharacterItemView> {
+        self.equipment
+            .iter()
+            .filter(|item| item.is_weapon() && item.is_equipped())
+            .cloned()
+            .collect()
+    }
+}
+
+impl Display for InventoryView {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.describe("It", "It"))
     }
 }
 
@@ -216,7 +241,7 @@ mod inventory_tests {
             ],
         };
 
-        let description = inventory.to_string();
+        let description = inventory.look_at(true, true, true).to_string();
         assert!(description.contains("a broken long sword"));
         assert!(description.contains(", and"));
         assert!(description.contains("rusty dull short sword sheathed at its hip."));
@@ -243,7 +268,7 @@ mod inventory_tests {
             }],
         };
 
-        let description = inventory.to_string();
+        let description = inventory.look_at(true, true, true).to_string();
         assert!(description.contains("a broken long sword"));
         assert!(!description.contains(", and"));
     }
@@ -287,7 +312,7 @@ mod inventory_tests {
             ],
         };
 
-        let description = inventory.to_string();
+        let description = inventory.look_at(true, true, true).to_string();
         assert!(description.contains("a broken long sword"));
         assert!(!description.contains(", and"));
     }
@@ -314,7 +339,8 @@ mod inventory_tests {
             }],
         };
 
-        let description = inventory.to_string();
+        let view = inventory.look_at(true, true, true);
+        let description = view.to_string();
         assert!(description.contains("set of drab steel plate helmet."));
         assert!(!description.contains(", and"));
     }
@@ -360,7 +386,8 @@ mod inventory_tests {
             ],
         };
 
-        let description = inventory.to_string();
+        let view = inventory.look_at(true, true, true);
+        let description = view.to_string();
         assert!(description.contains("set of drab steel plate"));
         assert!(description.contains("rusty iron shackles dangling from its wrists."));
         assert!(description.contains(", and"));

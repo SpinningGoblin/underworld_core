@@ -1,6 +1,8 @@
 use enum_iterator::IntoEnumIterator;
 use underworld_core::{
-    components::{items::item_type::ItemType, life_modifier::LifeModifier},
+    components::{
+        character::CharacterViewArgs, items::item_type::ItemType, life_modifier::LifeModifier,
+    },
     generators::{
         characters::CharacterPrototype, generator::Generator, inventory::InventoryPrototype,
     },
@@ -24,7 +26,9 @@ pub fn main() {
         has_inventory: true,
     };
 
-    let kobold = kobold_prototype.generate();
+    let kobold = kobold_prototype
+        .generate()
+        .look_at(&CharacterViewArgs::default(), true);
     if let Some(inventory) = &kobold.inventory {
         println!("{}", inventory);
     }

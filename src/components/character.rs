@@ -24,33 +24,6 @@ pub struct Character {
     pub inventory: Option<Inventory>,
 }
 
-#[derive(Clone, Debug)]
-#[cfg_attr(feature = "bevy_components", derive(Component))]
-#[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
-#[cfg_attr(feature = "openapi", derive(Object))]
-pub struct CharacterView {
-    pub stats: StatsView,
-    #[cfg_attr(feature = "serialization", serde(default))]
-    pub species: Option<Species>,
-    pub species_known: bool,
-    #[cfg_attr(feature = "serialization", serde(default))]
-    pub life_modifier: Option<LifeModifier>,
-    pub life_modifier_known: bool,
-    #[cfg_attr(feature = "serialization", serde(default))]
-    pub inventory: Option<InventoryView>,
-    pub inventory_known: bool,
-}
-
-#[derive(Clone, Debug)]
-pub struct CharacterViewArgs {
-    pub knows_health: bool,
-    pub knows_species: bool,
-    pub knows_life_modifier: bool,
-    pub knows_inventory: bool,
-    pub knows_hidden_in_inventory: bool,
-    pub knows_packed_in_inventory: bool,
-}
-
 impl Character {
     pub fn look_at(&self, args: &CharacterViewArgs, knows_all: bool) -> CharacterView {
         let (health, health_known) = if args.knows_health || knows_all {
@@ -101,34 +74,6 @@ impl Character {
         }
     }
 
-    pub fn describe_species(&self) -> String {
-        let mut descriptions: Vec<String> = Vec::new();
-
-        if !self.stats.height.is_average() {
-            descriptions.push(format!("{}", self.stats.height));
-        }
-
-        if let Some(life_modifier) = &self.life_modifier {
-            descriptions.push(life_modifier.to_string());
-        }
-
-        descriptions.push(self.species.to_string());
-        descriptions.join(" ")
-    }
-
-    pub fn describe_inventory(&self, starter: &str) -> String {
-        let sentence_starter = if starter.is_empty() {
-            format!("The {}", self.describe_species())
-        } else {
-            format!("{} {}", starter, self.describe_species())
-        };
-
-        match &self.inventory {
-            Some(inventory) => inventory.describe(&sentence_starter, "It"),
-            _ => "".to_string(),
-        }
-    }
-
     pub fn get_current_health(&self) -> Option<i32> {
         self.stats.health.as_ref().map(|health| health.current)
     }
@@ -145,9 +90,75 @@ impl Character {
     }
 }
 
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
+#[cfg_attr(feature = "openapi", derive(Object))]
+pub struct CharacterView {
+    pub stats: StatsView,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub species: Option<Species>,
+    pub species_known: bool,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub life_modifier: Option<LifeModifier>,
+    pub life_modifier_known: bool,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub inventory: Option<InventoryView>,
+    pub inventory_known: bool,
+}
+
+#[derive(Clone, Debug, Default)]
+pub struct CharacterViewArgs {
+    pub knows_health: bool,
+    pub knows_species: bool,
+    pub knows_life_modifier: bool,
+    pub knows_inventory: bool,
+    pub knows_hidden_in_inventory: bool,
+    pub knows_packed_in_inventory: bool,
+}
+
+impl CharacterView {
+    pub fn describe_species(&self) -> String {
+        let mut descriptions: Vec<String> = Vec::new();
+
+        if !self.stats.height.is_average() {
+            descriptions.push(format!("{}", self.stats.height));
+        }
+
+        if self.life_modifier_known {
+            if let Some(life_modifier) = &self.life_modifier {
+                descriptions.push(format!("{}", life_modifier));
+            }
+        }
+
+        if self.species_known {
+            if let Some(species) = &self.species {
+                descriptions.push(format!("{}", species));
+            }
+        }
+
+        descriptions.join(" ")
+    }
+
+    pub fn describe_inventory(&self, starter: &str) -> String {
+        let sentence_starter = if starter.is_empty() {
+            format!("The {}", self.describe_species())
+        } else {
+            format!("{} {}", starter, self.describe_species())
+        };
+
+        match &self.inventory {
+            Some(inventory) => inventory.describe(&sentence_starter, "It"),
+            _ => "".to_string(),
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::components::{life_modifier::LifeModifier, species::Species, stats::Stats};
+    use crate::components::{
+        character::CharacterViewArgs, life_modifier::LifeModifier, species::Species, stats::Stats,
+    };
 
     use super::Character;
 
@@ -163,7 +174,9 @@ mod tests {
             inventory: None,
         };
 
-        let description = character.describe_species();
+        let description = character
+            .look_at(&CharacterViewArgs::default(), true)
+            .describe_species();
         assert_eq!("tall goblin", description);
     }
 
@@ -179,7 +192,9 @@ mod tests {
             inventory: None,
         };
 
-        let description = character.describe_species();
-        assert_eq!("goblin skeleton", description);
+        let description = character
+            .look_at(&CharacterViewArgs::default(), true)
+            .describe_species();
+        assert_eq!("skeleton goblin", description);
     }
 }

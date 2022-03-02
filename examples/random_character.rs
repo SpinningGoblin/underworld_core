@@ -1,5 +1,8 @@
-use underworld_core::generators::{
-    characters::CharacterPrototype, generator::Generator, non_players::NonPlayerPrototype,
+use underworld_core::{
+    components::character::CharacterViewArgs,
+    generators::{
+        characters::CharacterPrototype, generator::Generator, non_players::NonPlayerPrototype,
+    },
 };
 
 pub fn main() {
@@ -7,7 +10,10 @@ pub fn main() {
         name: None,
         character_generator: Box::new(CharacterPrototype::random_species_overloaded()),
     };
-    let character = prototype.generate().character;
+    let character = prototype
+        .generate()
+        .character
+        .look_at(&CharacterViewArgs::default(), true);
     if let Some(inventory) = &character.inventory {
         println!("{}", inventory);
     }

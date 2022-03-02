@@ -18,15 +18,6 @@ pub struct NonPlayer {
     pub identifier: Identifier,
 }
 
-#[derive(Clone, Debug)]
-#[cfg_attr(feature = "bevy_components", derive(Component))]
-#[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
-#[cfg_attr(feature = "openapi", derive(Object))]
-pub struct NonPlayerView {
-    pub character: CharacterView,
-    pub identifier: IdentifierView,
-}
-
 impl NonPlayer {
     pub fn look_at(
         &self,
@@ -42,6 +33,27 @@ impl NonPlayer {
         }
     }
 
+    pub fn set_name(&mut self, name: &str) {
+        self.identifier.set_name(name);
+    }
+
+    pub fn kill(&mut self) {
+        if let Some(current) = self.character.get_current_health() {
+            self.character.damage(current)
+        }
+    }
+}
+
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
+#[cfg_attr(feature = "openapi", derive(Object))]
+pub struct NonPlayerView {
+    pub character: CharacterView,
+    pub identifier: IdentifierView,
+}
+
+impl NonPlayerView {
     pub fn describe_name(&self) -> String {
         match &self.identifier.name {
             Some(name) => format!("It says its name is {}", name),
@@ -49,19 +61,9 @@ impl NonPlayer {
         }
     }
 
-    pub fn set_name(&mut self, name: &str) {
-        self.identifier.set_name(name);
-    }
-
     pub fn describe(&self, starter: &str) -> String {
         let descriptions: Vec<String> = vec![self.character.describe_inventory(starter)];
 
         descriptions.join("")
-    }
-
-    pub fn kill(&mut self) {
-        if let Some(current) = self.character.get_current_health() {
-            self.character.damage(current)
-        }
     }
 }
