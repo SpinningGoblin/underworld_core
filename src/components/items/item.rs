@@ -9,6 +9,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::components::{
     damage::{Attack, Defense},
+    identifier::{Identifier, IdentifierView},
     material::Material,
     tag::Tag,
 };
@@ -23,6 +24,7 @@ use super::{descriptor::Descriptor, item_type::ItemType};
     serde(rename_all = "snake_case")
 )]
 pub struct Item {
+    pub identifier: Identifier,
     pub item_type: ItemType,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub tags: Vec<Tag>,
@@ -45,6 +47,7 @@ pub struct Item {
 )]
 #[cfg_attr(feature = "openapi", derive(Object))]
 pub struct ItemView {
+    pub identifier: IdentifierView,
     pub item_type: ItemType,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub tags: Vec<Tag>,
@@ -97,6 +100,7 @@ impl Item {
         };
 
         ItemView {
+            identifier: self.identifier.to_view(true),
             item_type: self.item_type.clone(),
             tags: self.tags.clone(),
             descriptors,

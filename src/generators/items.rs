@@ -1,11 +1,12 @@
 use rand::Rng;
+use uuid::Uuid;
 use std::ops::RangeInclusive;
 
 use crate::components::{
     damage::{Attack, Defense},
     items::{descriptor::Descriptor, item::Item, item_type::ItemType},
     material::Material,
-    tag::{Tag, Tagged},
+    tag::{Tag, Tagged}, identifier::Identifier,
 };
 
 use super::{
@@ -44,6 +45,10 @@ impl Generator<Item> for ItemPrototype {
         let tags = self.item_type.tags();
 
         Item {
+            identifier: Identifier {
+                id: Uuid::new_v4(),
+                name: None,
+            },
             item_type: self.item_type.clone(),
             tags,
             descriptors,

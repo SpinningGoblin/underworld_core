@@ -166,6 +166,7 @@ impl Inventory {
 #[cfg(test)]
 mod inventory_tests {
     use crate::components::{
+        identifier::Identifier,
         items::{
             character_item::CharacterItem, descriptor::Descriptor, item::Item, item_type::ItemType,
             location_descriptor::LocationDescriptor, location_tag::LocationTag,
@@ -179,6 +180,7 @@ mod inventory_tests {
     #[test]
     fn display_with_multiple_weapons() {
         let long_sword = Item {
+            identifier: Identifier::default(),
             attack: None,
             item_type: ItemType::LongSword,
             descriptors: vec![Descriptor::Broken],
@@ -187,6 +189,7 @@ mod inventory_tests {
             tags: vec![Tag::Blade],
         };
         let short_sword = Item {
+            identifier: Identifier::default(),
             attack: None,
             item_type: ItemType::ShortSword,
             descriptors: vec![Descriptor::Rusty, Descriptor::Dull],
@@ -222,6 +225,7 @@ mod inventory_tests {
     #[test]
     fn display_with_one_weapon() {
         let long_sword = Item {
+            identifier: Identifier::default(),
             attack: None,
             item_type: ItemType::LongSword,
             descriptors: vec![Descriptor::Broken],
@@ -247,6 +251,7 @@ mod inventory_tests {
     #[test]
     fn display_with_hidden_weapon_does_not_describe_them() {
         let long_sword = Item {
+            identifier: Identifier::default(),
             attack: None,
             item_type: ItemType::LongSword,
             descriptors: vec![Descriptor::Broken],
@@ -255,6 +260,7 @@ mod inventory_tests {
             defense: None,
         };
         let short_sword = Item {
+            identifier: Identifier::default(),
             attack: None,
             item_type: ItemType::ShortSword,
             descriptors: vec![Descriptor::Rusty, Descriptor::Dull],
@@ -289,6 +295,7 @@ mod inventory_tests {
     #[test]
     fn display_with_one_wearable() {
         let chain_mail = Item {
+            identifier: Identifier::default(),
             item_type: ItemType::PlateHelmet,
             material: Some(Material::Steel),
             descriptors: vec![Descriptor::SetOf, Descriptor::Drab],
@@ -315,6 +322,7 @@ mod inventory_tests {
     #[test]
     fn display_with_two_wearables() {
         let chain_mail = Item {
+            identifier: Identifier::default(),
             item_type: ItemType::PlateHelmet,
             material: Some(Material::Steel),
             descriptors: vec![Descriptor::SetOf, Descriptor::Drab],
@@ -324,6 +332,7 @@ mod inventory_tests {
         };
 
         let shackles = Item {
+            identifier: Identifier::default(),
             item_type: ItemType::Shackles,
             material: Some(Material::Iron),
             descriptors: vec![Descriptor::Rusty],
