@@ -8,7 +8,8 @@ use super::{character::Character, identifier::Identifier};
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
-pub struct Player {
+pub struct PlayerCharacter {
     pub character: Character,
     pub identifier: Identifier,
+    pub username: String,
 }
