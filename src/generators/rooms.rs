@@ -6,7 +6,6 @@ use std::ops::RangeInclusive;
 
 use enum_iterator::IntoEnumIterator;
 use rand::Rng;
-use uuid::Uuid;
 
 use crate::components::{
     identifier::Identifier,
@@ -53,10 +52,7 @@ impl Generator<Room> for RoomPrototype {
         Room {
             dimensions: build_dimensions(),
             descriptors,
-            identifier: Identifier {
-                id: Uuid::new_v4(),
-                name: None,
-            },
+            identifier: Identifier::just_id(),
             room_type: self.room_type.clone(),
             fixture_positions,
             npc_positions: build_npc_positions(&self.room_type, used_fixtures),

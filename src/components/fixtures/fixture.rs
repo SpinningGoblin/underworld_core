@@ -87,8 +87,6 @@ impl FixtureView {
 
 #[cfg(test)]
 mod display_tests {
-    use uuid::Uuid;
-
     use crate::components::{
         fixtures::fixture_type::FixtureType, identifier::Identifier, material::Material,
     };
@@ -102,10 +100,7 @@ mod display_tests {
             material: Some(Material::Steel),
             size: crate::components::size::Size::Average,
             descriptors: Vec::new(),
-            identifier: Identifier {
-                id: Uuid::new_v4(),
-                name: None,
-            },
+            identifier: Identifier::default(),
         };
 
         assert_eq!("steel chest", format!("{}", fixture.look_at()));

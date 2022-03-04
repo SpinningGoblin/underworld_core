@@ -96,8 +96,6 @@ impl FixturePosition {
 
 #[cfg(test)]
 mod tests {
-    use uuid::Uuid;
-
     use crate::components::{
         fixtures::{fixture::Fixture, fixture_type::FixtureType},
         identifier::Identifier,
@@ -113,20 +111,14 @@ mod tests {
     #[test]
     fn display() {
         let table = Fixture {
-            identifier: Identifier {
-                id: Uuid::new_v4(),
-                name: None,
-            },
+            identifier: Identifier::default(),
             fixture_type: FixtureType::Table,
             material: None,
             size: Size::Average,
             descriptors: Vec::new(),
         };
         let chair = Fixture {
-            identifier: Identifier {
-                id: Uuid::new_v4(),
-                name: None,
-            },
+            identifier: Identifier::default(),
             fixture_type: FixtureType::Chair,
             material: None,
             size: Size::Average,
