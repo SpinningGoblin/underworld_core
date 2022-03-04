@@ -39,6 +39,13 @@ impl Display for Identifier {
 }
 
 impl Identifier {
+    pub fn just_id() -> Self {
+        Self {
+            id: Uuid::new_v4(),
+            name: None,
+        }
+    }
+
     pub fn set_name(&mut self, name: &str) {
         self.name = Some(name.to_string());
     }
