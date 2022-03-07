@@ -25,55 +25,6 @@ pub struct Character {
 }
 
 impl Character {
-    pub fn look_at(&self, args: &CharacterViewArgs, knows_all: bool) -> CharacterView {
-        let (health, health_known) = if args.knows_health || knows_all {
-            (self.stats.health.clone(), true)
-        } else {
-            (None, false)
-        };
-
-        let (species, species_known) = if args.knows_species || knows_all {
-            (Some(self.species.clone()), true)
-        } else {
-            (None, false)
-        };
-
-        let (life_modifier, life_modifier_known) = if args.knows_life_modifier || knows_all {
-            (self.life_modifier.clone(), true)
-        } else {
-            (None, false)
-        };
-
-        let (inventory, inventory_known) = if args.knows_inventory || knows_all {
-            (
-                self.inventory.clone().map(|inv| {
-                    inv.look_at(
-                        args.knows_hidden_in_inventory,
-                        args.knows_packed_in_inventory,
-                        knows_all,
-                    )
-                }),
-                true,
-            )
-        } else {
-            (None, false)
-        };
-
-        CharacterView {
-            stats: StatsView {
-                health,
-                health_known,
-                height: self.stats.height.clone(),
-            },
-            species,
-            species_known,
-            life_modifier,
-            life_modifier_known,
-            inventory,
-            inventory_known,
-        }
-    }
-
     pub fn get_current_health(&self) -> Option<i32> {
         self.stats.health.as_ref().map(|health| health.current)
     }
@@ -156,8 +107,12 @@ impl CharacterView {
 
 #[cfg(test)]
 mod tests {
-    use crate::components::{
-        character::CharacterViewArgs, life_modifier::LifeModifier, species::Species, stats::Stats,
+    use crate::{
+        components::{
+            character::CharacterViewArgs, life_modifier::LifeModifier, species::Species,
+            stats::Stats,
+        },
+        systems::view::character::look_at,
     };
 
     use super::Character;
@@ -174,9 +129,8 @@ mod tests {
             inventory: None,
         };
 
-        let description = character
-            .look_at(&CharacterViewArgs::default(), true)
-            .describe_species();
+        let description =
+            look_at(&character, &CharacterViewArgs::default(), true).describe_species();
         assert_eq!("tall goblin", description);
     }
 
@@ -192,9 +146,8 @@ mod tests {
             inventory: None,
         };
 
-        let description = character
-            .look_at(&CharacterViewArgs::default(), true)
-            .describe_species();
+        let description =
+            look_at(&character, &CharacterViewArgs::default(), true).describe_species();
         assert_eq!("skeleton goblin", description);
     }
 }

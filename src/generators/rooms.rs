@@ -95,7 +95,10 @@ impl RoomType {
 
 #[cfg(test)]
 mod tests {
-    use crate::{components::rooms::room_view::RoomViewArgs, generators::generator::Generator};
+    use crate::{
+        components::rooms::room_view::RoomViewArgs, generators::generator::Generator,
+        systems::view::room::look_at,
+    };
 
     use super::RoomPrototype;
 
@@ -103,6 +106,7 @@ mod tests {
     fn generate_room() {
         let room_prototype = RoomPrototype::build_random();
         let room = room_prototype.generate();
-        assert!(!format!("{}", &room.look_at(RoomViewArgs::default(), true)).is_empty());
+
+        assert!(!format!("{}", look_at(&room, RoomViewArgs::default(), true)).is_empty());
     }
 }

@@ -32,18 +32,6 @@ pub struct Fixture {
     pub descriptors: Vec<Descriptor>,
 }
 
-impl Fixture {
-    pub fn look_at(&self) -> FixtureView {
-        FixtureView {
-            identifier: self.identifier.to_view(true),
-            fixture_type: self.fixture_type.clone(),
-            material: self.material.clone(),
-            size: self.size.clone(),
-            descriptors: self.descriptors.clone(),
-        }
-    }
-}
-
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
@@ -87,8 +75,11 @@ impl FixtureView {
 
 #[cfg(test)]
 mod display_tests {
-    use crate::components::{
-        fixtures::fixture_type::FixtureType, identifier::Identifier, material::Material,
+    use crate::{
+        components::{
+            fixtures::fixture_type::FixtureType, identifier::Identifier, material::Material,
+        },
+        systems::view::fixture::look_at,
     };
 
     use super::Fixture;
@@ -103,6 +94,6 @@ mod display_tests {
             identifier: Identifier::default(),
         };
 
-        assert_eq!("steel chest", format!("{}", fixture.look_at()));
+        assert_eq!("steel chest", format!("{}", look_at(&fixture)));
     }
 }

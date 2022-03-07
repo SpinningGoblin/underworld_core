@@ -79,31 +79,19 @@ impl FixturePositionView {
     }
 }
 
-impl FixturePosition {
-    pub fn look_at(&self) -> FixturePositionView {
-        FixturePositionView {
-            group_descriptor: self.group_descriptor.clone(),
-            fixtures: self
-                .fixtures
-                .iter()
-                .map(|f| f.look_at())
-                .into_iter()
-                .collect(),
-            position_descriptors: self.position_descriptors.clone(),
-        }
-    }
-}
-
 #[cfg(test)]
 mod tests {
-    use crate::components::{
-        fixtures::{fixture::Fixture, fixture_type::FixtureType},
-        identifier::Identifier,
-        rooms::{
-            fixture_position_descriptor::FixturePositionDescriptor,
-            group_descriptor::GroupDescriptor,
+    use crate::{
+        components::{
+            fixtures::{fixture::Fixture, fixture_type::FixtureType},
+            identifier::Identifier,
+            rooms::{
+                fixture_position_descriptor::FixturePositionDescriptor,
+                group_descriptor::GroupDescriptor,
+            },
+            size::Size,
         },
-        size::Size,
+        systems::view::fixture_position::look_at,
     };
 
     use super::FixturePosition;
@@ -132,7 +120,7 @@ mod tests {
 
         assert_eq!(
             "a table and chairs is in the corner",
-            format!("{}", &fixture_position.look_at())
+            format!("{}", look_at(&fixture_position))
         )
     }
 }

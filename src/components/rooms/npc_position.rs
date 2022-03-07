@@ -85,33 +85,6 @@ pub struct NpcPositionViewArgs {
     pub knows_name: bool,
 }
 
-impl NpcPosition {
-    pub fn look_at(
-        &self,
-        npc_position_args: &NpcPositionViewArgs,
-        knows_all: bool,
-    ) -> NpcPositionView {
-        let npcs: Vec<NonPlayerView> = self
-            .npcs
-            .iter()
-            .map(|npc| {
-                npc.look_at(
-                    &npc_position_args.character_args,
-                    npc_position_args.knows_name,
-                    knows_all,
-                )
-            })
-            .into_iter()
-            .collect();
-
-        NpcPositionView {
-            group_descriptor: self.group_descriptor.clone(),
-            npcs,
-            position_descriptor: self.position_descriptor.clone(),
-        }
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use crate::{
@@ -126,6 +99,7 @@ mod tests {
         generators::{
             characters::CharacterPrototype, generator::Generator, non_players::NonPlayerPrototype,
         },
+        systems::view::npc_position::look_at,
     };
 
     use super::NpcPosition;
@@ -150,7 +124,7 @@ mod tests {
             "in the corner stands a gang of goblins",
             format!(
                 "{}",
-                &npc_position.look_at(&NpcPositionViewArgs::default(), true)
+                look_at(&npc_position, &NpcPositionViewArgs::default(), true)
             )
         );
     }

@@ -19,41 +19,6 @@ pub struct Inventory {
 }
 
 impl Inventory {
-    pub fn look_at(
-        &self,
-        knows_hidden: bool,
-        knows_packed: bool,
-        knows_all: bool,
-    ) -> InventoryView {
-        let equipped_items = self
-            .equipment
-            .iter()
-            .filter(|item| item.is_equipped())
-            .filter_map(|item| {
-                if !item.is_hidden || knows_hidden || knows_all {
-                    Some(item.look_at(knows_hidden, knows_all))
-                } else {
-                    None
-                }
-            });
-
-        let packed_items = self
-            .equipment
-            .iter()
-            .filter(|item| item.is_packed())
-            .filter_map(|item| {
-                if knows_packed || knows_all {
-                    Some(item.look_at(true, knows_all))
-                } else {
-                    None
-                }
-            });
-
-        InventoryView {
-            equipment: equipped_items.chain(packed_items).collect(),
-        }
-    }
-
     pub fn equipped_wearables(&self) -> Vec<CharacterItem> {
         self.equipment
             .iter()
@@ -190,7 +155,7 @@ impl Display for InventoryView {
 
 #[cfg(test)]
 mod inventory_tests {
-    use crate::components::{
+    use crate::{components::{
         identifier::Identifier,
         items::{
             character_item::CharacterItem, descriptor::Descriptor, item::Item, item_type::ItemType,
@@ -198,7 +163,7 @@ mod inventory_tests {
         },
         material::Material,
         tag::Tag,
-    };
+    }, systems::view::inventory::look_at};
 
     use super::Inventory;
 
@@ -241,7 +206,7 @@ mod inventory_tests {
             ],
         };
 
-        let description = inventory.look_at(true, true, true).to_string();
+        let description = look_at(&inventory, true, true, true).to_string();
         assert!(description.contains("a broken long sword"));
         assert!(description.contains(", and"));
         assert!(description.contains("rusty dull short sword sheathed at its hip."));
@@ -268,7 +233,7 @@ mod inventory_tests {
             }],
         };
 
-        let description = inventory.look_at(true, true, true).to_string();
+        let description = look_at(&inventory, true, true, true).to_string();
         assert!(description.contains("a broken long sword"));
         assert!(!description.contains(", and"));
     }
@@ -312,7 +277,7 @@ mod inventory_tests {
             ],
         };
 
-        let description = inventory.look_at(true, true, true).to_string();
+        let description = look_at(&inventory, true, true, true).to_string();
         assert!(description.contains("a broken long sword"));
         assert!(!description.contains(", and"));
     }
@@ -339,7 +304,7 @@ mod inventory_tests {
             }],
         };
 
-        let view = inventory.look_at(true, true, true);
+        let view = look_at(&inventory, true, true, true).to_string();
         let description = view.to_string();
         assert!(description.contains("set of drab steel plate helmet."));
         assert!(!description.contains(", and"));
@@ -386,7 +351,7 @@ mod inventory_tests {
             ],
         };
 
-        let view = inventory.look_at(true, true, true);
+        let view = look_at(&inventory, true, true, true).to_string();
         let description = view.to_string();
         assert!(description.contains("set of drab steel plate"));
         assert!(description.contains("rusty iron shackles dangling from its wrists."));

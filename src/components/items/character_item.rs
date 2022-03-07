@@ -23,39 +23,6 @@ pub struct CharacterItem {
 }
 
 impl CharacterItem {
-    pub fn look_at(&self, knows_hidden: bool, knows_all: bool) -> CharacterItemView {
-        let full_item_hidden = self
-            .equipped_location_tags
-            .iter()
-            .any(|tag| tag.hides_full_item());
-
-        let is_hidden = if knows_hidden || knows_all {
-            Some(self.is_hidden)
-        } else {
-            None
-        };
-
-        let (location_descriptor, knows_equipped_location, equipped_location_tags) =
-            if self.is_hidden && (!knows_hidden || knows_all) {
-                (None, false, Vec::new())
-            } else {
-                (
-                    Some(self.location_descriptor.clone()),
-                    true,
-                    self.equipped_location_tags.clone(),
-                )
-            };
-
-        CharacterItemView {
-            item: self.item.look_at(!full_item_hidden, knows_all),
-            is_hidden,
-            location_descriptor,
-            knows_equipped_location,
-            equipped_location_tags,
-            is_multiple: self.is_multiple,
-        }
-    }
-
     pub fn is_equipped(&self) -> bool {
         self.equipped_location_tags.contains(&LocationTag::Equipped)
     }

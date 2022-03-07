@@ -6,7 +6,7 @@ use poem_openapi::Object;
 use serde::{Deserialize, Serialize};
 
 use super::{
-    character::{Character, CharacterView, CharacterViewArgs},
+    character::{Character, CharacterView},
     identifier::{Identifier, IdentifierView},
 };
 
@@ -17,27 +17,6 @@ pub struct PlayerCharacter {
     pub character: Character,
     pub identifier: Identifier,
     pub username: String,
-}
-
-impl PlayerCharacter {
-    pub fn check(&self) -> PlayerCharacterView {
-        let args = CharacterViewArgs {
-            knows_health: true,
-            knows_species: true,
-            knows_life_modifier: true,
-            knows_inventory: true,
-            knows_hidden_in_inventory: true,
-            knows_packed_in_inventory: true,
-        };
-        let character = self.character.look_at(&args, true);
-        let identifier = self.identifier.to_view(true);
-
-        PlayerCharacterView {
-            character,
-            identifier,
-            username: self.username.clone(),
-        }
-    }
 }
 
 #[derive(Clone, Debug)]

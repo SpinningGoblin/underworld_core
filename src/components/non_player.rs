@@ -6,7 +6,7 @@ use poem_openapi::Object;
 use serde::{Deserialize, Serialize};
 
 use super::{
-    character::{Character, CharacterView, CharacterViewArgs},
+    character::{Character, CharacterView},
     identifier::{Identifier, IdentifierView},
 };
 
@@ -19,20 +19,6 @@ pub struct NonPlayer {
 }
 
 impl NonPlayer {
-    pub fn look_at(
-        &self,
-        character_args: &CharacterViewArgs,
-        knows_name: bool,
-        knows_all: bool,
-    ) -> NonPlayerView {
-        let identifier = self.identifier.to_view(knows_name || knows_all);
-
-        NonPlayerView {
-            identifier,
-            character: self.character.look_at(character_args, knows_all),
-        }
-    }
-
     pub fn set_name(&mut self, name: &str) {
         self.identifier.set_name(name);
     }
