@@ -15,6 +15,7 @@ use serde::{Deserialize, Serialize};
     serde(rename_all = "snake_case")
 )]
 pub struct LookAtTarget {
+    pub room_id: String,
     pub target: String,
 }
 
@@ -35,7 +36,9 @@ impl LookAtTarget {
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
-pub struct LookAtRoom;
+pub struct LookAtRoom {
+    pub room_id: String,
+}
 
 impl LookAtRoom {
     pub fn description(&self) -> String {

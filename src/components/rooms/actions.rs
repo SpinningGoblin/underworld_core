@@ -9,14 +9,19 @@ use super::room::Room;
 impl Room {
     pub fn current_actions(&self) -> Vec<Action> {
         let basic_actions = vec![
-            Action::QuickLookRoom(QuickLookRoom),
-            Action::LookAtRoom(LookAtRoom),
+            Action::QuickLookRoom(QuickLookRoom {
+                room_id: self.identifier.id.to_string(),
+            }),
+            Action::LookAtRoom(LookAtRoom {
+                room_id: self.identifier.id.to_string(),
+            }),
         ];
 
         let fixture_actions = self.fixture_positions.iter().flat_map(|fixture_position| {
             fixture_position.fixtures.iter().map(|fixture| {
                 Action::LookAtTarget(LookAtTarget {
                     target: fixture.identifier.id.to_string(),
+                    room_id: self.identifier.id.to_string(),
                 })
             })
         });
@@ -25,6 +30,7 @@ impl Room {
             npc_position.npcs.iter().map(|npc| {
                 Action::LookAtTarget(LookAtTarget {
                     target: npc.identifier.id.to_string(),
+                    room_id: self.identifier.id.to_string(),
                 })
             })
         });

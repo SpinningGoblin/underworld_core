@@ -10,7 +10,9 @@ use serde::{Deserialize, Serialize};
     derive(Deserialize, Serialize),
     serde(rename_all = "snake_case")
 )]
-pub struct QuickLookRoom;
+pub struct QuickLookRoom {
+    pub room_id: String,
+}
 
 impl QuickLookRoom {
     pub fn description(&self) -> String {
