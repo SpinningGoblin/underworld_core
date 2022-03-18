@@ -155,15 +155,19 @@ impl Display for InventoryView {
 
 #[cfg(test)]
 mod inventory_tests {
-    use crate::{components::{
-        identifier::Identifier,
-        items::{
-            character_item::CharacterItem, descriptor::Descriptor, item::Item, item_type::ItemType,
-            location_descriptor::LocationDescriptor, location_tag::LocationTag,
+    use crate::{
+        components::{
+            identifier::Identifier,
+            items::{
+                character_item::CharacterItem, descriptor::Descriptor, item::Item,
+                item_type::ItemType, location_descriptor::LocationDescriptor,
+                location_tag::LocationTag,
+            },
+            material::Material,
+            tag::Tag,
         },
-        material::Material,
-        tag::Tag,
-    }, systems::view::inventory::look_at};
+        systems::view::inventory::look_at,
+    };
 
     use super::Inventory;
 
