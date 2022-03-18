@@ -11,9 +11,9 @@ pub fn look_at(
     let npcs: Vec<NonPlayerView> = npc_position
         .npcs
         .iter()
-        .map(|npc| {
+        .map(|non_player| {
             super::non_player::look_at(
-                &npc,
+                non_player,
                 &npc_position_args.character_args,
                 npc_position_args.knows_name,
                 knows_all,

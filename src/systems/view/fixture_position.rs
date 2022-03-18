@@ -6,7 +6,7 @@ pub fn look_at(fixture_position: &FixturePosition) -> FixturePositionView {
         fixtures: fixture_position
             .fixtures
             .iter()
-            .map(|f| super::fixture::look_at(&f))
+            .map(super::fixture::look_at)
             .into_iter()
             .collect(),
         position_descriptors: fixture_position.position_descriptors.clone(),
