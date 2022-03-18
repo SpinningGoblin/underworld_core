@@ -1,4 +1,5 @@
 mod dimensions;
+mod exits;
 mod fixtures;
 mod npcs;
 
@@ -13,7 +14,8 @@ use crate::components::{
 };
 
 use self::{
-    dimensions::build_dimensions, fixtures::build_fixture_positions, npcs::build_npc_positions,
+    dimensions::build_dimensions, exits::build_exits, fixtures::build_fixture_positions,
+    npcs::build_npc_positions,
 };
 
 use super::generator::Generator;
@@ -57,20 +59,14 @@ impl Generator<Room> for RoomPrototype {
             fixture_positions,
             npc_positions: build_npc_positions(&self.room_type, used_fixtures),
             flavour,
+            exits: build_exits(&self.room_type),
         }
     }
 }
 
 impl RoomPrototype {
     pub fn build_random() -> RoomPrototype {
-        let room_types = vec![
-            RoomType::Cave,
-            RoomType::Cavern,
-            RoomType::EntryWay,
-            RoomType::PrisonCell,
-            RoomType::Room,
-        ];
-
+        let room_types: Vec<RoomType> = RoomType::into_enum_iter().collect();
         let mut rng = rand::thread_rng();
         let index = rng.gen_range(0..room_types.len());
         let room_type = room_types.get(index).unwrap().clone();
