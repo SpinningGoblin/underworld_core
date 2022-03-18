@@ -1,5 +1,6 @@
 pub mod character;
 pub mod character_item;
+pub mod exit;
 pub mod fixture;
 pub mod fixture_position;
 pub mod identifier;

@@ -1,6 +1,7 @@
 use crate::components::{
     character::CharacterViewArgs,
     rooms::{
+        exit::ExitView,
         fixture_position::FixturePositionView,
         npc_position::{NpcPositionView, NpcPositionViewArgs},
         room::Room,
@@ -44,15 +45,22 @@ fn view(room: &Room, npc_position_args: NpcPositionViewArgs, knows_all: bool) ->
     let fixture_positions: Vec<FixturePositionView> = room
         .fixture_positions
         .iter()
-        .map(|fixture_position| super::fixture_position::look_at(&fixture_position))
+        .map(super::fixture_position::look_at)
         .into_iter()
         .collect();
     let npc_positions: Vec<NpcPositionView> = room
         .npc_positions
         .iter()
         .map(|npc_position| {
-            super::npc_position::look_at(&npc_position, &npc_position_args, knows_all)
+            super::npc_position::look_at(npc_position, &npc_position_args, knows_all)
         })
+        .into_iter()
+        .collect();
+
+    let exits: Vec<ExitView> = room
+        .exits
+        .iter()
+        .map(super::exit::look_at)
         .into_iter()
         .collect();
 
@@ -64,5 +72,6 @@ fn view(room: &Room, npc_position_args: NpcPositionViewArgs, knows_all: bool) ->
         dimensions: room.dimensions.clone(),
         npc_positions,
         flavour: room.flavour.clone(),
+        exits,
     }
 }

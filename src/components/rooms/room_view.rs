@@ -11,8 +11,9 @@ use serde::{Deserialize, Serialize};
 use crate::components::{identifier::IdentifierView, non_player::NonPlayerView, species::Species};
 
 use super::{
-    descriptor::Descriptor, dimensions::Dimensions, fixture_position::FixturePositionView,
-    flavour::Flavour, npc_position::NpcPositionView, room_type::RoomType,
+    descriptor::Descriptor, dimensions::Dimensions, exit::ExitView,
+    fixture_position::FixturePositionView, flavour::Flavour, npc_position::NpcPositionView,
+    room_type::RoomType,
 };
 
 #[derive(Clone, Debug)]
@@ -27,6 +28,7 @@ pub struct RoomView {
     pub dimensions: Dimensions,
     pub npc_positions: Vec<NpcPositionView>,
     pub flavour: Option<Flavour>,
+    pub exits: Vec<ExitView>,
 }
 
 #[derive(Clone, Debug, Default)]
