@@ -1,6 +1,6 @@
 use underworld_core::{
     components::rooms::room_view::RoomViewArgs,
-    generators::{rooms::random_room_generator, generator::Generator},
+    generators::{generator::Generator, rooms::random_room_generator},
     systems::view::room::look_at,
 };
 
