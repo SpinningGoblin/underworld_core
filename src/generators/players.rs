@@ -20,11 +20,25 @@ use crate::components::{
 
 use super::{generator::Generator, stats::build_specific_health};
 
-pub struct PlayerCharacterPrototype {
+struct PlayerCharacterPrototype {
     pub username: String,
     pub character_name: Option<String>,
     pub species: Option<Species>,
     pub size: Option<Size>,
+}
+
+pub fn player_generator(
+    username: &str,
+    character_name: Option<String>,
+    species: Option<Species>,
+    size: Option<Size>,
+) -> impl Generator<PlayerCharacter> {
+    PlayerCharacterPrototype {
+        username: username.to_string(),
+        character_name,
+        species,
+        size,
+    }
 }
 
 impl Generator<PlayerCharacter> for PlayerCharacterPrototype {
