@@ -1,6 +1,7 @@
 pub mod character;
 pub mod damage;
 pub mod fixtures;
+pub mod games;
 pub mod identifier;
 pub mod inventory;
 pub mod items;
@@ -13,3 +14,4 @@ pub mod size;
 pub mod species;
 pub mod stats;
 pub mod tag;
+pub mod worlds;
