@@ -20,7 +20,7 @@ use self::{
 
 use super::generator::Generator;
 
-pub struct RoomPrototype {
+struct RoomPrototype {
     pub num_descriptors: RangeInclusive<usize>,
     pub room_type: RoomType,
     pub possible_descriptors: Vec<Descriptor>,
@@ -64,19 +64,21 @@ impl Generator<Room> for RoomPrototype {
     }
 }
 
-impl RoomPrototype {
-    pub fn build_random() -> RoomPrototype {
-        let room_types: Vec<RoomType> = RoomType::into_enum_iter().collect();
-        let mut rng = rand::thread_rng();
-        let index = rng.gen_range(0..room_types.len());
-        let room_type = room_types.get(index).unwrap().clone();
-
-        RoomPrototype {
-            room_type: room_type.clone(),
-            num_descriptors: 1..=2,
-            possible_descriptors: room_type.possible_descriptors(),
-        }
+pub fn room_generator(room_type: &RoomType) -> impl Generator<Room> {
+    RoomPrototype {
+        num_descriptors: 1..=2,
+        room_type: room_type.clone(),
+        possible_descriptors: room_type.possible_descriptors(),
     }
+}
+
+pub fn random_room_generator() -> impl Generator<Room> {
+    let room_types: Vec<RoomType> = RoomType::into_enum_iter().collect();
+    let mut rng = rand::thread_rng();
+    let index = rng.gen_range(0..room_types.len());
+    let room_type = room_types.get(index).unwrap();
+
+    room_generator(room_type)
 }
 
 impl RoomType {
@@ -92,15 +94,14 @@ impl RoomType {
 #[cfg(test)]
 mod tests {
     use crate::{
-        components::rooms::room_view::RoomViewArgs, generators::generator::Generator,
+        components::rooms::room_view::RoomViewArgs,
+        generators::{generator::Generator, rooms::random_room_generator},
         systems::view::room::look_at,
     };
 
-    use super::RoomPrototype;
-
     #[test]
     fn generate_room() {
-        let room_prototype = RoomPrototype::build_random();
+        let room_prototype = random_room_generator();
         let room = room_prototype.generate();
 
         assert!(!format!("{}", look_at(&room, RoomViewArgs::default(), true)).is_empty());

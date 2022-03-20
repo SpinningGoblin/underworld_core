@@ -1,12 +1,12 @@
 use underworld_core::{
     components::rooms::room_view::RoomViewArgs,
-    generators::{generator::Generator, rooms::RoomPrototype},
+    generators::{rooms::random_room_generator, generator::Generator},
     systems::view::room::look_at,
 };
 
 pub fn main() {
-    let room_prototype = RoomPrototype::build_random();
-    let room = room_prototype.generate();
+    let room_generator = random_room_generator();
+    let room = room_generator.generate();
     let view = look_at(&room, RoomViewArgs::default(), true);
 
     println!("{}", &view);

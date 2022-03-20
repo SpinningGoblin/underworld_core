@@ -2,9 +2,9 @@ pub fn main() {
     #[cfg(feature = "serialization")]
     #[cfg(feature = "json")]
     {
-        use underworld_core::generators::{generator::Generator, rooms::RoomPrototype};
+        use underworld_core::generators::{generator::Generator, rooms::random_room_generator};
 
-        let room_prototype = RoomPrototype::build_random();
+        let room_prototype = random_room_generator();
         let room = room_prototype.generate();
         let serialized = serde_json::to_string(&room);
 
