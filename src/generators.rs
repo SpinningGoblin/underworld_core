@@ -1,5 +1,6 @@
 pub mod characters;
 pub mod fixtures;
+pub mod game;
 pub mod generator;
 pub mod inventory;
 pub mod items;
