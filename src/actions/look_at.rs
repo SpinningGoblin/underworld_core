@@ -1,11 +1,11 @@
-use std::str::FromStr;
-
 use uuid::Uuid;
 
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
+
+use crate::utils::ids::parse_id;
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -21,15 +21,15 @@ pub struct LookAtTarget {
 
 impl LookAtTarget {
     pub fn target_id(&self) -> Option<Uuid> {
-        self.id(&self.target)
+        parse_id(&self.target)
+    }
+
+    pub fn room_id(&self) -> Option<Uuid> {
+        parse_id(&self.room_id)
     }
 
     pub fn description(&self) -> String {
         "Look at a target inside of a room".to_string()
-    }
-
-    fn id(&self, value: &str) -> Option<Uuid> {
-        Uuid::from_str(value).ok()
     }
 }
 
