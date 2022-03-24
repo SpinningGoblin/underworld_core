@@ -308,8 +308,7 @@ mod inventory_tests {
             }],
         };
 
-        let view = look_at(&inventory, true, true, true).to_string();
-        let description = view.to_string();
+        let description = look_at(&inventory, true, true, true).to_string();
         assert!(description.contains("set of drab steel plate helmet."));
         assert!(!description.contains(", and"));
     }
@@ -355,8 +354,7 @@ mod inventory_tests {
             ],
         };
 
-        let view = look_at(&inventory, true, true, true).to_string();
-        let description = view.to_string();
+        let description = look_at(&inventory, true, true, true).to_string();
         assert!(description.contains("set of drab steel plate"));
         assert!(description.contains("rusty iron shackles dangling from its wrists."));
         assert!(description.contains(", and"));
