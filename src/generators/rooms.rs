@@ -7,6 +7,7 @@ use std::ops::RangeInclusive;
 
 use enum_iterator::IntoEnumIterator;
 use rand::Rng;
+use uuid::Uuid;
 
 use crate::components::{
     identifier::Identifier,
@@ -24,6 +25,7 @@ struct RoomPrototype {
     pub num_descriptors: RangeInclusive<usize>,
     pub room_type: RoomType,
     pub possible_descriptors: Vec<Descriptor>,
+    pub entrance_id: Option<Uuid>,
 }
 
 impl Generator<Room> for RoomPrototype {
@@ -59,26 +61,27 @@ impl Generator<Room> for RoomPrototype {
             fixture_positions,
             npc_positions: build_npc_positions(&self.room_type, used_fixtures),
             flavour,
-            exits: build_exits(&self.room_type),
+            exits: build_exits(&self.room_type, self.entrance_id),
         }
     }
 }
 
-pub fn room_generator(room_type: &RoomType) -> impl Generator<Room> {
+pub fn room_generator(room_type: &RoomType, entrance_id: Option<Uuid>) -> impl Generator<Room> {
     RoomPrototype {
         num_descriptors: 1..=2,
         room_type: room_type.clone(),
         possible_descriptors: room_type.possible_descriptors(),
+        entrance_id,
     }
 }
 
-pub fn random_room_generator() -> impl Generator<Room> {
+pub fn random_room_generator(entrance_id: Option<Uuid>) -> impl Generator<Room> {
     let room_types: Vec<RoomType> = RoomType::into_enum_iter().collect();
     let mut rng = rand::thread_rng();
     let index = rng.gen_range(0..room_types.len());
     let room_type = room_types.get(index).unwrap();
 
-    room_generator(room_type)
+    room_generator(room_type, entrance_id)
 }
 
 impl RoomType {
@@ -101,7 +104,7 @@ mod tests {
 
     #[test]
     fn generate_room() {
-        let room_prototype = random_room_generator();
+        let room_prototype = random_room_generator(None);
         let room = room_prototype.generate();
 
         assert!(!format!("{}", look_at(&room, RoomViewArgs::default(), true)).is_empty());

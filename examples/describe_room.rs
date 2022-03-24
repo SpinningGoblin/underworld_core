@@ -5,7 +5,7 @@ use underworld_core::{
 };
 
 pub fn main() {
-    let room_generator = random_room_generator();
+    let room_generator = random_room_generator(None);
     let room = room_generator.generate();
     let view = look_at(&room, RoomViewArgs::default(), true);
 

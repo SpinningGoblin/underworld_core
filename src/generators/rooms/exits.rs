@@ -1,5 +1,6 @@
 use enum_iterator::IntoEnumIterator;
 use rand::{prelude::ThreadRng, Rng};
+use uuid::Uuid;
 
 use crate::components::{
     identifier::Identifier,
@@ -10,12 +11,21 @@ use crate::components::{
     size::Size,
 };
 
-pub fn build_exits(room_type: &RoomType) -> Vec<Exit> {
+pub fn build_exits(room_type: &RoomType, entrance_id: Option<Uuid>) -> Vec<Exit> {
     let mut rng = rand::thread_rng();
     let num_exits = num_exits(&mut rng, room_type);
 
     (0..num_exits)
-        .map(|_| {
+        .map(|index| {
+            let identifier = if index == 0 {
+                match entrance_id {
+                    Some(it) => Identifier { id: it, name: None },
+                    None => Identifier::just_id(),
+                }
+            } else {
+                Identifier::just_id()
+            };
+
             let exit_type = exit_type(&mut rng, room_type);
             let material = material(&mut rng, &exit_type);
             let size = size(&mut rng, &exit_type);
@@ -26,7 +36,7 @@ pub fn build_exits(room_type: &RoomType) -> Vec<Exit> {
                 material,
                 size,
                 descriptors,
-                identifier: Identifier::just_id(),
+                identifier,
             }
         })
         .into_iter()

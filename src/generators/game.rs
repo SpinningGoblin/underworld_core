@@ -1,8 +1,9 @@
 use crate::components::{
     games::game::Game,
+    identifier::Identifier,
     player::PlayerCharacter,
     rooms::room_type::RoomType,
-    worlds::world::{ExitMap, World}, identifier::Identifier,
+    worlds::world::{ExitMap, World},
 };
 
 use super::{generator::Generator, rooms::room_generator};
@@ -17,24 +18,24 @@ struct GamePrototype {
 
 impl Generator<Game> for GamePrototype {
     fn generate(&self) -> Game {
-        let entry = room_generator(&RoomType::EntryWay).generate();
+        let entry = room_generator(&RoomType::EntryWay, None).generate();
 
         let exit_maps: Vec<ExitMap> = entry
             .exits
             .iter()
             .map(|exit| ExitMap {
-                exit_id: exit.identifier.id.clone(),
-                left_room_id: Some(entry.identifier.id.clone()),
+                exit_id: exit.identifier.id,
+                left_room_id: Some(entry.identifier.id),
                 right_room_id: None,
             })
             .collect();
 
         Game {
             identifier: Identifier::just_id(),
-            current_room: entry.identifier.id.clone(),
-            rooms_seen: vec![entry.identifier.id.clone()],
+            current_room_id: entry.identifier.id,
+            rooms_seen: vec![entry.identifier.id],
             world: World {
-                rooms: vec![entry.clone()],
+                rooms: vec![entry],
                 exit_graph: exit_maps,
             },
             player: self.player.clone(),
