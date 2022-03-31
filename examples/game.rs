@@ -27,8 +27,7 @@ pub fn main() {
                     let attack = AttackNpc {
                         target_id: npc.identifier.id.to_string(),
                     };
-                    let handled_attack =
-                        handle(&Action::AttackNpc(attack), &handled_action.game);
+                    let handled_attack = handle(&Action::AttackNpc(attack), &handled_action.game);
                     let serialized_events = serde_json::to_string(&handled_attack.events).unwrap();
                     println!("{}", &serialized_events);
                     let serialized_new_game = serde_json::to_string(&handled_attack.game).unwrap();
