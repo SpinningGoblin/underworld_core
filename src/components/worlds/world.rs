@@ -22,6 +22,16 @@ impl World {
             .find(|exit_map| exit_map.exit_id.eq(&entrance_id))
         {
             exit_map.set_room_id(room.identifier.id);
+
+            room.exits
+                .iter()
+                .filter(|exit| exit.identifier.id.ne(&entrance_id))
+                .map(|exit| ExitMap {
+                    exit_id: exit.identifier.id.clone(),
+                    left_room_id: Some(room.identifier.id.clone()),
+                    right_room_id: None,
+                })
+                .for_each(|exit_map| self.exit_graph.push(exit_map));
             self.rooms.push(room);
         }
     }
