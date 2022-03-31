@@ -313,8 +313,8 @@ fn life_modifier(species: &Species) -> Option<LifeModifier> {
 fn npc_prototype(species: &Species, life_modifier: Option<LifeModifier>) -> NonPlayerPrototype {
     let inventory_prototype = InventoryPrototype {
         item_types: ItemType::into_enum_iter().collect(),
-        num_equipped_weapons: 0..=2,
-        num_equipped_wearables: 0..=5,
+        num_equipped_weapons: 1..=1,
+        num_equipped_wearables: 1..=2,
         num_carried_weapons: 0..=1,
         num_carried_wearables: 0..=1,
         hidden_weapon_chance: 0,
