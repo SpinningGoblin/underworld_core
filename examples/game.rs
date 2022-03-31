@@ -3,7 +3,7 @@ pub fn main() {
     #[cfg(feature = "json")]
     {
         use underworld_core::{
-            actions::{action::Action, exit_room::ExitRoom},
+            actions::{action::Action, attack_npc::AttackNpc, exit_room::ExitRoom},
             generators::{game::game_generator, generator::Generator, players::player_generator},
             handlers::handle::handle,
         };
@@ -21,6 +21,20 @@ pub fn main() {
             println!("{}", &serialized_game);
             let serialized_new_game = serde_json::to_string(&handled_action.game).unwrap();
             println!("{}", &serialized_new_game);
+
+            if let Some(npc_positions) = &handled_action.game.current_room().npc_positions.get(0) {
+                if let Some(npc) = npc_positions.npcs.get(0) {
+                    let attack = AttackNpc {
+                        target_id: npc.identifier.id.to_string(),
+                    };
+                    let handled_attack =
+                        handle(&Action::AttackNpc(attack), &handled_action.game);
+                    let serialized_events = serde_json::to_string(&handled_attack.events).unwrap();
+                    println!("{}", &serialized_events);
+                    let serialized_new_game = serde_json::to_string(&handled_attack.game).unwrap();
+                    println!("{}", &serialized_new_game);
+                }
+            }
         };
     }
 }
