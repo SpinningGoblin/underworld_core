@@ -31,12 +31,54 @@ impl Character {
 
     pub fn damage(&mut self, damage: i32) {
         if let Some(mut health) = self.stats.health.as_mut() {
-            if damage >= health.current {
-                health.current = 0;
-                self.life_modifier = Some(LifeModifier::Dead);
-            } else {
-                health.current -= damage;
-            }
+            health.current -= damage;
+        }
+    }
+
+    pub fn kill(&mut self) {
+        if let Some(mut health) = self.stats.health.as_mut() {
+            health.current = 0;
+        }
+        self.life_modifier = Some(LifeModifier::Dead);
+    }
+
+    pub fn attack(&self) -> i32 {
+        let mut rng = rand::thread_rng();
+
+        match &self.inventory {
+            Some(inventory) => inventory
+                .equipment
+                .iter()
+                .map(|character_item| {
+                    character_item
+                        .item
+                        .attack
+                        .as_ref()
+                        .map(|attack| attack.attack_roll(&mut rng))
+                        .unwrap_or_default()
+                })
+                .sum(),
+            None => 0,
+        }
+    }
+
+    pub fn defense(&self) -> i32 {
+        let mut rng = rand::thread_rng();
+
+        match &self.inventory {
+            Some(inventory) => inventory
+                .equipment
+                .iter()
+                .map(|character_item| {
+                    character_item
+                        .item
+                        .defense
+                        .as_ref()
+                        .map(|defense| defense.defense_roll(&mut rng))
+                        .unwrap_or_default()
+                })
+                .sum(),
+            None => 0,
         }
     }
 }

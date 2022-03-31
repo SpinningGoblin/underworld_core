@@ -4,7 +4,9 @@ use bevy_ecs::prelude::Component;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::components::{identifier::Identifier, player::PlayerCharacter, worlds::world::World};
+use crate::components::{
+    identifier::Identifier, player::PlayerCharacter, rooms::room::Room, worlds::world::World,
+};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -19,16 +21,26 @@ pub struct Game {
 
 impl Game {
     pub fn current_room_exits(&self) -> Vec<Uuid> {
-        let current_room = self
-            .world
-            .rooms
-            .iter()
-            .find(|room| room.identifier.id.eq(&self.current_room_id))
-            .unwrap();
-        current_room
+        self.current_room()
             .exits
             .iter()
             .map(|exit| exit.identifier.id)
             .collect()
+    }
+
+    pub fn current_room(&self) -> &Room {
+        self.world
+            .rooms
+            .iter()
+            .find(|room| room.identifier.id.eq(&self.current_room_id))
+            .unwrap()
+    }
+
+    pub fn current_room_mut(&mut self) -> &mut Room {
+        self.world
+            .rooms
+            .iter_mut()
+            .find(|room| room.identifier.id.eq(&self.current_room_id))
+            .unwrap()
     }
 }
