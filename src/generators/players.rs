@@ -185,7 +185,7 @@ fn starter_weapon(rng: &mut ThreadRng) -> CharacterItem {
         material,
         descriptors,
         attack: Some(Attack {
-            num_rolls: 1,
+            num_rolls: 3,
             modifier: -1,
         }),
         defense: None,
