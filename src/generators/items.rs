@@ -124,14 +124,14 @@ impl ItemPrototype {
             | ItemType::Dagger
             | ItemType::Dirk
             | ItemType::Shield
-            | ItemType::ShortSword => Some(1),
+            | ItemType::ShortSword => Some(3),
             ItemType::Club
             | ItemType::Hammer
             | ItemType::LongSword
             | ItemType::Mace
             | ItemType::Morningstar
-            | ItemType::Whip => Some(2),
-            ItemType::GreatSword => Some(3),
+            | ItemType::Whip => Some(4),
+            ItemType::GreatSword => Some(5),
             _ => None,
         }
     }
@@ -150,15 +150,13 @@ impl ItemPrototype {
 
     fn defense_modifier(&self) -> Option<i32> {
         match self.item_type {
-            ItemType::Boots
-            | ItemType::Buckler
-            | ItemType::Cloak
-            | ItemType::Shield
-            | ItemType::Shirt
-            | ItemType::Trousers
-            | ItemType::Vest => Some(-1),
+            ItemType::Boots | ItemType::Buckler | ItemType::Shield | ItemType::Vest => Some(-1),
             ItemType::Crown | ItemType::Gloves | ItemType::Mask => Some(-2),
-            ItemType::LoinCloth | ItemType::Shackles => Some(-3),
+            ItemType::Shirt
+            | ItemType::Trousers
+            | ItemType::Cloak
+            | ItemType::LoinCloth
+            | ItemType::Shackles => Some(-3),
             _ => None,
         }
     }
