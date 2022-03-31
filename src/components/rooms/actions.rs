@@ -1,5 +1,7 @@
 use crate::actions::{
     action::Action,
+    attack_npc::AttackNpc,
+    exit_room::ExitRoom,
     look_at::{LookAtRoom, LookAtTarget},
     quick_look::QuickLookRoom,
 };
@@ -27,11 +29,22 @@ impl Room {
         });
 
         let npc_actions = self.npc_positions.iter().flat_map(|npc_position| {
-            npc_position.npcs.iter().map(|npc| {
-                Action::LookAtTarget(LookAtTarget {
-                    target: npc.identifier.id.to_string(),
-                    room_id: self.identifier.id.to_string(),
-                })
+            npc_position.npcs.iter().flat_map(|npc| {
+                vec![
+                    Action::LookAtTarget(LookAtTarget {
+                        target: npc.identifier.id.to_string(),
+                        room_id: self.identifier.id.to_string(),
+                    }),
+                    Action::AttackNpc(AttackNpc {
+                        target_id: npc.identifier.id.to_string(),
+                    }),
+                ]
+            })
+        });
+
+        let exit_actions = self.exits.iter().map(|exit| {
+            Action::ExitRoom(ExitRoom {
+                exit_id: exit.identifier.id.to_string(),
             })
         });
 
@@ -39,6 +52,7 @@ impl Room {
             .into_iter()
             .chain(fixture_actions)
             .chain(npc_actions)
+            .chain(exit_actions)
             .collect()
     }
 }
