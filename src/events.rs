@@ -1,4 +1,10 @@
 pub mod event;
+pub mod npc_hit;
+pub mod npc_killed;
+pub mod npc_missed;
+pub mod player_hit;
+pub mod player_killed;
+pub mod player_missed;
 pub mod room_exited;
 pub mod room_generated;
 pub mod room_viewed;
