@@ -1,6 +1,6 @@
 use crate::{
     actions::{action::Action, attack_npc::AttackNpc, exit_room::ExitRoom},
-    components::games::game::Game,
+    components::games::{game::Game, game_state::GameState},
     events::{
         event::{apply_events, Event},
         npc_hit::NpcHit,
@@ -18,7 +18,7 @@ use crate::{
 
 pub struct HandledAction {
     pub events: Vec<Event>,
-    pub game: Game,
+    pub new_state: GameState,
 }
 
 pub fn handle(action: &Action, game: &Game) -> HandledAction {
@@ -30,17 +30,16 @@ pub fn handle(action: &Action, game: &Game) -> HandledAction {
         Action::AttackNpc(attack_npc) => handle_attack_npc(attack_npc, game),
     };
 
-    let new_game = apply_events(&events, game);
     HandledAction {
+        new_state: apply_events(&events, &game.state),
         events,
-        game: new_game,
     }
 }
 
 fn handle_attack_npc(attack_npc: &AttackNpc, game: &Game) -> Vec<Event> {
     let mut events: Vec<Event> = Vec::new();
 
-    let room = game.current_room();
+    let room = game.state.current_room();
     if let Some(npc_id) = parse_id(&attack_npc.target_id) {
         if let Some(npc) = room.find_npc(&npc_id) {
             let defense = npc.character.defense();
@@ -105,13 +104,14 @@ fn handle_exit_room(exit_room: &ExitRoom, game: &Game) -> Vec<Event> {
 
     let exit_id = parse_id(&exit_room.exit_id).unwrap();
     let exit_map = game
+        .state
         .world
         .exit_graph
         .iter()
         .find(|exit_map| exit_map.exit_id.eq(&exit_id))
         .unwrap();
 
-    let other_room_id = exit_map.other_room_id(game.current_room_id);
+    let other_room_id = exit_map.other_room_id(game.state.current_room_id);
 
     let room_id = match other_room_id {
         Some(id) => id,
@@ -129,7 +129,7 @@ fn handle_exit_room(exit_room: &ExitRoom, game: &Game) -> Vec<Event> {
 
     events.push(Event::RoomExited(RoomExited {
         exit_id,
-        old_room_id: game.current_room_id,
+        old_room_id: game.state.current_room_id,
         new_room_id: room_id,
     }));
 

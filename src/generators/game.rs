@@ -1,5 +1,5 @@
 use crate::components::{
-    games::game::Game,
+    games::{game::Game, game_state::GameState},
     identifier::Identifier,
     player::PlayerCharacter,
     rooms::room_type::RoomType,
@@ -30,7 +30,7 @@ impl Generator<Game> for GamePrototype {
             })
             .collect();
 
-        Game {
+        let state = GameState {
             identifier: Identifier::just_id(),
             current_room_id: entry.identifier.id,
             rooms_seen: vec![entry.identifier.id],
@@ -38,7 +38,11 @@ impl Generator<Game> for GamePrototype {
                 rooms: vec![entry],
                 exit_graph: exit_maps,
             },
+        };
+
+        Game {
             player: self.player.clone(),
+            state,
         }
     }
 }
