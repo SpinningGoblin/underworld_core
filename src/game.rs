@@ -16,8 +16,9 @@ impl Game {
     }
 
     pub fn handle_action(&mut self, action: &Action) -> Vec<Event> {
-        let HandledAction { events, new_state } = handle(action, &self.state, &self.player);
+        let HandledAction { events, new_state, new_player } = handle(action, &self.state, &self.player);
         self.state = new_state;
+        self.player = new_player;
 
         events
     }

@@ -18,6 +18,7 @@ use crate::{
 
 pub struct HandledAction {
     pub events: Vec<Event>,
+    pub new_player: PlayerCharacter,
     pub new_state: GameState,
 }
 
@@ -30,8 +31,11 @@ pub fn handle(action: &Action, state: &GameState, player: &PlayerCharacter) -> H
         Action::AttackNpc(attack_npc) => handle_attack_npc(attack_npc, state, player),
     };
 
+    let (new_state, new_player) = apply_events(&events, state, player);
+
     HandledAction {
-        new_state: apply_events(&events, state),
+        new_state,
+        new_player,
         events,
     }
 }

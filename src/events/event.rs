@@ -3,7 +3,7 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::components::games::game_state::GameState;
+use crate::components::{games::game_state::GameState, player::PlayerCharacter};
 
 use super::{
     npc_hit::NpcHit, npc_killed::NpcKilled, npc_missed::NpcMissed, player_hit::PlayerHit,
@@ -29,8 +29,13 @@ pub enum Event {
     RoomGenerated(RoomGenerated),
 }
 
-pub fn apply_events(events: &[Event], game: &GameState) -> GameState {
-    let mut new_game = game.clone();
+pub fn apply_events(
+    events: &[Event],
+    state: &GameState,
+    player: &PlayerCharacter,
+) -> (GameState, PlayerCharacter) {
+    let mut new_game = state.clone();
+    let mut new_player = player.clone();
 
     for event in events.iter() {
         match event {
@@ -52,11 +57,13 @@ pub fn apply_events(events: &[Event], game: &GameState) -> GameState {
                     npc.character.kill();
                 }
             }
-            Event::PlayerHit(_) => {}
+            Event::PlayerHit(player_hit) => {
+                new_player.character.damage(player_hit.damage);
+            }
             Event::PlayerKilled(_) => {}
             Event::PlayerMissed(_) => {}
         }
     }
 
-    new_game
+    (new_game, new_player)
 }
