@@ -1,6 +1,6 @@
 use crate::{
     actions::{action::Action, attack_npc::AttackNpc, exit_room::ExitRoom},
-    components::games::{game::Game, game_state::GameState},
+    components::{games::game_state::GameState, player::PlayerCharacter},
     events::{
         event::{apply_events, Event},
         npc_hit::NpcHit,
@@ -21,51 +21,55 @@ pub struct HandledAction {
     pub new_state: GameState,
 }
 
-pub fn handle(action: &Action, game: &Game) -> HandledAction {
+pub fn handle(action: &Action, state: &GameState, player: &PlayerCharacter) -> HandledAction {
     let events = match action {
         Action::LookAtTarget(_) => Vec::new(),
         Action::LookAtRoom(_) => Vec::new(),
         Action::QuickLookRoom(_) => Vec::new(),
-        Action::ExitRoom(exit_room) => handle_exit_room(exit_room, game),
-        Action::AttackNpc(attack_npc) => handle_attack_npc(attack_npc, game),
+        Action::ExitRoom(exit_room) => handle_exit_room(exit_room, state),
+        Action::AttackNpc(attack_npc) => handle_attack_npc(attack_npc, state, player),
     };
 
     HandledAction {
-        new_state: apply_events(&events, &game.state),
+        new_state: apply_events(&events, state),
         events,
     }
 }
 
-fn handle_attack_npc(attack_npc: &AttackNpc, game: &Game) -> Vec<Event> {
+fn handle_attack_npc(
+    attack_npc: &AttackNpc,
+    state: &GameState,
+    player: &PlayerCharacter,
+) -> Vec<Event> {
     let mut events: Vec<Event> = Vec::new();
 
-    let room = game.state.current_room();
+    let room = state.current_room();
     if let Some(npc_id) = parse_id(&attack_npc.target_id) {
         if let Some(npc) = room.find_npc(&npc_id) {
             let defense = npc.character.defense();
-            let attack = game.player.character.attack();
+            let attack = player.character.attack();
             let damage = attack - defense;
             if damage > 0 {
                 events.push(Event::NpcHit(NpcHit {
                     npc_id,
                     damage,
-                    attacker_id: game.player.identifier.id,
+                    attacker_id: player.identifier.id,
                 }));
             } else {
                 println!("attack {} defense {}", attack, defense);
                 events.push(Event::NpcMissed(NpcMissed {
                     npc_id,
-                    attacker_id: game.player.identifier.id,
+                    attacker_id: player.identifier.id,
                 }));
             }
 
             if damage > npc.character.get_current_health().unwrap() {
                 events.push(Event::NpcKilled(NpcKilled {
                     npc_id,
-                    killer_id: game.player.identifier.id,
+                    killer_id: player.identifier.id,
                 }));
             } else {
-                let player_defense = game.player.character.defense();
+                let player_defense = player.character.defense();
                 let character_attack = npc.character.attack();
                 let player_damage = character_attack - player_defense;
                 if player_damage > 0 {
@@ -79,7 +83,7 @@ fn handle_attack_npc(attack_npc: &AttackNpc, game: &Game) -> Vec<Event> {
                     }));
                 }
 
-                if player_damage > game.player.character.get_current_health().unwrap() {
+                if player_damage > player.character.get_current_health().unwrap() {
                     events.push(Event::PlayerKilled(PlayerKilled {
                         killer_id: npc.identifier.id,
                     }));
@@ -91,7 +95,7 @@ fn handle_attack_npc(attack_npc: &AttackNpc, game: &Game) -> Vec<Event> {
     events
 }
 
-fn handle_exit_room(exit_room: &ExitRoom, game: &Game) -> Vec<Event> {
+fn handle_exit_room(exit_room: &ExitRoom, state: &GameState) -> Vec<Event> {
     // We need to check the exit maps for one with the room_id and exit.
     // If there's another exit id then find the room with that exit id and move
     // the player to that room.
@@ -103,15 +107,14 @@ fn handle_exit_room(exit_room: &ExitRoom, game: &Game) -> Vec<Event> {
     let mut events: Vec<Event> = Vec::new();
 
     let exit_id = parse_id(&exit_room.exit_id).unwrap();
-    let exit_map = game
-        .state
+    let exit_map = state
         .world
         .exit_graph
         .iter()
         .find(|exit_map| exit_map.exit_id.eq(&exit_id))
         .unwrap();
 
-    let other_room_id = exit_map.other_room_id(game.state.current_room_id);
+    let other_room_id = exit_map.other_room_id(state.current_room_id);
 
     let room_id = match other_room_id {
         Some(id) => id,
@@ -129,7 +132,7 @@ fn handle_exit_room(exit_room: &ExitRoom, game: &Game) -> Vec<Event> {
 
     events.push(Event::RoomExited(RoomExited {
         exit_id,
-        old_room_id: game.state.current_room_id,
+        old_room_id: state.current_room_id,
         new_room_id: room_id,
     }));
 

@@ -1,23 +1,20 @@
 use crate::components::{
-    games::{game::Game, game_state::GameState},
+    games::game_state::GameState,
     identifier::Identifier,
-    player::PlayerCharacter,
     rooms::room_type::RoomType,
     worlds::world::{ExitMap, World},
 };
 
 use super::{generator::Generator, rooms::room_generator};
 
-pub fn game_generator(player: PlayerCharacter) -> impl Generator<Game> {
-    GamePrototype { player }
+pub fn game_generator() -> impl Generator<GameState> {
+    GamePrototype {}
 }
 
-struct GamePrototype {
-    pub player: PlayerCharacter,
-}
+struct GamePrototype {}
 
-impl Generator<Game> for GamePrototype {
-    fn generate(&self) -> Game {
+impl Generator<GameState> for GamePrototype {
+    fn generate(&self) -> GameState {
         let entry = room_generator(&RoomType::EntryWay, None).generate();
 
         let exit_maps: Vec<ExitMap> = entry
@@ -30,7 +27,7 @@ impl Generator<Game> for GamePrototype {
             })
             .collect();
 
-        let state = GameState {
+        GameState {
             identifier: Identifier::just_id(),
             current_room_id: entry.identifier.id,
             rooms_seen: vec![entry.identifier.id],
@@ -38,11 +35,6 @@ impl Generator<Game> for GamePrototype {
                 rooms: vec![entry],
                 exit_graph: exit_maps,
             },
-        };
-
-        Game {
-            player: self.player.clone(),
-            state,
         }
     }
 }
