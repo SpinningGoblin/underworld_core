@@ -93,8 +93,7 @@ fn starter_wearables() -> Vec<CharacterItem> {
         material: Some(Material::Linen),
         attack: None,
         defense: Some(Defense {
-            num_rolls: 1,
-            modifier: -3,
+            damage_resistance: 1,
         }),
     };
 
@@ -106,8 +105,7 @@ fn starter_wearables() -> Vec<CharacterItem> {
         material: Some(Material::Linen),
         attack: None,
         defense: Some(Defense {
-            num_rolls: 1,
-            modifier: -3,
+            damage_resistance: 1,
         }),
     };
 
@@ -119,8 +117,7 @@ fn starter_wearables() -> Vec<CharacterItem> {
         material: Some(Material::Leather),
         attack: None,
         defense: Some(Defense {
-            num_rolls: 1,
-            modifier: -3,
+            damage_resistance: 1,
         }),
     };
 
@@ -185,7 +182,7 @@ fn starter_weapon(rng: &mut ThreadRng) -> CharacterItem {
         material,
         descriptors,
         attack: Some(Attack {
-            num_rolls: 3,
+            num_rolls: 1,
             modifier: -1,
         }),
         defense: None,

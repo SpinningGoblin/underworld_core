@@ -63,8 +63,6 @@ impl Character {
     }
 
     pub fn defense(&self) -> i32 {
-        let mut rng = rand::thread_rng();
-
         match &self.inventory {
             Some(inventory) => inventory
                 .equipment
@@ -74,7 +72,7 @@ impl Character {
                         .item
                         .defense
                         .as_ref()
-                        .map(|defense| defense.defense_roll(&mut rng))
+                        .map(|defense| defense.damage_resistance)
                         .unwrap_or_default()
                 })
                 .sum(),

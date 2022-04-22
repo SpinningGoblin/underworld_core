@@ -38,6 +38,9 @@ pub fn main() {
                     println!("{}", &serialized_events);
                     let serialized_new_game = serde_json::to_string(&game.state).unwrap();
                     println!("{}", &serialized_new_game);
+
+                    let serialized_player = serde_json::to_string(&game.player).unwrap();
+                    println!("{}", &serialized_player);
                 }
             }
         };

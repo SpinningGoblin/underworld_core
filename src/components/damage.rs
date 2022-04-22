@@ -26,14 +26,7 @@ impl Attack {
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 #[cfg_attr(feature = "openapi", derive(Object))]
 pub struct Defense {
-    pub num_rolls: usize,
-    pub modifier: i32,
-}
-
-impl Defense {
-    pub fn defense_roll(&self, rng: &mut ThreadRng) -> i32 {
-        roll(rng, self.num_rolls, self.modifier)
-    }
+    pub damage_resistance: i32,
 }
 
 fn roll(rng: &mut ThreadRng, num_rolls: usize, modifier: i32) -> i32 {

@@ -38,9 +38,8 @@ impl Generator<Item> for ItemPrototype {
             num_rolls,
             modifier: self.attack_modifier().unwrap_or_default(),
         });
-        let defense = self.num_defense_rolls().map(|num_rolls| Defense {
-            num_rolls,
-            modifier: self.defense_modifier().unwrap_or_default(),
+        let defense = self.resistance().map(|resistance| Defense {
+            damage_resistance: resistance,
         });
         let tags = self.item_type.tags();
 
@@ -124,14 +123,14 @@ impl ItemPrototype {
             | ItemType::Dagger
             | ItemType::Dirk
             | ItemType::Shield
-            | ItemType::ShortSword => Some(3),
+            | ItemType::ShortSword => Some(1),
             ItemType::Club
             | ItemType::Hammer
             | ItemType::LongSword
             | ItemType::Mace
             | ItemType::Morningstar
-            | ItemType::Whip => Some(4),
-            ItemType::GreatSword => Some(5),
+            | ItemType::Whip => Some(2),
+            ItemType::GreatSword => Some(3),
             _ => None,
         }
     }
@@ -143,43 +142,20 @@ impl ItemPrototype {
             | ItemType::ShortSword
             | ItemType::Dagger
             | ItemType::Dirk => Some(-1),
-            ItemType::GreatSword | ItemType::Hammer | ItemType::LongSword => Some(1),
+            ItemType::GreatSword => Some(1),
             _ => None,
         }
     }
 
-    fn defense_modifier(&self) -> Option<i32> {
+    fn resistance(&self) -> Option<i32> {
         match self.item_type {
-            ItemType::Boots | ItemType::Buckler | ItemType::Shield | ItemType::Vest => Some(-1),
-            ItemType::Crown | ItemType::Gloves | ItemType::Mask => Some(-2),
+            ItemType::Boots | ItemType::Buckler | ItemType::Shield | ItemType::Vest => Some(2),
             ItemType::Shirt
-            | ItemType::Trousers
-            | ItemType::Cloak
-            | ItemType::LoinCloth
-            | ItemType::Shackles => Some(-3),
-            _ => None,
-        }
-    }
-
-    fn num_defense_rolls(&self) -> Option<usize> {
-        match self.item_type {
-            ItemType::Breastplate
-            | ItemType::Boots
-            | ItemType::Buckler
-            | ItemType::Helm
-            | ItemType::PlateBoots
-            | ItemType::PlateGauntlets
-            | ItemType::PlateHelmet
-            | ItemType::Shield
-            | ItemType::Cloak
-            | ItemType::Crown
             | ItemType::Gloves
-            | ItemType::LoinCloth
-            | ItemType::Mask
-            | ItemType::Shirt
-            | ItemType::Shackles
             | ItemType::Trousers
-            | ItemType::Vest => Some(1),
+            | ItemType::Cloak
+            | ItemType::LoinCloth
+            | ItemType::Shackles => Some(1),
             _ => None,
         }
     }
