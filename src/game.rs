@@ -11,12 +11,12 @@ pub struct Game {
 }
 
 impl Game {
-    pub fn update_state(&mut self, state: GameState) {
-        self.state = state;
-    }
-
     pub fn handle_action(&mut self, action: &Action) -> Vec<Event> {
-        let HandledAction { events, new_state, new_player } = handle(action, &self.state, &self.player);
+        let HandledAction {
+            events,
+            new_state,
+            new_player,
+        } = handle(action, &self.state, &self.player);
         self.state = new_state;
         self.player = new_player;
 
