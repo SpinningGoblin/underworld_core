@@ -126,7 +126,7 @@ fn group_size(species: &Species) -> usize {
     rng.gen_range(range)
 }
 
-fn group_descriptor(group_size: usize) -> Option<GroupDescriptor> {
+pub fn group_descriptor(group_size: usize) -> Option<GroupDescriptor> {
     let options = match group_size {
         1 => single_group_descriptors(),
         _ => multi_group_descriptors(),

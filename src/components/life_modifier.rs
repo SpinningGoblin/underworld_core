@@ -16,7 +16,6 @@ use std::fmt::Display;
 )]
 #[cfg_attr(feature = "openapi", derive(Enum), oai(rename_all = "snake_case"))]
 pub enum LifeModifier {
-    Dead,
     Skeleton,
     Vampire,
     Zombie,
@@ -28,7 +27,6 @@ impl Display for LifeModifier {
             LifeModifier::Skeleton => "skeleton",
             LifeModifier::Vampire => "vampire",
             LifeModifier::Zombie => "zombie",
-            LifeModifier::Dead => "dead",
         };
 
         write!(f, "{}", text)
@@ -41,7 +39,6 @@ impl LifeModifier {
             LifeModifier::Skeleton => "skeletal".to_string(),
             LifeModifier::Vampire => "vampiric".to_string(),
             LifeModifier::Zombie => "zombified".to_string(),
-            LifeModifier::Dead => "dead".to_string(),
         }
     }
 }

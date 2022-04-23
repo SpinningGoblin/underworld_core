@@ -1,7 +1,7 @@
 mod dimensions;
 mod exits;
 mod fixtures;
-mod npcs;
+pub mod npcs;
 
 use std::ops::RangeInclusive;
 

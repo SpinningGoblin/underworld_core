@@ -25,6 +25,13 @@ pub struct Character {
 }
 
 impl Character {
+    pub fn is_dead(&self) -> bool {
+        match &self.stats.health {
+            Some(health) => health.current == 0,
+            None => true,
+        }
+    }
+
     pub fn get_current_health(&self) -> Option<i32> {
         self.stats.health.as_ref().map(|health| health.current)
     }
@@ -39,7 +46,6 @@ impl Character {
         if let Some(mut health) = self.stats.health.as_mut() {
             health.current = 0;
         }
-        self.life_modifier = Some(LifeModifier::Dead);
     }
 
     pub fn attack(&self) -> i32 {

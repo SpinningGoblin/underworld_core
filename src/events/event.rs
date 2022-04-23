@@ -3,7 +3,10 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::components::{games::game_state::GameState, player::PlayerCharacter};
+use crate::components::{
+    games::game_state::GameState, non_player::NonPlayer, player::PlayerCharacter,
+    rooms::npc_position::NpcPosition,
+};
 
 use super::{
     npc_hit::NpcHit, npc_killed::NpcKilled, npc_missed::NpcMissed, player_hit::PlayerHit,
@@ -53,8 +56,41 @@ pub fn apply_events(
             }
             Event::NpcMissed(_) => {}
             Event::NpcKilled(npc_killed) => {
-                if let Some(npc) = new_game.current_room_mut().find_npc_mut(&npc_killed.npc_id) {
+                let room = new_game.current_room_mut();
+                if let Some(npc) = room.find_npc_mut(&npc_killed.npc_id) {
                     npc.character.kill();
+                }
+
+                if let Some(index) = room.index_of_npc_position(&npc_killed.npc_id) {
+                    let position = room.remove_npc_position(index);
+
+                    let (dead, alive): (Vec<NonPlayer>, Vec<NonPlayer>) = position
+                        .npcs
+                        .into_iter()
+                        .partition(|npc| npc.character.is_dead());
+
+                    let replace_alive = !alive.is_empty();
+                    if !dead.is_empty() {
+                        let dead_position = NpcPosition {
+                            group_descriptor: crate::generators::rooms::npcs::group_descriptor(
+                                dead.len(),
+                            ),
+                            npcs: dead,
+                            position_descriptor: None,
+                        };
+                        room.npc_positions.push(dead_position);
+                    }
+
+                    if replace_alive {
+                        let alive_position = NpcPosition {
+                            group_descriptor: crate::generators::rooms::npcs::group_descriptor(
+                                alive.len(),
+                            ),
+                            npcs: alive,
+                            position_descriptor: position.position_descriptor.clone(),
+                        };
+                        room.npc_positions.push(alive_position);
+                    }
                 }
             }
             Event::PlayerHit(player_hit) => {
