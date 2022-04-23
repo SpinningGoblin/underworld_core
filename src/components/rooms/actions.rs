@@ -30,15 +30,18 @@ impl Room {
 
         let npc_actions = self.npc_positions.iter().flat_map(|npc_position| {
             npc_position.npcs.iter().flat_map(|npc| {
-                vec![
-                    Action::LookAtTarget(LookAtTarget {
-                        target: npc.identifier.id.to_string(),
-                        room_id: self.identifier.id.to_string(),
-                    }),
-                    Action::AttackNpc(AttackNpc {
+                let mut actions = vec![Action::LookAtTarget(LookAtTarget {
+                    target: npc.identifier.id.to_string(),
+                    room_id: self.identifier.id.to_string(),
+                })];
+
+                if !npc.character.is_dead() {
+                    actions.push(Action::AttackNpc(AttackNpc {
                         target_id: npc.identifier.id.to_string(),
-                    }),
-                ]
+                    }))
+                }
+
+                actions
             })
         });
 
