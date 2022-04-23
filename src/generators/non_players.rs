@@ -1,8 +1,6 @@
 use uuid::Uuid;
 
-use crate::components::{
-    character::Character, identifier::Identifier, non_player::NonPlayer,
-};
+use crate::components::{character::Character, identifier::Identifier, non_player::NonPlayer};
 
 use super::{characters::random_character_generator, generator::Generator};
 
