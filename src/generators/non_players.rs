@@ -1,8 +1,17 @@
 use uuid::Uuid;
 
-use crate::components::{character::Character, identifier::Identifier, non_player::NonPlayer};
+use crate::components::{
+    character::Character, identifier::Identifier, non_player::NonPlayer,
+};
 
-use super::generator::Generator;
+use super::{characters::random_character_generator, generator::Generator};
+
+pub fn npc_generator(name: Option<String>) -> impl Generator<NonPlayer> {
+    NonPlayerPrototype {
+        name,
+        character_generator: Box::new(random_character_generator()),
+    }
+}
 
 pub struct NonPlayerPrototype {
     pub name: Option<String>,

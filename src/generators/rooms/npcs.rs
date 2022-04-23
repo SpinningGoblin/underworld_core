@@ -328,6 +328,8 @@ fn npc_prototype(species: &Species, life_modifier: Option<LifeModifier>) -> NonP
         has_inventory: true,
     };
 
+
+
     NonPlayerPrototype {
         name: generate_name(),
         character_generator: Box::new(character_prototype),

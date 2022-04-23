@@ -17,6 +17,22 @@ pub struct CharacterPrototype {
     pub has_inventory: bool,
 }
 
+pub fn random_character_generator() -> impl Generator<Character> {
+    CharacterPrototype::random_species_character()
+}
+
+pub fn random_overloaded_character_generator() -> impl Generator<Character> {
+    CharacterPrototype::random_species_overloaded()
+}
+
+pub fn species_character_generator(species: Species) -> impl Generator<Character> {
+    basic_character(species)
+}
+
+pub fn overloaded_species_character_generator(species: Species) -> impl Generator<Character> {
+    overloaded_character(species)
+}
+
 impl CharacterPrototype {
     pub fn basic_goblin() -> Self {
         basic_character(Species::Goblin)
