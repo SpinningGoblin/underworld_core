@@ -1,11 +1,9 @@
-use uuid::Uuid;
-
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::{components::character::CharacterViewArgs, utils::ids::parse_id};
+use crate::components::character::CharacterViewArgs;
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -20,14 +18,6 @@ pub struct LookAtTarget {
 }
 
 impl LookAtTarget {
-    pub fn target_id(&self) -> Option<Uuid> {
-        parse_id(&self.target)
-    }
-
-    pub fn room_id(&self) -> Option<Uuid> {
-        parse_id(&self.room_id)
-    }
-
     pub fn description(&self) -> String {
         "Look at a target inside of a room".to_string()
     }
