@@ -9,9 +9,10 @@ use crate::components::{
 };
 
 use super::{
-    npc_hit::NpcHit, npc_killed::NpcKilled, npc_missed::NpcMissed, npc_viewed::NpcViewed,
-    player_hit::PlayerHit, player_killed::PlayerKilled, player_missed::PlayerMissed,
-    room_exited::RoomExited, room_generated::RoomGenerated,
+    item_taken_from_npc::ItemTakenFromNpc, npc_hit::NpcHit, npc_killed::NpcKilled,
+    npc_missed::NpcMissed, npc_viewed::NpcViewed, player_hit::PlayerHit,
+    player_killed::PlayerKilled, player_missed::PlayerMissed, room_exited::RoomExited,
+    room_generated::RoomGenerated,
 };
 
 #[derive(Clone, Debug)]
@@ -22,6 +23,7 @@ use super::{
     serde(rename_all = "snake_case", tag = "event_type")
 )]
 pub enum Event {
+    ItemTakenFromNpc(ItemTakenFromNpc),
     NpcHit(NpcHit),
     NpcKilled(NpcKilled),
     NpcMissed(NpcMissed),
@@ -97,9 +99,20 @@ pub fn apply_events(
             Event::PlayerHit(player_hit) => {
                 new_player.character.damage(player_hit.damage);
             }
-            Event::PlayerKilled(_) => {}
+            Event::PlayerKilled(_) => new_player.character.kill(),
             Event::PlayerMissed(_) => {}
             Event::NpcViewed(_) => {}
+            Event::ItemTakenFromNpc(item_taken_from_npc) => {
+                let npc = new_game
+                    .current_room_mut()
+                    .find_npc_mut(&item_taken_from_npc.npc_id)
+                    .unwrap();
+                let character_item = npc
+                    .character
+                    .remove_item(&item_taken_from_npc.item_id)
+                    .unwrap();
+                new_player.character.add_item(character_item)
+            }
         }
     }
 

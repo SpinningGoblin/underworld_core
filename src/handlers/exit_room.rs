@@ -1,12 +1,13 @@
 use crate::{
     actions::exit_room::ExitRoom,
     components::games::game_state::GameState,
+    errors::Errors,
     events::{event::Event, room_exited::RoomExited, room_generated::RoomGenerated},
     generators::{generator::Generator, rooms::random_room_generator},
     utils::ids::parse_id,
 };
 
-pub fn handle_exit_room(exit_room: &ExitRoom, state: &GameState) -> Vec<Event> {
+pub fn handle_exit_room(exit_room: &ExitRoom, state: &GameState) -> Result<Vec<Event>, Errors> {
     // We need to check the exit maps for one with the room_id and exit.
     // If there's another exit id then find the room with that exit id and move
     // the player to that room.
@@ -16,17 +17,18 @@ pub fn handle_exit_room(exit_room: &ExitRoom, state: &GameState) -> Vec<Event> {
     // current room.
 
     let mut events: Vec<Event> = Vec::new();
-
-    let exit_id = parse_id(&exit_room.exit_id).unwrap();
-    let exit_map = state
+    let exit_id = parse_id(&exit_room.exit_id)?;
+    let exit_map = match state
         .world
         .exit_graph
         .iter()
         .find(|exit_map| exit_map.exit_id.eq(&exit_id))
-        .unwrap();
+    {
+        Some(it) => it,
+        None => return Err(Errors::ExitNotFound(exit_id.to_string())),
+    };
 
     let other_room_id = exit_map.other_room_id(state.current_room_id);
-
     let room_id = match other_room_id {
         Some(id) => id,
         None => {
@@ -47,5 +49,5 @@ pub fn handle_exit_room(exit_room: &ExitRoom, state: &GameState) -> Vec<Event> {
         new_room_id: room_id,
     }));
 
-    events
+    Ok(events)
 }

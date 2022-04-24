@@ -1,6 +1,7 @@
 use crate::{
     actions::action::Action,
     components::{games::game_state::GameState, player::PlayerCharacter},
+    errors::Errors,
     events::event::Event,
     handlers::{handle, HandledAction},
 };
@@ -11,15 +12,15 @@ pub struct Game {
 }
 
 impl Game {
-    pub fn handle_action(&mut self, action: &Action) -> Vec<Event> {
+    pub fn handle_action(&mut self, action: &Action) -> Result<Vec<Event>, Errors> {
         let HandledAction {
             events,
             new_state,
             new_player,
-        } = handle(action, &self.state, &self.player);
+        } = handle(action, &self.state, &self.player)?;
         self.state = new_state;
         self.player = new_player;
 
-        events
+        Ok(events)
     }
 }
