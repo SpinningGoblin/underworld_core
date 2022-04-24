@@ -4,6 +4,7 @@ use bevy_ecs::prelude::Component;
 use poem_openapi::Object;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 use std::fmt::Display;
 
@@ -19,6 +20,31 @@ pub struct Inventory {
 }
 
 impl Inventory {
+    pub fn find_item(&self, item_id: &Uuid) -> Option<CharacterItem> {
+        self.equipment
+            .iter()
+            .find(|character_item| character_item.item.identifier.id.eq(item_id))
+            .cloned()
+    }
+
+    pub fn add_item(&mut self, character_item: CharacterItem) {
+        self.equipment.push(character_item)
+    }
+
+    pub fn remove_item(&mut self, item_id: &Uuid) -> Option<CharacterItem> {
+        let index = self
+            .equipment
+            .iter()
+            .enumerate()
+            .find(|(_, character_item)| character_item.item.identifier.id.eq(item_id))
+            .map(|(index, _)| index);
+
+        match index {
+            Some(it) => Some(self.equipment.remove(it)),
+            None => None,
+        }
+    }
+
     pub fn equipped_wearables(&self) -> Vec<CharacterItem> {
         self.equipment
             .iter()

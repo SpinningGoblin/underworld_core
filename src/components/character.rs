@@ -4,9 +4,11 @@ use bevy_ecs::prelude::Component;
 use poem_openapi::Object;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 use super::{
     inventory::{Inventory, InventoryView},
+    items::character_item::CharacterItem,
     life_modifier::LifeModifier,
     species::Species,
     stats::{Stats, StatsView},
@@ -26,9 +28,32 @@ pub struct Character {
 
 impl Character {
     pub fn is_dead(&self) -> bool {
-        match &self.stats.health {
-            Some(health) => health.current == 0,
-            None => true,
+        if let Some(health) = &self.stats.health {
+            health.current == 0
+        } else {
+            true
+        }
+    }
+
+    pub fn find_item(&self, item_id: &Uuid) -> Option<CharacterItem> {
+        if let Some(inv) = &self.inventory {
+            inv.find_item(item_id)
+        } else {
+            None
+        }
+    }
+
+    pub fn remove_item(&mut self, item_id: &Uuid) -> Option<CharacterItem> {
+        if let Some(inventory) = self.inventory.as_mut() {
+            inventory.remove_item(item_id)
+        } else {
+            None
+        }
+    }
+
+    pub fn add_item(&mut self, character_item: CharacterItem) {
+        if let Some(inventory) = self.inventory.as_mut() {
+            inventory.add_item(character_item)
         }
     }
 
