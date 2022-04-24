@@ -1,7 +1,8 @@
 use super::{
     attack_npc::AttackNpc,
     exit_room::ExitRoom,
-    look_at::{LookAtRoom, LookAtTarget},
+    look_at::{LookAtNpc, LookAtRoom, LookAtTarget},
+    loot_npc::LootNpc,
     quick_look::QuickLookRoom,
 };
 
@@ -19,8 +20,10 @@ use serde::{Deserialize, Serialize};
 )]
 pub enum Action {
     AttackNpc(AttackNpc),
+    LookAtNpc(LookAtNpc),
     LookAtTarget(LookAtTarget),
     LookAtRoom(LookAtRoom),
+    LootNpc(LootNpc),
     QuickLookRoom(QuickLookRoom),
     ExitRoom(ExitRoom),
 }

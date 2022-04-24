@@ -5,7 +5,7 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::utils::ids::parse_id;
+use crate::{components::character::CharacterViewArgs, utils::ids::parse_id};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -44,4 +44,18 @@ impl LookAtRoom {
     pub fn description(&self) -> String {
         "Look at a room".to_string()
     }
+}
+
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(
+    feature = "serialization",
+    derive(Deserialize, Serialize),
+    serde(rename_all = "snake_case")
+)]
+pub struct LookAtNpc {
+    pub npc_id: String,
+    pub args: CharacterViewArgs,
+    pub knows_name: bool,
+    pub knows_all: bool,
 }

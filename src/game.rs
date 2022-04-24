@@ -2,7 +2,7 @@ use crate::{
     actions::action::Action,
     components::{games::game_state::GameState, player::PlayerCharacter},
     events::event::Event,
-    handlers::handle::{handle, HandledAction},
+    handlers::{handle, HandledAction},
 };
 
 pub struct Game {

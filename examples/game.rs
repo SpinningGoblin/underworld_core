@@ -30,7 +30,7 @@ pub fn main() {
             if let Some(npc_positions) = &game.state.current_room().npc_positions.get(0) {
                 if let Some(npc) = npc_positions.npcs.get(0) {
                     let attack = AttackNpc {
-                        target_id: npc.identifier.id.to_string(),
+                        npc_id: npc.identifier.id.to_string(),
                     };
 
                     let attack_events = game.handle_action(&Action::AttackNpc(attack));

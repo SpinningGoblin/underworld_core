@@ -37,7 +37,7 @@ impl Room {
 
                 if !npc.character.is_dead() {
                     actions.push(Action::AttackNpc(AttackNpc {
-                        target_id: npc.identifier.id.to_string(),
+                        npc_id: npc.identifier.id.to_string(),
                     }))
                 }
 

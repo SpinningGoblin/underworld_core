@@ -9,9 +9,9 @@ use crate::components::{
 };
 
 use super::{
-    npc_hit::NpcHit, npc_killed::NpcKilled, npc_missed::NpcMissed, player_hit::PlayerHit,
-    player_killed::PlayerKilled, player_missed::PlayerMissed, room_exited::RoomExited,
-    room_generated::RoomGenerated,
+    npc_hit::NpcHit, npc_killed::NpcKilled, npc_missed::NpcMissed, npc_viewed::NpcViewed,
+    player_hit::PlayerHit, player_killed::PlayerKilled, player_missed::PlayerMissed,
+    room_exited::RoomExited, room_generated::RoomGenerated,
 };
 
 #[derive(Clone, Debug)]
@@ -25,6 +25,7 @@ pub enum Event {
     NpcHit(NpcHit),
     NpcKilled(NpcKilled),
     NpcMissed(NpcMissed),
+    NpcViewed(NpcViewed),
     PlayerHit(PlayerHit),
     PlayerKilled(PlayerKilled),
     PlayerMissed(PlayerMissed),
@@ -98,6 +99,7 @@ pub fn apply_events(
             }
             Event::PlayerKilled(_) => {}
             Event::PlayerMissed(_) => {}
+            Event::NpcViewed(_) => {}
         }
     }
 

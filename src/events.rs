@@ -2,6 +2,7 @@ pub mod event;
 pub mod npc_hit;
 pub mod npc_killed;
 pub mod npc_missed;
+pub mod npc_viewed;
 pub mod player_hit;
 pub mod player_killed;
 pub mod player_missed;

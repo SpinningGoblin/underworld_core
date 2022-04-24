@@ -10,6 +10,6 @@ use serde::{Deserialize, Serialize};
     derive(Deserialize, Serialize),
     serde(rename_all = "snake_case")
 )]
-pub struct AttackNpc {
+pub struct LootNpc {
     pub npc_id: String,
 }

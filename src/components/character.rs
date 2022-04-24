@@ -104,7 +104,7 @@ pub struct CharacterView {
     pub inventory_known: bool,
 }
 
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct CharacterViewArgs {
     pub knows_health: bool,
     pub knows_species: bool,
