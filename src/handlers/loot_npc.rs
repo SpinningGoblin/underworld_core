@@ -32,7 +32,7 @@ pub fn handle_loot_npc(
             match npc.character.find_item(&item_id) {
                 Some(_) => events.push(Event::ItemTakenFromNpc(ItemTakenFromNpc {
                     item_id,
-                    npc_id: npc_id.clone(),
+                    npc_id,
                 })),
                 None => return Err(Errors::ItemNotFound(item_id.to_string())),
             }

@@ -1,9 +1,13 @@
-use crate::actions::{
-    action::Action,
-    attack_npc::AttackNpc,
-    exit_room::ExitRoom,
-    look_at::{LookAtRoom, LookAtTarget},
-    quick_look::QuickLookRoom,
+use crate::{
+    actions::{
+        action::Action,
+        attack_npc::AttackNpc,
+        exit_room::ExitRoom,
+        look_at::{LookAtNpc, LookAtRoom, LookAtTarget},
+        loot_npc::LootNpc,
+        quick_look::QuickLookRoom,
+    },
+    components::character::CharacterViewArgs,
 };
 
 use super::room::Room;
@@ -30,15 +34,40 @@ impl Room {
 
         let npc_actions = self.npc_positions.iter().flat_map(|npc_position| {
             npc_position.npcs.iter().flat_map(|npc| {
-                let mut actions = vec![Action::LookAtTarget(LookAtTarget {
-                    target: npc.identifier.id.to_string(),
-                    room_id: self.identifier.id.to_string(),
+                let args = CharacterViewArgs {
+                    knows_health: true,
+                    knows_species: true,
+                    knows_life_modifier: true,
+                    knows_inventory: true,
+                    knows_hidden_in_inventory: false,
+                    knows_packed_in_inventory: false,
+                };
+
+                let mut actions = vec![Action::LookAtNpc(LookAtNpc {
+                    npc_id: npc.identifier.id.to_string(),
+                    knows_all: false,
+                    knows_name: true,
+                    args,
                 })];
 
                 if !npc.character.is_dead() {
                     actions.push(Action::AttackNpc(AttackNpc {
                         npc_id: npc.identifier.id.to_string(),
-                    }))
+                    }));
+                } else {
+                    let item_ids = match &npc.character.inventory {
+                        Some(it) => it
+                            .equipment
+                            .iter()
+                            .map(|character_item| character_item.item.identifier.id.to_string())
+                            .collect(),
+                        None => Vec::new(),
+                    };
+
+                    actions.push(Action::LootNpc(LootNpc {
+                        npc_id: npc.identifier.id.to_string(),
+                        item_ids,
+                    }));
                 }
 
                 actions
