@@ -1,3 +1,4 @@
+pub mod dead_npc_beaten;
 pub mod event;
 pub mod item_taken_from_npc;
 pub mod npc_hit;
