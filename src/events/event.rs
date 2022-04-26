@@ -4,13 +4,19 @@ use bevy_ecs::prelude::Component;
 use serde::{Deserialize, Serialize};
 
 use crate::components::{
-    games::game_state::GameState, non_player::NonPlayer, player::PlayerCharacter,
+    games::game_state::GameState,
+    items::{
+        character_item::CharacterItem, location_descriptor::LocationDescriptor,
+        location_tag::LocationTag,
+    },
+    non_player::NonPlayer,
+    player::PlayerCharacter,
     rooms::npc_position::NpcPosition,
 };
 
 use super::{
-    item_taken_from_npc::ItemTakenFromNpc, npc_hit::NpcHit, npc_killed::NpcKilled,
-    npc_missed::NpcMissed, npc_viewed::NpcViewed, player_hit::PlayerHit,
+    dead_npc_beaten::DeadNpcBeaten, item_taken_from_npc::ItemTakenFromNpc, npc_hit::NpcHit,
+    npc_killed::NpcKilled, npc_missed::NpcMissed, npc_viewed::NpcViewed, player_hit::PlayerHit,
     player_killed::PlayerKilled, player_missed::PlayerMissed, room_exited::RoomExited,
     room_generated::RoomGenerated,
 };
@@ -23,6 +29,7 @@ use super::{
     serde(rename_all = "snake_case", tag = "event_type")
 )]
 pub enum Event {
+    DeadNpcBeaten(DeadNpcBeaten),
     ItemTakenFromNpc(ItemTakenFromNpc),
     NpcHit(NpcHit),
     NpcKilled(NpcKilled),
@@ -111,8 +118,17 @@ pub fn apply_events(
                     .character
                     .remove_item(&item_taken_from_npc.item_id)
                     .unwrap();
-                new_player.character.add_item(character_item)
+
+                let packed_item = CharacterItem {
+                    is_hidden: false,
+                    location_descriptor: LocationDescriptor::None,
+                    equipped_location_tags: vec![LocationTag::Packed],
+                    is_multiple: character_item.is_multiple,
+                    item: character_item.item,
+                };
+                new_player.character.add_item(packed_item)
             }
+            Event::DeadNpcBeaten(_) => {}
         }
     }
 
