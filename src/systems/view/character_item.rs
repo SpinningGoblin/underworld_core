@@ -16,23 +16,19 @@ pub fn look_at(
         None
     };
 
-    let (location_descriptor, knows_equipped_location, equipped_location_tags) =
+    let (knows_equipped_location, equipped_location_tags) =
         if character_item.is_hidden && (!knows_hidden || knows_all) {
-            (None, false, Vec::new())
+            (false, Vec::new())
         } else {
-            (
-                Some(character_item.location_descriptor.clone()),
-                true,
-                character_item.equipped_location_tags.clone(),
-            )
+            (true, character_item.equipped_location_tags.clone())
         };
 
     CharacterItemView {
         item: super::item::look_at(&character_item.item, !full_item_hidden, knows_all),
         is_hidden,
-        location_descriptor,
         knows_equipped_location,
         equipped_location_tags,
         is_multiple: character_item.is_multiple,
+        at_the_ready: character_item.at_the_ready,
     }
 }

@@ -120,20 +120,13 @@ impl InventoryView {
 
         let mut item_text: Vec<String> = vec![intro_text];
 
-        for (index, item) in visible_items.iter().enumerate() {
-            let (starters, joiners) = starters_and_joiners(&item.item);
+        for (index, character_item) in visible_items.iter().enumerate() {
+            let (starters, joiners) = starters_and_joiners(&character_item.item);
             if index == 0 {
-                item_text.push(format!("{} ", starters.get_starter(item.is_multiple)));
+                item_text.push(format!("{} ", starters.get_starter(character_item.is_multiple)));
             }
 
-            let description = match &item.location_descriptor {
-                Some(location_descriptor) => {
-                    format!("{} {}", item.item.describe(), location_descriptor)
-                        .trim()
-                        .to_string()
-                }
-                None => item.item.describe(),
-            };
+            let description = character_item.item.describe();
 
             if index == visible_items.len() - 1 && visible_items.len() != 1 {
                 item_text.push(", and ".to_string());
@@ -146,7 +139,7 @@ impl InventoryView {
             } else {
                 item_text.push(format!(
                     "{} {}",
-                    joiners.get_joiner(item.is_multiple),
+                    joiners.get_joiner(character_item.is_multiple),
                     description
                 ));
             }
@@ -186,8 +179,7 @@ mod inventory_tests {
             identifier::Identifier,
             items::{
                 character_item::CharacterItem, descriptor::Descriptor, item::Item,
-                item_type::ItemType, location_descriptor::LocationDescriptor,
-                location_tag::LocationTag,
+                item_type::ItemType, location_tag::LocationTag,
             },
             material::Material,
             tag::Tag,
@@ -222,16 +214,16 @@ mod inventory_tests {
                 CharacterItem {
                     item: long_sword,
                     is_hidden: false,
-                    location_descriptor: LocationDescriptor::None,
                     is_multiple: false,
-                    equipped_location_tags: vec![LocationTag::Equipped],
+                    at_the_ready: true,
+                    equipped_location_tags: vec![LocationTag::Hand],
                 },
                 CharacterItem {
                     item: short_sword,
                     is_hidden: false,
-                    location_descriptor: LocationDescriptor::SheathedAtHip,
                     is_multiple: false,
-                    equipped_location_tags: vec![LocationTag::Equipped],
+                    at_the_ready: true,
+                    equipped_location_tags: vec![LocationTag::Hand],
                 },
             ],
         };
@@ -257,9 +249,9 @@ mod inventory_tests {
             equipment: vec![CharacterItem {
                 item: long_sword,
                 is_hidden: false,
-                location_descriptor: LocationDescriptor::None,
                 is_multiple: false,
-                equipped_location_tags: vec![LocationTag::Equipped],
+                at_the_ready: true,
+                equipped_location_tags: vec![LocationTag::Hand],
             }],
         };
 
@@ -293,16 +285,16 @@ mod inventory_tests {
                 CharacterItem {
                     item: long_sword,
                     is_hidden: false,
-                    location_descriptor: LocationDescriptor::None,
                     is_multiple: false,
-                    equipped_location_tags: vec![LocationTag::Equipped],
+                    at_the_ready: true,
+                    equipped_location_tags: vec![LocationTag::Hand],
                 },
                 CharacterItem {
                     item: short_sword,
                     is_hidden: true,
-                    location_descriptor: LocationDescriptor::StrappedToThigh,
                     is_multiple: false,
-                    equipped_location_tags: vec![LocationTag::Equipped],
+                    at_the_ready: true,
+                    equipped_location_tags: vec![LocationTag::Hand],
                 },
             ],
         };
@@ -328,9 +320,9 @@ mod inventory_tests {
             equipment: vec![CharacterItem {
                 item: chain_mail,
                 is_hidden: false,
-                location_descriptor: LocationDescriptor::None,
                 is_multiple: false,
-                equipped_location_tags: vec![LocationTag::Equipped],
+                at_the_ready: true,
+                equipped_location_tags: vec![LocationTag::Body],
             }],
         };
 
@@ -366,16 +358,16 @@ mod inventory_tests {
                 CharacterItem {
                     item: chain_mail,
                     is_hidden: false,
-                    location_descriptor: LocationDescriptor::None,
                     is_multiple: false,
-                    equipped_location_tags: vec![LocationTag::Equipped],
+                    at_the_ready: true,
+                    equipped_location_tags: vec![LocationTag::Body],
                 },
                 CharacterItem {
                     item: shackles,
                     is_hidden: false,
-                    location_descriptor: LocationDescriptor::DanglingFromWrists,
                     is_multiple: true,
-                    equipped_location_tags: vec![LocationTag::Equipped],
+                    at_the_ready: true,
+                    equipped_location_tags: vec![LocationTag::Wrist],
                 },
             ],
         };

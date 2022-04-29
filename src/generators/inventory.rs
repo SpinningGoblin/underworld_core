@@ -1,15 +1,9 @@
-use std::ops::RangeInclusive;
-
-use enum_iterator::IntoEnumIterator;
 use rand::Rng;
+use std::ops::RangeInclusive;
 
 use crate::components::{
     inventory::Inventory,
-    items::{
-        character_item::CharacterItem, item_type::ItemType,
-        location_descriptor::LocationDescriptor, location_tag::LocationTag,
-    },
-    tag::Tagged,
+    items::{character_item::CharacterItem, item_type::ItemType, location_tag::LocationTag},
 };
 
 use super::{
@@ -40,14 +34,20 @@ impl InventoryPrototype {
             return Vec::new();
         }
 
-        let mut used_descriptors: Vec<LocationDescriptor> = Vec::new();
         let mut equipped_weapons: Vec<CharacterItem> = Vec::new();
         let weapon_types: Vec<&ItemType> = self
             .item_types
             .iter()
             .filter(|item_type| type_is_for_weapon(item_type))
             .collect();
+        let mut location_tags = LocationTag::weapon_tags();
         for _ in 1..=count {
+            if location_tags.is_empty() {
+                break;
+            }
+
+            let tag_index = rng.gen_range(0..location_tags.len());
+            let tag = location_tags.remove(tag_index);
             let index = rng.gen_range(0..weapon_types.len());
             let weapon_type = match &weapon_types.get(index) {
                 Some(it) => *it,
@@ -56,37 +56,6 @@ impl InventoryPrototype {
             let generator = item_generator(weapon_type, true);
             let weapon = generator.generate();
 
-            let possibilities: Vec<LocationDescriptor> = LocationDescriptor::into_enum_iter()
-                .filter(|descriptor| {
-                    descriptor.matches_any_location_tags(&character_location_tags(weapon_type))
-                        && descriptor.matches_any_item_tags(&weapon_type.tags())
-                })
-                .filter(|descriptor| {
-                    if used_descriptors.is_empty() {
-                        true
-                    } else {
-                        used_descriptors
-                            .iter()
-                            .all(|l| !l.unable_to_be_used_with(descriptor))
-                    }
-                })
-                .collect();
-
-            let range = 0..possibilities.len();
-
-            // If we've got nowhere to put the weapon, we can't equip it.
-            if range.is_empty() {
-                continue;
-            }
-
-            let location_index = rng.gen_range(range);
-            let equipped_location = possibilities
-                .get(location_index)
-                .cloned()
-                .unwrap_or_default();
-
-            used_descriptors.push(equipped_location.clone());
-
             let hidden_roll: usize = rng.gen_range(0..=100);
             let multiple = type_inherently_multiple(weapon_type);
 
@@ -94,8 +63,8 @@ impl InventoryPrototype {
                 is_multiple: multiple,
                 item: weapon,
                 is_hidden: hidden_roll <= self.hidden_weapon_chance,
-                equipped_location_tags: equipped_location.tags(),
-                location_descriptor: equipped_location,
+                at_the_ready: tag.eq(&LocationTag::Hand),
+                equipped_location_tags: vec![tag],
             })
         }
 
@@ -110,14 +79,23 @@ impl InventoryPrototype {
             return Vec::new();
         }
 
-        let mut used_descriptors: Vec<LocationDescriptor> = Vec::new();
         let mut equipped_wearables: Vec<CharacterItem> = Vec::new();
         let mut used_types: Vec<ItemType> = Vec::new();
+        let mut wearable_tags = LocationTag::wearable_tags();
+
         for _ in 1..=count {
+            if wearable_tags.is_empty() {
+                break;
+            }
+
+            let tag_index = rng.gen_range(0..wearable_tags.len());
+            let tag = wearable_tags.remove(tag_index);
+
             let possible_types: Vec<ItemType> = self
                 .item_types
                 .iter()
                 .filter(|item_type| type_is_for_wearable(item_type))
+                .filter(|item_type| item_type_is_for_tags(item_type, &tag))
                 .filter(|w_t| {
                     // Return true only if it can be used with all of the used_types
                     if used_types.is_empty() {
@@ -142,49 +120,6 @@ impl InventoryPrototype {
             used_types.push(wearable_type.clone());
             let generator = item_generator(wearable_type, true);
             let wearable = generator.generate();
-            let character_tags = character_location_tags(wearable_type);
-
-            let possibilities: Vec<LocationDescriptor> = LocationDescriptor::into_enum_iter()
-                .filter(|descriptor| {
-                    descriptor.matches_any_location_tags(&character_tags)
-                        && descriptor.matches_any_item_tags(&wearable_type.tags())
-                })
-                .filter(|descriptor| {
-                    if used_descriptors.is_empty() {
-                        true
-                    } else {
-                        used_descriptors
-                            .iter()
-                            .all(|l| !l.unable_to_be_used_with(descriptor))
-                    }
-                })
-                .collect();
-
-            let range = 0..possibilities.len();
-
-            let equipped_location = if range.is_empty() {
-                LocationDescriptor::None
-            } else {
-                let location_index = rng.gen_range(range);
-                possibilities
-                    .get(location_index)
-                    .cloned()
-                    .unwrap_or_default()
-            };
-
-            if equipped_location != LocationDescriptor::None {
-                used_descriptors.push(equipped_location.clone());
-            };
-
-            let equipped_location_tags = if equipped_location == LocationDescriptor::None {
-                character_tags
-                    .into_iter()
-                    .chain(vec![LocationTag::Equipped].into_iter())
-                    .collect()
-            } else {
-                equipped_location.tags()
-            };
-
             let hidden_roll: usize = rng.gen_range(0..=100);
             let multiple = type_inherently_multiple(wearable_type);
 
@@ -192,8 +127,8 @@ impl InventoryPrototype {
                 is_multiple: multiple,
                 item: wearable,
                 is_hidden: hidden_roll <= self.hidden_wearable_chance,
-                location_descriptor: equipped_location,
-                equipped_location_tags,
+                equipped_location_tags: vec![tag],
+                at_the_ready: true,
             })
         }
 
@@ -215,44 +150,36 @@ impl Generator<Inventory> for InventoryPrototype {
     }
 }
 
-fn character_location_tags(item_type: &ItemType) -> Vec<LocationTag> {
+fn item_type_is_for_tags(item_type: &ItemType, tag: &LocationTag) -> bool {
     match *item_type {
-        ItemType::Buckler => vec![LocationTag::Hand],
-        ItemType::Club => vec![LocationTag::Hand, LocationTag::Hip],
-        ItemType::Dagger => vec![LocationTag::Hand, LocationTag::Hip, LocationTag::HipSheath],
-        ItemType::Dirk => vec![LocationTag::Hand, LocationTag::Hip, LocationTag::HipSheath],
-        ItemType::GreatSword => vec![LocationTag::Hand, LocationTag::Back],
-        ItemType::Hammer => vec![LocationTag::Hand, LocationTag::Hip],
-        ItemType::LongSword => vec![
-            LocationTag::Hand,
-            LocationTag::Hip,
-            LocationTag::HipSheath,
-            LocationTag::Back,
-        ],
-        ItemType::Mace => vec![LocationTag::Hand, LocationTag::Hip],
-        ItemType::Morningstar => vec![LocationTag::Hand, LocationTag::Hip],
-        ItemType::Shield => vec![LocationTag::Hand, LocationTag::Back],
-        ItemType::ShortSword => {
-            vec![LocationTag::Hand, LocationTag::Hip, LocationTag::HipSheath]
+        ItemType::Breastplate | ItemType::Shirt | ItemType::Vest => tag.eq(&LocationTag::Body),
+        ItemType::Boots | ItemType::PlateBoots => tag.eq(&LocationTag::Feet),
+        ItemType::Buckler => tag.eq(&LocationTag::Hand),
+        ItemType::Cloak => tag.eq(&LocationTag::Shoulder),
+        ItemType::Club
+        | ItemType::Hammer
+        | ItemType::Mace
+        | ItemType::Morningstar
+        | ItemType::Whip => tag.eq(&LocationTag::Hand) || tag.eq(&LocationTag::Hip),
+        ItemType::Dagger | ItemType::ShortSword | ItemType::Dirk => {
+            tag.eq(&LocationTag::Hand)
+                || vec![LocationTag::Hip, LocationTag::HipSheath].contains(tag)
         }
-        ItemType::Whip => vec![LocationTag::Hand, LocationTag::Hip],
-        ItemType::Breastplate => vec![LocationTag::Body],
-        ItemType::Mask => vec![LocationTag::Head],
-        ItemType::Cloak => vec![LocationTag::Shoulder],
-        ItemType::Shirt => vec![LocationTag::Body],
-        ItemType::Trousers => vec![LocationTag::Leg],
-        ItemType::Crown => vec![LocationTag::Head],
-        ItemType::Boots => vec![LocationTag::Feet],
-        ItemType::Gloves => vec![LocationTag::Hand],
-        ItemType::LoinCloth => vec![LocationTag::Waist],
-        ItemType::PlateBoots => vec![LocationTag::Feet],
-        ItemType::PlateGauntlets => vec![LocationTag::Hand],
-        ItemType::PlateHelmet => vec![LocationTag::Head],
-        ItemType::Shackles => vec![LocationTag::Ankle, LocationTag::Wrist],
-        ItemType::Vest => vec![LocationTag::Body],
-        ItemType::Helm => vec![LocationTag::Head],
-        ItemType::Halberd => vec![LocationTag::Hand, LocationTag::Back],
-        ItemType::Pike => vec![LocationTag::Hand, LocationTag::Back],
-        ItemType::Spear => vec![LocationTag::Hand, LocationTag::Back],
+        ItemType::Crown | ItemType::PlateHelmet | ItemType::Helm => tag.eq(&LocationTag::Head),
+        ItemType::Gloves | ItemType::PlateGauntlets => tag.eq(&LocationTag::Hand),
+        ItemType::GreatSword
+        | ItemType::Halberd
+        | ItemType::Pike
+        | ItemType::Shield
+        | ItemType::Spear => tag.eq(&LocationTag::Hand) || tag.eq(&LocationTag::Back),
+        ItemType::LoinCloth => tag.eq(&LocationTag::Waist),
+        ItemType::LongSword => {
+            tag.eq(&LocationTag::Hand)
+                || vec![LocationTag::Hip, LocationTag::HipSheath].contains(tag)
+                || tag.eq(&LocationTag::Back)
+        }
+        ItemType::Mask => tag.eq(&LocationTag::Face),
+        ItemType::Shackles => tag.eq(&LocationTag::Wrist) | tag.eq(&LocationTag::Ankle),
+        ItemType::Trousers => tag.eq(&LocationTag::Leg),
     }
 }

@@ -82,30 +82,26 @@ impl LocationDescriptor {
     pub fn tags(&self) -> Vec<LocationTag> {
         match *self {
             LocationDescriptor::AlmostFallingGrip => {
-                vec![LocationTag::Hand, LocationTag::Equipped]
+                vec![LocationTag::Hand]
             }
-            LocationDescriptor::ClenchedInFist => vec![LocationTag::Hand, LocationTag::Equipped],
-            LocationDescriptor::DanglingFromWrists => vec![
-                LocationTag::Equipped,
-                LocationTag::Wrist,
-                LocationTag::Ankle,
-            ],
-            LocationDescriptor::HangingHip => vec![LocationTag::Equipped, LocationTag::Hip],
+            LocationDescriptor::ClenchedInFist => vec![LocationTag::Hand],
+            LocationDescriptor::DanglingFromWrists => vec![LocationTag::Wrist, LocationTag::Ankle],
+            LocationDescriptor::HangingHip => vec![LocationTag::Hip],
             LocationDescriptor::HangingLooselyShoulders => {
-                vec![LocationTag::Equipped, LocationTag::Shoulder]
+                vec![LocationTag::Shoulder]
             }
-            LocationDescriptor::HeldLoosely => vec![LocationTag::Equipped, LocationTag::Hand],
+            LocationDescriptor::HeldLoosely => vec![LocationTag::Hand],
             LocationDescriptor::HangingMoldySheath => {
-                vec![LocationTag::Equipped, LocationTag::HipSheath]
+                vec![LocationTag::HipSheath]
             }
             LocationDescriptor::SheathedAtHip => {
-                vec![LocationTag::Equipped, LocationTag::HipSheath]
+                vec![LocationTag::HipSheath]
             }
-            LocationDescriptor::StrappedToBack => vec![LocationTag::Equipped, LocationTag::Back],
-            LocationDescriptor::StrappedToThigh => vec![LocationTag::Equipped, LocationTag::Leg],
-            LocationDescriptor::ClenchedInFists => vec![LocationTag::Equipped, LocationTag::Hand],
+            LocationDescriptor::StrappedToBack => vec![LocationTag::Back],
+            LocationDescriptor::StrappedToThigh => vec![LocationTag::Leg],
+            LocationDescriptor::ClenchedInFists => vec![LocationTag::Hand],
             LocationDescriptor::None => Vec::new(),
-            LocationDescriptor::CoiledAtWaist => vec![LocationTag::Equipped, LocationTag::Waist],
+            LocationDescriptor::CoiledAtWaist => vec![LocationTag::Waist],
         }
     }
 

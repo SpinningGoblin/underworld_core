@@ -5,10 +5,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::components::{
     games::game_state::GameState,
-    items::{
-        character_item::CharacterItem, location_descriptor::LocationDescriptor,
-        location_tag::LocationTag,
-    },
+    items::{character_item::CharacterItem, location_tag::LocationTag},
     non_player::NonPlayer,
     player::PlayerCharacter,
     rooms::npc_position::NpcPosition,
@@ -121,10 +118,10 @@ pub fn apply_events(
 
                 let packed_item = CharacterItem {
                     is_hidden: false,
-                    location_descriptor: LocationDescriptor::None,
                     equipped_location_tags: vec![LocationTag::Packed],
                     is_multiple: character_item.is_multiple,
                     item: character_item.item,
+                    at_the_ready: false,
                 };
                 new_player.character.add_item(packed_item)
             }

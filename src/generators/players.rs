@@ -9,7 +9,7 @@ use crate::components::{
     inventory::Inventory,
     items::{
         character_item::CharacterItem, descriptor::Descriptor, item::Item, item_type::ItemType,
-        location_descriptor::LocationDescriptor, location_tag::LocationTag,
+        location_tag::LocationTag,
     },
     material::Material,
     player::PlayerCharacter,
@@ -125,23 +125,23 @@ fn starter_wearables() -> Vec<CharacterItem> {
         CharacterItem {
             item: trousers,
             is_hidden: false,
-            location_descriptor: LocationDescriptor::None,
-            equipped_location_tags: vec![LocationTag::Equipped, LocationTag::Leg],
+            equipped_location_tags: vec![LocationTag::Leg],
             is_multiple: false,
+            at_the_ready: true,
         },
         CharacterItem {
             item: shirt,
             is_hidden: false,
-            location_descriptor: LocationDescriptor::None,
-            equipped_location_tags: vec![LocationTag::Equipped, LocationTag::Body],
+            equipped_location_tags: vec![LocationTag::Body],
             is_multiple: false,
+            at_the_ready: true,
         },
         CharacterItem {
             item: boots,
             is_hidden: false,
-            location_descriptor: LocationDescriptor::None,
-            equipped_location_tags: vec![LocationTag::Equipped, LocationTag::Feet],
+            equipped_location_tags: vec![LocationTag::Feet],
             is_multiple: false,
+            at_the_ready: true,
         },
     ]
 }
@@ -191,8 +191,8 @@ fn starter_weapon(rng: &mut ThreadRng) -> CharacterItem {
     CharacterItem {
         item,
         is_hidden: false,
-        location_descriptor: LocationDescriptor::None,
-        equipped_location_tags: vec![LocationTag::Equipped],
+        equipped_location_tags: vec![LocationTag::Hand],
         is_multiple: false,
+        at_the_ready: true,
     }
 }
