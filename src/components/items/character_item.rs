@@ -16,7 +16,7 @@ use super::{
 pub struct CharacterItem {
     pub item: Item,
     pub is_hidden: bool,
-    pub equipped_location_tags: Vec<LocationTag>,
+    pub equipped_location: LocationTag,
     pub is_multiple: bool,
     pub at_the_ready: bool,
 }
@@ -27,13 +27,12 @@ impl CharacterItem {
     }
 
     pub fn is_packed(&self) -> bool {
-        self.equipped_location_tags
-            .iter()
-            .any(|tag| tag == &LocationTag::Packed || tag == &LocationTag::Pockets)
+        self.equipped_location.eq(&LocationTag::Packed)
+            || self.equipped_location.eq(&LocationTag::Pockets)
     }
 
     pub fn is_in_hand(&self) -> bool {
-        self.at_the_ready || self.equipped_location_tags.contains(&LocationTag::Hand)
+        self.at_the_ready || self.equipped_location.eq(&LocationTag::Hand)
     }
 
     pub fn is_weapon(&self) -> bool {
@@ -53,7 +52,7 @@ pub struct CharacterItemView {
     pub item: ItemView,
     pub is_hidden: Option<bool>,
     pub knows_equipped_location: bool,
-    pub equipped_location_tags: Vec<LocationTag>,
+    pub equipped_location: Option<LocationTag>,
     pub is_multiple: bool,
     pub at_the_ready: bool,
 }

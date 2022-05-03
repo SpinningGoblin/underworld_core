@@ -64,7 +64,7 @@ impl InventoryPrototype {
                 item: weapon,
                 is_hidden: hidden_roll <= self.hidden_weapon_chance,
                 at_the_ready: tag.eq(&LocationTag::Hand),
-                equipped_location_tags: vec![tag],
+                equipped_location: tag,
             })
         }
 
@@ -127,8 +127,8 @@ impl InventoryPrototype {
                 is_multiple: multiple,
                 item: wearable,
                 is_hidden: hidden_roll <= self.hidden_wearable_chance,
-                equipped_location_tags: vec![tag],
                 at_the_ready: true,
+                equipped_location: tag,
             })
         }
 

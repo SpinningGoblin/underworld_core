@@ -125,23 +125,23 @@ fn starter_wearables() -> Vec<CharacterItem> {
         CharacterItem {
             item: trousers,
             is_hidden: false,
-            equipped_location_tags: vec![LocationTag::Leg],
             is_multiple: false,
             at_the_ready: true,
+            equipped_location: LocationTag::Leg,
         },
         CharacterItem {
             item: shirt,
             is_hidden: false,
-            equipped_location_tags: vec![LocationTag::Body],
             is_multiple: false,
             at_the_ready: true,
+            equipped_location: LocationTag::Body,
         },
         CharacterItem {
             item: boots,
             is_hidden: false,
-            equipped_location_tags: vec![LocationTag::Feet],
             is_multiple: false,
             at_the_ready: true,
+            equipped_location: LocationTag::Feet,
         },
     ]
 }
@@ -191,7 +191,7 @@ fn starter_weapon(rng: &mut ThreadRng) -> CharacterItem {
     CharacterItem {
         item,
         is_hidden: false,
-        equipped_location_tags: vec![LocationTag::Hand],
+        equipped_location: LocationTag::Hand,
         is_multiple: false,
         at_the_ready: true,
     }

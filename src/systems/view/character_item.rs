@@ -5,10 +5,7 @@ pub fn look_at(
     knows_hidden: bool,
     knows_all: bool,
 ) -> CharacterItemView {
-    let full_item_hidden = character_item
-        .equipped_location_tags
-        .iter()
-        .any(|tag| tag.hides_full_item());
+    let full_item_hidden = character_item.equipped_location.hides_full_item();
 
     let is_hidden = if knows_hidden || knows_all {
         Some(character_item.is_hidden)
@@ -16,19 +13,19 @@ pub fn look_at(
         None
     };
 
-    let (knows_equipped_location, equipped_location_tags) =
+    let (knows_equipped_location, equipped_location) =
         if character_item.is_hidden && (!knows_hidden || knows_all) {
-            (false, Vec::new())
+            (false, None)
         } else {
-            (true, character_item.equipped_location_tags.clone())
+            (true, Some(character_item.equipped_location.clone()))
         };
 
     CharacterItemView {
         item: super::item::look_at(&character_item.item, !full_item_hidden, knows_all),
         is_hidden,
         knows_equipped_location,
-        equipped_location_tags,
         is_multiple: character_item.is_multiple,
         at_the_ready: character_item.at_the_ready,
+        equipped_location,
     }
 }
