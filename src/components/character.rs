@@ -80,6 +80,13 @@ impl Character {
         }
     }
 
+    pub fn count_weapons_at_ready(&self) -> usize {
+        match &self.inventory {
+            Some(inv) => inv.count_weapons_at_ready(),
+            None => 0,
+        }
+    }
+
     pub fn strongest_unequipped_weapon(&self) -> Option<&CharacterItem> {
         match &self.inventory {
             Some(inv) => inv.strongest_unequipped_weapon(),
