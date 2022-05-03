@@ -13,9 +13,10 @@ use crate::components::{
 
 use super::{
     dead_npc_beaten::DeadNpcBeaten, item_taken_from_npc::ItemTakenFromNpc, npc_hit::NpcHit,
-    npc_killed::NpcKilled, npc_missed::NpcMissed, npc_viewed::NpcViewed, player_hit::PlayerHit,
-    player_killed::PlayerKilled, player_missed::PlayerMissed, room_exited::RoomExited,
-    room_generated::RoomGenerated,
+    npc_killed::NpcKilled, npc_missed::NpcMissed, npc_viewed::NpcViewed,
+    npc_weapon_readied::NpcWeaponReadied, player_hit::PlayerHit,
+    player_item_moved::PlayerItemMoved, player_killed::PlayerKilled, player_missed::PlayerMissed,
+    room_exited::RoomExited, room_generated::RoomGenerated,
 };
 
 #[derive(Clone, Debug)]
@@ -32,7 +33,9 @@ pub enum Event {
     NpcKilled(NpcKilled),
     NpcMissed(NpcMissed),
     NpcViewed(NpcViewed),
+    NpcWeaponReadied(NpcWeaponReadied),
     PlayerHit(PlayerHit),
+    PlayerItemMoved(PlayerItemMoved),
     PlayerKilled(PlayerKilled),
     PlayerMissed(PlayerMissed),
     RoomExited(RoomExited),
@@ -118,7 +121,7 @@ pub fn apply_events(
 
                 let packed_item = CharacterItem {
                     is_hidden: false,
-                    equipped_location_tags: vec![LocationTag::Packed],
+                    equipped_location: LocationTag::Packed,
                     is_multiple: character_item.is_multiple,
                     item: character_item.item,
                     at_the_ready: false,
@@ -126,6 +129,26 @@ pub fn apply_events(
                 new_player.character.add_item(packed_item)
             }
             Event::DeadNpcBeaten(_) => {}
+            Event::NpcWeaponReadied(weapon_readied) => {
+                let npc = new_game
+                    .current_room_mut()
+                    .find_npc_mut(&weapon_readied.npc_id)
+                    .unwrap();
+                let mut character_item =
+                    npc.character.remove_item(&weapon_readied.item_id).unwrap();
+                character_item.at_the_ready = true;
+                character_item.equipped_location = LocationTag::Hand;
+                npc.character.add_item(character_item);
+            }
+            Event::PlayerItemMoved(item_moved) => {
+                let mut character_item = new_player
+                    .character
+                    .remove_item(&item_moved.item_id)
+                    .unwrap();
+                character_item.at_the_ready = item_moved.at_the_ready;
+                character_item.equipped_location = item_moved.location.clone();
+                new_player.character.add_item(character_item);
+            }
         }
     }
 
