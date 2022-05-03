@@ -39,6 +39,13 @@ pub struct Item {
 }
 
 impl Item {
+    pub fn num_attack_rolls(&self) -> usize {
+        self.attack
+            .as_ref()
+            .map(|attack| attack.num_rolls)
+            .unwrap_or_default()
+    }
+
     pub fn is_weapon(&self) -> bool {
         self.tags.iter().any(|tag| tag.is_weapon())
     }
