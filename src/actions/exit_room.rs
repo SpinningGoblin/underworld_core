@@ -1,5 +1,7 @@
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
+#[cfg(feature = "openapi")]
+use poem_openapi::Object;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
@@ -10,6 +12,7 @@ use serde::{Deserialize, Serialize};
     derive(Deserialize, Serialize),
     serde(rename_all = "snake_case")
 )]
+#[cfg_attr(feature = "openapi", derive(Object))]
 pub struct ExitRoom {
     pub exit_id: String,
 }
