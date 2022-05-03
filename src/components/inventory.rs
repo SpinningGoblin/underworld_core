@@ -20,6 +20,13 @@ pub struct Inventory {
 }
 
 impl Inventory {
+    pub fn count_weapons_at_ready(&self) -> usize {
+        self.equipment
+            .iter()
+            .filter(|item| item.is_weapon() && item.at_the_ready)
+            .count()
+    }
+
     pub fn find_item(&self, item_id: &Uuid) -> Option<CharacterItem> {
         self.equipment
             .iter()
