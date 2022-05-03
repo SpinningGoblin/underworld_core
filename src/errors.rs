@@ -11,4 +11,5 @@ pub enum Errors {
     ItemNotFound(String),
     InvalidId(String),
     NpcNotFound(String),
+    TooManyWeaponsEquipped,
 }
