@@ -7,13 +7,14 @@ use crate::{
 
 use self::{
     attack_npc::handle_attack_npc, exit_room::handle_exit_room, loot_npc::handle_loot_npc,
-    view_npc::handle_view_npc,
+    move_player_item::handle_move_player_item, view_npc::handle_view_npc,
 };
 
 mod attack_npc;
 mod exit_room;
 mod helpers;
 mod loot_npc;
+mod move_player_item;
 mod view_npc;
 
 pub struct HandledAction {
@@ -35,7 +36,9 @@ pub fn handle(
         Action::AttackNpc(attack_npc) => handle_attack_npc(attack_npc, state, player)?,
         Action::LootNpc(loot_npc) => handle_loot_npc(state, loot_npc, player)?,
         Action::LookAtNpc(look_at_npc) => handle_view_npc(state, look_at_npc)?,
-        Action::MovePlayerItem(_) => Vec::new(),
+        Action::MovePlayerItem(move_player_item) => {
+            handle_move_player_item(move_player_item, player)?
+        }
     };
 
     let (new_state, new_player) = apply_events(&events, state, player);
