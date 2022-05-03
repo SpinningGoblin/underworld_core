@@ -14,4 +14,5 @@ use crate::components::items::location_tag::LocationTag;
 pub struct MovePlayerItem {
     pub item_id: String,
     pub location_tag: LocationTag,
+    pub put_at_the_ready: bool,
 }
