@@ -3,6 +3,7 @@ use super::{
     exit_room::ExitRoom,
     look_at::{LookAtNpc, LookAtRoom, LookAtTarget},
     loot_npc::LootNpc,
+    move_player_item::MovePlayerItem,
     quick_look::QuickLookRoom,
 };
 
@@ -24,6 +25,7 @@ pub enum Action {
     LookAtTarget(LookAtTarget),
     LookAtRoom(LookAtRoom),
     LootNpc(LootNpc),
+    MovePlayerItem(MovePlayerItem),
     QuickLookRoom(QuickLookRoom),
     ExitRoom(ExitRoom),
 }

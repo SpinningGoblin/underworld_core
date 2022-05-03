@@ -35,6 +35,7 @@ pub fn handle(
         Action::AttackNpc(attack_npc) => handle_attack_npc(attack_npc, state, player)?,
         Action::LootNpc(loot_npc) => handle_loot_npc(state, loot_npc, player)?,
         Action::LookAtNpc(look_at_npc) => handle_view_npc(state, look_at_npc)?,
+        Action::MovePlayerItem(_) => Vec::new(),
     };
 
     let (new_state, new_player) = apply_events(&events, state, player);
