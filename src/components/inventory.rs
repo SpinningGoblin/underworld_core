@@ -60,6 +60,19 @@ impl Inventory {
             .cloned()
             .collect()
     }
+
+    pub fn unequipped_weapons(&self) -> Vec<&CharacterItem> {
+        self.equipment
+            .iter()
+            .filter(|item| item.is_weapon() && !item.is_equipped())
+            .collect()
+    }
+
+    pub fn strongest_unequipped_weapon(&self) -> Option<&CharacterItem> {
+        self.unequipped_weapons()
+            .into_iter()
+            .max_by(|a, b| a.item.num_attack_rolls().cmp(&b.item.num_attack_rolls()))
+    }
 }
 
 #[derive(Clone, Debug)]
@@ -123,7 +136,10 @@ impl InventoryView {
         for (index, character_item) in visible_items.iter().enumerate() {
             let (starters, joiners) = starters_and_joiners(&character_item.item);
             if index == 0 {
-                item_text.push(format!("{} ", starters.get_starter(character_item.is_multiple)));
+                item_text.push(format!(
+                    "{} ",
+                    starters.get_starter(character_item.is_multiple)
+                ));
             }
 
             let description = character_item.item.describe();
@@ -216,14 +232,14 @@ mod inventory_tests {
                     is_hidden: false,
                     is_multiple: false,
                     at_the_ready: true,
-                    equipped_location_tags: vec![LocationTag::Hand],
+                    equipped_location: LocationTag::Hand,
                 },
                 CharacterItem {
                     item: short_sword,
                     is_hidden: false,
                     is_multiple: false,
                     at_the_ready: true,
-                    equipped_location_tags: vec![LocationTag::Hand],
+                    equipped_location: LocationTag::Hand,
                 },
             ],
         };
@@ -251,7 +267,7 @@ mod inventory_tests {
                 is_hidden: false,
                 is_multiple: false,
                 at_the_ready: true,
-                equipped_location_tags: vec![LocationTag::Hand],
+                equipped_location: LocationTag::Hand,
             }],
         };
 
@@ -287,14 +303,14 @@ mod inventory_tests {
                     is_hidden: false,
                     is_multiple: false,
                     at_the_ready: true,
-                    equipped_location_tags: vec![LocationTag::Hand],
+                    equipped_location: LocationTag::Hand,
                 },
                 CharacterItem {
                     item: short_sword,
                     is_hidden: true,
                     is_multiple: false,
                     at_the_ready: true,
-                    equipped_location_tags: vec![LocationTag::Hand],
+                    equipped_location: LocationTag::Hand,
                 },
             ],
         };
@@ -322,7 +338,7 @@ mod inventory_tests {
                 is_hidden: false,
                 is_multiple: false,
                 at_the_ready: true,
-                equipped_location_tags: vec![LocationTag::Body],
+                equipped_location: LocationTag::Body,
             }],
         };
 
@@ -360,14 +376,14 @@ mod inventory_tests {
                     is_hidden: false,
                     is_multiple: false,
                     at_the_ready: true,
-                    equipped_location_tags: vec![LocationTag::Body],
+                    equipped_location: LocationTag::Body,
                 },
                 CharacterItem {
                     item: shackles,
                     is_hidden: false,
                     is_multiple: true,
                     at_the_ready: true,
-                    equipped_location_tags: vec![LocationTag::Wrist],
+                    equipped_location: LocationTag::Wrist,
                 },
             ],
         };

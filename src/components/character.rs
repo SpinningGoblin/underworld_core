@@ -73,6 +73,20 @@ impl Character {
         }
     }
 
+    pub fn no_weapons_equipped(&self) -> bool {
+        match &self.inventory {
+            Some(inv) => inv.equipped_weapons().is_empty(),
+            None => true,
+        }
+    }
+
+    pub fn strongest_unequipped_weapon(&self) -> Option<&CharacterItem> {
+        match &self.inventory {
+            Some(inv) => inv.strongest_unequipped_weapon(),
+            None => None,
+        }
+    }
+
     pub fn attack(&self) -> i32 {
         let mut rng = rand::thread_rng();
 
