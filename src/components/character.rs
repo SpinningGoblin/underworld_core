@@ -94,6 +94,7 @@ impl Character {
             Some(inventory) => inventory
                 .equipment
                 .iter()
+                .filter(|character_item| character_item.at_the_ready)
                 .map(|character_item| {
                     character_item
                         .item
