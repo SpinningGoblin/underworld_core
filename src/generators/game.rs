@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use crate::components::{
     games::game_state::GameState,
     identifier::Identifier,
@@ -35,6 +37,8 @@ impl Generator<GameState> for GamePrototype {
                 rooms: vec![entry],
                 exit_graph: exit_maps,
             },
+            player_knows_all: false,
+            player_npc_knowledge: HashMap::new(),
         }
     }
 }

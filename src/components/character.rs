@@ -152,6 +152,7 @@ pub struct CharacterView {
 }
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]
+#[cfg_attr(feature = "openapi", derive(Object))]
 pub struct CharacterViewArgs {
     pub knows_health: bool,
     pub knows_species: bool,

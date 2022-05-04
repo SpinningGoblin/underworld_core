@@ -1,10 +1,10 @@
 use super::{
     attack_npc::AttackNpc,
     exit_room::ExitRoom,
-    look_at::{LookAtNpc, LookAtRoom, LookAtTarget},
+    look_at::{LookAtCurrentRoom, LookAtNpc},
     loot_npc::LootNpc,
     move_player_item::MovePlayerItem,
-    quick_look::QuickLookRoom,
+    quick_look::QuickLookCurrentRoom,
 };
 
 #[cfg(feature = "bevy_components")]
@@ -21,11 +21,10 @@ use serde::{Deserialize, Serialize};
 )]
 pub enum Action {
     AttackNpc(AttackNpc),
+    LookAtCurrentRoom(LookAtCurrentRoom),
     LookAtNpc(LookAtNpc),
-    LookAtTarget(LookAtTarget),
-    LookAtRoom(LookAtRoom),
     LootNpc(LootNpc),
     MovePlayerItem(MovePlayerItem),
-    QuickLookRoom(QuickLookRoom),
+    QuickLookCurrentRoom(QuickLookCurrentRoom),
     ExitRoom(ExitRoom),
 }

@@ -29,9 +29,6 @@ pub fn handle(
     player: &PlayerCharacter,
 ) -> Result<HandledAction, Errors> {
     let events = match action {
-        Action::LookAtTarget(_) => Vec::new(),
-        Action::LookAtRoom(_) => Vec::new(),
-        Action::QuickLookRoom(_) => Vec::new(),
         Action::ExitRoom(exit_room) => handle_exit_room(exit_room, state)?,
         Action::AttackNpc(attack_npc) => handle_attack_npc(attack_npc, state, player)?,
         Action::LootNpc(loot_npc) => handle_loot_npc(state, loot_npc, player)?,
@@ -39,6 +36,8 @@ pub fn handle(
         Action::MovePlayerItem(move_player_item) => {
             handle_move_player_item(move_player_item, player)?
         }
+        Action::LookAtCurrentRoom(_) => Vec::new(),
+        Action::QuickLookCurrentRoom(_) => Vec::new(),
     };
 
     let (new_state, new_player) = apply_events(&events, state, player);

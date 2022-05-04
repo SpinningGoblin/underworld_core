@@ -13,12 +13,10 @@ use serde::{Deserialize, Serialize};
     serde(rename_all = "snake_case")
 )]
 #[cfg_attr(feature = "openapi", derive(Object))]
-pub struct QuickLookRoom {
-    pub room_id: String,
-}
+pub struct QuickLookCurrentRoom;
 
-impl QuickLookRoom {
+impl QuickLookCurrentRoom {
     pub fn description(&self) -> String {
-        "Glance at a room".to_string()
+        "Glance at the current room".to_string()
     }
 }

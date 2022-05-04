@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
@@ -5,6 +7,8 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use crate::components::{identifier::Identifier, rooms::room::Room, worlds::world::World};
+
+use super::character_knowledge::CharacterKnowledge;
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -14,9 +18,18 @@ pub struct GameState {
     pub world: World,
     pub current_room_id: Uuid,
     pub rooms_seen: Vec<Uuid>,
+    pub player_knows_all: bool,
+    pub player_npc_knowledge: HashMap<Uuid, CharacterKnowledge>,
 }
 
 impl GameState {
+    pub fn npc_knowledge(&self, npc_id: &Uuid) -> CharacterKnowledge {
+        self.player_npc_knowledge
+            .get(npc_id)
+            .cloned()
+            .unwrap_or_default()
+    }
+
     pub fn current_room_exits(&self) -> Vec<Uuid> {
         self.current_room()
             .exits
