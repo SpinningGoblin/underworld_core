@@ -3,7 +3,7 @@ use crate::{
         action::Action,
         attack_npc::AttackNpc,
         exit_room::ExitRoom,
-        look_at::{LookAtCurrentRoom, LookAtNpc},
+        look_at::{InspectNpc, LookAtCurrentRoom, LookAtNpc},
         loot_npc::LootNpc,
     },
     components::{games::game_state::GameState, player::PlayerCharacter},
@@ -40,9 +40,18 @@ impl Game {
             .iter()
             .flat_map(|npc_position| npc_position.npcs.iter())
             .flat_map(|npc| {
-                let mut actions = vec![Action::LookAtNpc(LookAtNpc {
-                    npc_id: npc.identifier.id.to_string(),
-                })];
+                let mut actions = vec![
+                    Action::LookAtNpc(LookAtNpc {
+                        npc_id: npc.identifier.id.to_string(),
+                    }),
+                    Action::InspectNpc(InspectNpc {
+                        npc_id: npc.identifier.id.to_string(),
+                        discover_health: true,
+                        discover_name: true,
+                        discover_packed_items: true,
+                        discover_hidden_items: true,
+                    }),
+                ];
 
                 if !npc.character.is_dead() {
                     actions.push(Action::AttackNpc(AttackNpc {
