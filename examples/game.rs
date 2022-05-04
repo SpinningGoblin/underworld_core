@@ -3,7 +3,9 @@ pub fn main() {
     #[cfg(feature = "json")]
     {
         use underworld_core::{
-            actions::{action::Action, attack_npc::AttackNpc, exit_room::ExitRoom},
+            actions::{
+                action::Action, attack_npc::AttackNpc, exit_room::ExitRoom, look_at::InspectNpc,
+            },
             game::Game,
             generators::{game::game_generator, generator::Generator, players::player_generator},
         };
@@ -27,22 +29,34 @@ pub fn main() {
             let serialized_new_game = serde_json::to_string(&game.state).unwrap();
             println!("{}", &serialized_new_game);
 
-            if let Some(npc_positions) = &game.state.current_room().npc_positions.get(0) {
-                if let Some(npc) = npc_positions.npcs.get(0) {
-                    let attack = AttackNpc {
-                        npc_id: npc.identifier.id.to_string(),
-                    };
+            let npc_id = match game.state.current_room().npc_positions.get(0) {
+                Some(it) => it.npcs.get(0).unwrap().identifier.id,
+                None => return,
+            };
 
-                    let attack_events = game.handle_action(&Action::AttackNpc(attack));
-                    let serialized_events = serde_json::to_string(&attack_events).unwrap();
-                    println!("{}", &serialized_events);
-                    let serialized_new_game = serde_json::to_string(&game.state).unwrap();
-                    println!("{}", &serialized_new_game);
+            let inspect = InspectNpc {
+                npc_id: npc_id.to_string(),
+                discover_health: true,
+                discover_name: true,
+                discover_packed_items: true,
+                discover_hidden_items: true,
+            };
+            let inspect_events = game.handle_action(&Action::InspectNpc(inspect)).unwrap();
+            let serialized_inspect_events = serde_json::to_string(&inspect_events).unwrap();
+            println!("{}", &serialized_inspect_events);
 
-                    let serialized_player = serde_json::to_string(&game.player).unwrap();
-                    println!("{}", &serialized_player);
-                }
-            }
+            let attack = AttackNpc {
+                npc_id: npc_id.to_string(),
+            };
+            let attack_events = game.handle_action(&Action::AttackNpc(attack)).unwrap();
+            let serialized_events = serde_json::to_string(&attack_events).unwrap();
+            println!("{}", &serialized_events);
+
+            let serialized_new_game = serde_json::to_string(&game.state).unwrap();
+            println!("{}", &serialized_new_game);
+
+            let serialized_player = serde_json::to_string(&game.player).unwrap();
+            println!("{}", &serialized_player);
         };
     }
 }

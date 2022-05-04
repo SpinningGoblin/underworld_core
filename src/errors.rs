@@ -1,3 +1,4 @@
+#[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug)]

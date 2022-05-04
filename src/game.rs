@@ -5,11 +5,8 @@ use crate::{
         exit_room::ExitRoom,
         look_at::{LookAtCurrentRoom, LookAtNpc},
         loot_npc::LootNpc,
-        quick_look::QuickLookCurrentRoom,
     },
-    components::{
-        character::CharacterViewArgs, games::game_state::GameState, player::PlayerCharacter,
-    },
+    components::{games::game_state::GameState, player::PlayerCharacter},
     errors::Errors,
     events::event::Event,
     handlers::{handle, HandledAction},
@@ -34,10 +31,7 @@ impl Game {
     }
 
     pub fn current_actions(&self) -> Vec<Action> {
-        let room_view_actions = vec![
-            Action::QuickLookCurrentRoom(QuickLookCurrentRoom),
-            Action::LookAtCurrentRoom(LookAtCurrentRoom),
-        ];
+        let room_view_actions = vec![Action::LookAtCurrentRoom(LookAtCurrentRoom)];
 
         let npc_actions = self
             .state
@@ -46,21 +40,8 @@ impl Game {
             .iter()
             .flat_map(|npc_position| npc_position.npcs.iter())
             .flat_map(|npc| {
-                let knowledge = self.state.npc_knowledge(&npc.identifier.id);
-                let args = CharacterViewArgs {
-                    knows_health: knowledge.knows_health,
-                    knows_species: knowledge.knows_species,
-                    knows_life_modifier: knowledge.knows_life_modifier,
-                    knows_inventory: knowledge.knows_inventory,
-                    knows_hidden_in_inventory: knowledge.knows_hidden_in_inventory,
-                    knows_packed_in_inventory: knowledge.knows_packed_in_inventory,
-                };
-
                 let mut actions = vec![Action::LookAtNpc(LookAtNpc {
                     npc_id: npc.identifier.id.to_string(),
-                    knows_all: false,
-                    knows_name: true,
-                    args,
                 })];
 
                 if !npc.character.is_dead() {

@@ -12,9 +12,11 @@ use crate::components::{
 };
 
 use super::{
-    dead_npc_beaten::DeadNpcBeaten, item_taken_from_npc::ItemTakenFromNpc, npc_hit::NpcHit,
-    npc_killed::NpcKilled, npc_missed::NpcMissed, npc_viewed::NpcViewed,
-    npc_weapon_readied::NpcWeaponReadied, player_hit::PlayerHit,
+    dead_npc_beaten::DeadNpcBeaten, item_taken_from_npc::ItemTakenFromNpc,
+    npc_health_discovered::NpcHealthDiscovered, npc_hidden_discovered::NpcHiddenDiscovered,
+    npc_hit::NpcHit, npc_killed::NpcKilled, npc_missed::NpcMissed,
+    npc_name_discovered::NpcNameDiscovered, npc_packed_discovered::NpcPackedDiscovered,
+    npc_viewed::NpcViewed, npc_weapon_readied::NpcWeaponReadied, player_hit::PlayerHit,
     player_item_moved::PlayerItemMoved, player_killed::PlayerKilled, player_missed::PlayerMissed,
     room_exited::RoomExited, room_generated::RoomGenerated,
 };
@@ -29,9 +31,13 @@ use super::{
 pub enum Event {
     DeadNpcBeaten(DeadNpcBeaten),
     ItemTakenFromNpc(ItemTakenFromNpc),
+    NpcHealthDiscovered(NpcHealthDiscovered),
+    NpcHiddenDiscovered(NpcHiddenDiscovered),
     NpcHit(NpcHit),
     NpcKilled(NpcKilled),
     NpcMissed(NpcMissed),
+    NpcNameDiscovered(NpcNameDiscovered),
+    NpcPackedDiscovered(NpcPackedDiscovered),
     NpcViewed(NpcViewed),
     NpcWeaponReadied(NpcWeaponReadied),
     PlayerHit(PlayerHit),
@@ -148,6 +154,26 @@ pub fn apply_events(
                 character_item.at_the_ready = item_moved.at_the_ready;
                 character_item.equipped_location = item_moved.location.clone();
                 new_player.character.add_item(character_item);
+            }
+            Event::NpcHealthDiscovered(health_discovered) => {
+                let mut knowledge = new_game.npc_knowledge(&health_discovered.npc_id);
+                knowledge.knows_health = true;
+                new_game.set_npc_knowledge(health_discovered.npc_id, knowledge);
+            }
+            Event::NpcHiddenDiscovered(hidden_discovered) => {
+                let mut knowledge = new_game.npc_knowledge(&hidden_discovered.npc_id);
+                knowledge.knows_health = true;
+                new_game.set_npc_knowledge(hidden_discovered.npc_id, knowledge);
+            }
+            Event::NpcNameDiscovered(name_discovered) => {
+                let mut knowledge = new_game.npc_knowledge(&name_discovered.npc_id);
+                knowledge.knows_health = true;
+                new_game.set_npc_knowledge(name_discovered.npc_id, knowledge);
+            }
+            Event::NpcPackedDiscovered(packed_discovered) => {
+                let mut knowledge = new_game.npc_knowledge(&packed_discovered.npc_id);
+                knowledge.knows_health = true;
+                new_game.set_npc_knowledge(packed_discovered.npc_id, knowledge);
             }
         }
     }

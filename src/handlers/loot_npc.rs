@@ -9,8 +9,8 @@ use crate::{
 use super::helpers::npc_attack_player;
 
 pub fn handle_loot_npc(
-    state: &GameState,
     action: &LootNpc,
+    state: &GameState,
     player: &PlayerCharacter,
 ) -> Result<Vec<Event>, Errors> {
     let npc_id = parse_id(&action.npc_id)?;

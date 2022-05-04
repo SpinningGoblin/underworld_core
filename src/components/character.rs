@@ -151,7 +151,8 @@ pub struct CharacterView {
     pub inventory_known: bool,
 }
 
-#[derive(Clone, Debug, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default)]
+#[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 #[cfg_attr(feature = "openapi", derive(Object))]
 pub struct CharacterViewArgs {
     pub knows_health: bool,

@@ -19,7 +19,7 @@ pub struct CharacterKnowledge {
 impl Default for CharacterKnowledge {
     fn default() -> Self {
         Self {
-            knows_health: true,
+            knows_health: false,
             knows_species: true,
             knows_life_modifier: true,
             knows_inventory: true,

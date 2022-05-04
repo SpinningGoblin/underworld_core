@@ -1,9 +1,13 @@
 pub mod dead_npc_beaten;
 pub mod event;
 pub mod item_taken_from_npc;
+pub mod npc_health_discovered;
+pub mod npc_hidden_discovered;
 pub mod npc_hit;
 pub mod npc_killed;
 pub mod npc_missed;
+pub mod npc_name_discovered;
+pub mod npc_packed_discovered;
 pub mod npc_viewed;
 pub mod npc_weapon_readied;
 pub mod player_hit;
