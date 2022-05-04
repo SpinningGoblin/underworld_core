@@ -37,8 +37,12 @@ pub struct LookAtNpc {
 /// than was previously known about the NPC.
 pub struct InspectNpc {
     pub npc_id: String,
+    /// Attempt to discover the NPC's health.
     pub discover_health: bool,
+    /// Attempt to discover the NPC's name.
     pub discover_name: bool,
+    /// Attempt to discover the items the NPC has packed away.
     pub discover_packed_items: bool,
+    /// Attempt to discover any hidden items the NPC has.
     pub discover_hidden_items: bool,
 }
