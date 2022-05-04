@@ -20,7 +20,7 @@ pub struct LookAtCurrentRoom;
 )]
 #[cfg_attr(feature = "openapi", derive(Object))]
 /// Look at the specified NPC, NPC is viewed using what player
-/// current knows about NPC.
+/// currently knows about NPC.
 pub struct LookAtNpc {
     pub npc_id: String,
 }
