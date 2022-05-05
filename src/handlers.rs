@@ -30,6 +30,14 @@ pub fn handle(
     state: &GameState,
     player: &PlayerCharacter,
 ) -> Result<HandledAction, Errors> {
+    if player.character.is_dead() {
+        /*
+        TODO: Later we might want more specific handling for this
+        where maybe some things could happen with a dead player.
+        */
+        return Err(Errors::PlayerIsDead);
+    }
+
     let events = match action {
         Action::ExitRoom(exit_room) => handle_exit_room(exit_room, state)?,
         Action::AttackNpc(attack_npc) => handle_attack_npc(attack_npc, state, player)?,

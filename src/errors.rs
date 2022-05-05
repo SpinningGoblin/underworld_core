@@ -13,4 +13,5 @@ pub enum Errors {
     InvalidId(String),
     NpcNotFound(String),
     TooManyWeaponsEquipped,
+    PlayerIsDead,
 }
