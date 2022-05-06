@@ -2,7 +2,7 @@ use crate::components::{
     character::CharacterViewArgs,
     rooms::{
         exit::ExitView,
-        fixture_position::FixturePositionView,
+        fixture_position::{FixturePositionView, FixturePositionViewArgs},
         npc_position::{NpcPositionView, NpcPositionViewArgs},
         room::Room,
         room_view::{RoomView, RoomViewArgs},
@@ -22,7 +22,12 @@ pub fn quick_look(room: &Room) -> RoomView {
         knows_name: false,
     };
 
-    view(room, npc_position_args, false)
+    let fixture_position_args = FixturePositionViewArgs {
+        knows_items: false,
+        knows_hidden: false,
+    };
+
+    view(room, npc_position_args, fixture_position_args, false)
 }
 
 pub fn look_at(room: &Room, args: RoomViewArgs, knows_all: bool) -> RoomView {
@@ -38,14 +43,26 @@ pub fn look_at(room: &Room, args: RoomViewArgs, knows_all: bool) -> RoomView {
         knows_name: args.knows_names,
     };
 
-    view(room, npc_position_args, knows_all)
+    let fixture_position_args = FixturePositionViewArgs {
+        knows_items: true,
+        knows_hidden: true,
+    };
+
+    view(room, npc_position_args, fixture_position_args, knows_all)
 }
 
-fn view(room: &Room, npc_position_args: NpcPositionViewArgs, knows_all: bool) -> RoomView {
+fn view(
+    room: &Room,
+    npc_position_args: NpcPositionViewArgs,
+    fixture_position_args: FixturePositionViewArgs,
+    knows_all: bool,
+) -> RoomView {
     let fixture_positions: Vec<FixturePositionView> = room
         .fixture_positions
         .iter()
-        .map(super::fixture_position::look_at)
+        .map(|fixture_position| {
+            super::fixture_position::look_at(fixture_position, &fixture_position_args, knows_all)
+        })
         .into_iter()
         .collect();
     let npc_positions: Vec<NpcPositionView> = room

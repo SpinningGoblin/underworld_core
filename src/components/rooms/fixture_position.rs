@@ -79,6 +79,12 @@ impl FixturePositionView {
     }
 }
 
+#[derive(Clone, Debug, Default)]
+pub struct FixturePositionViewArgs {
+    pub knows_items: bool,
+    pub knows_hidden: bool,
+}
+
 #[cfg(test)]
 mod tests {
     use crate::{
@@ -94,7 +100,7 @@ mod tests {
         systems::view::fixture_position::look_at,
     };
 
-    use super::FixturePosition;
+    use super::{FixturePosition, FixturePositionViewArgs};
 
     #[test]
     fn display() {
@@ -104,6 +110,9 @@ mod tests {
             material: None,
             size: Size::Average,
             descriptors: Vec::new(),
+            contained_items: Vec::new(),
+            hidden_compartment_items: Vec::new(),
+            has_hidden_compartment: false,
         };
         let chair = Fixture {
             identifier: Identifier::default(),
@@ -111,6 +120,9 @@ mod tests {
             material: None,
             size: Size::Average,
             descriptors: Vec::new(),
+            contained_items: Vec::new(),
+            hidden_compartment_items: Vec::new(),
+            has_hidden_compartment: false,
         };
         let fixture_position = FixturePosition {
             group_descriptor: Some(GroupDescriptor::A),
@@ -120,7 +132,17 @@ mod tests {
 
         assert_eq!(
             "a table and chairs is in the corner",
-            format!("{}", look_at(&fixture_position))
+            format!(
+                "{}",
+                look_at(
+                    &fixture_position,
+                    &FixturePositionViewArgs {
+                        knows_items: true,
+                        knows_hidden: true,
+                    },
+                    false
+                )
+            )
         )
     }
 }

@@ -9,7 +9,10 @@ use serde::{Deserialize, Serialize};
 
 use crate::components::{
     identifier::{Identifier, IdentifierView},
-    items::descriptor::Descriptor,
+    items::{
+        descriptor::Descriptor,
+        item::{Item, ItemView},
+    },
     material::Material,
     size::Size,
 };
@@ -29,7 +32,12 @@ pub struct Fixture {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub material: Option<Material>,
     pub size: Size,
+    #[cfg_attr(feature = "serialization", serde(default))]
     pub descriptors: Vec<Descriptor>,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub contained_items: Vec<Item>,
+    pub hidden_compartment_items: Vec<Item>,
+    pub has_hidden_compartment: bool,
 }
 
 #[derive(Clone, Debug)]
@@ -47,6 +55,12 @@ pub struct FixtureView {
     pub material: Option<Material>,
     pub size: Size,
     pub descriptors: Vec<Descriptor>,
+    pub contained_items: Vec<ItemView>,
+    pub knows_contained_items: bool,
+    pub hidden_compartment_items: Vec<ItemView>,
+    pub knows_hidden_compartment_items: bool,
+    pub has_hidden_compartment: bool,
+    pub knows_if_hidden_compartment: bool,
 }
 
 impl Display for FixtureView {
@@ -92,8 +106,14 @@ mod display_tests {
             size: crate::components::size::Size::Average,
             descriptors: Vec::new(),
             identifier: Identifier::default(),
+            contained_items: Vec::new(),
+            hidden_compartment_items: Vec::new(),
+            has_hidden_compartment: false,
         };
 
-        assert_eq!("steel chest", format!("{}", look_at(&fixture)));
+        assert_eq!(
+            "steel chest",
+            format!("{}", look_at(&fixture, true, true, true))
+        );
     }
 }

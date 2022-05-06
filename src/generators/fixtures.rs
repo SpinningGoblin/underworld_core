@@ -1,5 +1,4 @@
 use rand::Rng;
-use uuid::Uuid;
 
 use crate::components::{
     fixtures::{fixture::Fixture, fixture_type::FixtureType},
@@ -77,14 +76,14 @@ impl Generator<Fixture> for FixturePrototype {
         }
 
         Fixture {
-            identifier: Identifier {
-                id: Uuid::new_v4(),
-                name: None,
-            },
+            identifier: Identifier::just_id(),
             material,
             fixture_type: self.fixture_type.clone(),
             size,
             descriptors,
+            contained_items: Vec::new(),
+            hidden_compartment_items: Vec::new(),
+            has_hidden_compartment: false,
         }
     }
 }
