@@ -1,7 +1,7 @@
 use rand::Rng;
 
 use crate::{
-    actions::look_at::InspectNpc,
+    actions::inspect_npc::InspectNpc,
     components::{games::game_state::GameState, player::PlayerCharacter},
     errors::Errors,
     events::{
