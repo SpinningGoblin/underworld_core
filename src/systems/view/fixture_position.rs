@@ -17,6 +17,7 @@ pub fn look_at(
                     fixture,
                     args.knows_items,
                     args.knows_can_be_opened,
+                    args.knows_has_hidden,
                     args.knows_hidden,
                     knows_all,
                 )

@@ -124,7 +124,7 @@ mod display_tests {
 
         assert_eq!(
             "steel chest",
-            format!("{}", look_at(&fixture, true, true, true, true))
+            format!("{}", look_at(&fixture, true, true, true, true, true))
         );
     }
 }

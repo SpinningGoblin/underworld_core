@@ -7,6 +7,7 @@ pub fn look_at(
     fixture: &Fixture,
     knows_contained: bool,
     knows_can_be_opened: bool,
+    knows_has_hidden: bool,
     knows_hidden: bool,
     knows_all: bool,
 ) -> FixtureView {
@@ -30,7 +31,7 @@ pub fn look_at(
         Vec::new()
     };
 
-    let (has_hidden, hidden_compartment_open) = if knows_hidden || knows_all {
+    let (has_hidden, hidden_compartment_open) = if knows_has_hidden || knows_all {
         (
             fixture.has_hidden_compartment,
             fixture.hidden_compartment_open,
@@ -56,7 +57,7 @@ pub fn look_at(
         hidden_compartment_items: hidden_items,
         has_hidden_compartment: has_hidden,
         knows_hidden_compartment_items: knows_hidden || knows_all,
-        knows_if_hidden_compartment: knows_hidden || knows_all,
+        knows_if_hidden_compartment: knows_has_hidden || knows_all,
         open,
         can_be_opened,
         knows_if_can_be_opened: knows_can_be_opened || knows_all,

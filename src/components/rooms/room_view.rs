@@ -40,6 +40,7 @@ pub struct RoomViewArgs {
     pub knows_fixture_items: bool,
     pub knows_fixture_hidden: bool,
     pub knows_fixture_can_be_opened: bool,
+    pub knows_fixture_has_hidden: bool,
 }
 
 impl Display for RoomView {

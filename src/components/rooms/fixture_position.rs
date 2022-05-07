@@ -83,6 +83,7 @@ impl FixturePositionView {
 pub struct FixturePositionViewArgs {
     pub knows_items: bool,
     pub knows_hidden: bool,
+    pub knows_has_hidden: bool,
     pub knows_can_be_opened: bool,
 }
 
@@ -146,7 +147,8 @@ mod tests {
                     &FixturePositionViewArgs {
                         knows_items: true,
                         knows_hidden: true,
-                        knows_can_be_opened: true
+                        knows_can_be_opened: true,
+                        knows_has_hidden: true,
                     },
                     false
                 )
