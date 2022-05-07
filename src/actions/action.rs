@@ -1,12 +1,7 @@
 use super::{
-    attack_npc::AttackNpc,
-    exit_room::ExitRoom,
-    inspect_fixture::InspectFixture,
-    inspect_npc::InspectNpc,
-    look_at_current_room::LookAtCurrentRoom,
-    look_at_npc::LookAtNpc,
-    loot_npc::LootNpc,
-    move_player_item::MovePlayerItem,
+    attack_npc::AttackNpc, exit_room::ExitRoom, inspect_fixture::InspectFixture,
+    inspect_npc::InspectNpc, look_at_current_room::LookAtCurrentRoom, look_at_npc::LookAtNpc,
+    loot_npc::LootNpc, move_player_item::MovePlayerItem,
 };
 
 #[cfg(feature = "bevy_components")]

@@ -1,12 +1,7 @@
 use crate::{
     actions::{
-        action::Action,
-        attack_npc::AttackNpc,
-        exit_room::ExitRoom,
-        inspect_npc::InspectNpc,
-        look_at_current_room::LookAtCurrentRoom,
-        look_at_npc::LookAtNpc,
-        loot_npc::LootNpc,
+        action::Action, attack_npc::AttackNpc, exit_room::ExitRoom, inspect_npc::InspectNpc,
+        look_at_current_room::LookAtCurrentRoom, look_at_npc::LookAtNpc, loot_npc::LootNpc,
     },
     components::{games::game_state::GameState, player::PlayerCharacter},
     errors::Errors,
