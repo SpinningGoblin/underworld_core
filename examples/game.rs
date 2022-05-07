@@ -2,10 +2,12 @@ pub fn main() {
     #[cfg(feature = "serialization")]
     #[cfg(feature = "json")]
     {
+        use serde::Serialize;
         use underworld_core::{
             actions::{
                 action::Action, attack_npc::AttackNpc, exit_room::ExitRoom, look_at::InspectNpc,
             },
+            components::{games::game_state::GameState, player::PlayerCharacter},
             game::Game,
             generators::{game::game_generator, generator::Generator, players::player_generator},
         };
@@ -45,10 +47,18 @@ pub fn main() {
         };
         game.handle_action(&Action::AttackNpc(attack)).unwrap();
 
-        let serialized_new_game = serde_json::to_string(&game.state).unwrap();
-        println!("{}", &serialized_new_game);
+        #[derive(Serialize)]
+        struct SerializedGame {
+            state: GameState,
+            player: PlayerCharacter,
+        }
 
-        let serialized_player = serde_json::to_string(&game.player).unwrap();
-        println!("{}", &serialized_player);
+        let serialized_game = SerializedGame {
+            state: game.state.clone(),
+            player: game.player.clone(),
+        };
+
+        let serialized_new_game = serde_json::to_string(&serialized_game).unwrap();
+        println!("{}", &serialized_new_game);
     }
 }
