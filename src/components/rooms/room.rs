@@ -4,7 +4,9 @@ use bevy_ecs::prelude::Component;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::components::{identifier::Identifier, non_player::NonPlayer};
+use crate::components::{
+    fixtures::fixture::Fixture, identifier::Identifier, non_player::NonPlayer,
+};
 
 use super::{
     descriptor::Descriptor, dimensions::Dimensions, exit::Exit, fixture_position::FixturePosition,
@@ -31,11 +33,26 @@ pub struct Room {
 }
 
 impl Room {
-    pub fn find_npc(&self, target_id: &Uuid) -> Option<&NonPlayer> {
+    pub fn find_npc(&self, npc_id: &Uuid) -> Option<&NonPlayer> {
         self.npc_positions
             .iter()
             .flat_map(|npc_position| npc_position.npcs.iter())
-            .find(|npc| npc.identifier.id.eq(target_id))
+            .find(|npc| npc.identifier.id.eq(npc_id))
+    }
+
+    pub fn find_fixture(&self, fixture_id: &Uuid) -> Option<&Fixture> {
+        self.fixture_positions
+            .iter()
+            .flat_map(|fixture_position| fixture_position.fixtures.iter())
+            .find(|fixture| fixture.identifier.id.eq(fixture_id))
+    }
+
+    pub fn first_alive_npc(&self) -> Option<&NonPlayer> {
+        self.npc_positions
+            .iter()
+            .flat_map(|npc_position| npc_position.npcs.iter())
+            .filter(|npc| !npc.character.is_dead())
+            .find(|_| true) // First one
     }
 
     pub fn find_npc_mut(&mut self, target_id: &Uuid) -> Option<&mut NonPlayer> {
@@ -43,6 +60,13 @@ impl Room {
             .iter_mut()
             .flat_map(|npc_position| npc_position.npcs.iter_mut())
             .find(|npc| npc.identifier.id.eq(target_id))
+    }
+
+    pub fn find_fixture_mut(&mut self, fixture_id: &Uuid) -> Option<&mut Fixture> {
+        self.fixture_positions
+            .iter_mut()
+            .flat_map(|fixture_position| fixture_position.fixtures.iter_mut())
+            .find(|fixture| fixture.identifier.id.eq(fixture_id))
     }
 
     pub fn index_of_npc_position(&self, npc_id: &Uuid) -> Option<usize> {
