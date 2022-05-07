@@ -3,7 +3,8 @@ use super::{
     exit_room::ExitRoom,
     inspect_fixture::InspectFixture,
     inspect_npc::InspectNpc,
-    look_at::{LookAtCurrentRoom, LookAtNpc},
+    look_at::LookAtCurrentRoom,
+    look_at_npc::LookAtNpc,
     loot_npc::LootNpc,
     move_player_item::MovePlayerItem,
 };

@@ -1,5 +1,5 @@
 use crate::{
-    actions::look_at::LookAtNpc,
+    actions::look_at_npc::LookAtNpc,
     components::{character::CharacterViewArgs, games::game_state::GameState},
     errors::Errors,
     events::{event::Event, npc_viewed::NpcViewed},
