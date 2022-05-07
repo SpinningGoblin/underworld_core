@@ -13,7 +13,13 @@ pub fn look_at(
             .fixtures
             .iter()
             .map(|fixture| {
-                super::fixture::look_at(fixture, args.knows_items, args.knows_hidden, knows_all)
+                super::fixture::look_at(
+                    fixture,
+                    args.knows_items,
+                    args.knows_can_be_opened,
+                    args.knows_hidden,
+                    knows_all,
+                )
             })
             .into_iter()
             .collect(),

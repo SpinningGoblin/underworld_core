@@ -110,7 +110,29 @@ impl Generator<Fixture> for FixturePrototype {
             contained_items,
             hidden_compartment_items,
             has_hidden_compartment: self.has_hidden_compartment,
+            can_be_opened: fixture_can_be_opened(&self.fixture_type),
+            open: false,
+            hidden_compartment_open: false,
         }
+    }
+}
+
+fn fixture_can_be_opened(fixture_type: &FixtureType) -> bool {
+    match *fixture_type {
+        FixtureType::Barrel
+        | FixtureType::Chest
+        | FixtureType::Coffin
+        | FixtureType::WeaponRack => true,
+        FixtureType::Bed
+        | FixtureType::Bucket
+        | FixtureType::Chair
+        | FixtureType::Cot
+        | FixtureType::Crate
+        | FixtureType::Pillar
+        | FixtureType::SleepingRoll
+        | FixtureType::StatueTentacledMonstrosity
+        | FixtureType::StatueWarrior
+        | FixtureType::Table => false,
     }
 }
 

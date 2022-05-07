@@ -36,8 +36,12 @@ pub struct Fixture {
     pub descriptors: Vec<Descriptor>,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub contained_items: Vec<Item>,
+    #[cfg_attr(feature = "serialization", serde(default))]
     pub hidden_compartment_items: Vec<Item>,
     pub has_hidden_compartment: bool,
+    pub can_be_opened: bool,
+    pub open: bool,
+    pub hidden_compartment_open: bool,
 }
 
 #[derive(Clone, Debug)]
@@ -61,6 +65,10 @@ pub struct FixtureView {
     pub knows_hidden_compartment_items: bool,
     pub has_hidden_compartment: bool,
     pub knows_if_hidden_compartment: bool,
+    pub open: bool,
+    pub can_be_opened: bool,
+    pub knows_if_can_be_opened: bool,
+    pub hidden_compartment_open: bool,
 }
 
 impl Display for FixtureView {
@@ -109,11 +117,14 @@ mod display_tests {
             contained_items: Vec::new(),
             hidden_compartment_items: Vec::new(),
             has_hidden_compartment: false,
+            can_be_opened: true,
+            open: false,
+            hidden_compartment_open: false,
         };
 
         assert_eq!(
             "steel chest",
-            format!("{}", look_at(&fixture, true, true, true))
+            format!("{}", look_at(&fixture, true, true, true, true))
         );
     }
 }

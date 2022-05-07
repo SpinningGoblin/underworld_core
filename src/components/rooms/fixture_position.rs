@@ -83,6 +83,7 @@ impl FixturePositionView {
 pub struct FixturePositionViewArgs {
     pub knows_items: bool,
     pub knows_hidden: bool,
+    pub knows_can_be_opened: bool,
 }
 
 #[cfg(test)]
@@ -113,6 +114,9 @@ mod tests {
             contained_items: Vec::new(),
             hidden_compartment_items: Vec::new(),
             has_hidden_compartment: false,
+            can_be_opened: false,
+            open: false,
+            hidden_compartment_open: false,
         };
         let chair = Fixture {
             identifier: Identifier::default(),
@@ -123,6 +127,9 @@ mod tests {
             contained_items: Vec::new(),
             hidden_compartment_items: Vec::new(),
             has_hidden_compartment: false,
+            can_be_opened: false,
+            open: false,
+            hidden_compartment_open: false,
         };
         let fixture_position = FixturePosition {
             group_descriptor: Some(GroupDescriptor::A),
@@ -139,6 +146,7 @@ mod tests {
                     &FixturePositionViewArgs {
                         knows_items: true,
                         knows_hidden: true,
+                        knows_can_be_opened: true
                     },
                     false
                 )

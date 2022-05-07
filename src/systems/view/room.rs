@@ -25,6 +25,7 @@ pub fn quick_look(room: &Room) -> RoomView {
     let fixture_position_args = FixturePositionViewArgs {
         knows_items: false,
         knows_hidden: false,
+        knows_can_be_opened: false,
     };
 
     view(room, npc_position_args, fixture_position_args, false)
@@ -44,8 +45,9 @@ pub fn look_at(room: &Room, args: RoomViewArgs, knows_all: bool) -> RoomView {
     };
 
     let fixture_position_args = FixturePositionViewArgs {
-        knows_items: true,
-        knows_hidden: true,
+        knows_items: args.knows_fixture_items,
+        knows_hidden: args.knows_fixture_hidden,
+        knows_can_be_opened: args.knows_fixture_can_be_opened,
     };
 
     view(room, npc_position_args, fixture_position_args, knows_all)
