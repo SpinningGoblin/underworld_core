@@ -14,10 +14,7 @@ pub fn main() {
 
         let player = player_generator("Me", None, None, None).generate();
         let state = game_generator().generate();
-        let mut game = Game {
-            state,
-            player,
-        };
+        let mut game = Game { state, player };
 
         let first_exit_id = match game.state.current_room_exits().get(0) {
             Some(it) => it.clone(),
