@@ -4,7 +4,7 @@ use crate::{
         attack_npc::AttackNpc,
         exit_room::ExitRoom,
         inspect_npc::InspectNpc,
-        look_at::LookAtCurrentRoom,
+        look_at_current_room::LookAtCurrentRoom,
         look_at_npc::LookAtNpc,
         loot_npc::LootNpc,
     },
