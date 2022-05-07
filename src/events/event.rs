@@ -15,7 +15,7 @@ use super::{
     dead_npc_beaten::DeadNpcBeaten, fixture_can_be_opened_discovered::FixtureCanBeOpenedDiscovered,
     fixture_contained_discovered::FixtureContainedDiscovered,
     fixture_has_hidden_discovered::FixtureHasHiddenDiscovered,
-    fixture_hidden_items_discovered::FixtureHiddenItemsDiscovered,
+    fixture_hidden_items_discovered::FixtureHiddenItemsDiscovered, fixture_viewed::FixtureViewed,
     item_taken_from_npc::ItemTakenFromNpc, npc_health_discovered::NpcHealthDiscovered,
     npc_hidden_discovered::NpcHiddenDiscovered, npc_hit::NpcHit, npc_killed::NpcKilled,
     npc_missed::NpcMissed, npc_name_discovered::NpcNameDiscovered,
@@ -38,6 +38,7 @@ pub enum Event {
     FixtureContainedDiscovered(FixtureContainedDiscovered),
     FixtureHasHiddenDiscovered(FixtureHasHiddenDiscovered),
     FixtureHiddenItemsDiscovered(FixtureHiddenItemsDiscovered),
+    FixtureViewed(FixtureViewed),
     ItemTakenFromNpc(ItemTakenFromNpc),
     NpcHealthDiscovered(NpcHealthDiscovered),
     NpcHiddenDiscovered(NpcHiddenDiscovered),
@@ -203,6 +204,7 @@ pub fn apply_events(
                 knowledge.knows_hidden_items = true;
                 new_game.set_fixture_knowledge(hidden_items.fixture_id, knowledge);
             }
+            Event::FixtureViewed(_) => {}
         }
     }
 

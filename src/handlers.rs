@@ -9,7 +9,7 @@ use self::{
     attack_npc::handle_attack_npc, exit_room::handle_exit_room,
     inspect_fixture::handle_inspect_fixture, inspect_npc::handle_inspect_npc,
     loot_npc::handle_loot_npc, move_player_item::handle_move_player_item,
-    view_npc::handle_view_npc,
+    view_fixture::handle_view_fixture, view_npc::handle_view_npc,
 };
 
 mod attack_npc;
@@ -19,6 +19,7 @@ mod inspect_fixture;
 mod inspect_npc;
 mod loot_npc;
 mod move_player_item;
+mod view_fixture;
 mod view_npc;
 
 pub struct HandledAction {
@@ -53,6 +54,7 @@ pub fn handle(
         Action::InspectFixture(inspect_fixture) => {
             handle_inspect_fixture(inspect_fixture, state, player)?
         }
+        Action::LookAtFixture(look_at_fixture) => handle_view_fixture(look_at_fixture, state)?,
     };
 
     let (new_state, new_player) = apply_events(&events, state, player);

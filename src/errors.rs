@@ -9,6 +9,7 @@ use serde::{Deserialize, Serialize};
 )]
 pub enum Errors {
     ExitNotFound(String),
+    FixtureNotFound(String),
     ItemNotFound(String),
     InvalidId(String),
     NpcNotFound(String),

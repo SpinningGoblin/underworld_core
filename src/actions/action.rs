@@ -1,7 +1,8 @@
 use super::{
     attack_npc::AttackNpc, exit_room::ExitRoom, inspect_fixture::InspectFixture,
-    inspect_npc::InspectNpc, look_at_current_room::LookAtCurrentRoom, look_at_npc::LookAtNpc,
-    loot_npc::LootNpc, move_player_item::MovePlayerItem,
+    inspect_npc::InspectNpc, look_at_current_room::LookAtCurrentRoom,
+    look_at_fixture::LookAtFixture, look_at_npc::LookAtNpc, loot_npc::LootNpc,
+    move_player_item::MovePlayerItem,
 };
 
 #[cfg(feature = "bevy_components")]
@@ -21,6 +22,7 @@ pub enum Action {
     InspectFixture(InspectFixture),
     InspectNpc(InspectNpc),
     LookAtCurrentRoom(LookAtCurrentRoom),
+    LookAtFixture(LookAtFixture),
     LookAtNpc(LookAtNpc),
     LootNpc(LootNpc),
     MovePlayerItem(MovePlayerItem),

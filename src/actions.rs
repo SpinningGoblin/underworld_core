@@ -4,6 +4,7 @@ pub mod exit_room;
 pub mod inspect_fixture;
 pub mod inspect_npc;
 pub mod look_at_current_room;
+pub mod look_at_fixture;
 pub mod look_at_npc;
 pub mod loot_npc;
 pub mod move_player_item;
