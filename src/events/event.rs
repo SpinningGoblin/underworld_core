@@ -22,7 +22,7 @@ use super::{
     npc_packed_discovered::NpcPackedDiscovered, npc_viewed::NpcViewed,
     npc_weapon_readied::NpcWeaponReadied, player_hit::PlayerHit,
     player_item_moved::PlayerItemMoved, player_killed::PlayerKilled, player_missed::PlayerMissed,
-    room_exited::RoomExited, room_generated::RoomGenerated,
+    room_exited::RoomExited, room_generated::RoomGenerated, room_viewed::RoomViewed,
 };
 
 #[derive(Clone, Debug)]
@@ -55,6 +55,7 @@ pub enum Event {
     PlayerMissed(PlayerMissed),
     RoomExited(RoomExited),
     RoomGenerated(RoomGenerated),
+    RoomViewed(RoomViewed),
 }
 
 pub fn apply_events(
@@ -205,6 +206,7 @@ pub fn apply_events(
                 new_game.set_fixture_knowledge(hidden_items.fixture_id, knowledge);
             }
             Event::FixtureViewed(_) => {}
+            Event::RoomViewed(_) => {}
         }
     }
 

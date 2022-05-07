@@ -1,81 +1,41 @@
+use std::collections::HashMap;
+
+use uuid::Uuid;
+
 use crate::components::{
-    character::CharacterViewArgs,
     fixtures::fixture::FixtureViewArgs,
+    non_player::NonPlayerViewArgs,
     rooms::{
         exit::ExitView,
         fixture_position::FixturePositionView,
         npc_position::NpcPositionView,
         room::Room,
         room_view::{RoomView, RoomViewArgs},
-    }, non_player::NonPlayerViewArgs,
+    },
 };
 
-pub fn quick_look(room: &Room) -> RoomView {
-    let npc_position_args = NonPlayerViewArgs {
-        character_args: CharacterViewArgs {
-            knows_health: false,
-            knows_species: true,
-            knows_life_modifier: true,
-            knows_inventory: false,
-            knows_hidden_in_inventory: false,
-            knows_packed_in_inventory: false,
-        },
-        knows_name: false,
-    };
-
-    let fixture_position_args = FixtureViewArgs {
-        knows_items: false,
-        knows_hidden: false,
-        knows_can_be_opened: false,
-        knows_has_hidden: false,
-    };
-
-    view(room, npc_position_args, fixture_position_args, false)
+pub fn look_at(room: &Room, _args: RoomViewArgs, knows_all: bool) -> RoomView {
+    view(room, HashMap::new(), HashMap::new(), knows_all)
 }
 
-pub fn look_at(room: &Room, args: RoomViewArgs, knows_all: bool) -> RoomView {
-    let npc_position_args = NonPlayerViewArgs {
-        character_args: CharacterViewArgs {
-            knows_health: args.knows_character_health,
-            knows_species: true,
-            knows_life_modifier: true,
-            knows_inventory: true,
-            knows_hidden_in_inventory: args.can_see_hidden,
-            knows_packed_in_inventory: args.can_see_packed,
-        },
-        knows_name: args.knows_names,
-    };
-
-    let fixture_position_args = FixtureViewArgs {
-        knows_items: args.knows_fixture_items,
-        knows_hidden: args.knows_fixture_hidden,
-        knows_can_be_opened: args.knows_fixture_can_be_opened,
-        knows_has_hidden: args.knows_fixture_has_hidden,
-    };
-
-    view(room, npc_position_args, fixture_position_args, knows_all)
-}
-
-fn view(
+pub fn view(
     room: &Room,
-    npc_position_args: NonPlayerViewArgs,
-    fixture_args: FixtureViewArgs,
+    non_player_args: HashMap<Uuid, NonPlayerViewArgs>,
+    fixture_args: HashMap<Uuid, FixtureViewArgs>,
     knows_all: bool,
 ) -> RoomView {
     let fixture_positions: Vec<FixturePositionView> = room
         .fixture_positions
         .iter()
         .map(|fixture_position| {
-            super::fixture_position::look_at(fixture_position, &fixture_args, knows_all)
+            super::fixture_position::view_v2(fixture_position, &fixture_args, knows_all)
         })
         .into_iter()
         .collect();
     let npc_positions: Vec<NpcPositionView> = room
         .npc_positions
         .iter()
-        .map(|npc_position| {
-            super::npc_position::look_at(npc_position, &npc_position_args, knows_all)
-        })
+        .map(|npc_position| super::npc_position::view_v2(npc_position, &non_player_args, knows_all))
         .into_iter()
         .collect();
 

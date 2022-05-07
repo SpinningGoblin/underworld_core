@@ -9,7 +9,7 @@ use self::{
     attack_npc::handle_attack_npc, exit_room::handle_exit_room,
     inspect_fixture::handle_inspect_fixture, inspect_npc::handle_inspect_npc,
     loot_npc::handle_loot_npc, move_player_item::handle_move_player_item,
-    view_fixture::handle_view_fixture, view_npc::handle_view_npc,
+    view_fixture::handle_view_fixture, view_npc::handle_view_npc, view_room::handle_view_room,
 };
 
 mod attack_npc;
@@ -21,6 +21,7 @@ mod loot_npc;
 mod move_player_item;
 mod view_fixture;
 mod view_npc;
+mod view_room;
 
 pub struct HandledAction {
     pub events: Vec<Event>,
@@ -49,7 +50,9 @@ pub fn handle(
         Action::MovePlayerItem(move_player_item) => {
             handle_move_player_item(move_player_item, player)?
         }
-        Action::LookAtCurrentRoom(_) => Vec::new(),
+        Action::LookAtCurrentRoom(look_at_current_room) => {
+            handle_view_room(look_at_current_room, state)?
+        }
         Action::InspectNpc(inspect_npc) => handle_inspect_npc(inspect_npc, state, player)?,
         Action::InspectFixture(inspect_fixture) => {
             handle_inspect_fixture(inspect_fixture, state, player)?

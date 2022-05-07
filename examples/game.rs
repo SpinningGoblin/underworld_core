@@ -17,7 +17,7 @@ pub fn main() {
         let mut game = Game { state, player };
 
         let first_exit_id = match game.state.current_room_exits().get(0) {
-            Some(it) => it.clone(),
+            Some(it) => *it,
             None => return,
         };
 

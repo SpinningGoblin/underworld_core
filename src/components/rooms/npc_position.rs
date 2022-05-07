@@ -8,9 +8,7 @@ use poem_openapi::Object;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    components::{
-        non_player::{NonPlayer, NonPlayerView},
-    },
+    components::non_player::{NonPlayer, NonPlayerView},
     utils::sentences::first_letter_to_upper_case,
 };
 
@@ -84,8 +82,7 @@ mod tests {
         components::{
             non_player::{NonPlayer, NonPlayerViewArgs},
             rooms::{
-                group_descriptor::GroupDescriptor,
-                npc_position_descriptor::NpcPositionDescriptor,
+                group_descriptor::GroupDescriptor, npc_position_descriptor::NpcPositionDescriptor,
             },
             species::Species,
         },
