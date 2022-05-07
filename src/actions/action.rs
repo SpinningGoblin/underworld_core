@@ -1,6 +1,7 @@
 use super::{
     attack_npc::AttackNpc,
     exit_room::ExitRoom,
+    inspect_fixture::InspectFixture,
     look_at::{InspectNpc, LookAtCurrentRoom, LookAtNpc},
     loot_npc::LootNpc,
     move_player_item::MovePlayerItem,
@@ -20,6 +21,7 @@ use serde::{Deserialize, Serialize};
 )]
 pub enum Action {
     AttackNpc(AttackNpc),
+    InspectFixture(InspectFixture),
     InspectNpc(InspectNpc),
     LookAtCurrentRoom(LookAtCurrentRoom),
     LookAtNpc(LookAtNpc),

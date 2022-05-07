@@ -12,11 +12,15 @@ use crate::components::{
 };
 
 use super::{
-    dead_npc_beaten::DeadNpcBeaten, item_taken_from_npc::ItemTakenFromNpc,
-    npc_health_discovered::NpcHealthDiscovered, npc_hidden_discovered::NpcHiddenDiscovered,
-    npc_hit::NpcHit, npc_killed::NpcKilled, npc_missed::NpcMissed,
-    npc_name_discovered::NpcNameDiscovered, npc_packed_discovered::NpcPackedDiscovered,
-    npc_viewed::NpcViewed, npc_weapon_readied::NpcWeaponReadied, player_hit::PlayerHit,
+    dead_npc_beaten::DeadNpcBeaten, fixture_can_be_opened_discovered::FixtureCanBeOpenedDiscovered,
+    fixture_contained_discovered::FixtureContainedDiscovered,
+    fixture_has_hidden_discovered::FixtureHasHiddenDiscovered,
+    fixture_hidden_items_discovered::FixtureHiddenItemsDiscovered,
+    item_taken_from_npc::ItemTakenFromNpc, npc_health_discovered::NpcHealthDiscovered,
+    npc_hidden_discovered::NpcHiddenDiscovered, npc_hit::NpcHit, npc_killed::NpcKilled,
+    npc_missed::NpcMissed, npc_name_discovered::NpcNameDiscovered,
+    npc_packed_discovered::NpcPackedDiscovered, npc_viewed::NpcViewed,
+    npc_weapon_readied::NpcWeaponReadied, player_hit::PlayerHit,
     player_item_moved::PlayerItemMoved, player_killed::PlayerKilled, player_missed::PlayerMissed,
     room_exited::RoomExited, room_generated::RoomGenerated,
 };
@@ -30,6 +34,10 @@ use super::{
 )]
 pub enum Event {
     DeadNpcBeaten(DeadNpcBeaten),
+    FixtureCanBeOpenedDiscovered(FixtureCanBeOpenedDiscovered),
+    FixtureContainedDiscovered(FixtureContainedDiscovered),
+    FixtureHasHiddenDiscovered(FixtureHasHiddenDiscovered),
+    FixtureHiddenItemsDiscovered(FixtureHiddenItemsDiscovered),
     ItemTakenFromNpc(ItemTakenFromNpc),
     NpcHealthDiscovered(NpcHealthDiscovered),
     NpcHiddenDiscovered(NpcHiddenDiscovered),
@@ -174,6 +182,26 @@ pub fn apply_events(
                 let mut knowledge = new_game.npc_knowledge(&packed_discovered.npc_id);
                 knowledge.knows_health = true;
                 new_game.set_npc_knowledge(packed_discovered.npc_id, knowledge);
+            }
+            Event::FixtureCanBeOpenedDiscovered(opened_discovered) => {
+                let mut knowledge = new_game.fixture_knowledge(&opened_discovered.fixture_id);
+                knowledge.knows_can_be_opened = true;
+                new_game.set_fixture_knowledge(opened_discovered.fixture_id, knowledge);
+            }
+            Event::FixtureContainedDiscovered(contained_discovered) => {
+                let mut knowledge = new_game.fixture_knowledge(&contained_discovered.fixture_id);
+                knowledge.knows_items = true;
+                new_game.set_fixture_knowledge(contained_discovered.fixture_id, knowledge);
+            }
+            Event::FixtureHasHiddenDiscovered(has_hidden) => {
+                let mut knowledge = new_game.fixture_knowledge(&has_hidden.fixture_id);
+                knowledge.knows_has_hidden = true;
+                new_game.set_fixture_knowledge(has_hidden.fixture_id, knowledge);
+            }
+            Event::FixtureHiddenItemsDiscovered(hidden_items) => {
+                let mut knowledge = new_game.fixture_knowledge(&hidden_items.fixture_id);
+                knowledge.knows_hidden_items = true;
+                new_game.set_fixture_knowledge(hidden_items.fixture_id, knowledge);
             }
         }
     }

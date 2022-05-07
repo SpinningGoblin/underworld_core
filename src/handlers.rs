@@ -6,7 +6,8 @@ use crate::{
 };
 
 use self::{
-    attack_npc::handle_attack_npc, exit_room::handle_exit_room, inspect_npc::handle_inspect_npc,
+    attack_npc::handle_attack_npc, exit_room::handle_exit_room,
+    inspect_fixture::handle_inspect_fixture, inspect_npc::handle_inspect_npc,
     loot_npc::handle_loot_npc, move_player_item::handle_move_player_item,
     view_npc::handle_view_npc,
 };
@@ -14,6 +15,7 @@ use self::{
 mod attack_npc;
 mod exit_room;
 mod helpers;
+mod inspect_fixture;
 mod inspect_npc;
 mod loot_npc;
 mod move_player_item;
@@ -48,6 +50,9 @@ pub fn handle(
         }
         Action::LookAtCurrentRoom(_) => Vec::new(),
         Action::InspectNpc(inspect_npc) => handle_inspect_npc(inspect_npc, state, player)?,
+        Action::InspectFixture(inspect_fixture) => {
+            handle_inspect_fixture(inspect_fixture, state, player)?
+        }
     };
 
     let (new_state, new_player) = apply_events(&events, state, player);
