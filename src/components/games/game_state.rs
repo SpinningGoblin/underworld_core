@@ -8,7 +8,7 @@ use uuid::Uuid;
 
 use crate::components::{identifier::Identifier, rooms::room::Room, worlds::world::World};
 
-use super::character_knowledge::CharacterKnowledge;
+use super::{character_knowledge::CharacterKnowledge, fixture_knowledge::FixtureKnowledge};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -22,6 +22,8 @@ pub struct GameState {
     pub player_knows_all: bool,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub player_npc_knowledge: HashMap<Uuid, CharacterKnowledge>,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub player_fixture_knowledge: HashMap<Uuid, FixtureKnowledge>,
 }
 
 impl GameState {
@@ -32,8 +34,19 @@ impl GameState {
             .unwrap_or_default()
     }
 
+    pub fn fixture_knowledge(&self, fixture_id: &Uuid) -> FixtureKnowledge {
+        self.player_fixture_knowledge
+            .get(fixture_id)
+            .cloned()
+            .unwrap_or_default()
+    }
+
     pub fn set_npc_knowledge(&mut self, npc_id: Uuid, knowledge: CharacterKnowledge) {
         self.player_npc_knowledge.insert(npc_id, knowledge);
+    }
+
+    pub fn set_fixture_knowledge(&mut self, fixture_id: Uuid, knowledge: FixtureKnowledge) {
+        self.player_fixture_knowledge.insert(fixture_id, knowledge);
     }
 
     pub fn current_room_exits(&self) -> Vec<Uuid> {

@@ -39,6 +39,7 @@ impl Generator<GameState> for GamePrototype {
             },
             player_knows_all: false,
             player_npc_knowledge: HashMap::new(),
+            player_fixture_knowledge: HashMap::new(),
         }
     }
 }
