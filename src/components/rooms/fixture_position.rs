@@ -79,19 +79,14 @@ impl FixturePositionView {
     }
 }
 
-#[derive(Clone, Debug, Default)]
-pub struct FixturePositionViewArgs {
-    pub knows_items: bool,
-    pub knows_hidden: bool,
-    pub knows_has_hidden: bool,
-    pub knows_can_be_opened: bool,
-}
-
 #[cfg(test)]
 mod tests {
     use crate::{
         components::{
-            fixtures::{fixture::Fixture, fixture_type::FixtureType},
+            fixtures::{
+                fixture::{Fixture, FixtureViewArgs},
+                fixture_type::FixtureType,
+            },
             identifier::Identifier,
             rooms::{
                 fixture_position_descriptor::FixturePositionDescriptor,
@@ -102,7 +97,7 @@ mod tests {
         systems::view::fixture_position::look_at,
     };
 
-    use super::{FixturePosition, FixturePositionViewArgs};
+    use super::FixturePosition;
 
     #[test]
     fn display() {
@@ -144,7 +139,7 @@ mod tests {
                 "{}",
                 look_at(
                     &fixture_position,
-                    &FixturePositionViewArgs {
+                    &FixtureViewArgs {
                         knows_items: true,
                         knows_hidden: true,
                         knows_can_be_opened: true,

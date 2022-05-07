@@ -9,7 +9,6 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     components::{
-        character::CharacterViewArgs,
         non_player::{NonPlayer, NonPlayerView},
     },
     utils::sentences::first_letter_to_upper_case,
@@ -79,19 +78,13 @@ impl NpcPositionView {
     }
 }
 
-#[derive(Clone, Debug, Default)]
-pub struct NpcPositionViewArgs {
-    pub character_args: CharacterViewArgs,
-    pub knows_name: bool,
-}
-
 #[cfg(test)]
 mod tests {
     use crate::{
         components::{
-            non_player::NonPlayer,
+            non_player::{NonPlayer, NonPlayerViewArgs},
             rooms::{
-                group_descriptor::GroupDescriptor, npc_position::NpcPositionViewArgs,
+                group_descriptor::GroupDescriptor,
                 npc_position_descriptor::NpcPositionDescriptor,
             },
             species::Species,
@@ -124,7 +117,7 @@ mod tests {
             "in the corner stands a gang of goblins",
             format!(
                 "{}",
-                look_at(&npc_position, &NpcPositionViewArgs::default(), true)
+                look_at(&npc_position, &NonPlayerViewArgs::default(), true)
             )
         );
     }

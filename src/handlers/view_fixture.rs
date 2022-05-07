@@ -1,6 +1,6 @@
 use crate::{
     actions::look_at_fixture::LookAtFixture,
-    components::games::game_state::GameState,
+    components::{fixtures::fixture::FixtureViewArgs, games::game_state::GameState},
     errors::Errors,
     events::{event::Event, fixture_viewed::FixtureViewed},
     systems::view::fixture,
@@ -20,14 +20,14 @@ pub fn handle_view_fixture(
 
     let knowledge = game_state.fixture_knowledge(&fixture_id);
 
-    let view = fixture::look_at(
-        fixture,
-        knowledge.knows_items,
-        knowledge.knows_can_be_opened,
-        knowledge.knows_has_hidden,
-        knowledge.knows_hidden_items,
-        game_state.player_knows_all,
-    );
+    let args = FixtureViewArgs {
+        knows_items: knowledge.knows_items,
+        knows_hidden: knowledge.knows_hidden_items,
+        knows_has_hidden: knowledge.knows_has_hidden,
+        knows_can_be_opened: knowledge.knows_can_be_opened,
+    };
+
+    let view = fixture::look_at(fixture, &args, game_state.player_knows_all);
 
     Ok(vec![Event::FixtureViewed(FixtureViewed {
         fixture_view: view,

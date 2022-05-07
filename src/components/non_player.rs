@@ -6,7 +6,7 @@ use poem_openapi::Object;
 use serde::{Deserialize, Serialize};
 
 use super::{
-    character::{Character, CharacterView},
+    character::{Character, CharacterView, CharacterViewArgs},
     identifier::{Identifier, IdentifierView},
 };
 
@@ -52,4 +52,10 @@ impl NonPlayerView {
 
         descriptions.join("")
     }
+}
+
+#[derive(Clone, Debug, Default)]
+pub struct NonPlayerViewArgs {
+    pub character_args: CharacterViewArgs,
+    pub knows_name: bool,
 }

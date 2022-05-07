@@ -95,11 +95,21 @@ impl FixtureView {
     }
 }
 
+#[derive(Clone, Debug, Default)]
+pub struct FixtureViewArgs {
+    pub knows_items: bool,
+    pub knows_hidden: bool,
+    pub knows_has_hidden: bool,
+    pub knows_can_be_opened: bool,
+}
+
 #[cfg(test)]
 mod display_tests {
     use crate::{
         components::{
-            fixtures::fixture_type::FixtureType, identifier::Identifier, material::Material,
+            fixtures::{fixture::FixtureViewArgs, fixture_type::FixtureType},
+            identifier::Identifier,
+            material::Material,
         },
         systems::view::fixture::look_at,
     };
@@ -122,9 +132,13 @@ mod display_tests {
             hidden_compartment_open: false,
         };
 
-        assert_eq!(
-            "steel chest",
-            format!("{}", look_at(&fixture, true, true, true, true, true))
-        );
+        let args = FixtureViewArgs {
+            knows_items: true,
+            knows_hidden: true,
+            knows_has_hidden: true,
+            knows_can_be_opened: true,
+        };
+
+        assert_eq!("steel chest", format!("{}", look_at(&fixture, &args, true)));
     }
 }

@@ -1,11 +1,11 @@
 use crate::components::{
-    non_player::NonPlayerView,
-    rooms::npc_position::{NpcPosition, NpcPositionView, NpcPositionViewArgs},
+    non_player::{NonPlayerView, NonPlayerViewArgs},
+    rooms::npc_position::{NpcPosition, NpcPositionView},
 };
 
 pub fn look_at(
     npc_position: &NpcPosition,
-    npc_position_args: &NpcPositionViewArgs,
+    npc_position_args: &NonPlayerViewArgs,
     knows_all: bool,
 ) -> NpcPositionView {
     let npcs: Vec<NonPlayerView> = npc_position
