@@ -212,28 +212,65 @@ impl FixtureGenerators {
         if !self.generated_once {
             self.generated_once = true;
             let fixture_type = self.fixture_types.get(self.current_index).unwrap();
-            return Some(get_generator(fixture_type));
+            return Some(get_generator(
+                fixture_type,
+                has_hidden_compartment(fixture_type),
+            ));
         }
 
         let mut rng = rand::thread_rng();
         let roll: usize = rng.gen_range(0..=100);
         let last_generated = self.fixture_types.get(self.current_index).unwrap();
         if last_generated == &FixtureType::Table && roll <= 75 {
-            return Some(get_generator(&FixtureType::Chair));
+            return Some(get_generator(
+                &FixtureType::Chair,
+                has_hidden_compartment(&FixtureType::Chair),
+            ));
         } else if last_generated == &FixtureType::Barrel && roll <= 75 {
-            return Some(get_generator(&FixtureType::Crate));
+            return Some(get_generator(
+                &FixtureType::Crate,
+                has_hidden_compartment(&FixtureType::Crate),
+            ));
         }
 
         // I don't really want to switch up generators all that often
         if roll <= 95 {
-            return Some(get_generator(last_generated));
+            return Some(get_generator(
+                last_generated,
+                has_hidden_compartment(last_generated),
+            ));
         }
 
         let index = rng.gen_range(0..self.fixture_types.len());
         self.current_index = index;
         let fixture_type = self.fixture_types.get(index).unwrap();
-        Some(get_generator(fixture_type))
+        Some(get_generator(
+            fixture_type,
+            has_hidden_compartment(fixture_type),
+        ))
     }
+}
+
+fn has_hidden_compartment(fixture_type: &FixtureType) -> bool {
+    let chance_of_hidden_compartment = match *fixture_type {
+        FixtureType::Barrel => 25,
+        FixtureType::Bucket | FixtureType::SleepingRoll => 0,
+        FixtureType::Bed
+        | FixtureType::Chair
+        | FixtureType::Cot
+        | FixtureType::Crate
+        | FixtureType::Pillar
+        | FixtureType::Table
+        | FixtureType::WeaponRack => 15,
+        FixtureType::Chest => 50,
+        FixtureType::Coffin
+        | FixtureType::StatueTentacledMonstrosity
+        | FixtureType::StatueWarrior => 75,
+    };
+
+    let mut rng = rand::thread_rng();
+    let roll = rng.gen_range(1..=100);
+    roll <= chance_of_hidden_compartment
 }
 
 fn possible_fixtures(room_type: &RoomType) -> Vec<FixtureType> {

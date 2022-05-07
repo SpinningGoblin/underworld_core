@@ -1,26 +1,38 @@
-use rand::Rng;
+use std::ops::RangeInclusive;
+
+use enum_iterator::IntoEnumIterator;
+use rand::{prelude::ThreadRng, Rng};
 
 use crate::components::{
     fixtures::{fixture::Fixture, fixture_type::FixtureType},
     identifier::Identifier,
-    items::descriptor::Descriptor,
+    items::{descriptor::Descriptor, item::Item, item_type::ItemType},
     material::BuiltWithMaterial,
     size::Size,
     tag::{Tag, Tagged},
 };
 
-use super::{generator::Generator, utils::item_descriptors::matches_tags};
+use super::{generator::Generator, items::item_generator, utils::item_descriptors::matches_tags};
 
 const HAS_MATERIAL_CHANCE: usize = 90;
 const HAS_NON_STANDARD_SIZE: usize = 50;
 
 pub struct FixturePrototype {
     pub fixture_type: FixtureType,
+    pub num_contained_items: RangeInclusive<usize>,
+    pub num_hidden_items: RangeInclusive<usize>,
+    pub has_hidden_compartment: bool,
 }
 
-pub fn get_generator(fixture_type: &FixtureType) -> impl Generator<Fixture> {
+pub fn get_generator(
+    fixture_type: &FixtureType,
+    has_hidden_compartment: bool,
+) -> impl Generator<Fixture> {
     FixturePrototype {
         fixture_type: fixture_type.clone(),
+        has_hidden_compartment,
+        num_contained_items: 1..=2,
+        num_hidden_items: 1..=2,
     }
 }
 
@@ -75,16 +87,258 @@ impl Generator<Fixture> for FixturePrototype {
             num_descriptors -= 1;
         }
 
+        let contained_items: Vec<Item> = if fixture_can_have_items(&self.fixture_type) {
+            let num_items = rng.gen_range(self.num_contained_items.clone());
+            build_items(&self.fixture_type, num_items, &size, &mut rng)
+        } else {
+            Vec::new()
+        };
+
+        let hidden_compartment_items: Vec<Item> = if self.has_hidden_compartment {
+            let num_items = rng.gen_range(self.num_hidden_items.clone());
+            build_items(&self.fixture_type, num_items, &size, &mut rng)
+        } else {
+            Vec::new()
+        };
+
         Fixture {
             identifier: Identifier::just_id(),
             material,
             fixture_type: self.fixture_type.clone(),
             size,
             descriptors,
-            contained_items: Vec::new(),
-            hidden_compartment_items: Vec::new(),
-            has_hidden_compartment: false,
+            contained_items,
+            hidden_compartment_items,
+            has_hidden_compartment: self.has_hidden_compartment,
         }
+    }
+}
+
+fn build_items(
+    fixture_type: &FixtureType,
+    num_items: usize,
+    size: &Size,
+    rng: &mut ThreadRng,
+) -> Vec<Item> {
+    if num_items == 0 {
+        return Vec::new();
+    }
+
+    let range = 0..num_items;
+    let item_types = possible_item_types(fixture_type, size);
+    range
+        .flat_map(|_| {
+            let item_type_index = rng.gen_range(0..item_types.len());
+            match item_types.get(item_type_index) {
+                Some(item_type) => {
+                    let generator = item_generator(item_type, false);
+                    Some(generator.generate())
+                }
+                None => None,
+            }
+        })
+        .collect()
+}
+
+fn fixture_can_have_items(fixture_type: &FixtureType) -> bool {
+    match *fixture_type {
+        FixtureType::Barrel
+        | FixtureType::Bed
+        | FixtureType::Bucket
+        | FixtureType::Chest
+        | FixtureType::Coffin
+        | FixtureType::WeaponRack
+        | FixtureType::Table
+        | FixtureType::Crate => true,
+        FixtureType::Chair
+        | FixtureType::Cot
+        | FixtureType::Pillar
+        | FixtureType::SleepingRoll
+        | FixtureType::StatueTentacledMonstrosity
+        | FixtureType::StatueWarrior => false,
+    }
+}
+
+fn possible_item_types(fixture_type: &FixtureType, size: &Size) -> Vec<ItemType> {
+    match (fixture_type, size) {
+        (FixtureType::Barrel, Size::Small) => vec![
+            ItemType::Dagger,
+            ItemType::Crown,
+            ItemType::Dirk,
+            ItemType::Whip,
+            ItemType::Trousers,
+            ItemType::PlateGauntlets,
+            ItemType::PlateHelmet,
+            ItemType::Shackles,
+            ItemType::Shirt,
+            ItemType::ShortSword,
+            ItemType::Gloves,
+            ItemType::Hammer,
+            ItemType::LoinCloth,
+            ItemType::Cloak,
+            ItemType::Vest,
+            ItemType::Boots,
+            ItemType::Buckler,
+            ItemType::Mace,
+            ItemType::Mask,
+            ItemType::Morningstar,
+        ],
+        (FixtureType::Barrel, Size::Tiny) => vec![ItemType::Dagger, ItemType::LoinCloth],
+        (FixtureType::Bed, Size::Small) => vec![
+            ItemType::LoinCloth,
+            ItemType::Shirt,
+            ItemType::Shackles,
+            ItemType::Crown,
+            ItemType::Mask,
+            ItemType::Mace,
+        ],
+        (FixtureType::Bed, Size::Tiny) => vec![ItemType::LoinCloth],
+        (FixtureType::Bucket, Size::Average) => vec![
+            ItemType::LoinCloth,
+            ItemType::Dagger,
+            ItemType::Shackles,
+            ItemType::Crown,
+        ],
+        (FixtureType::Bucket, Size::Huge) => vec![
+            ItemType::LoinCloth,
+            ItemType::Dagger,
+            ItemType::Shackles,
+            ItemType::Crown,
+            ItemType::Shirt,
+            ItemType::ShortSword,
+        ],
+        (FixtureType::Bucket, Size::Large) => vec![
+            ItemType::LoinCloth,
+            ItemType::Dagger,
+            ItemType::Shackles,
+            ItemType::Crown,
+            ItemType::Shirt,
+            ItemType::ShortSword,
+        ],
+        (FixtureType::Bucket, Size::Massive) => vec![
+            ItemType::LoinCloth,
+            ItemType::Dagger,
+            ItemType::Shackles,
+            ItemType::Crown,
+            ItemType::Shirt,
+            ItemType::ShortSword,
+        ],
+        (FixtureType::Bucket, Size::Medium) => vec![
+            ItemType::LoinCloth,
+            ItemType::Dagger,
+            ItemType::Shackles,
+            ItemType::Crown,
+        ],
+        (FixtureType::Bucket, Size::Small) => vec![ItemType::LoinCloth],
+        (FixtureType::Bucket, Size::Tiny) => vec![ItemType::Crown],
+        (FixtureType::Chest, Size::Average) => vec![
+            ItemType::Dagger,
+            ItemType::Crown,
+            ItemType::Dirk,
+            ItemType::Whip,
+            ItemType::Trousers,
+            ItemType::PlateGauntlets,
+            ItemType::PlateHelmet,
+            ItemType::Shackles,
+            ItemType::Shirt,
+            ItemType::ShortSword,
+            ItemType::Gloves,
+            ItemType::Hammer,
+            ItemType::LoinCloth,
+            ItemType::Cloak,
+            ItemType::Vest,
+            ItemType::Boots,
+            ItemType::Buckler,
+            ItemType::Mace,
+            ItemType::Mask,
+            ItemType::Morningstar,
+        ],
+        (FixtureType::Chest, Size::Small) => {
+            vec![ItemType::Crown, ItemType::Mask, ItemType::ShortSword]
+        }
+        (FixtureType::Chest, Size::Tiny) => {
+            vec![ItemType::Crown, ItemType::Mask, ItemType::ShortSword]
+        }
+        (FixtureType::Barrel, Size::Average)
+        | (FixtureType::Barrel, Size::Huge)
+        | (FixtureType::Barrel, Size::Large)
+        | (FixtureType::Barrel, Size::Massive)
+        | (FixtureType::Barrel, Size::Medium)
+        | (FixtureType::Bed, Size::Average)
+        | (FixtureType::Bed, Size::Huge)
+        | (FixtureType::Bed, Size::Large)
+        | (FixtureType::Bed, Size::Massive)
+        | (FixtureType::Chest, Size::Huge)
+        | (FixtureType::Chest, Size::Large)
+        | (FixtureType::Chest, Size::Massive)
+        | (FixtureType::Coffin, Size::Average)
+        | (FixtureType::Coffin, Size::Huge)
+        | (FixtureType::Coffin, Size::Large)
+        | (FixtureType::Coffin, Size::Massive)
+        | (FixtureType::Coffin, Size::Small)
+        | (FixtureType::Coffin, Size::Tiny)
+        | (FixtureType::Crate, Size::Average)
+        | (FixtureType::Crate, Size::Huge)
+        | (FixtureType::Crate, Size::Large)
+        | (FixtureType::Crate, Size::Massive)
+        | (FixtureType::Crate, Size::Medium)
+        | (FixtureType::Crate, Size::Small)
+        | (FixtureType::Crate, Size::Tiny)
+        | (FixtureType::Pillar, Size::Average)
+        | (FixtureType::Pillar, Size::Huge)
+        | (FixtureType::Pillar, Size::Large)
+        | (FixtureType::Pillar, Size::Massive)
+        | (FixtureType::Pillar, Size::Medium)
+        | (FixtureType::Pillar, Size::Small)
+        | (FixtureType::Pillar, Size::Tall)
+        | (FixtureType::Pillar, Size::Tiny)
+        | (FixtureType::StatueTentacledMonstrosity, Size::Average)
+        | (FixtureType::StatueTentacledMonstrosity, Size::Huge)
+        | (FixtureType::StatueTentacledMonstrosity, Size::Large)
+        | (FixtureType::StatueTentacledMonstrosity, Size::Massive)
+        | (FixtureType::StatueTentacledMonstrosity, Size::Medium)
+        | (FixtureType::StatueTentacledMonstrosity, Size::Short)
+        | (FixtureType::StatueTentacledMonstrosity, Size::Small)
+        | (FixtureType::StatueTentacledMonstrosity, Size::Squat)
+        | (FixtureType::StatueTentacledMonstrosity, Size::Tall)
+        | (FixtureType::StatueTentacledMonstrosity, Size::Tiny)
+        | (FixtureType::StatueWarrior, Size::Average)
+        | (FixtureType::StatueWarrior, Size::Huge)
+        | (FixtureType::StatueWarrior, Size::Large)
+        | (FixtureType::StatueWarrior, Size::Massive)
+        | (FixtureType::StatueWarrior, Size::Medium)
+        | (FixtureType::StatueWarrior, Size::Short)
+        | (FixtureType::StatueWarrior, Size::Small)
+        | (FixtureType::StatueWarrior, Size::Squat)
+        | (FixtureType::StatueWarrior, Size::Tall)
+        | (FixtureType::StatueWarrior, Size::Tiny)
+        | (FixtureType::Table, Size::Average)
+        | (FixtureType::Table, Size::Huge)
+        | (FixtureType::Table, Size::Large)
+        | (FixtureType::Table, Size::Massive)
+        | (FixtureType::Table, Size::Long)
+        | (FixtureType::Table, Size::Medium)
+        | (FixtureType::Table, Size::Narrow)
+        | (FixtureType::Table, Size::Short)
+        | (FixtureType::Table, Size::Small)
+        | (FixtureType::Table, Size::Squat)
+        | (FixtureType::Table, Size::Tall)
+        | (FixtureType::Table, Size::Tiny)
+        | (FixtureType::Table, Size::Wide)
+        | (FixtureType::WeaponRack, Size::Average)
+        | (FixtureType::WeaponRack, Size::Huge)
+        | (FixtureType::WeaponRack, Size::Large)
+        | (FixtureType::WeaponRack, Size::Massive)
+        | (FixtureType::WeaponRack, Size::Long)
+        | (FixtureType::WeaponRack, Size::Medium)
+        | (FixtureType::WeaponRack, Size::Narrow)
+        | (FixtureType::WeaponRack, Size::Short)
+        | (FixtureType::WeaponRack, Size::Small)
+        | (FixtureType::WeaponRack, Size::Squat)
+        | (FixtureType::WeaponRack, Size::Tall)
+        | (FixtureType::WeaponRack, Size::Tiny)
+        | (FixtureType::WeaponRack, Size::Wide) => ItemType::into_enum_iter().collect(),
+        _ => Vec::new(),
     }
 }
 
