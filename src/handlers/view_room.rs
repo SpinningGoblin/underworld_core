@@ -25,6 +25,7 @@ pub fn handle_view_room(_: &LookAtCurrentRoom, state: &GameState) -> Result<Vec<
         .map(|fixture| fixture.identifier.id)
     {
         let knowledge = state.fixture_knowledge(&fixture_id);
+
         fixture_args
             .insert(
                 fixture_id,
@@ -34,8 +35,7 @@ pub fn handle_view_room(_: &LookAtCurrentRoom, state: &GameState) -> Result<Vec<
                     knows_has_hidden: knowledge.knows_has_hidden,
                     knows_can_be_opened: knowledge.knows_can_be_opened,
                 },
-            )
-            .unwrap();
+            );
     }
 
     let mut npc_args: HashMap<Uuid, NonPlayerViewArgs> = HashMap::new();
@@ -61,8 +61,7 @@ pub fn handle_view_room(_: &LookAtCurrentRoom, state: &GameState) -> Result<Vec<
                     },
                     knows_name: knowledge.knows_name,
                 },
-            )
-            .unwrap();
+            );
     }
 
     let view = view(room, npc_args, fixture_args, state.player_knows_all);
