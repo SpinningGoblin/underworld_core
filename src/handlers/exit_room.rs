@@ -2,7 +2,10 @@ use crate::{
     actions::exit_room::ExitRoom,
     components::games::game_state::GameState,
     errors::Errors,
-    events::{event::Event, room_exited::RoomExited, room_generated::RoomGenerated},
+    events::{
+        event::Event, room_exited::RoomExited, room_first_seen::RoomFirstSeen,
+        room_generated::RoomGenerated,
+    },
     generators::{generator::Generator, rooms::random_room_generator},
     utils::ids::parse_id,
 };
@@ -48,6 +51,10 @@ pub fn handle_exit_room(exit_room: &ExitRoom, state: &GameState) -> Result<Vec<E
         old_room_id: state.current_room_id,
         new_room_id: room_id,
     }));
+
+    if !state.rooms_seen.contains(&room_id) {
+        events.push(Event::RoomFirstSeen(RoomFirstSeen { room_id }));
+    }
 
     Ok(events)
 }

@@ -22,7 +22,8 @@ use super::{
     npc_packed_discovered::NpcPackedDiscovered, npc_viewed::NpcViewed,
     npc_weapon_readied::NpcWeaponReadied, player_hit::PlayerHit,
     player_item_moved::PlayerItemMoved, player_killed::PlayerKilled, player_missed::PlayerMissed,
-    room_exited::RoomExited, room_generated::RoomGenerated, room_viewed::RoomViewed,
+    room_exited::RoomExited, room_first_seen::RoomFirstSeen, room_generated::RoomGenerated,
+    room_viewed::RoomViewed,
 };
 
 #[derive(Clone, Debug)]
@@ -55,6 +56,7 @@ pub enum Event {
     PlayerMissed(PlayerMissed),
     RoomExited(RoomExited),
     RoomGenerated(RoomGenerated),
+    RoomFirstSeen(RoomFirstSeen),
     RoomViewed(RoomViewed),
 }
 
@@ -70,7 +72,6 @@ pub fn apply_events(
         match event {
             Event::RoomExited(room_exited) => {
                 new_game.current_room_id = room_exited.new_room_id;
-                new_game.rooms_seen.push(room_exited.new_room_id);
             }
             Event::RoomGenerated(room_generated) => new_game
                 .world
@@ -207,6 +208,9 @@ pub fn apply_events(
             }
             Event::FixtureViewed(_) => {}
             Event::RoomViewed(_) => {}
+            Event::RoomFirstSeen(first_seen) => {
+                new_game.rooms_seen.push(first_seen.room_id);
+            }
         }
     }
 
