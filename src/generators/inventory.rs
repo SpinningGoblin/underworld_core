@@ -48,8 +48,19 @@ impl InventoryPrototype {
 
             let tag_index = rng.gen_range(0..location_tags.len());
             let tag = location_tags.remove(tag_index);
-            let index = rng.gen_range(0..weapon_types.len());
-            let weapon_type = match &weapon_types.get(index) {
+
+            let possible_weapon_types: Vec<&ItemType> = weapon_types
+                .iter()
+                .filter(|item_type| item_type_is_for_tags(item_type, &tag))
+                .cloned()
+                .collect();
+
+            if possible_weapon_types.is_empty() {
+                continue;
+            }
+
+            let index = rng.gen_range(0..possible_weapon_types.len());
+            let weapon_type = match &possible_weapon_types.get(index) {
                 Some(it) => *it,
                 None => continue,
             };
