@@ -172,17 +172,17 @@ pub fn apply_events(
             }
             Event::NpcHiddenDiscovered(hidden_discovered) => {
                 let mut knowledge = new_game.npc_knowledge(&hidden_discovered.npc_id);
-                knowledge.knows_health = true;
+                knowledge.knows_hidden_in_inventory = true;
                 new_game.set_npc_knowledge(hidden_discovered.npc_id, knowledge);
             }
             Event::NpcNameDiscovered(name_discovered) => {
                 let mut knowledge = new_game.npc_knowledge(&name_discovered.npc_id);
-                knowledge.knows_health = true;
+                knowledge.knows_name = true;
                 new_game.set_npc_knowledge(name_discovered.npc_id, knowledge);
             }
             Event::NpcPackedDiscovered(packed_discovered) => {
                 let mut knowledge = new_game.npc_knowledge(&packed_discovered.npc_id);
-                knowledge.knows_health = true;
+                knowledge.knows_packed_in_inventory = true;
                 new_game.set_npc_knowledge(packed_discovered.npc_id, knowledge);
             }
             Event::FixtureCanBeOpenedDiscovered(opened_discovered) => {
