@@ -1,7 +1,9 @@
 use crate::{
     actions::{
-        action::Action, attack_npc::AttackNpc, exit_room::ExitRoom, inspect_npc::InspectNpc,
-        look_at_current_room::LookAtCurrentRoom, look_at_npc::LookAtNpc, loot_npc::LootNpc,
+        action::Action, attack_npc::AttackNpc, exit_room::ExitRoom,
+        inspect_fixture::InspectFixture, inspect_npc::InspectNpc,
+        look_at_current_room::LookAtCurrentRoom, look_at_fixture::LookAtFixture,
+        look_at_npc::LookAtNpc, loot_npc::LootNpc,
     },
     components::{games::game_state::GameState, player::PlayerCharacter},
     errors::Errors,
@@ -29,6 +31,29 @@ impl Game {
 
     pub fn current_actions(&self) -> Vec<Action> {
         let room_view_actions = vec![Action::LookAtCurrentRoom(LookAtCurrentRoom)];
+
+        let fixture_actions = self
+            .state
+            .current_room()
+            .fixture_positions
+            .iter()
+            .flat_map(|fixture_position| fixture_position.fixtures.iter())
+            .flat_map(|fixture| {
+                let actions = vec![
+                    Action::LookAtFixture(LookAtFixture {
+                        fixture_id: fixture.identifier.id.to_string(),
+                    }),
+                    Action::InspectFixture(InspectFixture {
+                        fixture_id: fixture.identifier.id.to_string(),
+                        discover_hidden: true,
+                        discover_hidden_items: true,
+                        discover_contained: true,
+                        discover_can_be_opened: true,
+                    }),
+                ];
+
+                actions
+            });
 
         let npc_actions = self
             .state
@@ -83,6 +108,7 @@ impl Game {
             .into_iter()
             .chain(npc_actions)
             .chain(exit_actions)
+            .chain(fixture_actions)
             .collect()
     }
 }
