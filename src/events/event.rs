@@ -81,7 +81,6 @@ pub fn apply_events(
                     npc.character.damage(npc_hit.damage);
                 }
             }
-            Event::NpcMissed(_) => {}
             Event::NpcKilled(npc_killed) => {
                 let room = new_game.current_room_mut();
                 if let Some(npc) = room.find_npc_mut(&npc_killed.npc_id) {
@@ -124,8 +123,6 @@ pub fn apply_events(
                 new_player.character.damage(player_hit.damage);
             }
             Event::PlayerKilled(_) => new_player.character.kill(),
-            Event::PlayerMissed(_) => {}
-            Event::NpcViewed(_) => {}
             Event::ItemTakenFromNpc(item_taken_from_npc) => {
                 let npc = new_game
                     .current_room_mut()
@@ -145,7 +142,6 @@ pub fn apply_events(
                 };
                 new_player.character.add_item(packed_item)
             }
-            Event::DeadNpcBeaten(_) => {}
             Event::NpcWeaponReadied(weapon_readied) => {
                 let npc = new_game
                     .current_room_mut()
@@ -206,11 +202,15 @@ pub fn apply_events(
                 knowledge.knows_hidden_items = true;
                 new_game.set_fixture_knowledge(hidden_items.fixture_id, knowledge);
             }
-            Event::FixtureViewed(_) => {}
-            Event::RoomViewed(_) => {}
             Event::RoomFirstSeen(first_seen) => {
                 new_game.rooms_seen.push(first_seen.room_id);
             }
+            Event::NpcMissed(_)
+            | Event::DeadNpcBeaten(_)
+            | Event::PlayerMissed(_)
+            | Event::NpcViewed(_)
+            | Event::FixtureViewed(_)
+            | Event::RoomViewed(_) => {}
         }
     }
 
