@@ -10,8 +10,8 @@ pub fn npc_attack_player(player: &PlayerCharacter, npc: &NonPlayer) -> Vec<Event
     let mut events: Vec<Event> = Vec::new();
 
     // If there are no weapons equipped, then all the NPC does is ready the weapon.
-    if npc.character.no_weapons_equipped() {
-        if let Some(character_item) = npc.character.strongest_unequipped_weapon() {
+    if npc.character.no_weapons_readied() {
+        if let Some(character_item) = npc.character.strongest_non_readied_weapon() {
             events.push(Event::NpcWeaponReadied(NpcWeaponReadied {
                 npc_id: npc.identifier.id,
                 item_id: character_item.item.identifier.id,

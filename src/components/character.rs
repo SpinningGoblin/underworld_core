@@ -80,10 +80,24 @@ impl Character {
         }
     }
 
+    pub fn no_weapons_readied(&self) -> bool {
+        match &self.inventory {
+            Some(inv) => inv.readied_weapons().is_empty(),
+            None => true,
+        }
+    }
+
     pub fn count_weapons_at_ready(&self) -> usize {
         match &self.inventory {
             Some(inv) => inv.count_weapons_at_ready(),
             None => 0,
+        }
+    }
+
+    pub fn strongest_non_readied_weapon(&self) -> Option<&CharacterItem> {
+        match &self.inventory {
+            Some(inv) => inv.strongest_non_readied_weapon(),
+            None => None,
         }
     }
 
