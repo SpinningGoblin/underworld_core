@@ -4,7 +4,7 @@ use enum_iterator::IntoEnumIterator;
 use rand::{prelude::ThreadRng, Rng};
 
 use crate::components::{
-    fixtures::{fixture::Fixture, fixture_type::FixtureType},
+    fixtures::{fixture::Fixture, fixture_item::FixtureItem, fixture_type::FixtureType},
     identifier::Identifier,
     items::{descriptor::Descriptor, item::Item, item_type::ItemType},
     material::BuiltWithMaterial,
@@ -87,16 +87,28 @@ impl Generator<Fixture> for FixturePrototype {
             num_descriptors -= 1;
         }
 
-        let contained_items: Vec<Item> = if fixture_can_have_items(&self.fixture_type) {
+        let items: Vec<FixtureItem> = if fixture_can_have_items(&self.fixture_type) {
             let num_items = rng.gen_range(self.num_contained_items.clone());
             build_items(&self.fixture_type, num_items, &size, &mut rng)
+                .into_iter()
+                .map(|item| FixtureItem {
+                    item,
+                    is_hidden: false,
+                })
+                .collect()
         } else {
             Vec::new()
         };
 
-        let hidden_compartment_items: Vec<Item> = if self.has_hidden_compartment {
+        let hidden_compartment_items: Vec<FixtureItem> = if self.has_hidden_compartment {
             let num_items = rng.gen_range(self.num_hidden_items.clone());
             build_items(&self.fixture_type, num_items, &size, &mut rng)
+                .into_iter()
+                .map(|item| FixtureItem {
+                    item,
+                    is_hidden: true,
+                })
+                .collect()
         } else {
             Vec::new()
         };
@@ -107,8 +119,10 @@ impl Generator<Fixture> for FixturePrototype {
             fixture_type: self.fixture_type.clone(),
             size,
             descriptors,
-            contained_items,
-            hidden_compartment_items,
+            items: items
+                .into_iter()
+                .chain(hidden_compartment_items.into_iter())
+                .collect(),
             has_hidden_compartment: self.has_hidden_compartment,
             can_be_opened: fixture_can_be_opened(&self.fixture_type),
             open: false,

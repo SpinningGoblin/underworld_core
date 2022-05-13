@@ -1,24 +1,32 @@
-use crate::components::{
-    fixtures::fixture::{Fixture, FixtureView, FixtureViewArgs},
-    items::item::ItemView,
+use crate::components::fixtures::{
+    fixture::{Fixture, FixtureView, FixtureViewArgs},
+    fixture_item::FixtureItemView,
 };
 
 pub fn look_at(fixture: &Fixture, args: &FixtureViewArgs, knows_all: bool) -> FixtureView {
-    let contained_items: Vec<ItemView> = if args.knows_items || knows_all {
+    let items: Vec<FixtureItemView> = if args.knows_items || knows_all {
         fixture
-            .contained_items
+            .items
             .iter()
-            .map(|item| super::item::look_at(item, args.knows_items, knows_all))
-            .collect()
-    } else {
-        Vec::new()
-    };
-
-    let hidden_items: Vec<ItemView> = if args.knows_hidden || knows_all {
-        fixture
-            .contained_items
-            .iter()
-            .map(|item| super::item::look_at(item, args.knows_has_hidden, knows_all))
+            .filter(|fixture_item| {
+                if fixture_item.is_hidden {
+                    args.knows_hidden || knows_all
+                } else {
+                    true
+                }
+            })
+            .map(|fixture_item| {
+                let is_hidden = if fixture_item.is_hidden {
+                    args.knows_hidden || knows_all
+                } else {
+                    false
+                };
+                FixtureItemView {
+                    item: super::item::look_at(&fixture_item.item, args.knows_items, knows_all),
+                    is_hidden,
+                    is_hidden_known: args.knows_hidden,
+                }
+            })
             .collect()
     } else {
         Vec::new()
@@ -45,9 +53,8 @@ pub fn look_at(fixture: &Fixture, args: &FixtureViewArgs, knows_all: bool) -> Fi
         material: fixture.material.clone(),
         size: fixture.size.clone(),
         descriptors: fixture.descriptors.clone(),
-        contained_items,
+        items,
         knows_contained_items: args.knows_items || knows_all,
-        hidden_compartment_items: hidden_items,
         has_hidden_compartment: has_hidden,
         knows_hidden_compartment_items: args.knows_hidden || knows_all,
         knows_if_hidden_compartment: args.knows_has_hidden || knows_all,

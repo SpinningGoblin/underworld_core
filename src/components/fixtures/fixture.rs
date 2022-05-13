@@ -6,18 +6,19 @@ use bevy_ecs::prelude::Component;
 use poem_openapi::Object;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 use crate::components::{
     identifier::{Identifier, IdentifierView},
-    items::{
-        descriptor::Descriptor,
-        item::{Item, ItemView},
-    },
+    items::descriptor::Descriptor,
     material::Material,
     size::Size,
 };
 
-use super::fixture_type::FixtureType;
+use super::{
+    fixture_item::{FixtureItem, FixtureItemView},
+    fixture_type::FixtureType,
+};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -35,13 +36,27 @@ pub struct Fixture {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub descriptors: Vec<Descriptor>,
     #[cfg_attr(feature = "serialization", serde(default))]
-    pub contained_items: Vec<Item>,
-    #[cfg_attr(feature = "serialization", serde(default))]
-    pub hidden_compartment_items: Vec<Item>,
+    pub items: Vec<FixtureItem>,
     pub has_hidden_compartment: bool,
     pub can_be_opened: bool,
     pub open: bool,
     pub hidden_compartment_open: bool,
+}
+
+impl Fixture {
+    pub fn remove_item(&mut self, item_id: &Uuid) -> Option<FixtureItem> {
+        let index = self
+            .items
+            .iter()
+            .enumerate()
+            .find(|(_, fixture_item)| fixture_item.item.identifier.id.eq(item_id))
+            .map(|(index, _)| index);
+
+        match index {
+            Some(it) => Some(self.items.remove(it)),
+            None => None,
+        }
+    }
 }
 
 #[derive(Clone, Debug)]
@@ -59,9 +74,8 @@ pub struct FixtureView {
     pub material: Option<Material>,
     pub size: Size,
     pub descriptors: Vec<Descriptor>,
-    pub contained_items: Vec<ItemView>,
+    pub items: Vec<FixtureItemView>,
     pub knows_contained_items: bool,
-    pub hidden_compartment_items: Vec<ItemView>,
     pub knows_hidden_compartment_items: bool,
     pub has_hidden_compartment: bool,
     pub knows_if_hidden_compartment: bool,
@@ -124,8 +138,7 @@ mod display_tests {
             size: crate::components::size::Size::Average,
             descriptors: Vec::new(),
             identifier: Identifier::default(),
-            contained_items: Vec::new(),
-            hidden_compartment_items: Vec::new(),
+            items: Vec::new(),
             has_hidden_compartment: false,
             can_be_opened: true,
             open: false,
