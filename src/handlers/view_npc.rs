@@ -7,15 +7,15 @@ use crate::{
     utils::ids::parse_id,
 };
 
-pub fn handle_view_npc(action: &LookAtNpc, game_state: &GameState) -> Result<Vec<Event>, Errors> {
-    let npc_id = parse_id(&action.npc_id)?;
+pub fn handle_view_npc(look_at_npc: &LookAtNpc, state: &GameState) -> Result<Vec<Event>, Errors> {
+    let npc_id = parse_id(&look_at_npc.npc_id)?;
 
-    let npc = match game_state.current_room().find_npc(&npc_id) {
+    let npc = match state.current_room().find_npc(&npc_id) {
         Some(it) => it,
         None => return Err(Errors::NpcNotFound(npc_id.to_string())),
     };
 
-    let knowledge = game_state.npc_knowledge(&npc_id);
+    let knowledge = state.npc_knowledge(&npc_id);
     let args = CharacterViewArgs {
         knows_health: knowledge.knows_health,
         knows_species: knowledge.knows_species,
@@ -25,12 +25,7 @@ pub fn handle_view_npc(action: &LookAtNpc, game_state: &GameState) -> Result<Vec
         knows_packed_in_inventory: knowledge.knows_packed_in_inventory,
     };
 
-    let view = non_player::look_at(
-        npc,
-        &args,
-        knowledge.knows_name,
-        game_state.player_knows_all,
-    );
+    let view = non_player::look_at(npc, &args, knowledge.knows_name, state.player_knows_all);
 
     Ok(vec![Event::NpcViewed(NpcViewed { npc_view: view })])
 }
