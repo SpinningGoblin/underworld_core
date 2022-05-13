@@ -275,7 +275,7 @@ mod inventory_tests {
         let description = look_at(&inventory, true, true, true).to_string();
         assert!(description.contains("a broken long sword"));
         assert!(description.contains(", and"));
-        assert!(description.contains("rusty dull short sword sheathed at its hip."));
+        assert!(description.contains("rusty dull short sword."));
     }
 
     #[test]
@@ -377,11 +377,11 @@ mod inventory_tests {
 
     #[test]
     fn display_with_two_wearables() {
-        let chain_mail = Item {
+        let plate = Item {
             identifier: Identifier::default(),
-            item_type: ItemType::PlateHelmet,
+            item_type: ItemType::Breastplate,
             material: Some(Material::Steel),
-            descriptors: vec![Descriptor::SetOf, Descriptor::Drab],
+            descriptors: vec![Descriptor::Drab],
             defense: None,
             attack: None,
             tags: vec![Tag::Armour],
@@ -400,7 +400,7 @@ mod inventory_tests {
         let inventory = Inventory {
             equipment: vec![
                 CharacterItem {
-                    item: chain_mail,
+                    item: plate,
                     is_hidden: false,
                     is_multiple: false,
                     at_the_ready: true,
@@ -417,8 +417,7 @@ mod inventory_tests {
         };
 
         let description = look_at(&inventory, true, true, true).to_string();
-        assert!(description.contains("set of drab steel plate"));
-        assert!(description.contains("rusty iron shackles dangling from its wrists."));
-        assert!(description.contains(", and"));
+        assert!(description.contains("drab steel breast plate"));
+        assert!(description.contains("rusty iron shackles."));
     }
 }
