@@ -16,11 +16,11 @@ use super::{
     fixture_contained_discovered::FixtureContainedDiscovered,
     fixture_has_hidden_discovered::FixtureHasHiddenDiscovered,
     fixture_hidden_items_discovered::FixtureHiddenItemsDiscovered, fixture_viewed::FixtureViewed,
-    item_taken_from_npc::ItemTakenFromNpc, npc_health_discovered::NpcHealthDiscovered,
-    npc_hidden_discovered::NpcHiddenDiscovered, npc_hit::NpcHit, npc_killed::NpcKilled,
-    npc_missed::NpcMissed, npc_name_discovered::NpcNameDiscovered,
-    npc_packed_discovered::NpcPackedDiscovered, npc_viewed::NpcViewed,
-    npc_weapon_readied::NpcWeaponReadied, player_hit::PlayerHit,
+    item_taken_from_fixture::ItemTakenFromFixture, item_taken_from_npc::ItemTakenFromNpc,
+    npc_health_discovered::NpcHealthDiscovered, npc_hidden_discovered::NpcHiddenDiscovered,
+    npc_hit::NpcHit, npc_killed::NpcKilled, npc_missed::NpcMissed,
+    npc_name_discovered::NpcNameDiscovered, npc_packed_discovered::NpcPackedDiscovered,
+    npc_viewed::NpcViewed, npc_weapon_readied::NpcWeaponReadied, player_hit::PlayerHit,
     player_item_moved::PlayerItemMoved, player_killed::PlayerKilled, player_missed::PlayerMissed,
     room_exited::RoomExited, room_first_seen::RoomFirstSeen, room_generated::RoomGenerated,
     room_viewed::RoomViewed,
@@ -40,6 +40,7 @@ pub enum Event {
     FixtureHasHiddenDiscovered(FixtureHasHiddenDiscovered),
     FixtureHiddenItemsDiscovered(FixtureHiddenItemsDiscovered),
     FixtureViewed(FixtureViewed),
+    ItemTakenFromFixture(ItemTakenFromFixture),
     ItemTakenFromNpc(ItemTakenFromNpc),
     NpcHealthDiscovered(NpcHealthDiscovered),
     NpcHiddenDiscovered(NpcHiddenDiscovered),
@@ -204,6 +205,24 @@ pub fn apply_events(
             }
             Event::RoomFirstSeen(first_seen) => {
                 new_game.rooms_seen.push(first_seen.room_id);
+            }
+            Event::ItemTakenFromFixture(item_taken_from_fixture) => {
+                let fixture = new_game
+                    .current_room_mut()
+                    .find_fixture_mut(&item_taken_from_fixture.fixture_id)
+                    .unwrap();
+                let fixture_item = fixture
+                    .remove_item(&item_taken_from_fixture.item_id)
+                    .unwrap();
+
+                let packed_item = CharacterItem {
+                    is_hidden: false,
+                    equipped_location: LocationTag::Packed,
+                    is_multiple: false,
+                    item: fixture_item.item,
+                    at_the_ready: false,
+                };
+                new_player.character.add_item(packed_item)
             }
             Event::NpcMissed(_)
             | Event::DeadNpcBeaten(_)

@@ -5,6 +5,7 @@ pub mod fixture_contained_discovered;
 pub mod fixture_has_hidden_discovered;
 pub mod fixture_hidden_items_discovered;
 pub mod fixture_viewed;
+pub mod item_taken_from_fixture;
 pub mod item_taken_from_npc;
 pub mod npc_health_discovered;
 pub mod npc_hidden_discovered;
