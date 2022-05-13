@@ -8,8 +8,9 @@ use crate::{
 use self::{
     attack_npc::handle_attack_npc, exit_room::handle_exit_room,
     inspect_fixture::handle_inspect_fixture, inspect_npc::handle_inspect_npc,
-    loot_npc::handle_loot_npc, move_player_item::handle_move_player_item,
-    view_fixture::handle_view_fixture, view_npc::handle_view_npc, view_room::handle_view_room,
+    loot_fixture::handle_loot_fixture, loot_npc::handle_loot_npc,
+    move_player_item::handle_move_player_item, view_fixture::handle_view_fixture,
+    view_npc::handle_view_npc, view_room::handle_view_room,
 };
 
 mod attack_npc;
@@ -17,6 +18,7 @@ mod exit_room;
 mod helpers;
 mod inspect_fixture;
 mod inspect_npc;
+mod loot_fixture;
 mod loot_npc;
 mod move_player_item;
 mod view_fixture;
@@ -35,10 +37,8 @@ pub fn handle(
     player: &PlayerCharacter,
 ) -> Result<HandledAction, Errors> {
     if player.character.is_dead() {
-        /*
-        TODO: Later we might want more specific handling for this
-        where maybe some things could happen with a dead player.
-        */
+        // TODO: Later we might want more specific handling for this,
+        // where maybe some things could happen with a dead player.
         return Err(Errors::PlayerIsDead);
     }
 
@@ -58,6 +58,7 @@ pub fn handle(
             handle_inspect_fixture(inspect_fixture, state, player)?
         }
         Action::LookAtFixture(look_at_fixture) => handle_view_fixture(look_at_fixture, state)?,
+        Action::LootFixture(loot_fixture) => handle_loot_fixture(loot_fixture, state)?,
     };
 
     let (new_state, new_player) = apply_events(&events, state, player);
