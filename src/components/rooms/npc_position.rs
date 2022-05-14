@@ -106,7 +106,7 @@ mod tests {
         };
 
         assert_eq!(
-            "in the corner stands a gang of goblins",
+            "in the corner stands a lone goblin",
             format!(
                 "{}",
                 look_at(&npc_position, &NonPlayerViewArgs::default(), true)
