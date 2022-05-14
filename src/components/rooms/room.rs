@@ -36,7 +36,7 @@ impl Room {
     pub fn find_npc(&self, npc_id: &Uuid) -> Option<&NonPlayer> {
         self.npc_positions
             .iter()
-            .flat_map(|npc_position| npc_position.npcs.iter())
+            .map(|npc_position| &npc_position.npc)
             .find(|npc| npc.identifier.id.eq(npc_id))
     }
 
@@ -50,16 +50,15 @@ impl Room {
     pub fn first_alive_npc(&self) -> Option<&NonPlayer> {
         self.npc_positions
             .iter()
-            .flat_map(|npc_position| npc_position.npcs.iter())
+            .map(|npc_position| &npc_position.npc)
             .filter(|npc| !npc.character.is_dead())
             .find(|_| true) // First one
     }
 
-    pub fn find_npc_mut(&mut self, target_id: &Uuid) -> Option<&mut NonPlayer> {
+    pub fn find_npc_mut(&mut self, target_id: &Uuid) -> Option<&mut NpcPosition> {
         self.npc_positions
             .iter_mut()
-            .flat_map(|npc_position| npc_position.npcs.iter_mut())
-            .find(|npc| npc.identifier.id.eq(target_id))
+            .find(|npc_position| npc_position.npc.identifier.id.eq(target_id))
     }
 
     pub fn find_fixture_mut(&mut self, fixture_id: &Uuid) -> Option<&mut Fixture> {
@@ -73,12 +72,7 @@ impl Room {
         self.npc_positions
             .iter()
             .enumerate()
-            .find(|(_, npc_position)| {
-                npc_position
-                    .npcs
-                    .iter()
-                    .any(|npc| npc.identifier.id.eq(npc_id))
-            })
+            .find(|(_, npc_position)| npc_position.npc.identifier.id.eq(npc_id))
             .map(|(index, _)| index)
     }
 

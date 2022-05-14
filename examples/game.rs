@@ -27,7 +27,7 @@ pub fn main() {
 
         game.handle_action(&Action::ExitRoom(exit_room)).unwrap();
         let npc_id = match game.state.current_room().npc_positions.get(0) {
-            Some(it) => it.npcs.get(0).unwrap().identifier.id,
+            Some(it) => it.npc.identifier.id,
             None => return,
         };
 

@@ -20,7 +20,7 @@ use super::{group_descriptor::GroupDescriptor, npc_position_descriptor::NpcPosit
 pub struct NpcPosition {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub group_descriptor: Option<GroupDescriptor>,
-    pub npcs: Vec<NonPlayer>,
+    pub npc: NonPlayer,
     pub position_descriptor: Option<NpcPositionDescriptor>,
 }
 
@@ -31,7 +31,7 @@ pub struct NpcPosition {
 pub struct NpcPositionView {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub group_descriptor: Option<GroupDescriptor>,
-    pub npcs: Vec<NonPlayerView>,
+    pub npc: NonPlayerView,
     pub position_descriptor: Option<NpcPositionDescriptor>,
 }
 
@@ -59,16 +59,12 @@ impl Display for NpcPositionView {
 
 impl NpcPositionView {
     fn species_description(&self) -> String {
-        let species_counts = crate::utils::frequencies::sorted_frequencies(
-            self.npcs.iter().flat_map(|n| n.character.species.clone()),
-        );
-
-        let mut parts: Vec<String> = Vec::new();
-        for (species, count) in species_counts {
-            parts.push(species.describe_count(count));
-        }
-
-        parts.join(" and ")
+        self.npc
+            .character
+            .species
+            .clone()
+            .map(|species| species.describe_count(1))
+            .unwrap_or_default()
     }
 
     pub fn display_as_sentence(&self) -> String {
@@ -80,7 +76,7 @@ impl NpcPositionView {
 mod tests {
     use crate::{
         components::{
-            non_player::{NonPlayer, NonPlayerViewArgs},
+            non_player::NonPlayerViewArgs,
             rooms::{
                 group_descriptor::GroupDescriptor, npc_position_descriptor::NpcPositionDescriptor,
             },
@@ -102,11 +98,10 @@ mod tests {
                 Species::Goblin,
             )),
         };
-        let npcs: Vec<NonPlayer> = vec![goblin_prototype.generate(), goblin_prototype.generate()];
 
         let npc_position = NpcPosition {
-            npcs,
-            group_descriptor: Some(GroupDescriptor::AGangOf),
+            npc: goblin_prototype.generate(),
+            group_descriptor: Some(GroupDescriptor::ALone),
             position_descriptor: Some(NpcPositionDescriptor::InCornerStands),
         };
 

@@ -60,7 +60,7 @@ impl Game {
             .current_room()
             .npc_positions
             .iter()
-            .flat_map(|npc_position| npc_position.npcs.iter())
+            .map(|npc_position| &npc_position.npc)
             .flat_map(|npc| {
                 let mut actions = vec![
                     Action::LookAtNpc(LookAtNpc {

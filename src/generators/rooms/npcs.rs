@@ -6,7 +6,6 @@ use crate::{
         fixtures::fixture_type::FixtureType,
         items::item_type::ItemType,
         life_modifier::LifeModifier,
-        non_player::NonPlayer,
         rooms::{
             group_descriptor::GroupDescriptor, npc_position::NpcPosition,
             npc_position_descriptor::NpcPositionDescriptor, room_type::RoomType,
@@ -33,7 +32,7 @@ pub fn build_npc_positions(
     }
 
     (0..num_groups)
-        .map(|_| {
+        .flat_map(|_| {
             // For each group, find a starting race.
             let starter_species = choose_species();
             // Get the group size based on the species.
@@ -41,33 +40,32 @@ pub fn build_npc_positions(
             let life_modifier = life_modifier(&starter_species);
             let mut species = starter_species.clone();
             let mut prototype = npc_prototype(&starter_species, life_modifier.clone());
-            let mut npcs: Vec<NonPlayer> = (0..group_size)
-                .map(|index| {
-                    if index > 0 {
-                        species = switch_species(&species);
-                        prototype = npc_prototype(&species, life_modifier.clone());
-                    }
-                    prototype.generate()
-                })
-                .collect();
 
-            let position_descriptor = position_descriptor(npcs.len(), &fixtures_in_room);
+            let mut npc_positions: Vec<NpcPosition> = Vec::new();
+            (0..group_size).for_each(|index| {
+                if index > 0 {
+                    species = switch_species(&species);
+                    prototype = npc_prototype(&species, life_modifier.clone());
+                }
+                let mut npc = prototype.generate();
 
-            if position_descriptor == Some(NpcPositionDescriptor::IsLyingInPoolBlood) {
-                npcs.iter_mut().for_each(|npc| {
-                    if !matches!(&npc.character.species, Species::Phantom | Species::Shadow)
-                        && npc.character.life_modifier == None
-                    {
-                        npc.kill();
-                    }
+                let position_descriptor = position_descriptor(&fixtures_in_room);
+
+                if position_descriptor == Some(NpcPositionDescriptor::IsLyingInPoolBlood)
+                    && !matches!(&npc.character.species, Species::Phantom | Species::Shadow)
+                    && npc.character.life_modifier == None
+                {
+                    npc.kill();
+                }
+
+                npc_positions.push(NpcPosition {
+                    group_descriptor: group_descriptor(),
+                    npc,
+                    position_descriptor,
                 });
-            }
+            });
 
-            NpcPosition {
-                group_descriptor: group_descriptor(npcs.len()),
-                position_descriptor,
-                npcs,
-            }
+            npc_positions
         })
         .collect()
 }
@@ -126,11 +124,8 @@ fn group_size(species: &Species) -> usize {
     rng.gen_range(range)
 }
 
-pub fn group_descriptor(group_size: usize) -> Option<GroupDescriptor> {
-    let options = match group_size {
-        1 => single_group_descriptors(),
-        _ => multi_group_descriptors(),
-    };
+pub fn group_descriptor() -> Option<GroupDescriptor> {
+    let options = single_group_descriptors();
 
     let mut rng = rand::thread_rng();
     let index = rng.gen_range(0..options.len());
@@ -145,147 +140,88 @@ fn single_group_descriptors() -> Vec<GroupDescriptor> {
     ]
 }
 
-fn multi_group_descriptors() -> Vec<GroupDescriptor> {
-    vec![
-        GroupDescriptor::Some,
-        GroupDescriptor::AFew,
-        GroupDescriptor::AGangOf,
-        GroupDescriptor::AGroupOf,
-    ]
-}
-
-fn position_descriptor(
-    group_size: usize,
-    used_fixtures: &[FixtureType],
-) -> Option<NpcPositionDescriptor> {
+fn position_descriptor(used_fixtures: &[FixtureType]) -> Option<NpcPositionDescriptor> {
     let mut options: Vec<NpcPositionDescriptor> = Vec::new();
 
     for fixture_type in used_fixtures {
         let mut fixture_options = match *fixture_type {
-            FixtureType::Barrel => barrel_positions(group_size),
-            FixtureType::Bed => bed_positions(group_size),
-            FixtureType::Chair => chair_positions(group_size),
-            FixtureType::Chest => chest_positions(group_size),
-            FixtureType::Cot => cot_positions(group_size),
-            FixtureType::Crate => crate_positions(group_size),
-            FixtureType::SleepingRoll => sleeping_roll_positions(group_size),
-            FixtureType::Table => table_positions(group_size),
-            FixtureType::WeaponRack => weapon_rack_positions(group_size),
+            FixtureType::Barrel => barrel_positions(),
+            FixtureType::Bed => bed_positions(),
+            FixtureType::Chair => chair_positions(),
+            FixtureType::Chest => chest_positions(),
+            FixtureType::Cot => cot_positions(),
+            FixtureType::Crate => crate_positions(),
+            FixtureType::SleepingRoll => sleeping_roll_positions(),
+            FixtureType::Table => table_positions(),
+            FixtureType::WeaponRack => weapon_rack_positions(),
             _ => Vec::new(),
         };
 
         options.append(&mut fixture_options);
     }
-    options.append(&mut other_positions(group_size));
+    options.append(&mut other_positions());
 
     let mut rng = rand::thread_rng();
     let index = rng.gen_range(0..options.len());
     options.get(index).cloned()
 }
 
-fn other_positions(group_size: usize) -> Vec<NpcPositionDescriptor> {
-    if group_size == 1 {
-        vec![
-            NpcPositionDescriptor::IsGlaringAtYou,
-            NpcPositionDescriptor::IsGlaringAtYouFromNearby,
-            NpcPositionDescriptor::InCornerStands,
-            NpcPositionDescriptor::IsStandingAround,
-            NpcPositionDescriptor::IsLyingInPoolBlood,
-        ]
-    } else {
-        vec![
-            NpcPositionDescriptor::AreGlaringAtYou,
-            NpcPositionDescriptor::AreGlaringAtYouFromNearby,
-            NpcPositionDescriptor::AreInTheCorner,
-            NpcPositionDescriptor::InCornerStands,
-            NpcPositionDescriptor::InTheCornerAre,
-        ]
-    }
+fn other_positions() -> Vec<NpcPositionDescriptor> {
+    vec![
+        NpcPositionDescriptor::IsGlaringAtYou,
+        NpcPositionDescriptor::IsGlaringAtYouFromNearby,
+        NpcPositionDescriptor::InCornerStands,
+        NpcPositionDescriptor::IsStandingAround,
+        NpcPositionDescriptor::IsLyingInPoolBlood,
+        NpcPositionDescriptor::IsCrouchedInTheCenterOfRoom,
+        NpcPositionDescriptor::IsSittingAndDozingInCenterOfRoom,
+    ]
 }
 
-fn barrel_positions(group_size: usize) -> Vec<NpcPositionDescriptor> {
-    if group_size == 1 {
-        vec![NpcPositionDescriptor::IsStandingInABarrel]
-    } else {
-        Vec::new()
-    }
+fn barrel_positions() -> Vec<NpcPositionDescriptor> {
+    vec![NpcPositionDescriptor::IsStandingInABarrel]
 }
 
-fn bed_positions(group_size: usize) -> Vec<NpcPositionDescriptor> {
-    if group_size == 1 {
-        vec![NpcPositionDescriptor::IsSleepingInTheBed]
-    } else {
-        Vec::new()
-    }
+fn bed_positions() -> Vec<NpcPositionDescriptor> {
+    vec![NpcPositionDescriptor::IsSleepingInTheBed]
 }
 
-fn chair_positions(group_size: usize) -> Vec<NpcPositionDescriptor> {
-    if group_size == 1 {
-        vec![
-            NpcPositionDescriptor::IsSittingInAChair,
-            NpcPositionDescriptor::SittingInAChairIs,
-        ]
-    } else {
-        vec![NpcPositionDescriptor::AreSittingInChairs]
-    }
+fn chair_positions() -> Vec<NpcPositionDescriptor> {
+    vec![
+        NpcPositionDescriptor::IsSittingInAChair,
+        NpcPositionDescriptor::SittingInAChairIs,
+    ]
 }
 
-fn chest_positions(group_size: usize) -> Vec<NpcPositionDescriptor> {
-    if group_size == 1 {
-        vec![
-            NpcPositionDescriptor::IsCrouchedOverChest,
-            NpcPositionDescriptor::IsRummagingThroughAChest,
-        ]
-    } else {
-        Vec::new()
-    }
+fn chest_positions() -> Vec<NpcPositionDescriptor> {
+    vec![
+        NpcPositionDescriptor::IsCrouchedOverChest,
+        NpcPositionDescriptor::IsRummagingThroughAChest,
+    ]
 }
 
-fn crate_positions(group_size: usize) -> Vec<NpcPositionDescriptor> {
-    if group_size == 1 {
-        vec![NpcPositionDescriptor::IsLeaningOnACrate]
-    } else {
-        vec![NpcPositionDescriptor::AreLeaningOnACrate]
-    }
+fn crate_positions() -> Vec<NpcPositionDescriptor> {
+    vec![NpcPositionDescriptor::IsLeaningOnACrate]
 }
 
-fn cot_positions(group_size: usize) -> Vec<NpcPositionDescriptor> {
-    if group_size == 1 {
-        vec![NpcPositionDescriptor::IsSleepingInACot]
-    } else {
-        Vec::new()
-    }
+fn cot_positions() -> Vec<NpcPositionDescriptor> {
+    vec![NpcPositionDescriptor::IsSleepingInACot]
 }
 
-fn sleeping_roll_positions(group_size: usize) -> Vec<NpcPositionDescriptor> {
-    if group_size == 1 {
-        vec![NpcPositionDescriptor::IsSleepingInSleepingRoll]
-    } else {
-        Vec::new()
-    }
+fn sleeping_roll_positions() -> Vec<NpcPositionDescriptor> {
+    vec![NpcPositionDescriptor::IsSleepingInSleepingRoll]
 }
 
-fn table_positions(group_size: usize) -> Vec<NpcPositionDescriptor> {
-    if group_size == 1 {
-        vec![
-            NpcPositionDescriptor::IsStandingOnTheTable,
-            NpcPositionDescriptor::IsLeaningAgainstTheTable,
-            NpcPositionDescriptor::StandsOnTheTable,
-        ]
-    } else {
-        vec![
-            NpcPositionDescriptor::AreLeaningAgainstTheTable,
-            NpcPositionDescriptor::StandOnTheTable,
-        ]
-    }
+fn table_positions() -> Vec<NpcPositionDescriptor> {
+    vec![
+        NpcPositionDescriptor::IsStandingOnTheTable,
+        NpcPositionDescriptor::IsLeaningAgainstTheTable,
+        NpcPositionDescriptor::StandsOnTheTable,
+    ]
 }
 
-fn weapon_rack_positions(group_size: usize) -> Vec<NpcPositionDescriptor> {
-    if group_size == 1 {
-        vec![NpcPositionDescriptor::IsLookingAtTheWeaponRack]
-    } else {
-        vec![NpcPositionDescriptor::AreLookingAtTheWeaponRack]
-    }
+fn weapon_rack_positions() -> Vec<NpcPositionDescriptor> {
+    vec![NpcPositionDescriptor::IsLookingAtTheWeaponRack]
 }
 
 const UNDEAD_CHANCE: usize = 15;

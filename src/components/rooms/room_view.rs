@@ -60,7 +60,7 @@ impl RoomView {
         let non_players: Vec<&NonPlayerView> = self
             .npc_positions
             .iter()
-            .flat_map(|npc_position| npc_position.npcs.iter())
+            .map(|npc_position| &npc_position.npc)
             .collect();
         if non_players.is_empty() {
             return "".to_string();
@@ -163,11 +163,7 @@ impl RoomView {
             return Self::empty_room_description();
         }
 
-        if self
-            .npc_positions
-            .iter()
-            .all(|npc_position| npc_position.npcs.is_empty())
-        {
+        if self.npc_positions.is_empty() {
             return Self::empty_room_description();
         }
 

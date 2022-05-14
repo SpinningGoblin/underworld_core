@@ -42,7 +42,7 @@ pub fn handle_view_room(_: &LookAtCurrentRoom, state: &GameState) -> Result<Vec<
     for npc_id in room
         .npc_positions
         .iter()
-        .flat_map(|npc_position| npc_position.npcs.iter())
+        .map(|npc_position| &npc_position.npc)
         .map(|npc| npc.identifier.id)
     {
         let knowledge = state.npc_knowledge(&npc_id);

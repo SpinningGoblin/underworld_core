@@ -6,9 +6,7 @@ use serde::{Deserialize, Serialize};
 use crate::components::{
     games::game_state::GameState,
     items::{character_item::CharacterItem, location_tag::LocationTag},
-    non_player::NonPlayer,
     player::PlayerCharacter,
-    rooms::npc_position::NpcPosition,
 };
 
 use super::{
@@ -78,46 +76,15 @@ pub fn apply_events(
                 .world
                 .add_room(room_generated.entrance_id, room_generated.room.clone()),
             Event::NpcHit(npc_hit) => {
-                if let Some(npc) = new_game.current_room_mut().find_npc_mut(&npc_hit.npc_id) {
-                    npc.character.damage(npc_hit.damage);
+                if let Some(position) = new_game.current_room_mut().find_npc_mut(&npc_hit.npc_id) {
+                    position.npc.character.damage(npc_hit.damage);
                 }
             }
             Event::NpcKilled(npc_killed) => {
                 let room = new_game.current_room_mut();
-                if let Some(npc) = room.find_npc_mut(&npc_killed.npc_id) {
-                    npc.character.kill();
-                }
-
-                if let Some(index) = room.index_of_npc_position(&npc_killed.npc_id) {
-                    let position = room.remove_npc_position(index);
-
-                    let (dead, alive): (Vec<NonPlayer>, Vec<NonPlayer>) = position
-                        .npcs
-                        .into_iter()
-                        .partition(|npc| npc.character.is_dead());
-
-                    let replace_alive = !alive.is_empty();
-                    if !dead.is_empty() {
-                        let dead_position = NpcPosition {
-                            group_descriptor: crate::generators::rooms::npcs::group_descriptor(
-                                dead.len(),
-                            ),
-                            npcs: dead,
-                            position_descriptor: None,
-                        };
-                        room.npc_positions.push(dead_position);
-                    }
-
-                    if replace_alive {
-                        let alive_position = NpcPosition {
-                            group_descriptor: crate::generators::rooms::npcs::group_descriptor(
-                                alive.len(),
-                            ),
-                            npcs: alive,
-                            position_descriptor: position.position_descriptor.clone(),
-                        };
-                        room.npc_positions.push(alive_position);
-                    }
+                if let Some(position) = room.find_npc_mut(&npc_killed.npc_id) {
+                    position.npc.character.kill();
+                    position.position_descriptor = None;
                 }
             }
             Event::PlayerHit(player_hit) => {
@@ -125,11 +92,12 @@ pub fn apply_events(
             }
             Event::PlayerKilled(_) => new_player.character.kill(),
             Event::ItemTakenFromNpc(item_taken_from_npc) => {
-                let npc = new_game
+                let position = new_game
                     .current_room_mut()
                     .find_npc_mut(&item_taken_from_npc.npc_id)
                     .unwrap();
-                let character_item = npc
+                let character_item = position
+                    .npc
                     .character
                     .remove_item(&item_taken_from_npc.item_id)
                     .unwrap();
@@ -144,15 +112,18 @@ pub fn apply_events(
                 new_player.character.add_item(packed_item)
             }
             Event::NpcWeaponReadied(weapon_readied) => {
-                let npc = new_game
+                let position = new_game
                     .current_room_mut()
                     .find_npc_mut(&weapon_readied.npc_id)
                     .unwrap();
-                let mut character_item =
-                    npc.character.remove_item(&weapon_readied.item_id).unwrap();
+                let mut character_item = position
+                    .npc
+                    .character
+                    .remove_item(&weapon_readied.item_id)
+                    .unwrap();
                 character_item.at_the_ready = true;
                 character_item.equipped_location = LocationTag::Hand;
-                npc.character.add_item(character_item);
+                position.npc.character.add_item(character_item);
             }
             Event::PlayerItemMoved(item_moved) => {
                 let mut character_item = new_player
