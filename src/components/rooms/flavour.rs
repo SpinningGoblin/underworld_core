@@ -17,7 +17,11 @@ use crate::utils::sentences::first_letter_to_upper_case;
     derive(Deserialize, Serialize),
     serde(rename_all = "snake_case")
 )]
-#[cfg_attr(feature = "openapi", derive(Enum), oai(rename_all = "snake_case"))]
+#[cfg_attr(
+    feature = "openapi",
+    derive(Enum),
+    oai(rename_all = "snake_case", rename = "FlavourText")
+)]
 pub enum Flavour {
     AStrangeBreezeBlows,
     MoldMossCoversWalls,

@@ -19,7 +19,7 @@ pub struct Stats {
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
-#[cfg_attr(feature = "openapi", derive(Object))]
+#[cfg_attr(feature = "openapi", derive(Object), oai(rename = "Stats"))]
 pub struct StatsView {
     pub health: Option<Health>,
     pub health_known: bool,

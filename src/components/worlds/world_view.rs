@@ -10,7 +10,7 @@ use crate::components::rooms::room_view::RoomView;
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
-#[cfg_attr(feature = "openapi", derive(Object))]
+#[cfg_attr(feature = "openapi", derive(Object), oai(rename = "World"))]
 pub struct WorldView {
     pub rooms: Vec<RoomView>,
     pub exit_graph: Vec<ExitMapView>,
@@ -19,7 +19,7 @@ pub struct WorldView {
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
-#[cfg_attr(feature = "openapi", derive(Object))]
+#[cfg_attr(feature = "openapi", derive(Object), oai(rename = "ExitMap"))]
 pub struct ExitMapView {
     pub exit_id: String,
     pub left_room_id: Option<String>,

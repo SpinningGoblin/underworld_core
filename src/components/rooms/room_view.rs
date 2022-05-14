@@ -19,7 +19,7 @@ use super::{
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
-#[cfg_attr(feature = "openapi", derive(Object))]
+#[cfg_attr(feature = "openapi", derive(Object), oai(rename = "Room"))]
 pub struct RoomView {
     pub identifier: IdentifierView,
     pub descriptors: Vec<Descriptor>,

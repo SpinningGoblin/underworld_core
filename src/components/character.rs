@@ -151,7 +151,7 @@ impl Character {
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
-#[cfg_attr(feature = "openapi", derive(Object))]
+#[cfg_attr(feature = "openapi", derive(Object), oai(rename = "Character"))]
 pub struct CharacterView {
     pub stats: StatsView,
     #[cfg_attr(feature = "serialization", serde(default))]

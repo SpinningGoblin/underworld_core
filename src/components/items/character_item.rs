@@ -52,7 +52,7 @@ impl CharacterItem {
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
-#[cfg_attr(feature = "openapi", derive(Object))]
+#[cfg_attr(feature = "openapi", derive(Object), oai(rename = "CharacterItem"))]
 pub struct CharacterItemView {
     pub item: ItemView,
     pub is_hidden: Option<bool>,

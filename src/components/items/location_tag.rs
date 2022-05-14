@@ -16,7 +16,11 @@ use super::item_type::ItemType;
     derive(Deserialize, Serialize),
     serde(rename_all = "snake_case")
 )]
-#[cfg_attr(feature = "openapi", derive(Enum), oai(rename_all = "snake_case"))]
+#[cfg_attr(
+    feature = "openapi",
+    derive(Enum),
+    oai(rename_all = "snake_case", rename = "EquipLocationTag")
+)]
 pub enum LocationTag {
     Ankle,
     Arm,

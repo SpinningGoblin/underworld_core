@@ -27,7 +27,7 @@ pub struct NpcPosition {
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
-#[cfg_attr(feature = "openapi", derive(Object))]
+#[cfg_attr(feature = "openapi", derive(Object), oai(rename = "NpcPosition"))]
 pub struct NpcPositionView {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub group_descriptor: Option<GroupDescriptor>,

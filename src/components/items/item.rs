@@ -62,7 +62,7 @@ impl Item {
     derive(Deserialize, Serialize),
     serde(rename_all = "snake_case")
 )]
-#[cfg_attr(feature = "openapi", derive(Object))]
+#[cfg_attr(feature = "openapi", derive(Object), oai(rename = "Item"))]
 pub struct ItemView {
     pub identifier: IdentifierView,
     pub item_type: ItemType,

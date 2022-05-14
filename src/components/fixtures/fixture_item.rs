@@ -22,7 +22,7 @@ pub struct FixtureItem {
     derive(Deserialize, Serialize),
     serde(rename_all = "snake_case")
 )]
-#[cfg_attr(feature = "openapi", derive(Object))]
+#[cfg_attr(feature = "openapi", derive(Object), oai(rename = "FixtureItem"))]
 pub struct FixtureItemView {
     pub item: ItemView,
     pub is_hidden: bool,
