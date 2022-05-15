@@ -17,6 +17,5 @@ pub fn check(player_character: PlayerCharacter) -> PlayerCharacterView {
     PlayerCharacterView {
         character,
         identifier: super::identifier::to_view(&player_character.identifier, true),
-        username: player_character.username.clone(),
     }
 }

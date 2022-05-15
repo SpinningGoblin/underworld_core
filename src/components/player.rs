@@ -16,7 +16,6 @@ use super::{
 pub struct PlayerCharacter {
     pub character: Character,
     pub identifier: Identifier,
-    pub username: String,
 }
 
 #[derive(Clone, Debug)]
@@ -26,5 +25,4 @@ pub struct PlayerCharacter {
 pub struct PlayerCharacterView {
     pub character: CharacterView,
     pub identifier: IdentifierView,
-    pub username: String,
 }

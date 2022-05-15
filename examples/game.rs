@@ -12,7 +12,7 @@ pub fn main() {
             generators::{game::game_generator, generator::Generator, players::player_generator},
         };
 
-        let player = player_generator("Me", None, None, None).generate();
+        let player = player_generator(None, None, None).generate();
         let state = game_generator().generate();
         let mut game = Game { state, player };
 
