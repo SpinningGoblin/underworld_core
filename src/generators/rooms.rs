@@ -93,20 +93,3 @@ impl RoomType {
         Flavour::into_enum_iter().collect()
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use crate::{
-        components::rooms::room_view::RoomViewArgs,
-        generators::{generator::Generator, rooms::random_room_generator},
-        systems::view::room::look_at,
-    };
-
-    #[test]
-    fn generate_room() {
-        let room_prototype = random_room_generator(None);
-        let room = room_prototype.generate();
-
-        assert!(!format!("{}", look_at(&room, RoomViewArgs::default(), true)).is_empty());
-    }
-}
