@@ -5,7 +5,7 @@ pub struct ItemNotFoundError(pub String);
 
 impl Display for ItemNotFoundError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "ExitNotFound:{}", self.0)
+        write!(f, "ItemNotFound:{}", self.0)
     }
 }
 

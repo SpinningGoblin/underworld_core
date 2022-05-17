@@ -5,7 +5,7 @@ pub struct TooManyWeaponsEquippedError;
 
 impl Display for TooManyWeaponsEquippedError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "NpcNotFound")
+        write!(f, "TooManyWeaponsEquipped")
     }
 }
 
