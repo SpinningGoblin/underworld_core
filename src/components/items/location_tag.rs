@@ -102,7 +102,9 @@ pub fn location_tags_for_item_type(item_type: &ItemType) -> Vec<LocationTag> {
         ItemType::Cloak => vec![LocationTag::Shoulder],
         ItemType::Shirt => vec![LocationTag::Body],
         ItemType::Trousers => vec![LocationTag::Leg],
-        ItemType::Crown => vec![LocationTag::Head],
+        ItemType::Crown | ItemType::BowlerHat | ItemType::Fedora | ItemType::TopHat => {
+            vec![LocationTag::Head]
+        }
         ItemType::Boots => vec![LocationTag::Feet],
         ItemType::Gloves => vec![LocationTag::Hand],
         ItemType::LoinCloth => vec![LocationTag::Waist],

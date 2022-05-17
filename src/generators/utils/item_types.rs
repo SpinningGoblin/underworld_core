@@ -33,32 +33,15 @@ pub fn type_inherently_multiple(item_type: &ItemType) -> bool {
         | ItemType::Helm
         | ItemType::Halberd
         | ItemType::Pike
-        | ItemType::Spear => false,
+        | ItemType::Spear
+        | ItemType::TopHat
+        | ItemType::BowlerHat
+        | ItemType::Fedora => false,
         ItemType::Trousers
         | ItemType::Breastplate
         | ItemType::Boots
         | ItemType::Gloves
         | ItemType::PlateBoots
         | ItemType::PlateGauntlets => true,
-    }
-}
-
-pub fn type_cannot_be_used_with(item_type: &ItemType, other: &ItemType) -> bool {
-    match *item_type {
-        ItemType::Breastplate => other.is_upper_body(),
-        ItemType::Boots => other.is_footwear(),
-        ItemType::Cloak => other == &ItemType::Cloak,
-        ItemType::Crown => other.is_headgear(),
-        ItemType::Gloves => other.is_for_hands(),
-        ItemType::LoinCloth => other.is_lower_body(),
-        ItemType::Mask => other.is_headgear(),
-        ItemType::PlateBoots => other.is_footwear(),
-        ItemType::PlateGauntlets => other.is_footwear(),
-        ItemType::PlateHelmet => other.is_headgear(),
-        ItemType::Shackles => other.is_for_hands(),
-        ItemType::Shirt => other.is_upper_body(),
-        ItemType::Trousers => other.is_lower_body(),
-        ItemType::Vest => other.is_upper_body(),
-        _ => false,
     }
 }

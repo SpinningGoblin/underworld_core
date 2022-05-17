@@ -9,10 +9,7 @@ use crate::components::{
 use super::{
     generator::Generator,
     items::item_generator,
-    utils::item_types::{
-        type_cannot_be_used_with, type_inherently_multiple, type_is_for_weapon,
-        type_is_for_wearable,
-    },
+    utils::item_types::{type_inherently_multiple, type_is_for_weapon, type_is_for_wearable},
 };
 
 pub struct InventoryPrototype {
@@ -107,14 +104,6 @@ impl InventoryPrototype {
                 .iter()
                 .filter(|item_type| type_is_for_wearable(item_type))
                 .filter(|item_type| item_type_is_for_tags(item_type, &tag))
-                .filter(|w_t| {
-                    // Return true only if it can be used with all of the used_types
-                    if used_types.is_empty() {
-                        true
-                    } else {
-                        used_types.iter().all(|w| !type_cannot_be_used_with(w, w_t))
-                    }
-                })
                 .cloned()
                 .collect();
 
@@ -176,7 +165,12 @@ fn item_type_is_for_tags(item_type: &ItemType, tag: &LocationTag) -> bool {
             tag.eq(&LocationTag::Hand)
                 || vec![LocationTag::Hip, LocationTag::HipSheath].contains(tag)
         }
-        ItemType::Crown | ItemType::PlateHelmet | ItemType::Helm => tag.eq(&LocationTag::Head),
+        ItemType::Crown
+        | ItemType::PlateHelmet
+        | ItemType::Helm
+        | ItemType::BowlerHat
+        | ItemType::Fedora
+        | ItemType::TopHat => tag.eq(&LocationTag::Head),
         ItemType::Gloves | ItemType::PlateGauntlets => tag.eq(&LocationTag::Hand),
         ItemType::GreatSword
         | ItemType::Halberd

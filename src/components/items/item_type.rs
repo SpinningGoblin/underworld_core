@@ -21,12 +21,14 @@ use crate::components::tag::{Tag, Tagged};
 pub enum ItemType {
     Breastplate,
     Boots,
+    BowlerHat,
     Buckler,
     Cloak,
     Club,
     Crown,
     Dagger,
     Dirk,
+    Fedora,
     Gloves,
     GreatSword,
     Halberd,
@@ -46,6 +48,7 @@ pub enum ItemType {
     Shirt,
     Shackles,
     Spear,
+    TopHat,
     Trousers,
     Vest,
     Whip,
@@ -115,6 +118,9 @@ impl Tagged for ItemType {
             ItemType::Halberd => vec![Tag::Damage],
             ItemType::Pike => vec![Tag::Damage],
             ItemType::Spear => vec![Tag::Damage],
+            ItemType::BowlerHat => vec![Tag::Clothing],
+            ItemType::Fedora => vec![Tag::Clothing],
+            ItemType::TopHat => vec![Tag::Clothing],
         }
     }
 }
@@ -152,6 +158,9 @@ impl Display for ItemType {
             ItemType::Halberd => "halberd",
             ItemType::Pike => "pike",
             ItemType::Spear => "spear",
+            ItemType::BowlerHat => "bowler hat",
+            ItemType::Fedora => "fedora",
+            ItemType::TopHat => "top hat",
         };
 
         write!(f, "{}", text)

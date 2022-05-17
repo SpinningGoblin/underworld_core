@@ -1,3 +1,4 @@
+use enum_iterator::IntoEnumIterator;
 use rand::Rng;
 use std::ops::RangeInclusive;
 
@@ -258,5 +259,8 @@ fn possible_materials(item_type: &ItemType) -> Vec<Material> {
             Material::Steel,
             Material::Iron,
         ],
+        ItemType::BowlerHat | ItemType::Fedora | ItemType::TopHat => {
+            Material::into_enum_iter().collect()
+        }
     }
 }
