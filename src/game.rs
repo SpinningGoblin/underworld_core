@@ -8,7 +8,7 @@ use crate::{
     components::{games::game_state::GameState, player::PlayerCharacter},
     errors::Errors,
     events::event::Event,
-    handlers::{handle, HandledAction},
+    handlers::handle::HandledAction,
 };
 
 pub struct Game {
@@ -22,7 +22,7 @@ impl Game {
             events,
             new_state,
             new_player,
-        } = handle(action, &self.state, &self.player)?;
+        } = crate::handlers::handle::handle_action(action, &self.state, &self.player)?;
         self.state = new_state;
         self.player = new_player;
 
