@@ -1,9 +1,11 @@
+use std::error::Error;
+
 use rand::Rng;
 
 use crate::{
     actions::inspect_fixture::InspectFixture,
     components::{games::game_state::GameState, player::PlayerCharacter},
-    errors::Errors,
+    errors::fixture_not_found_error::FixtureNotFoundError,
     events::{
         event::Event, fixture_can_be_opened_discovered::FixtureCanBeOpenedDiscovered,
         fixture_contained_discovered::FixtureContainedDiscovered,
@@ -25,9 +27,13 @@ pub fn handle_inspect_fixture(
     inspect_fixture: &InspectFixture,
     state: &GameState,
     player: &PlayerCharacter,
-) -> Result<Vec<Event>, Errors> {
+) -> Result<Vec<Event>, Box<dyn Error>> {
     let mut events: Vec<Event> = Vec::new();
     let fixture_id = parse_id(&inspect_fixture.fixture_id)?;
+
+    if state.current_room().find_fixture(&fixture_id).is_none() {
+        return Err(Box::new(FixtureNotFoundError(fixture_id.to_string())));
+    }
 
     let mut rng = rand::thread_rng();
 

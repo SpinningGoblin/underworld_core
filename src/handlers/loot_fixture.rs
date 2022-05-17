@@ -1,9 +1,11 @@
+use std::error::Error;
+
 use uuid::Uuid;
 
 use crate::{
     actions::loot_fixture::LootFixture,
     components::games::game_state::GameState,
-    errors::Errors,
+    errors::fixture_not_found_error::FixtureNotFoundError,
     events::{event::Event, item_taken_from_fixture::ItemTakenFromFixture},
     utils::ids::parse_id,
 };
@@ -11,11 +13,11 @@ use crate::{
 pub fn handle_loot_fixture(
     loot_fixture: &LootFixture,
     state: &GameState,
-) -> Result<Vec<Event>, Errors> {
+) -> Result<Vec<Event>, Box<dyn Error>> {
     let fixture_id = parse_id(&loot_fixture.fixture_id)?;
     let fixture = match state.current_room().find_fixture(&fixture_id) {
         Some(it) => it,
-        None => return Err(Errors::FixtureNotFound(fixture_id.to_string())),
+        None => return Err(Box::new(FixtureNotFoundError(fixture_id.to_string()))),
     };
 
     let item_ids: Vec<Uuid> = loot_fixture

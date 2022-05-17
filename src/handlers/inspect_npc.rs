@@ -1,9 +1,11 @@
+use std::error::Error;
+
 use rand::Rng;
 
 use crate::{
     actions::inspect_npc::InspectNpc,
     components::{games::game_state::GameState, player::PlayerCharacter},
-    errors::Errors,
+    errors::npc_not_found_error::NpcNotFoundError,
     events::{
         event::Event, npc_health_discovered::NpcHealthDiscovered,
         npc_hidden_discovered::NpcHiddenDiscovered, npc_name_discovered::NpcNameDiscovered,
@@ -24,13 +26,13 @@ pub fn handle_inspect_npc(
     inspect_npc: &InspectNpc,
     state: &GameState,
     player: &PlayerCharacter,
-) -> Result<Vec<Event>, Errors> {
+) -> Result<Vec<Event>, Box<dyn Error>> {
     let mut events: Vec<Event> = Vec::new();
     let npc_id = parse_id(&inspect_npc.npc_id)?;
 
     let npc = match state.current_room().find_npc(&npc_id) {
         Some(it) => it,
-        None => return Err(Errors::NpcNotFound(npc_id.to_string())),
+        None => return Err(Box::new(NpcNotFoundError(npc_id.to_string()))),
     };
 
     let mut rng = rand::thread_rng();

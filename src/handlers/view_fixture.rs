@@ -1,7 +1,9 @@
+use std::error::Error;
+
 use crate::{
     actions::look_at_fixture::LookAtFixture,
     components::{fixtures::fixture::FixtureViewArgs, games::game_state::GameState},
-    errors::Errors,
+    errors::fixture_not_found_error::FixtureNotFoundError,
     events::{event::Event, fixture_viewed::FixtureViewed},
     systems::view::fixture,
     utils::ids::parse_id,
@@ -10,12 +12,12 @@ use crate::{
 pub fn handle_view_fixture(
     look_at_fixture: &LookAtFixture,
     state: &GameState,
-) -> Result<Vec<Event>, Errors> {
+) -> Result<Vec<Event>, Box<dyn Error>> {
     let fixture_id = parse_id(&look_at_fixture.fixture_id)?;
 
     let fixture = match state.current_room().find_fixture(&fixture_id) {
         Some(it) => it,
-        None => return Err(Errors::FixtureNotFound(fixture_id.to_string())),
+        None => return Err(Box::new(FixtureNotFoundError(fixture_id.to_string()))),
     };
 
     let knowledge = state.fixture_knowledge(&fixture_id);

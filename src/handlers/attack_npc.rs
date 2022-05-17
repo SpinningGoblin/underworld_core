@@ -1,9 +1,11 @@
+use std::error::Error;
+
 use rand::Rng;
 
 use crate::{
     actions::attack_npc::AttackNpc,
     components::{games::game_state::GameState, player::PlayerCharacter},
-    errors::Errors,
+    errors::npc_not_found_error::NpcNotFoundError,
     events::{
         dead_npc_beaten::DeadNpcBeaten, event::Event, npc_hit::NpcHit, npc_killed::NpcKilled,
         player_missed::PlayerMissed,
@@ -19,7 +21,7 @@ pub fn handle_attack_npc(
     attack_npc: &AttackNpc,
     state: &GameState,
     player: &PlayerCharacter,
-) -> Result<Vec<Event>, Errors> {
+) -> Result<Vec<Event>, Box<dyn Error>> {
     let mut events: Vec<Event> = Vec::new();
 
     let room = state.current_room();
@@ -27,7 +29,7 @@ pub fn handle_attack_npc(
 
     let npc = match room.find_npc(&npc_id) {
         Some(it) => it,
-        None => return Err(Errors::NpcNotFound(npc_id.to_string())),
+        None => return Err(Box::new(NpcNotFoundError(npc_id.to_string()))),
     };
 
     if npc.character.is_dead() {

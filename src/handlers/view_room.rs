@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, error::Error};
 
 use uuid::Uuid;
 
@@ -8,12 +8,14 @@ use crate::{
         character::CharacterViewArgs, fixtures::fixture::FixtureViewArgs,
         games::game_state::GameState, non_player::NonPlayerViewArgs,
     },
-    errors::Errors,
     events::{event::Event, room_viewed::RoomViewed},
     systems::view::room::view,
 };
 
-pub fn handle_view_room(_: &LookAtCurrentRoom, state: &GameState) -> Result<Vec<Event>, Errors> {
+pub fn handle_view_room(
+    _: &LookAtCurrentRoom,
+    state: &GameState,
+) -> Result<Vec<Event>, Box<dyn Error>> {
     let room = state.current_room();
 
     let mut fixture_args: HashMap<Uuid, FixtureViewArgs> = HashMap::new();
