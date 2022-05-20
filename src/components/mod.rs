@@ -1,5 +1,6 @@
 pub mod character;
 pub mod damage;
+pub mod effects;
 pub mod fixtures;
 pub mod games;
 pub mod identifier;
