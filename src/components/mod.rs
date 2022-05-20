@@ -12,6 +12,7 @@ pub mod player;
 pub mod rooms;
 pub mod size;
 pub mod species;
+pub mod spells;
 pub mod stats;
 pub mod tag;
 pub mod worlds;
