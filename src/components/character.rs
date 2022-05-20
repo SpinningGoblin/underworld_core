@@ -7,10 +7,12 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use super::{
+    effects::Effects,
     inventory::{Inventory, InventoryView},
     items::character_item::CharacterItem,
     life_modifier::LifeModifier,
     species::Species,
+    spells::spell_memory::SpellMemory,
     stats::{Stats, StatsView},
 };
 
@@ -24,6 +26,10 @@ pub struct Character {
     pub life_modifier: Option<LifeModifier>,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub inventory: Option<Inventory>,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub current_effects: Effects,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub spell_memory: SpellMemory,
 }
 
 impl Character {
@@ -218,8 +224,8 @@ impl CharacterView {
 mod tests {
     use crate::{
         components::{
-            character::CharacterViewArgs, life_modifier::LifeModifier, species::Species,
-            stats::Stats,
+            character::CharacterViewArgs, effects::Effects, life_modifier::LifeModifier,
+            species::Species, spells::spell_memory::SpellMemory, stats::Stats,
         },
         systems::view::character::look_at,
     };
@@ -236,6 +242,8 @@ mod tests {
             species: Species::Goblin,
             life_modifier: None,
             inventory: None,
+            current_effects: Effects::default(),
+            spell_memory: SpellMemory::default(),
         };
 
         let description =
@@ -253,6 +261,8 @@ mod tests {
             species: Species::Goblin,
             life_modifier: Some(LifeModifier::Skeleton),
             inventory: None,
+            current_effects: Effects::default(),
+            spell_memory: SpellMemory::default(),
         };
 
         let description =

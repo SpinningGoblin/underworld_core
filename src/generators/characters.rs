@@ -3,7 +3,8 @@ mod prototypes;
 use rand::Rng;
 
 use crate::components::{
-    character::Character, inventory::Inventory, life_modifier::LifeModifier, species::Species,
+    character::Character, effects::Effects, inventory::Inventory, life_modifier::LifeModifier,
+    species::Species, spells::spell_memory::SpellMemory,
 };
 
 use self::prototypes::{basic_character, overloaded_character, undead_character};
@@ -111,6 +112,8 @@ impl Generator<Character> for CharacterPrototype {
             inventory,
             species: self.species.clone(),
             life_modifier: self.life_modifier.clone(),
+            current_effects: Effects::default(),
+            spell_memory: SpellMemory::default(),
         }
     }
 }

@@ -5,6 +5,7 @@ use uuid::Uuid;
 use crate::components::{
     character::Character,
     damage::{Attack, Defense},
+    effects::Effects,
     identifier::Identifier,
     inventory::Inventory,
     items::{
@@ -15,6 +16,7 @@ use crate::components::{
     player::PlayerCharacter,
     size::Size,
     species::Species,
+    spells::spell_memory::SpellMemory,
     tag::Tag,
 };
 
@@ -71,6 +73,8 @@ impl Generator<PlayerCharacter> for PlayerCharacterPrototype {
                         .chain(vec![starter_weapon].into_iter())
                         .collect(),
                 }),
+                current_effects: Effects::default(),
+                spell_memory: SpellMemory::default(),
             },
             identifier: Identifier {
                 id: Uuid::new_v4(),
