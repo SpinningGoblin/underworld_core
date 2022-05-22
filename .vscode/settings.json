@@ -10,6 +10,11 @@
     "**/Thumbs.db": true,
     "target/": true
   },
-  "rust-analyzer.cargo.allFeatures": true,
+  "rust-analyzer.cargo.features": [
+    "bevy_components",
+    "serialization",
+    "json",
+    "openapi"
+  ],
   "cSpell.words": ["Equippable"]
 }
