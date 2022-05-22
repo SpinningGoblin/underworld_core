@@ -24,6 +24,17 @@ pub struct Spell {
     pub defense: Option<Defense>,
 }
 
+impl Spell {
+    pub fn damage(&self) -> i32 {
+        let mut rng = rand::thread_rng();
+
+        match &self.attack {
+            Some(attack) => attack.attack_roll(&mut rng),
+            None => 0,
+        }
+    }
+}
+
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
