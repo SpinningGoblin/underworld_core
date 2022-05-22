@@ -15,8 +15,8 @@ use super::damage::{Attack, Defense};
     serde(rename_all = "snake_case")
 )]
 pub struct Effects {
-    pub magical_shield: Option<Defense>,
-    pub retribution_shield: Option<Attack>,
+    pub shield_aura: Option<Defense>,
+    pub retribution_aura: Option<Attack>,
     pub resurrection_aura: bool,
 }
 

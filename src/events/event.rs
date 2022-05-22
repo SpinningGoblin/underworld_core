@@ -18,10 +18,13 @@ use super::{
     npc_health_discovered::NpcHealthDiscovered, npc_hidden_discovered::NpcHiddenDiscovered,
     npc_hit::NpcHit, npc_killed::NpcKilled, npc_missed::NpcMissed,
     npc_name_discovered::NpcNameDiscovered, npc_packed_discovered::NpcPackedDiscovered,
-    npc_viewed::NpcViewed, npc_weapon_readied::NpcWeaponReadied, player_hit::PlayerHit,
-    player_item_moved::PlayerItemMoved, player_killed::PlayerKilled, player_missed::PlayerMissed,
-    room_exited::RoomExited, room_first_seen::RoomFirstSeen, room_generated::RoomGenerated,
-    room_viewed::RoomViewed,
+    npc_viewed::NpcViewed, npc_weapon_readied::NpcWeaponReadied,
+    player_gains_resurrection_aura::PlayerGainsResurrectionAura,
+    player_gains_retribution_aura::PlayerGainsRetributionAura,
+    player_gains_shield_aura::PlayerGainsShieldAura, player_healed::PlayerHealed,
+    player_hit::PlayerHit, player_item_moved::PlayerItemMoved, player_killed::PlayerKilled,
+    player_missed::PlayerMissed, player_resurrected::PlayerResurrected, room_exited::RoomExited,
+    room_first_seen::RoomFirstSeen, room_generated::RoomGenerated, room_viewed::RoomViewed, player_retribution_aura_dissipated::PlayerRetributionAuraDissipated,
 };
 
 #[derive(Clone, Debug)]
@@ -49,10 +52,16 @@ pub enum Event {
     NpcPackedDiscovered(NpcPackedDiscovered),
     NpcViewed(NpcViewed),
     NpcWeaponReadied(NpcWeaponReadied),
+    PlayerGainsResurrectionAura(PlayerGainsResurrectionAura),
+    PlayerGainsRetributionAura(PlayerGainsRetributionAura),
+    PlayerGainsShieldAura(PlayerGainsShieldAura),
+    PlayerHealed(PlayerHealed),
     PlayerHit(PlayerHit),
     PlayerItemMoved(PlayerItemMoved),
     PlayerKilled(PlayerKilled),
     PlayerMissed(PlayerMissed),
+    PlayerResurrected(PlayerResurrected),
+    PlayerRetributionAuraDissipated(PlayerRetributionAuraDissipated),
     RoomExited(RoomExited),
     RoomGenerated(RoomGenerated),
     RoomFirstSeen(RoomFirstSeen),
@@ -195,6 +204,26 @@ pub fn apply_events(
                 };
                 new_player.character.add_item(packed_item)
             }
+            Event::PlayerHealed(player_healed) => {
+                new_player.character.heal(player_healed.damage_healed)
+            }
+            Event::PlayerGainsResurrectionAura(_) => {
+                new_player.character.current_effects.resurrection_aura = true;
+            }
+            Event::PlayerGainsRetributionAura(gain_retribution_aura) => {
+                new_player.character.current_effects.retribution_aura =
+                    Some(gain_retribution_aura.attack.clone())
+            }
+            Event::PlayerGainsShieldAura(gain_shield_aura) => {
+                new_player.character.current_effects.shield_aura =
+                    Some(gain_shield_aura.defense.clone())
+            }
+            Event::PlayerResurrected(_) => {
+                new_player.character.heal_to_max();
+            }
+            Event::PlayerRetributionAuraDissipated(_) => {
+                new_player.character.current_effects.retribution_aura = None;
+            },
             Event::NpcMissed(_)
             | Event::DeadNpcBeaten(_)
             | Event::PlayerMissed(_)
