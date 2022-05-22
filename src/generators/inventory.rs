@@ -1,9 +1,12 @@
 use rand::Rng;
 use std::ops::RangeInclusive;
 
-use crate::components::{
-    inventory::Inventory,
-    items::{character_item::CharacterItem, item_type::ItemType, location_tag::LocationTag},
+use crate::{
+    components::{
+        inventory::Inventory,
+        items::{character_item::CharacterItem, item_type::ItemType, location_tag::LocationTag},
+    },
+    utils::rolls::roll_d100,
 };
 
 use super::{
@@ -18,8 +21,8 @@ pub struct InventoryPrototype {
     pub num_equipped_wearables: RangeInclusive<usize>,
     pub num_carried_weapons: RangeInclusive<usize>,
     pub num_carried_wearables: RangeInclusive<usize>,
-    pub hidden_weapon_chance: usize,
-    pub hidden_wearable_chance: usize,
+    pub hidden_weapon_chance: i32,
+    pub hidden_wearable_chance: i32,
 }
 
 impl InventoryPrototype {
@@ -64,7 +67,7 @@ impl InventoryPrototype {
             let generator = item_generator(weapon_type, true);
             let weapon = generator.generate();
 
-            let hidden_roll: usize = rng.gen_range(0..=100);
+            let hidden_roll = roll_d100(&mut rng, 1, 0);
             let multiple = type_inherently_multiple(weapon_type);
 
             equipped_weapons.push(CharacterItem {
@@ -120,7 +123,7 @@ impl InventoryPrototype {
             used_types.push(wearable_type.clone());
             let generator = item_generator(wearable_type, true);
             let wearable = generator.generate();
-            let hidden_roll: usize = rng.gen_range(0..=100);
+            let hidden_roll = roll_d100(&mut rng, 1, 0);
             let multiple = type_inherently_multiple(wearable_type);
 
             equipped_wearables.push(CharacterItem {

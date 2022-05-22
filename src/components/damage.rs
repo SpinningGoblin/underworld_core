@@ -2,7 +2,7 @@
 use bevy_ecs::prelude::Component;
 #[cfg(feature = "openapi")]
 use poem_openapi::Object;
-use rand::{prelude::ThreadRng, Rng};
+use rand::prelude::ThreadRng;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
@@ -17,7 +17,7 @@ pub struct Attack {
 
 impl Attack {
     pub fn attack_roll(&self, rng: &mut ThreadRng) -> i32 {
-        roll(rng, self.num_rolls, self.modifier)
+        crate::utils::rolls::roll_d6(rng, self.num_rolls, self.modifier)
     }
 }
 
@@ -27,13 +27,6 @@ impl Attack {
 #[cfg_attr(feature = "openapi", derive(Object))]
 pub struct Defense {
     pub damage_resistance: i32,
-}
-
-fn roll(rng: &mut ThreadRng, num_rolls: usize, modifier: i32) -> i32 {
-    let roll: i32 = (0..num_rolls)
-        .map(|_| -> i32 { rng.gen_range(1..=6) })
-        .sum();
-    0.max(roll - modifier)
 }
 
 #[derive(Clone, Debug)]

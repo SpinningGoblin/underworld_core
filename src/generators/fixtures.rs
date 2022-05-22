@@ -3,19 +3,22 @@ use std::ops::RangeInclusive;
 use enum_iterator::IntoEnumIterator;
 use rand::{prelude::ThreadRng, Rng};
 
-use crate::components::{
-    fixtures::{fixture::Fixture, fixture_item::FixtureItem, fixture_type::FixtureType},
-    identifier::Identifier,
-    items::{descriptor::Descriptor, item::Item, item_type::ItemType},
-    material::BuiltWithMaterial,
-    size::Size,
-    tag::{Tag, Tagged},
+use crate::{
+    components::{
+        fixtures::{fixture::Fixture, fixture_item::FixtureItem, fixture_type::FixtureType},
+        identifier::Identifier,
+        items::{descriptor::Descriptor, item::Item, item_type::ItemType},
+        material::BuiltWithMaterial,
+        size::Size,
+        tag::{Tag, Tagged},
+    },
+    utils::rolls::roll_d100,
 };
 
 use super::{generator::Generator, items::item_generator, utils::item_descriptors::matches_tags};
 
-const HAS_MATERIAL_CHANCE: usize = 90;
-const HAS_NON_STANDARD_SIZE: usize = 50;
+const HAS_MATERIAL_CHANCE: i32 = 90;
+const HAS_NON_STANDARD_SIZE: i32 = 50;
 
 pub struct FixturePrototype {
     pub fixture_type: FixtureType,
@@ -39,7 +42,7 @@ pub fn get_generator(
 impl Generator<Fixture> for FixturePrototype {
     fn generate(&self) -> Fixture {
         let mut rng = rand::thread_rng();
-        let has_material = rng.gen_range(0..=100) <= HAS_MATERIAL_CHANCE;
+        let has_material = roll_d100(&mut rng, 1, 0) <= HAS_MATERIAL_CHANCE;
 
         let material = if has_material {
             let possible_materials = self.fixture_type.possible_materials();
@@ -49,7 +52,7 @@ impl Generator<Fixture> for FixturePrototype {
             None
         };
 
-        let non_average_size_roll: usize = rng.gen_range(0..=100);
+        let non_average_size_roll: i32 = roll_d100(&mut rng, 1, 0);
         let size = if non_average_size_roll <= HAS_NON_STANDARD_SIZE {
             let possibilities = non_average_sizes();
             let index = rng.gen_range(0..possibilities.len());

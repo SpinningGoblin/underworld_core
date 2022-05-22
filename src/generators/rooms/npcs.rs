@@ -16,9 +16,10 @@ use crate::{
         characters::CharacterPrototype, generator::Generator, inventory::InventoryPrototype,
         name::generate_name, non_players::NonPlayerPrototype,
     },
+    utils::rolls::roll_d100,
 };
 
-const SWITCH_SPECIES_CHANCE: usize = 10;
+const SWITCH_SPECIES_CHANCE: i32 = 10;
 
 pub fn build_npc_positions(
     room_type: &RoomType,
@@ -83,7 +84,7 @@ fn num_groups(room_type: &RoomType) -> usize {
 
 fn switch_species(species: &Species) -> Species {
     let mut rng = rand::thread_rng();
-    let switch_roll: usize = rng.gen_range(0..=100);
+    let switch_roll = roll_d100(&mut rng, 1, 0);
     if switch_roll > SWITCH_SPECIES_CHANCE {
         return species.clone();
     }
@@ -224,18 +225,18 @@ fn weapon_rack_positions() -> Vec<NpcPositionDescriptor> {
     vec![NpcPositionDescriptor::IsLookingAtTheWeaponRack]
 }
 
-const UNDEAD_CHANCE: usize = 15;
+const UNDEAD_CHANCE: i32 = 15;
 
 fn life_modifier(species: &Species) -> Option<LifeModifier> {
     let mut rng = rand::thread_rng();
-    let roll: usize = rng.gen_range(0..=100);
+    let roll = roll_d100(&mut rng, 1, 0);
 
     if matches!(species, &Species::Phantom | &Species::Shadow) {
         return None;
     }
 
     if roll < UNDEAD_CHANCE {
-        let type_roll: usize = rng.gen_range(0..=100);
+        let type_roll = roll_d100(&mut rng, 1, 0);
         match type_roll {
             0..=33 => Some(LifeModifier::Skeleton),
             34..=66 => Some(LifeModifier::Vampire),

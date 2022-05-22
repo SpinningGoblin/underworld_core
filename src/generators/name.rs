@@ -1,10 +1,12 @@
 use rand::Rng;
 
-const CHANCE_UNNAMED: usize = 10;
+use crate::utils::rolls::roll_d100;
+
+const CHANCE_UNNAMED: i32 = 10;
 
 pub fn generate_name() -> Option<String> {
     let mut rng = rand::thread_rng();
-    let no_name_roll: usize = rng.gen_range(1..=100);
+    let no_name_roll = roll_d100(&mut rng, 1, 0);
     if no_name_roll <= CHANCE_UNNAMED {
         return None;
     }

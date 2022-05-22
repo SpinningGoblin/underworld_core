@@ -1,10 +1,13 @@
 use rand::Rng;
 
-use crate::components::{rooms::dimensions::Dimensions, size::Size};
+use crate::{
+    components::{rooms::dimensions::Dimensions, size::Size},
+    utils::rolls::roll_d100,
+};
 
-const NON_AVERAGE_HEIGHT_CHANGE: usize = 25;
-const NON_AVERAGE_WIDTH_CHANGE: usize = 50;
-const NON_AVERAGE_LENGTH_CHANGE: usize = 25;
+const NON_AVERAGE_HEIGHT_CHANGE: i32 = 25;
+const NON_AVERAGE_WIDTH_CHANGE: i32 = 50;
+const NON_AVERAGE_LENGTH_CHANGE: i32 = 25;
 
 fn non_average_heights() -> Vec<Size> {
     vec![Size::Tall, Size::Squat]
@@ -28,7 +31,7 @@ pub fn build_dimensions() -> Dimensions {
 
 fn height() -> Size {
     let mut rng = rand::thread_rng();
-    let non_average_roll: usize = rng.gen_range(0..=100);
+    let non_average_roll = roll_d100(&mut rng, 1, 0);
     if non_average_roll <= NON_AVERAGE_HEIGHT_CHANGE {
         let possibilities = non_average_heights();
         let index = rng.gen_range(0..possibilities.len());
@@ -43,7 +46,7 @@ fn height() -> Size {
 
 fn length() -> Size {
     let mut rng = rand::thread_rng();
-    let non_average_roll: usize = rng.gen_range(0..=100);
+    let non_average_roll = roll_d100(&mut rng, 1, 0);
     if non_average_roll <= NON_AVERAGE_LENGTH_CHANGE {
         let possibilities = non_average_lengths();
         let index = rng.gen_range(0..possibilities.len());
@@ -58,7 +61,7 @@ fn length() -> Size {
 
 fn width() -> Size {
     let mut rng = rand::thread_rng();
-    let non_average_roll: usize = rng.gen_range(0..=100);
+    let non_average_roll = roll_d100(&mut rng, 1, 0);
     if non_average_roll <= NON_AVERAGE_WIDTH_CHANGE {
         let possibilities = non_average_widths();
         let index = rng.gen_range(0..possibilities.len());

@@ -1,6 +1,9 @@
 use rand::Rng;
 
-use crate::components::{damage::Health, size::Size, species::Species, stats::Stats};
+use crate::{
+    components::{damage::Health, size::Size, species::Species, stats::Stats},
+    utils::rolls::{roll_d100, roll_d6},
+};
 
 use super::generator::Generator;
 
@@ -40,7 +43,7 @@ pub struct StatsPrototype {
     pub num_health_rolls: usize,
 }
 
-const NON_AVERAGE_HEIGHT_CHANCE: usize = 40;
+const NON_AVERAGE_HEIGHT_CHANCE: i32 = 40;
 
 fn non_average_heights() -> Vec<Size> {
     vec![
@@ -56,7 +59,7 @@ impl Generator<Stats> for StatsPrototype {
     fn generate(&self) -> Stats {
         let mut rng = rand::thread_rng();
 
-        let non_average_height_roll: usize = rng.gen_range(0..=100);
+        let non_average_height_roll = roll_d100(&mut rng, 1, 0);
         let height = if non_average_height_roll <= NON_AVERAGE_HEIGHT_CHANCE {
             let possibilities = non_average_heights();
             let index = rng.gen_range(0..possibilities.len());
@@ -78,7 +81,7 @@ impl Generator<Stats> for StatsPrototype {
                         0
                     } else {
                         let mut rng = rand::thread_rng();
-                        range.map(|_| rng.gen_range(1..=6)).sum()
+                        range.map(|_| roll_d6(&mut rng, 1, 0)).sum()
                     }
                 }
             };

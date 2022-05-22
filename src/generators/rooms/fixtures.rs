@@ -11,6 +11,7 @@ use crate::{
         },
     },
     generators::{fixtures::get_generator, generator::Generator},
+    utils::rolls::roll_d100,
 };
 
 pub fn build_fixture_positions(room_type: &RoomType) -> (Vec<FixturePosition>, Vec<FixtureType>) {
@@ -219,7 +220,7 @@ impl FixtureGenerators {
         }
 
         let mut rng = rand::thread_rng();
-        let roll: usize = rng.gen_range(0..=100);
+        let roll = roll_d100(&mut rng, 1, 0);
         let last_generated = self.fixture_types.get(self.current_index).unwrap();
         if last_generated == &FixtureType::Table && roll <= 75 {
             return Some(get_generator(
@@ -269,7 +270,7 @@ fn has_hidden_compartment(fixture_type: &FixtureType) -> bool {
     };
 
     let mut rng = rand::thread_rng();
-    let roll = rng.gen_range(1..=100);
+    let roll = roll_d100(&mut rng, 1, 0);
     roll <= chance_of_hidden_compartment
 }
 
