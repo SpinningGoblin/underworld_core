@@ -44,7 +44,7 @@ pub fn npc_attack_player(player: &PlayerCharacter, npc: &NonPlayer) -> Vec<Event
         if let Some(retribution_aura) = &player.character.current_effects.retribution_aura {
             let mut rng = rand::thread_rng();
             let damage = retribution_aura.attack_roll(&mut rng);
-            events.append(&mut damage_npc(&player, &npc, damage, false));
+            events.append(&mut damage_npc(player, npc, damage, false));
             events.push(Event::PlayerRetributionAuraDissipated(
                 PlayerRetributionAuraDissipated,
             ))
@@ -62,13 +62,11 @@ pub fn damage_npc(
     damage: i32,
     can_counter: bool,
 ) -> Vec<Event> {
-    let mut events: Vec<Event> = Vec::new();
-
-    events.push(Event::NpcHit(NpcHit {
+    let mut events: Vec<Event> = vec![Event::NpcHit(NpcHit {
         npc_id: npc.identifier.id,
         damage,
         attacker_id: player.identifier.id,
-    }));
+    })];
 
     if damage > npc.character.get_current_health().unwrap() {
         events.push(Event::NpcKilled(NpcKilled {
