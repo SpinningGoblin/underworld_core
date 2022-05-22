@@ -143,7 +143,7 @@ impl ItemPrototype {
             | ItemType::ShortSword
             | ItemType::Dagger
             | ItemType::Dirk => Some(-1),
-            ItemType::GreatSword => Some(1),
+            ItemType::GreatSword => Some(2),
             _ => None,
         }
     }
