@@ -4,6 +4,7 @@ use bevy_ecs::prelude::Component;
 use poem_openapi::Object;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 use super::learned_spell::{LearnedSpell, LearnedSpellView};
 
@@ -16,6 +17,14 @@ use super::learned_spell::{LearnedSpell, LearnedSpellView};
 )]
 pub struct SpellMemory {
     pub spells: Vec<LearnedSpell>,
+}
+
+impl SpellMemory {
+    pub fn find_spell(&self, spell_id: &Uuid) -> Option<&LearnedSpell> {
+        self.spells
+            .iter()
+            .find(|learned_spell| learned_spell.identifier.id.eq(spell_id))
+    }
 }
 
 #[derive(Clone, Debug)]

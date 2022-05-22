@@ -12,7 +12,7 @@ use super::{
     items::character_item::CharacterItem,
     life_modifier::LifeModifier,
     species::Species,
-    spells::spell_memory::SpellMemory,
+    spells::{learned_spell::LearnedSpell, spell_memory::SpellMemory},
     stats::{Stats, StatsView},
 };
 
@@ -49,6 +49,10 @@ impl Character {
         }
     }
 
+    pub fn find_spell(&self, spell_id: &Uuid) -> Option<&LearnedSpell> {
+        self.spell_memory.find_spell(spell_id)
+    }
+
     pub fn remove_item(&mut self, item_id: &Uuid) -> Option<CharacterItem> {
         if let Some(inventory) = self.inventory.as_mut() {
             inventory.remove_item(item_id)
@@ -70,6 +74,18 @@ impl Character {
     pub fn damage(&mut self, damage: i32) {
         if let Some(mut health) = self.stats.health.as_mut() {
             health.current -= damage;
+        }
+    }
+
+    pub fn heal(&mut self, damage_healed: i32) {
+        if let Some(mut health) = self.stats.health.as_mut() {
+            health.current += damage_healed;
+        }
+    }
+
+    pub fn heal_to_max(&mut self) {
+        if let Some(mut health) = self.stats.health.as_mut() {
+            health.current = health.max;
         }
     }
 
