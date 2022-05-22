@@ -10,15 +10,15 @@ use uuid::Uuid;
 
 use crate::components::{
     identifier::{Identifier, IdentifierView},
-    items::descriptor::Descriptor,
+    items::{
+        descriptor::Descriptor,
+        fixture_item::{FixtureItem, FixtureItemView},
+    },
     material::Material,
     size::Size,
 };
 
-use super::{
-    fixture_item::{FixtureItem, FixtureItemView},
-    fixture_type::FixtureType,
-};
+use super::fixture_type::FixtureType;
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -115,43 +115,4 @@ pub struct FixtureViewArgs {
     pub knows_hidden: bool,
     pub knows_has_hidden: bool,
     pub knows_can_be_opened: bool,
-}
-
-#[cfg(test)]
-mod display_tests {
-    use crate::{
-        components::{
-            fixtures::{fixture::FixtureViewArgs, fixture_type::FixtureType},
-            identifier::Identifier,
-            material::Material,
-        },
-        systems::view::fixture::view,
-    };
-
-    use super::Fixture;
-
-    #[test]
-    fn display_with_material() {
-        let fixture = Fixture {
-            fixture_type: FixtureType::Chest,
-            material: Some(Material::Steel),
-            size: crate::components::size::Size::Average,
-            descriptors: Vec::new(),
-            identifier: Identifier::default(),
-            items: Vec::new(),
-            has_hidden_compartment: false,
-            can_be_opened: true,
-            open: false,
-            hidden_compartment_open: false,
-        };
-
-        let args = FixtureViewArgs {
-            knows_items: true,
-            knows_hidden: true,
-            knows_has_hidden: true,
-            knows_can_be_opened: true,
-        };
-
-        assert_eq!("steel chest", format!("{}", view(&fixture, &args, true)));
-    }
 }

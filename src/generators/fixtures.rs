@@ -5,9 +5,11 @@ use rand::{prelude::ThreadRng, Rng};
 
 use crate::{
     components::{
-        fixtures::{fixture::Fixture, fixture_item::FixtureItem, fixture_type::FixtureType},
+        fixtures::{fixture::Fixture, fixture_type::FixtureType},
         identifier::Identifier,
-        items::{descriptor::Descriptor, item::Item, item_type::ItemType},
+        items::{
+            descriptor::Descriptor, fixture_item::FixtureItem, item::Item, item_type::ItemType,
+        },
         material::BuiltWithMaterial,
         size::Size,
         tag::{Tag, Tagged},

@@ -1,6 +1,6 @@
-use crate::components::fixtures::{
-    fixture::{Fixture, FixtureView, FixtureViewArgs},
-    fixture_item::FixtureItemView,
+use crate::components::{
+    fixtures::fixture::{Fixture, FixtureView, FixtureViewArgs},
+    items::fixture_item::FixtureItemView,
 };
 
 pub fn view(fixture: &Fixture, args: &FixtureViewArgs, knows_all: bool) -> FixtureView {
