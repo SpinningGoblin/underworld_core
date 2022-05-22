@@ -17,7 +17,7 @@ use crate::{
     utils::ids::parse_id,
 };
 
-pub fn handle_cast_spell_on_player(
+pub fn handle(
     cast_spell_on_player: &CastSpellOnPlayer,
     player: &PlayerCharacter,
 ) -> Result<Vec<Event>, Box<dyn Error>> {

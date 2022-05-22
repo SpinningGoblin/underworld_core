@@ -9,10 +9,7 @@ use crate::{
     utils::ids::parse_id,
 };
 
-pub fn handle_view_npc(
-    look_at_npc: &LookAtNpc,
-    state: &GameState,
-) -> Result<Vec<Event>, Box<dyn Error>> {
+pub fn handle(look_at_npc: &LookAtNpc, state: &GameState) -> Result<Vec<Event>, Box<dyn Error>> {
     let npc_id = parse_id(&look_at_npc.npc_id)?;
 
     let npc = match state.current_room().find_npc(&npc_id) {

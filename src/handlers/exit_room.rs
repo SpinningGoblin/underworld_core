@@ -12,10 +12,7 @@ use crate::{
     utils::ids::parse_id,
 };
 
-pub fn handle_exit_room(
-    exit_room: &ExitRoom,
-    state: &GameState,
-) -> Result<Vec<Event>, Box<dyn Error>> {
+pub fn handle(exit_room: &ExitRoom, state: &GameState) -> Result<Vec<Event>, Box<dyn Error>> {
     // We need to check the exit maps for one with the room_id and exit.
     // If there's another exit id then find the room with that exit id and move
     // the player to that room.

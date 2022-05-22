@@ -9,7 +9,7 @@ use crate::{
     utils::ids::parse_id,
 };
 
-pub fn handle_view_fixture(
+pub fn handle(
     look_at_fixture: &LookAtFixture,
     state: &GameState,
 ) -> Result<Vec<Event>, Box<dyn Error>> {

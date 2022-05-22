@@ -21,7 +21,7 @@ const DISCOVER_CAN_BE_OPENED_CHANCE: i32 = 1;
 const DISCOVER_HIDDEN_ITEMS_CHANCE: i32 = 5;
 const NPC_ATTACKS_CHANCE: i32 = 5;
 
-pub fn handle_inspect_fixture(
+pub fn handle(
     inspect_fixture: &InspectFixture,
     state: &GameState,
     player: &PlayerCharacter,

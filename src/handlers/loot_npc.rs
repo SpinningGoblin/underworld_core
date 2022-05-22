@@ -10,7 +10,7 @@ use crate::{
 
 use super::helpers::npc_attack_player;
 
-pub fn handle_loot_npc(
+pub fn handle(
     loot_npc: &LootNpc,
     state: &GameState,
     player: &PlayerCharacter,

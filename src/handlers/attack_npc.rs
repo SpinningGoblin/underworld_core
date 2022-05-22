@@ -10,7 +10,7 @@ use crate::{
 
 use super::helpers::damage_npc;
 
-pub fn handle_attack_npc(
+pub fn handle(
     attack_npc: &AttackNpc,
     state: &GameState,
     player: &PlayerCharacter,

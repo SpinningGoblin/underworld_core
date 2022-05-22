@@ -20,7 +20,7 @@ const DISCOVER_PACKED_CHANCE: i32 = 4;
 const DISCOVER_HIDDEN_CHANCE: i32 = 2;
 const NPC_ATTACKS_CHANCE: i32 = 5;
 
-pub fn handle_inspect_npc(
+pub fn handle(
     inspect_npc: &InspectNpc,
     state: &GameState,
     player: &PlayerCharacter,

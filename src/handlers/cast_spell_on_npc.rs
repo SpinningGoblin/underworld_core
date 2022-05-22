@@ -8,7 +8,7 @@ use crate::{
     utils::ids::parse_id,
 };
 
-pub fn handle_cast_spell_on_npc(
+pub fn handle(
     cast_spell_on_npc: &CastSpellOnNpc,
     _state: &GameState,
     player: &PlayerCharacter,

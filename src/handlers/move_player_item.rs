@@ -11,7 +11,7 @@ use crate::{
     utils::ids::parse_id,
 };
 
-pub fn handle_move_player_item(
+pub fn handle(
     move_player_item: &MovePlayerItem,
     player: &PlayerCharacter,
 ) -> Result<Vec<Event>, Box<dyn Error>> {

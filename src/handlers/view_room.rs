@@ -12,10 +12,7 @@ use crate::{
     systems::view::room::view,
 };
 
-pub fn handle_view_room(
-    _: &LookAtCurrentRoom,
-    state: &GameState,
-) -> Result<Vec<Event>, Box<dyn Error>> {
+pub fn handle(_: &LookAtCurrentRoom, state: &GameState) -> Result<Vec<Event>, Box<dyn Error>> {
     let room = state.current_room();
 
     let mut fixture_args: HashMap<Uuid, FixtureViewArgs> = HashMap::new();

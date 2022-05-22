@@ -10,10 +10,7 @@ use crate::{
     utils::ids::parse_id,
 };
 
-pub fn handle_loot_fixture(
-    loot_fixture: &LootFixture,
-    state: &GameState,
-) -> Result<Vec<Event>, Box<dyn Error>> {
+pub fn handle(loot_fixture: &LootFixture, state: &GameState) -> Result<Vec<Event>, Box<dyn Error>> {
     let fixture_id = parse_id(&loot_fixture.fixture_id)?;
     let fixture = match state.current_room().find_fixture(&fixture_id) {
         Some(it) => it,
