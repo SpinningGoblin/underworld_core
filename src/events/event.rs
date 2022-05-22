@@ -2,6 +2,7 @@
 use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 use crate::components::{
     games::game_state::GameState,
@@ -101,40 +102,17 @@ pub fn apply_events(
                 new_player.character.damage(player_hit.damage);
             }
             Event::PlayerKilled(_) => new_player.character.kill(),
-            Event::ItemTakenFromNpc(item_taken_from_npc) => {
-                let position = new_game
-                    .current_room_mut()
-                    .find_npc_mut(&item_taken_from_npc.npc_id)
-                    .unwrap();
-                let character_item = position
-                    .npc
-                    .character
-                    .remove_item(&item_taken_from_npc.item_id)
-                    .unwrap();
-
-                let packed_item = CharacterItem {
-                    is_hidden: false,
-                    equipped_location: LocationTag::Packed,
-                    is_multiple: character_item.is_multiple,
-                    item: character_item.item,
-                    at_the_ready: false,
-                };
-                new_player.character.add_item(packed_item)
-            }
-            Event::NpcWeaponReadied(weapon_readied) => {
-                let position = new_game
-                    .current_room_mut()
-                    .find_npc_mut(&weapon_readied.npc_id)
-                    .unwrap();
-                let mut character_item = position
-                    .npc
-                    .character
-                    .remove_item(&weapon_readied.item_id)
-                    .unwrap();
-                character_item.at_the_ready = true;
-                character_item.equipped_location = LocationTag::Hand;
-                position.npc.character.add_item(character_item);
-            }
+            Event::ItemTakenFromNpc(item_taken_from_npc) => take_item_from_npc(
+                &mut new_game,
+                &mut new_player,
+                &item_taken_from_npc.npc_id,
+                &item_taken_from_npc.item_id,
+            ),
+            Event::NpcWeaponReadied(weapon_readied) => ready_npc_weapon(
+                &mut new_game,
+                &weapon_readied.npc_id,
+                &weapon_readied.item_id,
+            ),
             Event::PlayerItemMoved(item_moved) => {
                 let mut character_item = new_player
                     .character
@@ -187,24 +165,12 @@ pub fn apply_events(
             Event::RoomFirstSeen(first_seen) => {
                 new_game.rooms_seen.push(first_seen.room_id);
             }
-            Event::ItemTakenFromFixture(item_taken_from_fixture) => {
-                let fixture = new_game
-                    .current_room_mut()
-                    .find_fixture_mut(&item_taken_from_fixture.fixture_id)
-                    .unwrap();
-                let fixture_item = fixture
-                    .remove_item(&item_taken_from_fixture.item_id)
-                    .unwrap();
-
-                let packed_item = CharacterItem {
-                    is_hidden: false,
-                    equipped_location: LocationTag::Packed,
-                    is_multiple: false,
-                    item: fixture_item.item,
-                    at_the_ready: false,
-                };
-                new_player.character.add_item(packed_item)
-            }
+            Event::ItemTakenFromFixture(item_taken_from_fixture) => take_item_from_fixture(
+                &mut new_game,
+                &mut new_player,
+                &item_taken_from_fixture.fixture_id,
+                &item_taken_from_fixture.item_id,
+            ),
             Event::PlayerHealed(player_healed) => {
                 new_player.character.heal(player_healed.damage_healed)
             }
@@ -235,4 +201,53 @@ pub fn apply_events(
     }
 
     (new_game, new_player)
+}
+
+fn take_item_from_fixture(
+    new_game: &mut GameState,
+    new_player: &mut PlayerCharacter,
+    fixture_id: &Uuid,
+    item_id: &Uuid,
+) {
+    let fixture = new_game
+        .current_room_mut()
+        .find_fixture_mut(fixture_id)
+        .unwrap();
+    let fixture_item = fixture.remove_item(item_id).unwrap();
+
+    let packed_item = CharacterItem {
+        is_hidden: false,
+        equipped_location: LocationTag::Packed,
+        is_multiple: false,
+        item: fixture_item.item,
+        at_the_ready: false,
+    };
+    new_player.character.add_item(packed_item)
+}
+
+fn take_item_from_npc(
+    new_game: &mut GameState,
+    new_player: &mut PlayerCharacter,
+    npc_id: &Uuid,
+    item_id: &Uuid,
+) {
+    let position = new_game.current_room_mut().find_npc_mut(npc_id).unwrap();
+    let character_item = position.npc.character.remove_item(item_id).unwrap();
+
+    let packed_item = CharacterItem {
+        is_hidden: false,
+        equipped_location: LocationTag::Packed,
+        is_multiple: character_item.is_multiple,
+        item: character_item.item,
+        at_the_ready: false,
+    };
+    new_player.character.add_item(packed_item);
+}
+
+fn ready_npc_weapon(new_game: &mut GameState, npc_id: &Uuid, item_id: &Uuid) {
+    let position = new_game.current_room_mut().find_npc_mut(npc_id).unwrap();
+    let mut character_item = position.npc.character.remove_item(item_id).unwrap();
+    character_item.at_the_ready = true;
+    character_item.equipped_location = LocationTag::Hand;
+    position.npc.character.add_item(character_item);
 }
