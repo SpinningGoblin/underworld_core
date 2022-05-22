@@ -12,10 +12,10 @@ pub fn check(player_character: PlayerCharacter) -> PlayerCharacterView {
         knows_hidden_in_inventory: true,
         knows_packed_in_inventory: true,
     };
-    let character = super::character::look_at(&player_character.character, &args, true);
+    let character = super::character::view(&player_character.character, &args, true);
 
     PlayerCharacterView {
         character,
-        identifier: super::identifier::to_view(&player_character.identifier, true),
+        identifier: super::identifier::view(&player_character.identifier, true),
     }
 }

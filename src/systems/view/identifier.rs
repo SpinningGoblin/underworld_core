@@ -1,6 +1,6 @@
 use crate::components::identifier::{Identifier, IdentifierView};
 
-pub fn to_view(identifier: &Identifier, name_known: bool) -> IdentifierView {
+pub fn view(identifier: &Identifier, name_known: bool) -> IdentifierView {
     if name_known {
         IdentifierView {
             id: identifier.id.to_string(),

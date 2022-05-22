@@ -243,7 +243,7 @@ mod tests {
             character::CharacterViewArgs, effects::Effects, life_modifier::LifeModifier,
             species::Species, spells::spell_memory::SpellMemory, stats::Stats,
         },
-        systems::view::character::look_at,
+        systems::view::character::view,
     };
 
     use super::Character;
@@ -262,8 +262,7 @@ mod tests {
             spell_memory: SpellMemory::default(),
         };
 
-        let description =
-            look_at(&character, &CharacterViewArgs::default(), true).describe_species();
+        let description = view(&character, &CharacterViewArgs::default(), true).describe_species();
         assert_eq!("tall goblin", description);
     }
 
@@ -281,8 +280,7 @@ mod tests {
             spell_memory: SpellMemory::default(),
         };
 
-        let description =
-            look_at(&character, &CharacterViewArgs::default(), true).describe_species();
+        let description = view(&character, &CharacterViewArgs::default(), true).describe_species();
         assert_eq!("skeleton goblin", description);
     }
 }

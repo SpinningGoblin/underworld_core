@@ -3,7 +3,7 @@ use crate::components::{
     stats::StatsView,
 };
 
-pub fn look_at(character: &Character, args: &CharacterViewArgs, knows_all: bool) -> CharacterView {
+pub fn view(character: &Character, args: &CharacterViewArgs, knows_all: bool) -> CharacterView {
     let (health, health_known) = if args.knows_health || knows_all {
         (character.stats.health.clone(), true)
     } else {
@@ -25,7 +25,7 @@ pub fn look_at(character: &Character, args: &CharacterViewArgs, knows_all: bool)
     let (inventory, inventory_known) = if args.knows_inventory || knows_all {
         (
             character.inventory.clone().map(|inv| {
-                super::inventory::look_at(
+                super::inventory::view(
                     &inv,
                     args.knows_hidden_in_inventory,
                     args.knows_packed_in_inventory,

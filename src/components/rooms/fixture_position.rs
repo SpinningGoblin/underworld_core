@@ -81,12 +81,11 @@ impl FixturePositionView {
 
 #[cfg(test)]
 mod tests {
+    use std::collections::HashMap;
+
     use crate::{
         components::{
-            fixtures::{
-                fixture::{Fixture, FixtureViewArgs},
-                fixture_type::FixtureType,
-            },
+            fixtures::{fixture::Fixture, fixture_type::FixtureType},
             identifier::Identifier,
             rooms::{
                 fixture_position_descriptor::FixturePositionDescriptor,
@@ -94,7 +93,7 @@ mod tests {
             },
             size::Size,
         },
-        systems::view::fixture_position::look_at,
+        systems::view::fixture_position::view,
     };
 
     use super::FixturePosition;
@@ -133,19 +132,7 @@ mod tests {
 
         assert_eq!(
             "a table and chairs is in the corner",
-            format!(
-                "{}",
-                look_at(
-                    &fixture_position,
-                    &FixtureViewArgs {
-                        knows_items: true,
-                        knows_hidden: true,
-                        knows_can_be_opened: true,
-                        knows_has_hidden: true,
-                    },
-                    false
-                )
-            )
+            format!("{}", view(&fixture_position, &HashMap::new(), true))
         )
     }
 }

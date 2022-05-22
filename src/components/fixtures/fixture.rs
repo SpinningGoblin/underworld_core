@@ -125,7 +125,7 @@ mod display_tests {
             identifier::Identifier,
             material::Material,
         },
-        systems::view::fixture::look_at,
+        systems::view::fixture::view,
     };
 
     use super::Fixture;
@@ -152,6 +152,6 @@ mod display_tests {
             knows_can_be_opened: true,
         };
 
-        assert_eq!("steel chest", format!("{}", look_at(&fixture, &args, true)));
+        assert_eq!("steel chest", format!("{}", view(&fixture, &args, true)));
     }
 }

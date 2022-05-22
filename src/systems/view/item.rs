@@ -1,6 +1,6 @@
 use crate::components::items::item::{Item, ItemView};
 
-pub fn look_at(item: &Item, sees_full_item: bool, knows_all: bool) -> ItemView {
+pub fn view(item: &Item, sees_full_item: bool, knows_all: bool) -> ItemView {
     let (descriptors, descriptors_known) = if sees_full_item || knows_all {
         (item.descriptors.clone(), true)
     } else {
@@ -26,7 +26,7 @@ pub fn look_at(item: &Item, sees_full_item: bool, knows_all: bool) -> ItemView {
     };
 
     ItemView {
-        identifier: super::identifier::to_view(&item.identifier, true),
+        identifier: super::identifier::view(&item.identifier, true),
         item_type: item.item_type.clone(),
         tags: item.tags.clone(),
         descriptors,

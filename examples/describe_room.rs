@@ -1,13 +1,14 @@
+use std::collections::HashMap;
+
 use underworld_core::{
-    components::rooms::room_view::RoomViewArgs,
     generators::{generator::Generator, rooms::random_room_generator},
-    systems::view::room::look_at,
+    systems::view::room::view,
 };
 
 pub fn main() {
     let room_generator = random_room_generator(None);
     let room = room_generator.generate();
-    let view = look_at(&room, RoomViewArgs::default(), true);
+    let view = view(&room, HashMap::new(), HashMap::new(), true);
 
     println!("{}", &view);
     println!();

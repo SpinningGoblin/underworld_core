@@ -3,7 +3,7 @@ use underworld_core::{
     generators::{
         characters::CharacterPrototype, generator::Generator, non_players::NonPlayerPrototype,
     },
-    systems::view::character::look_at,
+    systems::view::character::view,
 };
 
 pub fn main() {
@@ -12,7 +12,7 @@ pub fn main() {
         character_generator: Box::new(CharacterPrototype::random_species_overloaded()),
     };
     let character = prototype.generate().character;
-    let view = look_at(&character, &CharacterViewArgs::default(), true);
+    let view = view(&character, &CharacterViewArgs::default(), true);
     if let Some(inventory) = &view.inventory {
         println!("{}", inventory);
     }

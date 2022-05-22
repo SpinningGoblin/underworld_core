@@ -3,7 +3,7 @@ use crate::components::fixtures::{
     fixture_item::FixtureItemView,
 };
 
-pub fn look_at(fixture: &Fixture, args: &FixtureViewArgs, knows_all: bool) -> FixtureView {
+pub fn view(fixture: &Fixture, args: &FixtureViewArgs, knows_all: bool) -> FixtureView {
     let items: Vec<FixtureItemView> = if args.knows_items || knows_all {
         fixture
             .items
@@ -22,7 +22,7 @@ pub fn look_at(fixture: &Fixture, args: &FixtureViewArgs, knows_all: bool) -> Fi
                     false
                 };
                 FixtureItemView {
-                    item: super::item::look_at(&fixture_item.item, args.knows_items, knows_all),
+                    item: super::item::view(&fixture_item.item, args.knows_items, knows_all),
                     is_hidden,
                     is_hidden_known: args.knows_hidden,
                 }
@@ -48,7 +48,7 @@ pub fn look_at(fixture: &Fixture, args: &FixtureViewArgs, knows_all: bool) -> Fi
     };
 
     FixtureView {
-        identifier: super::identifier::to_view(&fixture.identifier, true),
+        identifier: super::identifier::view(&fixture.identifier, true),
         fixture_type: fixture.fixture_type.clone(),
         material: fixture.material.clone(),
         size: fixture.size.clone(),

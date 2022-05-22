@@ -1,6 +1,6 @@
 use crate::components::inventory::{Inventory, InventoryView};
 
-pub fn look_at(
+pub fn view(
     inventory: &Inventory,
     knows_hidden: bool,
     knows_packed: bool,
@@ -12,7 +12,7 @@ pub fn look_at(
         .filter(|character_item| character_item.is_equipped())
         .filter_map(|character_item| {
             if !character_item.is_hidden || knows_hidden || knows_all {
-                Some(super::character_item::look_at(
+                Some(super::character_item::view(
                     character_item,
                     knows_hidden,
                     knows_all,
@@ -28,11 +28,7 @@ pub fn look_at(
         .filter(|character_item| character_item.is_packed())
         .filter_map(|character_item| {
             if knows_packed || knows_all {
-                Some(super::character_item::look_at(
-                    character_item,
-                    true,
-                    knows_all,
-                ))
+                Some(super::character_item::view(character_item, true, knows_all))
             } else {
                 None
             }

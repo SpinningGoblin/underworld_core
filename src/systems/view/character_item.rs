@@ -1,6 +1,6 @@
 use crate::components::items::character_item::{CharacterItem, CharacterItemView};
 
-pub fn look_at(
+pub fn view(
     character_item: &CharacterItem,
     knows_hidden: bool,
     knows_all: bool,
@@ -21,7 +21,7 @@ pub fn look_at(
         };
 
     CharacterItemView {
-        item: super::item::look_at(&character_item.item, !full_item_hidden, knows_all),
+        item: super::item::view(&character_item.item, !full_item_hidden, knows_all),
         is_hidden,
         knows_equipped_location,
         is_multiple: character_item.is_multiple,

@@ -29,7 +29,7 @@ pub fn handle(
         knows_can_be_opened: knowledge.knows_can_be_opened,
     };
 
-    let view = fixture::look_at(fixture, &args, state.player_knows_all);
+    let view = fixture::view(fixture, &args, state.player_knows_all);
 
     Ok(vec![Event::FixtureViewed(FixtureViewed {
         fixture_view: view,

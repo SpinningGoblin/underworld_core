@@ -6,7 +6,7 @@ use underworld_core::{
     generators::{
         characters::CharacterPrototype, generator::Generator, inventory::InventoryPrototype,
     },
-    systems::view::character::look_at,
+    systems::view::character::view,
 };
 
 pub fn main() {
@@ -28,7 +28,7 @@ pub fn main() {
     };
 
     let kobold = kobold_prototype.generate();
-    let view = look_at(&kobold, &CharacterViewArgs::default(), true);
+    let view = view(&kobold, &CharacterViewArgs::default(), true);
     if let Some(inventory) = &view.inventory {
         println!("{}", inventory);
     }

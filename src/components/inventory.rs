@@ -228,7 +228,7 @@ mod inventory_tests {
             material::Material,
             tag::Tag,
         },
-        systems::view::inventory::look_at,
+        systems::view::inventory::view,
     };
 
     use super::Inventory;
@@ -272,7 +272,7 @@ mod inventory_tests {
             ],
         };
 
-        let description = look_at(&inventory, true, true, true).to_string();
+        let description = view(&inventory, true, true, true).to_string();
         assert!(description.contains("a broken long sword"));
         assert!(description.contains(", and"));
         assert!(description.contains("rusty dull short sword."));
@@ -299,7 +299,7 @@ mod inventory_tests {
             }],
         };
 
-        let description = look_at(&inventory, true, true, true).to_string();
+        let description = view(&inventory, true, true, true).to_string();
         assert!(description.contains("a broken long sword"));
         assert!(!description.contains(", and"));
     }
@@ -343,7 +343,7 @@ mod inventory_tests {
             ],
         };
 
-        let description = look_at(&inventory, true, true, true).to_string();
+        let description = view(&inventory, true, true, true).to_string();
         assert!(description.contains("a broken long sword"));
         assert!(!description.contains(", and"));
     }
@@ -370,7 +370,7 @@ mod inventory_tests {
             }],
         };
 
-        let description = look_at(&inventory, true, true, true).to_string();
+        let description = view(&inventory, true, true, true).to_string();
         assert!(description.contains("set of drab steel plate helmet."));
         assert!(!description.contains(", and"));
     }
@@ -416,7 +416,7 @@ mod inventory_tests {
             ],
         };
 
-        let description = look_at(&inventory, true, true, true).to_string();
+        let description = view(&inventory, true, true, true).to_string();
         assert!(description.contains("drab steel breast plate"));
         assert!(description.contains("rusty iron shackles."));
     }

@@ -6,17 +6,10 @@ use crate::components::{
     fixtures::fixture::FixtureViewArgs,
     non_player::NonPlayerViewArgs,
     rooms::{
-        exit::ExitView,
-        fixture_position::FixturePositionView,
-        npc_position::NpcPositionView,
-        room::Room,
-        room_view::{RoomView, RoomViewArgs},
+        exit::ExitView, fixture_position::FixturePositionView, npc_position::NpcPositionView,
+        room::Room, room_view::RoomView,
     },
 };
-
-pub fn look_at(room: &Room, _args: RoomViewArgs, knows_all: bool) -> RoomView {
-    view(room, HashMap::new(), HashMap::new(), knows_all)
-}
 
 pub fn view(
     room: &Room,
@@ -28,26 +21,26 @@ pub fn view(
         .fixture_positions
         .iter()
         .map(|fixture_position| {
-            super::fixture_position::view_v2(fixture_position, &fixture_args, knows_all)
+            super::fixture_position::view(fixture_position, &fixture_args, knows_all)
         })
         .into_iter()
         .collect();
     let npc_positions: Vec<NpcPositionView> = room
         .npc_positions
         .iter()
-        .map(|npc_position| super::npc_position::view_v2(npc_position, &non_player_args, knows_all))
+        .map(|npc_position| super::npc_position::view(npc_position, &non_player_args, knows_all))
         .into_iter()
         .collect();
 
     let exits: Vec<ExitView> = room
         .exits
         .iter()
-        .map(super::exit::look_at)
+        .map(super::exit::view)
         .into_iter()
         .collect();
 
     RoomView {
-        identifier: super::identifier::to_view(&room.identifier, true),
+        identifier: super::identifier::view(&room.identifier, true),
         descriptors: room.descriptors.clone(),
         room_type: room.room_type.clone(),
         fixture_positions,

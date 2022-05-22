@@ -74,9 +74,10 @@ impl NpcPositionView {
 
 #[cfg(test)]
 mod tests {
+    use std::collections::HashMap;
+
     use crate::{
         components::{
-            non_player::NonPlayerViewArgs,
             rooms::{
                 group_descriptor::GroupDescriptor, npc_position_descriptor::NpcPositionDescriptor,
             },
@@ -85,7 +86,7 @@ mod tests {
         generators::{
             characters::CharacterPrototype, generator::Generator, non_players::NonPlayerPrototype,
         },
-        systems::view::npc_position::look_at,
+        systems::view::npc_position::view,
     };
 
     use super::NpcPosition;
@@ -107,10 +108,7 @@ mod tests {
 
         assert_eq!(
             "in the corner stands a lone goblin",
-            format!(
-                "{}",
-                look_at(&npc_position, &NonPlayerViewArgs::default(), true)
-            )
+            format!("{}", view(&npc_position, &HashMap::new(), true))
         );
     }
 }
