@@ -1,4 +1,6 @@
 mod attack_npc;
+mod cast_spell_on_npc;
+mod cast_spell_on_player;
 mod exit_room;
 mod helpers;
 mod inspect_fixture;

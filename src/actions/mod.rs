@@ -1,5 +1,7 @@
 pub mod action;
 pub mod attack_npc;
+pub mod cast_spell_on_npc;
+pub mod cast_spell_on_player;
 pub mod exit_room;
 pub mod inspect_fixture;
 pub mod inspect_npc;

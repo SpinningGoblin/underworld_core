@@ -1,5 +1,6 @@
 use super::{
-    attack_npc::AttackNpc, exit_room::ExitRoom, inspect_fixture::InspectFixture,
+    attack_npc::AttackNpc, cast_spell_on_npc::CastSpellOnNpc,
+    cast_spell_on_player::CastSpellOnPlayer, exit_room::ExitRoom, inspect_fixture::InspectFixture,
     inspect_npc::InspectNpc, look_at_current_room::LookAtCurrentRoom,
     look_at_fixture::LookAtFixture, look_at_npc::LookAtNpc, loot_fixture::LootFixture,
     loot_npc::LootNpc, move_player_item::MovePlayerItem,
@@ -19,6 +20,8 @@ use serde::{Deserialize, Serialize};
 )]
 pub enum Action {
     AttackNpc(AttackNpc),
+    CastSpellOnNpc(CastSpellOnNpc),
+    CastSpellOnPlayer(CastSpellOnPlayer),
     InspectFixture(InspectFixture),
     InspectNpc(InspectNpc),
     LookAtCurrentRoom(LookAtCurrentRoom),

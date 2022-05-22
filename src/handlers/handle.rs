@@ -49,6 +49,10 @@ pub fn handle_action(
         Action::LootFixture(loot_fixture) => {
             super::loot_fixture::handle_loot_fixture(loot_fixture, state)?
         }
+        Action::CastSpellOnNpc(_) => todo!(),
+        Action::CastSpellOnPlayer(cast_spell_on_player) => {
+            super::cast_spell_on_player::handle_cast_spell_on_player(cast_spell_on_player, player)?
+        }
     };
 
     let (new_state, new_player) = apply_events(&events, state, player);
