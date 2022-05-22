@@ -1,9 +1,11 @@
 use crate::{
     components::{non_player::NonPlayer, player::PlayerCharacter},
     events::{
-        event::Event, npc_weapon_readied::NpcWeaponReadied, player_hit::PlayerHit,
-        player_killed::PlayerKilled,
+        event::Event, npc_hit::NpcHit, npc_killed::NpcKilled, npc_weapon_readied::NpcWeaponReadied,
+        player_hit::PlayerHit, player_killed::PlayerKilled, player_missed::PlayerMissed,
+        player_resurrected::PlayerResurrected, player_retribution_aura_dissipated::PlayerRetributionAuraDissipated,
     },
+    utils::rolls::roll_d6,
 };
 
 pub fn npc_attack_player(player: &PlayerCharacter, npc: &NonPlayer) -> Vec<Event> {
@@ -21,6 +23,9 @@ pub fn npc_attack_player(player: &PlayerCharacter, npc: &NonPlayer) -> Vec<Event
         let player_defense = player.character.defense();
         let character_attack = npc.character.attack();
         let player_damage = (character_attack - player_defense).max(1);
+
+        // TODO Add handling for any defense aura player has.
+
         events.push(Event::PlayerHit(PlayerHit {
             attacker_id: npc.identifier.id,
             damage: player_damage,
@@ -29,6 +34,54 @@ pub fn npc_attack_player(player: &PlayerCharacter, npc: &NonPlayer) -> Vec<Event
             events.push(Event::PlayerKilled(PlayerKilled {
                 killer_id: npc.identifier.id,
             }));
+
+            if player.character.current_effects.resurrection_aura {
+                events.push(Event::PlayerResurrected(PlayerResurrected));
+            }
+        }
+
+        if let Some(retribution_aura) = &player.character.current_effects.retribution_aura {
+            let mut rng = rand::thread_rng();
+            let damage = retribution_aura.attack_roll(&mut rng);
+            events.append(&mut damage_npc(&player, &npc, damage, false));
+            events.push(Event::PlayerRetributionAuraDissipated(PlayerRetributionAuraDissipated))
+        }
+    }
+
+    events
+}
+
+const PLAYER_DODGE_CHANCE: i32 = 1;
+
+pub fn damage_npc(
+    player: &PlayerCharacter,
+    npc: &NonPlayer,
+    damage: i32,
+    can_counter: bool,
+) -> Vec<Event> {
+    let mut events: Vec<Event> = Vec::new();
+
+    events.push(Event::NpcHit(NpcHit {
+        npc_id: npc.identifier.id,
+        damage,
+        attacker_id: player.identifier.id,
+    }));
+
+    if damage > npc.character.get_current_health().unwrap() {
+        events.push(Event::NpcKilled(NpcKilled {
+            npc_id: npc.identifier.id,
+            killer_id: player.identifier.id,
+        }));
+    } else if can_counter {
+        let mut rng = rand::thread_rng();
+        let dodge_roll = roll_d6(&mut rng, 1, 0);
+
+        if dodge_roll <= PLAYER_DODGE_CHANCE {
+            events.push(Event::PlayerMissed(PlayerMissed {
+                attacker_id: npc.identifier.id,
+            }));
+        } else {
+            events.append(&mut npc_attack_player(player, npc));
         }
     }
 
