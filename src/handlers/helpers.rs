@@ -3,7 +3,8 @@ use crate::{
     events::{
         event::Event, npc_hit::NpcHit, npc_killed::NpcKilled, npc_weapon_readied::NpcWeaponReadied,
         player_hit::PlayerHit, player_killed::PlayerKilled, player_missed::PlayerMissed,
-        player_resurrected::PlayerResurrected, player_retribution_aura_dissipated::PlayerRetributionAuraDissipated,
+        player_resurrected::PlayerResurrected,
+        player_retribution_aura_dissipated::PlayerRetributionAuraDissipated,
     },
     utils::rolls::roll_d6,
 };
@@ -44,7 +45,9 @@ pub fn npc_attack_player(player: &PlayerCharacter, npc: &NonPlayer) -> Vec<Event
             let mut rng = rand::thread_rng();
             let damage = retribution_aura.attack_roll(&mut rng);
             events.append(&mut damage_npc(&player, &npc, damage, false));
-            events.push(Event::PlayerRetributionAuraDissipated(PlayerRetributionAuraDissipated))
+            events.push(Event::PlayerRetributionAuraDissipated(
+                PlayerRetributionAuraDissipated,
+            ))
         }
     }
 

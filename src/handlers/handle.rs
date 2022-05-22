@@ -49,7 +49,9 @@ pub fn handle_action(
         Action::LootFixture(loot_fixture) => {
             super::loot_fixture::handle_loot_fixture(loot_fixture, state)?
         }
-        Action::CastSpellOnNpc(_) => todo!(),
+        Action::CastSpellOnNpc(cast_spell_on_npc) => {
+            super::cast_spell_on_npc::handle_cast_spell_on_npc(cast_spell_on_npc, state, player)?
+        }
         Action::CastSpellOnPlayer(cast_spell_on_player) => {
             super::cast_spell_on_player::handle_cast_spell_on_player(cast_spell_on_player, player)?
         }

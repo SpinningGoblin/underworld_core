@@ -23,8 +23,9 @@ use super::{
     player_gains_retribution_aura::PlayerGainsRetributionAura,
     player_gains_shield_aura::PlayerGainsShieldAura, player_healed::PlayerHealed,
     player_hit::PlayerHit, player_item_moved::PlayerItemMoved, player_killed::PlayerKilled,
-    player_missed::PlayerMissed, player_resurrected::PlayerResurrected, room_exited::RoomExited,
-    room_first_seen::RoomFirstSeen, room_generated::RoomGenerated, room_viewed::RoomViewed, player_retribution_aura_dissipated::PlayerRetributionAuraDissipated,
+    player_missed::PlayerMissed, player_resurrected::PlayerResurrected,
+    player_retribution_aura_dissipated::PlayerRetributionAuraDissipated, room_exited::RoomExited,
+    room_first_seen::RoomFirstSeen, room_generated::RoomGenerated, room_viewed::RoomViewed,
 };
 
 #[derive(Clone, Debug)]
@@ -223,7 +224,7 @@ pub fn apply_events(
             }
             Event::PlayerRetributionAuraDissipated(_) => {
                 new_player.character.current_effects.retribution_aura = None;
-            },
+            }
             Event::NpcMissed(_)
             | Event::DeadNpcBeaten(_)
             | Event::PlayerMissed(_)
