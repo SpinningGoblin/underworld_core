@@ -23,6 +23,7 @@ pub mod player_healed;
 pub mod player_hit;
 pub mod player_item_moved;
 pub mod player_item_removed;
+pub mod player_item_used;
 pub mod player_killed;
 pub mod player_missed;
 pub mod player_resurrected;
@@ -50,8 +51,9 @@ pub use {
     player_gains_retribution_aura::PlayerGainsRetributionAura,
     player_gains_shield_aura::PlayerGainsShieldAura, player_healed::PlayerHealed,
     player_hit::PlayerHit, player_item_moved::PlayerItemMoved,
-    player_item_removed::PlayerItemRemoved, player_killed::PlayerKilled,
-    player_missed::PlayerMissed, player_resurrected::PlayerResurrected,
+    player_item_removed::PlayerItemRemoved, player_item_used::PlayerItemUsed,
+    player_killed::PlayerKilled, player_missed::PlayerMissed,
+    player_resurrected::PlayerResurrected,
     player_retribution_aura_dissipated::PlayerRetributionAuraDissipated,
     player_spell_forgotten::PlayerSpellForgotten, player_spell_learned::PlayerSpellLearned,
     player_spell_used::PlayerSpellUsed, room_exited::RoomExited, room_first_seen::RoomFirstSeen,

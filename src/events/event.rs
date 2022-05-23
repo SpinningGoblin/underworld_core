@@ -43,6 +43,7 @@ pub enum Event {
     PlayerHit(super::PlayerHit),
     PlayerItemMoved(super::PlayerItemMoved),
     PlayerItemRemoved(super::PlayerItemRemoved),
+    PlayerItemUsed(super::PlayerItemUsed),
     PlayerKilled(super::PlayerKilled),
     PlayerMissed(super::PlayerMissed),
     PlayerResurrected(super::PlayerResurrected),
@@ -201,6 +202,15 @@ pub fn apply_events(
                     spell: player_spell_learned.spell.clone(),
                     learned_at: player_spell_learned.learned_at,
                 });
+            }
+            Event::PlayerItemUsed(player_item_used) => {
+                let mut character_item =
+                    match new_player.character.remove_item(&player_item_used.item_id) {
+                        Some(it) => it,
+                        None => continue,
+                    };
+                character_item.decrease_uses();
+                new_player.character.add_item(character_item);
             }
             Event::NpcMissed(_)
             | Event::DeadNpcBeaten(_)
