@@ -51,7 +51,7 @@ impl Generator<Item> for ItemPrototype {
             material,
             attack,
             defense,
-            consumable_effect: None,
+            consumable: None,
         }
     }
 }

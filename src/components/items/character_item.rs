@@ -51,6 +51,10 @@ impl CharacterItem {
     pub fn is_consumable(&self) -> bool {
         self.item.is_consumable()
     }
+
+    pub fn decrease_uses(&mut self) {
+        self.item.decrease_uses()
+    }
 }
 
 #[derive(Clone, Debug)]

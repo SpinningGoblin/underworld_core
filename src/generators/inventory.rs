@@ -9,6 +9,7 @@ use crate::{
         inventory::Inventory,
         items::{
             character_item::CharacterItem,
+            consumable::Consumable,
             consumable_effect::{ConsumableEffect, ConsumableEffectName, LearnSpellEffect},
             item::Item,
             item_type::ItemType,
@@ -206,14 +207,17 @@ impl InventoryPrototype {
             material,
             attack: None,
             defense: None,
-            consumable_effect: Some(ConsumableEffect {
-                name: ConsumableEffectName::LearnSpell,
-                learn_spell_effect: Some(LearnSpellEffect {
-                    spell_name: spell_name.clone(),
-                    spell_attack,
-                    spell_defense,
-                    spell_uses,
-                }),
+            consumable: Some(Consumable {
+                effect: ConsumableEffect {
+                    name: ConsumableEffectName::LearnSpell,
+                    learn_spell_effect: Some(LearnSpellEffect {
+                        spell_name: spell_name.clone(),
+                        spell_attack,
+                        spell_defense,
+                        spell_uses,
+                    }),
+                },
+                uses: 1,
             }),
         };
 

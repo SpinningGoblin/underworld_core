@@ -109,7 +109,7 @@ fn starter_wearables() -> Vec<CharacterItem> {
         defense: Some(Defense {
             damage_resistance: 1,
         }),
-        consumable_effect: None,
+        consumable: None,
     };
 
     let shirt = Item {
@@ -122,7 +122,7 @@ fn starter_wearables() -> Vec<CharacterItem> {
         defense: Some(Defense {
             damage_resistance: 1,
         }),
-        consumable_effect: None,
+        consumable: None,
     };
 
     let boots = Item {
@@ -135,7 +135,7 @@ fn starter_wearables() -> Vec<CharacterItem> {
         defense: Some(Defense {
             damage_resistance: 1,
         }),
-        consumable_effect: None,
+        consumable: None,
     };
 
     vec![
@@ -203,7 +203,7 @@ fn starter_weapon(rng: &mut ThreadRng) -> CharacterItem {
             modifier: -1,
         }),
         defense: None,
-        consumable_effect: None,
+        consumable: None,
     };
 
     CharacterItem {

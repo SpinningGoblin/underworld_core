@@ -14,7 +14,7 @@ use crate::components::{
     tag::Tag,
 };
 
-use super::{consumable_effect::ConsumableEffect, descriptor::Descriptor, item_type::ItemType};
+use super::{consumable::Consumable, descriptor::Descriptor, item_type::ItemType};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -37,7 +37,7 @@ pub struct Item {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub defense: Option<Defense>,
     #[cfg_attr(feature = "serialization", serde(default))]
-    pub consumable_effect: Option<ConsumableEffect>,
+    pub consumable: Option<Consumable>,
 }
 
 impl Item {
@@ -58,6 +58,12 @@ impl Item {
 
     pub fn is_consumable(&self) -> bool {
         self.tags.iter().any(|tag| tag.is_consumable())
+    }
+
+    pub fn decrease_uses(&mut self) {
+        if let Some(mut consumable) = self.consumable.as_mut() {
+            consumable.uses -= 1;
+        }
     }
 }
 
