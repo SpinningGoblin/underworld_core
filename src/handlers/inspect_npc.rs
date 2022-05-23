@@ -4,10 +4,8 @@ use crate::{
     actions::inspect_npc::InspectNpc,
     components::{games::game_state::GameState, player::PlayerCharacter},
     errors::npc_not_found_error::NpcNotFoundError,
-    events::{
-        event::Event, npc_health_discovered::NpcHealthDiscovered,
-        npc_hidden_discovered::NpcHiddenDiscovered, npc_name_discovered::NpcNameDiscovered,
-        npc_packed_discovered::NpcPackedDiscovered,
+    events::event::{
+        Event, NpcHealthDiscovered, NpcHiddenDiscovered, NpcNameDiscovered, NpcPackedDiscovered,
     },
     utils::{ids::parse_id, rolls::roll_d6},
 };

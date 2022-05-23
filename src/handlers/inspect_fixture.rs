@@ -4,11 +4,9 @@ use crate::{
     actions::inspect_fixture::InspectFixture,
     components::{games::game_state::GameState, player::PlayerCharacter},
     errors::fixture_not_found_error::FixtureNotFoundError,
-    events::{
-        event::Event, fixture_can_be_opened_discovered::FixtureCanBeOpenedDiscovered,
-        fixture_contained_discovered::FixtureContainedDiscovered,
-        fixture_has_hidden_discovered::FixtureHasHiddenDiscovered,
-        fixture_hidden_items_discovered::FixtureHiddenItemsDiscovered,
+    events::event::{
+        Event, FixtureCanBeOpenedDiscovered, FixtureContainedDiscovered,
+        FixtureHasHiddenDiscovered, FixtureHiddenItemsDiscovered,
     },
     utils::{ids::parse_id, rolls::roll_d6},
 };

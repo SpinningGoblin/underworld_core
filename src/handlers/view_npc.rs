@@ -4,7 +4,7 @@ use crate::{
     actions::look_at_npc::LookAtNpc,
     components::{character::CharacterViewArgs, games::game_state::GameState},
     errors::npc_not_found_error::NpcNotFoundError,
-    events::{event::Event, npc_viewed::NpcViewed},
+    events::event::{Event, NpcViewed},
     systems::view::non_player,
     utils::ids::parse_id,
 };

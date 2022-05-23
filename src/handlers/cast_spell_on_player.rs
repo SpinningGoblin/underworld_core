@@ -8,11 +8,9 @@ use crate::{
         spells::spell_name::SpellName,
     },
     errors::spell_not_found_error::SpellNotFoundError,
-    events::{
-        event::Event, player_gains_resurrection_aura::PlayerGainsResurrectionAura,
-        player_gains_retribution_aura::PlayerGainsRetributionAura,
-        player_gains_shield_aura::PlayerGainsShieldAura, player_healed::PlayerHealed,
-        player_hit::PlayerHit,
+    events::event::{
+        Event, PlayerGainsResurrectionAura, PlayerGainsRetributionAura, PlayerGainsShieldAura,
+        PlayerHealed, PlayerHit, PlayerSpellForgotten, PlayerSpellUsed,
     },
     utils::ids::parse_id,
 };
@@ -60,6 +58,16 @@ pub fn handle(
                 defense,
             }));
         }
+    }
+
+    events.push(Event::PlayerSpellUsed(PlayerSpellUsed {
+        spell_id: spell_id.clone(),
+    }));
+
+    if learned_spell.spell.uses - 1 == 0 {
+        events.push(Event::PlayerSpellForgotten(PlayerSpellForgotten {
+            spell_id,
+        }));
     }
 
     Ok(events)

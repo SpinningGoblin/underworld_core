@@ -1,10 +1,8 @@
 use crate::{
     components::{non_player::NonPlayer, player::PlayerCharacter},
-    events::{
-        event::Event, npc_hit::NpcHit, npc_killed::NpcKilled, npc_weapon_readied::NpcWeaponReadied,
-        player_hit::PlayerHit, player_killed::PlayerKilled, player_missed::PlayerMissed,
-        player_resurrected::PlayerResurrected,
-        player_retribution_aura_dissipated::PlayerRetributionAuraDissipated,
+    events::event::{
+        Event, NpcHit, NpcKilled, NpcWeaponReadied, PlayerHit, PlayerKilled, PlayerMissed,
+        PlayerResurrected, PlayerRetributionAuraDissipated,
     },
     utils::rolls::roll_d6,
 };

@@ -4,7 +4,7 @@ use crate::{
     actions::attack_npc::AttackNpc,
     components::{games::game_state::GameState, player::PlayerCharacter},
     errors::npc_not_found_error::NpcNotFoundError,
-    events::{dead_npc_beaten::DeadNpcBeaten, event::Event},
+    events::event::{DeadNpcBeaten, Event},
     utils::ids::parse_id,
 };
 

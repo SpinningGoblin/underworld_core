@@ -8,7 +8,7 @@ use crate::{
         character::CharacterViewArgs, fixtures::fixture::FixtureViewArgs,
         games::game_state::GameState, non_player::NonPlayerViewArgs,
     },
-    events::{event::Event, room_viewed::RoomViewed},
+    events::event::{Event, RoomViewed},
     systems::view::room::view,
 };
 
