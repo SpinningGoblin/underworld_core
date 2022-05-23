@@ -1,5 +1,6 @@
 use crate::components::{
     character::{Character, CharacterView, CharacterViewArgs},
+    spells::{learned_spell::LearnedSpellView, spell::SpellView, spell_memory::SpellMemoryView},
     stats::StatsView,
 };
 
@@ -38,6 +39,35 @@ pub fn view(character: &Character, args: &CharacterViewArgs, knows_all: bool) ->
         (None, false)
     };
 
+    let (spell_memory, spell_memory_known) = if knows_all {
+        (
+            Some(SpellMemoryView {
+                spells: character
+                    .spell_memory
+                    .spells
+                    .iter()
+                    .map(|learned_spell| LearnedSpellView {
+                        identifier: super::identifier::view(&learned_spell.identifier, true),
+                        spell: SpellView {
+                            name: learned_spell.spell.name.clone(),
+                            attack: learned_spell.spell.attack.clone(),
+                            knows_attack: true,
+                            defense: learned_spell.spell.defense.clone(),
+                            knows_defense: true,
+                            uses: learned_spell.spell.uses,
+                            knows_uses: true,
+                        },
+                        learned_at: learned_spell.learned_at.to_rfc3339(),
+                    })
+                    .collect(),
+                knows_spells: true,
+            }),
+            true,
+        )
+    } else {
+        (None, false)
+    };
+
     CharacterView {
         stats: StatsView {
             health,
@@ -50,5 +80,7 @@ pub fn view(character: &Character, args: &CharacterViewArgs, knows_all: bool) ->
         life_modifier_known,
         inventory,
         inventory_known,
+        spell_memory,
+        spell_memory_known,
     }
 }

@@ -12,7 +12,10 @@ use super::{
     items::character_item::CharacterItem,
     life_modifier::LifeModifier,
     species::Species,
-    spells::{learned_spell::LearnedSpell, spell_memory::SpellMemory},
+    spells::{
+        learned_spell::LearnedSpell,
+        spell_memory::{SpellMemory, SpellMemoryView},
+    },
     stats::{Stats, StatsView},
 };
 
@@ -210,6 +213,9 @@ pub struct CharacterView {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub inventory: Option<InventoryView>,
     pub inventory_known: bool,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub spell_memory: Option<SpellMemoryView>,
+    pub spell_memory_known: bool,
 }
 
 #[derive(Clone, Debug, Default)]
