@@ -36,7 +36,8 @@ pub mod room_generated;
 pub mod room_viewed;
 
 pub use {
-    dead_npc_beaten::DeadNpcBeaten, event::Event, fixture_can_be_opened_discovered::FixtureCanBeOpenedDiscovered,
+    dead_npc_beaten::DeadNpcBeaten, event::Event,
+    fixture_can_be_opened_discovered::FixtureCanBeOpenedDiscovered,
     fixture_contained_discovered::FixtureContainedDiscovered,
     fixture_has_hidden_discovered::FixtureHasHiddenDiscovered,
     fixture_hidden_items_discovered::FixtureHiddenItemsDiscovered, fixture_viewed::FixtureViewed,
