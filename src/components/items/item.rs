@@ -14,7 +14,7 @@ use crate::components::{
     tag::Tag,
 };
 
-use super::{descriptor::Descriptor, item_type::ItemType};
+use super::{consumable_effect::ConsumableEffect, descriptor::Descriptor, item_type::ItemType};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -36,6 +36,8 @@ pub struct Item {
     pub attack: Option<Attack>,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub defense: Option<Defense>,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub consumable_effect: Option<ConsumableEffect>,
 }
 
 impl Item {

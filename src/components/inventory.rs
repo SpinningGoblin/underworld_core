@@ -243,6 +243,7 @@ mod inventory_tests {
             material: None,
             defense: None,
             tags: vec![Tag::Blade],
+            consumable_effect: None,
         };
         let short_sword = Item {
             identifier: Identifier::default(),
@@ -252,6 +253,7 @@ mod inventory_tests {
             material: None,
             tags: vec![Tag::Blade],
             defense: None,
+            consumable_effect: None,
         };
         let inventory = Inventory {
             equipment: vec![
@@ -288,6 +290,7 @@ mod inventory_tests {
             material: None,
             tags: vec![Tag::Blade],
             defense: None,
+            consumable_effect: None,
         };
         let inventory = Inventory {
             equipment: vec![CharacterItem {
@@ -314,6 +317,7 @@ mod inventory_tests {
             material: None,
             tags: vec![Tag::Blade],
             defense: None,
+            consumable_effect: None,
         };
         let short_sword = Item {
             identifier: Identifier::default(),
@@ -323,6 +327,7 @@ mod inventory_tests {
             material: None,
             tags: vec![Tag::Blade],
             defense: None,
+            consumable_effect: None,
         };
         let inventory = Inventory {
             equipment: vec![
@@ -358,6 +363,7 @@ mod inventory_tests {
             defense: None,
             attack: None,
             tags: vec![Tag::Armour],
+            consumable_effect: None,
         };
 
         let inventory = Inventory {
@@ -385,6 +391,7 @@ mod inventory_tests {
             defense: None,
             attack: None,
             tags: vec![Tag::Armour],
+            consumable_effect: None,
         };
 
         let shackles = Item {
@@ -395,6 +402,7 @@ mod inventory_tests {
             defense: None,
             attack: None,
             tags: vec![Tag::Accessory],
+            consumable_effect: None,
         };
 
         let inventory = Inventory {

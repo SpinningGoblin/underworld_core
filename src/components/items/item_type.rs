@@ -43,6 +43,7 @@ pub enum ItemType {
     PlateBoots,
     PlateGauntlets,
     PlateHelmet,
+    Scroll,
     Shield,
     ShortSword,
     Shirt,
@@ -121,6 +122,7 @@ impl Tagged for ItemType {
             ItemType::BowlerHat => vec![Tag::Clothing],
             ItemType::Fedora => vec![Tag::Clothing],
             ItemType::TopHat => vec![Tag::Clothing],
+            ItemType::Scroll => vec![Tag::Consumable, Tag::Teachable],
         }
     }
 }
@@ -161,6 +163,7 @@ impl Display for ItemType {
             ItemType::BowlerHat => "bowler hat",
             ItemType::Fedora => "fedora",
             ItemType::TopHat => "top hat",
+            ItemType::Scroll => "scroll",
         };
 
         write!(f, "{}", text)

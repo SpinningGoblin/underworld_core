@@ -27,6 +27,8 @@ pub enum Material {
     Iron,
     Leather,
     Linen,
+    Paper,
+    Papyrus,
     Silk,
     Steel,
     Stone,
@@ -54,6 +56,8 @@ impl Display for Material {
             Material::Linen => write!(f, "linen"),
             Material::Silk => write!(f, "silk"),
             Material::Wool => write!(f, "wool"),
+            Material::Paper => write!(f, "paper"),
+            Material::Papyrus => write!(f, "papyrus"),
         }
     }
 }
@@ -74,6 +78,8 @@ impl Tagged for Material {
             Material::Linen => vec![Tag::Cloth],
             Material::Silk => vec![Tag::Cloth],
             Material::Wool => vec![Tag::Cloth],
+            Material::Paper => vec![Tag::Paper],
+            Material::Papyrus => vec![Tag::Paper],
         }
     }
 }

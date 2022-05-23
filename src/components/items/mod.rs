@@ -1,4 +1,5 @@
 pub mod character_item;
+pub mod consumable_effect;
 pub mod descriptor;
 pub mod fixture_item;
 pub mod item;

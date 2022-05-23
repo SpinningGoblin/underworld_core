@@ -26,14 +26,17 @@ pub enum Tag {
     Cloth,
     Clothing,
     Combat,
+    Consumable,
     Container,
     Damage,
     Defense,
     Equipped,
     Fixture,
     Instrument,
+    Teachable,
     Leather,
     Metal,
+    Paper,
     Rope,
     Shield,
     Stone,
@@ -42,11 +45,15 @@ pub enum Tag {
 }
 
 impl Tag {
+    pub fn is_consumable(&self) -> bool {
+        matches!(*self, Tag::Consumable | Tag::Teachable)
+    }
+
     pub fn is_weapon(&self) -> bool {
-        vec![Tag::Blade, Tag::Blunt, Tag::Whip].contains(self)
+        matches!(*self, Tag::Blade | Tag::Blunt | Tag::Whip)
     }
 
     pub fn is_wearable(&self) -> bool {
-        vec![Tag::Accessory, Tag::Armour, Tag::Clothing].contains(self)
+        matches!(*self, Tag::Accessory | Tag::Armour | Tag::Clothing)
     }
 }

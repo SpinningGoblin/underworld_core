@@ -36,7 +36,8 @@ pub fn type_inherently_multiple(item_type: &ItemType) -> bool {
         | ItemType::Spear
         | ItemType::TopHat
         | ItemType::BowlerHat
-        | ItemType::Fedora => false,
+        | ItemType::Fedora
+        | ItemType::Scroll => false,
         ItemType::Trousers
         | ItemType::Breastplate
         | ItemType::Boots

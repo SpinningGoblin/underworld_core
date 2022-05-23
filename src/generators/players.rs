@@ -1,3 +1,4 @@
+use chrono::Utc;
 use enum_iterator::IntoEnumIterator;
 use rand::{prelude::ThreadRng, Rng};
 use uuid::Uuid;
@@ -16,7 +17,9 @@ use crate::components::{
     player::PlayerCharacter,
     size::Size,
     species::Species,
-    spells::spell_memory::SpellMemory,
+    spells::{
+        learned_spell::LearnedSpell, spell::Spell, spell_memory::SpellMemory, spell_name::SpellName,
+    },
     tag::Tag,
 };
 
@@ -74,7 +77,18 @@ impl Generator<PlayerCharacter> for PlayerCharacterPrototype {
                         .collect(),
                 }),
                 current_effects: Effects::default(),
-                spell_memory: SpellMemory::default(),
+                spell_memory: SpellMemory {
+                    spells: vec![LearnedSpell {
+                        identifier: Identifier::just_id(),
+                        spell: Spell {
+                            name: SpellName::Phoenix,
+                            attack: None,
+                            defense: None,
+                            uses: 1,
+                        },
+                        learned_at: Utc::now(),
+                    }],
+                },
             },
             identifier: Identifier {
                 id: Uuid::new_v4(),
@@ -95,6 +109,7 @@ fn starter_wearables() -> Vec<CharacterItem> {
         defense: Some(Defense {
             damage_resistance: 1,
         }),
+        consumable_effect: None,
     };
 
     let shirt = Item {
@@ -107,6 +122,7 @@ fn starter_wearables() -> Vec<CharacterItem> {
         defense: Some(Defense {
             damage_resistance: 1,
         }),
+        consumable_effect: None,
     };
 
     let boots = Item {
@@ -119,6 +135,7 @@ fn starter_wearables() -> Vec<CharacterItem> {
         defense: Some(Defense {
             damage_resistance: 1,
         }),
+        consumable_effect: None,
     };
 
     vec![
@@ -186,6 +203,7 @@ fn starter_weapon(rng: &mut ThreadRng) -> CharacterItem {
             modifier: -1,
         }),
         defense: None,
+        consumable_effect: None,
     };
 
     CharacterItem {

@@ -117,5 +117,6 @@ pub fn location_tags_for_item_type(item_type: &ItemType) -> Vec<LocationTag> {
         ItemType::Halberd => vec![LocationTag::Hand, LocationTag::Back],
         ItemType::Pike => vec![LocationTag::Hand, LocationTag::Back],
         ItemType::Spear => vec![LocationTag::Hand, LocationTag::Back],
+        ItemType::Scroll => vec![LocationTag::Packed, LocationTag::Pockets],
     }
 }
