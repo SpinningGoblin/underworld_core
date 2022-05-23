@@ -1,7 +1,7 @@
 use std::error::Error;
 
 use crate::{
-    actions::cast_spell_on_npc::CastSpellOnNpc,
+    actions::CastSpellOnNpc,
     components::{games::game_state::GameState, player::PlayerCharacter},
     errors::SpellNotFoundError,
     events::event::Event,

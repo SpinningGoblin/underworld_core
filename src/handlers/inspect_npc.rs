@@ -1,7 +1,7 @@
 use std::error::Error;
 
 use crate::{
-    actions::inspect_npc::InspectNpc,
+    actions::InspectNpc,
     components::{games::game_state::GameState, player::PlayerCharacter},
     errors::NpcNotFoundError,
     events::{

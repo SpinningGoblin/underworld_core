@@ -1,7 +1,7 @@
 use std::error::Error;
 
 use crate::{
-    actions::cast_spell_on_player::CastSpellOnPlayer,
+    actions::CastSpellOnPlayer,
     components::{
         damage::{Attack, Defense},
         player::PlayerCharacter,
@@ -60,9 +60,7 @@ pub fn handle(
         }
     }
 
-    events.push(Event::PlayerSpellUsed(PlayerSpellUsed {
-        spell_id,
-    }));
+    events.push(Event::PlayerSpellUsed(PlayerSpellUsed { spell_id }));
 
     if learned_spell.spell.uses - 1 == 0 {
         events.push(Event::PlayerSpellForgotten(PlayerSpellForgotten {

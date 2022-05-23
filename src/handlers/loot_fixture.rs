@@ -3,7 +3,7 @@ use std::error::Error;
 use uuid::Uuid;
 
 use crate::{
-    actions::loot_fixture::LootFixture,
+    actions::LootFixture,
     components::games::game_state::GameState,
     errors::FixtureNotFoundError,
     events::{Event, ItemTakenFromFixture},

@@ -1,7 +1,7 @@
 use std::error::Error;
 
 use crate::{
-    actions::exit_room::ExitRoom,
+    actions::ExitRoom,
     components::games::game_state::GameState,
     errors::ExitNotFoundError,
     events::{Event, RoomExited, RoomFirstSeen, RoomGenerated},

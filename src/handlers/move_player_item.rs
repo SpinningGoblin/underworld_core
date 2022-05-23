@@ -1,7 +1,7 @@
 use std::error::Error;
 
 use crate::{
-    actions::move_player_item::MovePlayerItem,
+    actions::MovePlayerItem,
     components::player::PlayerCharacter,
     errors::{ItemNotFoundError, TooManyWeaponsEquippedError},
     events::{Event, PlayerItemMoved},

@@ -1,7 +1,7 @@
 use std::error::Error;
 
 use crate::{
-    actions::attack_npc::AttackNpc,
+    actions::AttackNpc,
     components::{games::game_state::GameState, player::PlayerCharacter},
     errors::NpcNotFoundError,
     events::{DeadNpcBeaten, Event},

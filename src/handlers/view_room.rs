@@ -3,7 +3,7 @@ use std::{collections::HashMap, error::Error};
 use uuid::Uuid;
 
 use crate::{
-    actions::look_at_current_room::LookAtCurrentRoom,
+    actions::LookAtCurrentRoom,
     components::{
         character::CharacterViewArgs, fixtures::fixture::FixtureViewArgs,
         games::game_state::GameState, non_player::NonPlayerViewArgs,

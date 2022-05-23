@@ -1,7 +1,7 @@
 use std::error::Error;
 
 use crate::{
-    actions::look_at_fixture::LookAtFixture,
+    actions::LookAtFixture,
     components::{fixtures::fixture::FixtureViewArgs, games::game_state::GameState},
     errors::FixtureNotFoundError,
     events::{Event, FixtureViewed},
