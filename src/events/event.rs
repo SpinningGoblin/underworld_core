@@ -8,27 +8,7 @@ use crate::components::{
     games::game_state::GameState,
     items::{character_item::CharacterItem, location_tag::LocationTag},
     player::PlayerCharacter,
-};
-
-pub use super::{
-    dead_npc_beaten::DeadNpcBeaten, fixture_can_be_opened_discovered::FixtureCanBeOpenedDiscovered,
-    fixture_contained_discovered::FixtureContainedDiscovered,
-    fixture_has_hidden_discovered::FixtureHasHiddenDiscovered,
-    fixture_hidden_items_discovered::FixtureHiddenItemsDiscovered, fixture_viewed::FixtureViewed,
-    item_taken_from_fixture::ItemTakenFromFixture, item_taken_from_npc::ItemTakenFromNpc,
-    npc_health_discovered::NpcHealthDiscovered, npc_hidden_discovered::NpcHiddenDiscovered,
-    npc_hit::NpcHit, npc_killed::NpcKilled, npc_missed::NpcMissed,
-    npc_name_discovered::NpcNameDiscovered, npc_packed_discovered::NpcPackedDiscovered,
-    npc_viewed::NpcViewed, npc_weapon_readied::NpcWeaponReadied,
-    player_gains_resurrection_aura::PlayerGainsResurrectionAura,
-    player_gains_retribution_aura::PlayerGainsRetributionAura,
-    player_gains_shield_aura::PlayerGainsShieldAura, player_healed::PlayerHealed,
-    player_hit::PlayerHit, player_item_moved::PlayerItemMoved, player_killed::PlayerKilled,
-    player_missed::PlayerMissed, player_resurrected::PlayerResurrected,
-    player_retribution_aura_dissipated::PlayerRetributionAuraDissipated,
-    player_spell_forgotten::PlayerSpellForgotten, player_spell_used::PlayerSpellUsed,
-    room_exited::RoomExited, room_first_seen::RoomFirstSeen, room_generated::RoomGenerated,
-    room_viewed::RoomViewed,
+    spells::learned_spell::LearnedSpell,
 };
 
 #[derive(Clone, Debug)]
@@ -39,39 +19,41 @@ pub use super::{
     serde(rename_all = "snake_case", tag = "event_type")
 )]
 pub enum Event {
-    DeadNpcBeaten(DeadNpcBeaten),
-    FixtureCanBeOpenedDiscovered(FixtureCanBeOpenedDiscovered),
-    FixtureContainedDiscovered(FixtureContainedDiscovered),
-    FixtureHasHiddenDiscovered(FixtureHasHiddenDiscovered),
-    FixtureHiddenItemsDiscovered(FixtureHiddenItemsDiscovered),
-    FixtureViewed(FixtureViewed),
-    ItemTakenFromFixture(ItemTakenFromFixture),
-    ItemTakenFromNpc(ItemTakenFromNpc),
-    NpcHealthDiscovered(NpcHealthDiscovered),
-    NpcHiddenDiscovered(NpcHiddenDiscovered),
-    NpcHit(NpcHit),
-    NpcKilled(NpcKilled),
-    NpcMissed(NpcMissed),
-    NpcNameDiscovered(NpcNameDiscovered),
-    NpcPackedDiscovered(NpcPackedDiscovered),
-    NpcViewed(NpcViewed),
-    NpcWeaponReadied(NpcWeaponReadied),
-    PlayerGainsResurrectionAura(PlayerGainsResurrectionAura),
-    PlayerGainsRetributionAura(PlayerGainsRetributionAura),
-    PlayerGainsShieldAura(PlayerGainsShieldAura),
-    PlayerHealed(PlayerHealed),
-    PlayerHit(PlayerHit),
-    PlayerItemMoved(PlayerItemMoved),
-    PlayerKilled(PlayerKilled),
-    PlayerMissed(PlayerMissed),
-    PlayerResurrected(PlayerResurrected),
-    PlayerRetributionAuraDissipated(PlayerRetributionAuraDissipated),
-    PlayerSpellForgotten(PlayerSpellForgotten),
-    PlayerSpellUsed(PlayerSpellUsed),
-    RoomExited(RoomExited),
-    RoomGenerated(RoomGenerated),
-    RoomFirstSeen(RoomFirstSeen),
-    RoomViewed(RoomViewed),
+    DeadNpcBeaten(super::DeadNpcBeaten),
+    FixtureCanBeOpenedDiscovered(super::FixtureCanBeOpenedDiscovered),
+    FixtureContainedDiscovered(super::FixtureContainedDiscovered),
+    FixtureHasHiddenDiscovered(super::FixtureHasHiddenDiscovered),
+    FixtureHiddenItemsDiscovered(super::FixtureHiddenItemsDiscovered),
+    FixtureViewed(super::FixtureViewed),
+    ItemTakenFromFixture(super::ItemTakenFromFixture),
+    ItemTakenFromNpc(super::ItemTakenFromNpc),
+    NpcHealthDiscovered(super::NpcHealthDiscovered),
+    NpcHiddenDiscovered(super::NpcHiddenDiscovered),
+    NpcHit(super::NpcHit),
+    NpcKilled(super::NpcKilled),
+    NpcMissed(super::NpcMissed),
+    NpcNameDiscovered(super::NpcNameDiscovered),
+    NpcPackedDiscovered(super::NpcPackedDiscovered),
+    NpcViewed(super::NpcViewed),
+    NpcWeaponReadied(super::NpcWeaponReadied),
+    PlayerGainsResurrectionAura(super::PlayerGainsResurrectionAura),
+    PlayerGainsRetributionAura(super::PlayerGainsRetributionAura),
+    PlayerGainsShieldAura(super::PlayerGainsShieldAura),
+    PlayerHealed(super::PlayerHealed),
+    PlayerHit(super::PlayerHit),
+    PlayerItemMoved(super::PlayerItemMoved),
+    PlayerItemRemoved(super::PlayerItemRemoved),
+    PlayerKilled(super::PlayerKilled),
+    PlayerMissed(super::PlayerMissed),
+    PlayerResurrected(super::PlayerResurrected),
+    PlayerRetributionAuraDissipated(super::PlayerRetributionAuraDissipated),
+    PlayerSpellForgotten(super::PlayerSpellForgotten),
+    PlayerSpellLearned(super::PlayerSpellLearned),
+    PlayerSpellUsed(super::PlayerSpellUsed),
+    RoomExited(super::RoomExited),
+    RoomGenerated(super::RoomGenerated),
+    RoomFirstSeen(super::RoomFirstSeen),
+    RoomViewed(super::RoomViewed),
 }
 
 pub fn apply_events(
@@ -207,6 +189,18 @@ pub fn apply_events(
                 {
                     learned_spell.spell.uses -= 1;
                 }
+            }
+            Event::PlayerItemRemoved(player_item_removed) => {
+                new_player
+                    .character
+                    .remove_item(&player_item_removed.item_id);
+            }
+            Event::PlayerSpellLearned(player_spell_learned) => {
+                new_player.character.spell_memory.add_spell(LearnedSpell {
+                    identifier: player_spell_learned.spell_identifier.clone(),
+                    spell: player_spell_learned.spell.clone(),
+                    learned_at: player_spell_learned.learned_at,
+                });
             }
             Event::NpcMissed(_)
             | Event::DeadNpcBeaten(_)

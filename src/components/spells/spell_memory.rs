@@ -25,6 +25,10 @@ impl SpellMemory {
             .iter()
             .find(|learned_spell| learned_spell.identifier.id.eq(spell_id))
     }
+
+    pub fn add_spell(&mut self, learned_spell: LearnedSpell) {
+        self.spells.push(learned_spell);
+    }
 }
 
 #[derive(Clone, Debug)]
