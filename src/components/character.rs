@@ -53,11 +53,36 @@ impl Character {
         self.spell_memory.find_spell(spell_id)
     }
 
+    pub fn find_spell_mut(&mut self, spell_id: &Uuid) -> Option<&mut LearnedSpell> {
+        self.spell_memory
+            .spells
+            .iter_mut()
+            .find(|spell| spell.identifier.id.eq(spell_id))
+    }
+
     pub fn remove_item(&mut self, item_id: &Uuid) -> Option<CharacterItem> {
         if let Some(inventory) = self.inventory.as_mut() {
             inventory.remove_item(item_id)
         } else {
             None
+        }
+    }
+
+    pub fn forget_spell(&mut self, spell_id: &Uuid) {
+        if let Some(index) =
+            self.spell_memory
+                .spells
+                .iter()
+                .enumerate()
+                .find_map(|(i, learned_spell)| {
+                    if learned_spell.identifier.id.eq(spell_id) {
+                        Some(i)
+                    } else {
+                        None
+                    }
+                })
+        {
+            self.spell_memory.spells.remove(index);
         }
     }
 
