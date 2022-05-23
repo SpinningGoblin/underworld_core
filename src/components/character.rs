@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use super::{
-    effects::Effects,
+    effects::{Effects, EffectsView},
     inventory::{Inventory, InventoryView},
     items::character_item::CharacterItem,
     life_modifier::LifeModifier,
@@ -213,6 +213,9 @@ pub struct CharacterView {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub inventory: Option<InventoryView>,
     pub inventory_known: bool,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub current_effects: Option<EffectsView>,
+    pub current_effects_known: bool,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub spell_memory: Option<SpellMemoryView>,
     pub spell_memory_known: bool,
