@@ -61,7 +61,7 @@ pub fn handle(
     }
 
     events.push(Event::PlayerSpellUsed(PlayerSpellUsed {
-        spell_id: spell_id.clone(),
+        spell_id,
     }));
 
     if learned_spell.spell.uses - 1 == 0 {
