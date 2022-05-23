@@ -10,7 +10,7 @@ use crate::components::{
     player::PlayerCharacter,
 };
 
-use super::{
+pub use super::{
     dead_npc_beaten::DeadNpcBeaten, fixture_can_be_opened_discovered::FixtureCanBeOpenedDiscovered,
     fixture_contained_discovered::FixtureContainedDiscovered,
     fixture_has_hidden_discovered::FixtureHasHiddenDiscovered,
@@ -25,8 +25,10 @@ use super::{
     player_gains_shield_aura::PlayerGainsShieldAura, player_healed::PlayerHealed,
     player_hit::PlayerHit, player_item_moved::PlayerItemMoved, player_killed::PlayerKilled,
     player_missed::PlayerMissed, player_resurrected::PlayerResurrected,
-    player_retribution_aura_dissipated::PlayerRetributionAuraDissipated, room_exited::RoomExited,
-    room_first_seen::RoomFirstSeen, room_generated::RoomGenerated, room_viewed::RoomViewed,
+    player_retribution_aura_dissipated::PlayerRetributionAuraDissipated,
+    player_spell_forgotten::PlayerSpellForgotten, player_spell_used::PlayerSpellUsed,
+    room_exited::RoomExited, room_first_seen::RoomFirstSeen, room_generated::RoomGenerated,
+    room_viewed::RoomViewed,
 };
 
 #[derive(Clone, Debug)]
@@ -64,6 +66,8 @@ pub enum Event {
     PlayerMissed(PlayerMissed),
     PlayerResurrected(PlayerResurrected),
     PlayerRetributionAuraDissipated(PlayerRetributionAuraDissipated),
+    PlayerSpellForgotten(PlayerSpellForgotten),
+    PlayerSpellUsed(PlayerSpellUsed),
     RoomExited(RoomExited),
     RoomGenerated(RoomGenerated),
     RoomFirstSeen(RoomFirstSeen),
@@ -190,6 +194,19 @@ pub fn apply_events(
             }
             Event::PlayerRetributionAuraDissipated(_) => {
                 new_player.character.current_effects.retribution_aura = None;
+            }
+            Event::PlayerSpellForgotten(player_spell_forgotten) => {
+                new_player
+                    .character
+                    .forget_spell(&player_spell_forgotten.spell_id);
+            }
+            Event::PlayerSpellUsed(player_spell_used) => {
+                if let Some(learned_spell) = new_player
+                    .character
+                    .find_spell_mut(&player_spell_used.spell_id)
+                {
+                    learned_spell.spell.uses -= 1;
+                }
             }
             Event::NpcMissed(_)
             | Event::DeadNpcBeaten(_)

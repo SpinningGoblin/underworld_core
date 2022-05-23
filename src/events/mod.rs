@@ -26,6 +26,8 @@ pub mod player_killed;
 pub mod player_missed;
 pub mod player_resurrected;
 pub mod player_retribution_aura_dissipated;
+pub mod player_spell_forgotten;
+pub mod player_spell_used;
 pub mod room_exited;
 pub mod room_first_seen;
 pub mod room_generated;

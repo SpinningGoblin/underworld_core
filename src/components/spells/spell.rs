@@ -22,7 +22,7 @@ pub struct Spell {
     pub attack: Option<Attack>,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub defense: Option<Defense>,
-    pub single_use: bool,
+    pub uses: i32,
 }
 
 impl Spell {
@@ -50,6 +50,6 @@ pub struct SpellView {
     pub knows_attack: bool,
     pub defense: Option<Defense>,
     pub knows_defense: bool,
-    pub single_use: bool,
-    pub knows_single_use: bool,
+    pub uses: i32,
+    pub knows_uses: bool,
 }
