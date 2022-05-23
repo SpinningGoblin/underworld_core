@@ -3,7 +3,7 @@ use std::error::Error;
 use crate::{
     actions::inspect_fixture::InspectFixture,
     components::{games::game_state::GameState, player::PlayerCharacter},
-    errors::fixture_not_found_error::FixtureNotFoundError,
+    errors::FixtureNotFoundError,
     events::{
         Event, FixtureCanBeOpenedDiscovered, FixtureContainedDiscovered,
         FixtureHasHiddenDiscovered, FixtureHiddenItemsDiscovered,

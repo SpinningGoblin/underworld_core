@@ -3,7 +3,7 @@ use std::error::Error;
 use crate::{
     actions::look_at_npc::LookAtNpc,
     components::{character::CharacterViewArgs, games::game_state::GameState},
-    errors::npc_not_found_error::NpcNotFoundError,
+    errors::NpcNotFoundError,
     events::{Event, NpcViewed},
     systems::view::non_player,
     utils::ids::parse_id,

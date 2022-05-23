@@ -3,8 +3,8 @@ use std::error::Error;
 use crate::{
     actions::attack_npc::AttackNpc,
     components::{games::game_state::GameState, player::PlayerCharacter},
-    errors::npc_not_found_error::NpcNotFoundError,
-    events::{Event, DeadNpcBeaten},
+    errors::NpcNotFoundError,
+    events::{DeadNpcBeaten, Event},
     utils::ids::parse_id,
 };
 

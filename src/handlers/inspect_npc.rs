@@ -3,7 +3,7 @@ use std::error::Error;
 use crate::{
     actions::inspect_npc::InspectNpc,
     components::{games::game_state::GameState, player::PlayerCharacter},
-    errors::npc_not_found_error::NpcNotFoundError,
+    errors::NpcNotFoundError,
     events::{
         Event, NpcHealthDiscovered, NpcHiddenDiscovered, NpcNameDiscovered, NpcPackedDiscovered,
     },

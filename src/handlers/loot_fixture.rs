@@ -5,7 +5,7 @@ use uuid::Uuid;
 use crate::{
     actions::loot_fixture::LootFixture,
     components::games::game_state::GameState,
-    errors::fixture_not_found_error::FixtureNotFoundError,
+    errors::FixtureNotFoundError,
     events::{Event, ItemTakenFromFixture},
     utils::ids::parse_id,
 };

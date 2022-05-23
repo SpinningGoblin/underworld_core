@@ -3,7 +3,7 @@ use std::error::Error;
 use crate::{
     actions::action::Action,
     components::{games::game_state::GameState, player::PlayerCharacter},
-    errors::player_is_dead_error::PlayerIsDeadError,
+    errors::PlayerIsDeadError,
     events::event::{apply_events, Event},
 };
 

@@ -3,7 +3,7 @@ use std::error::Error;
 use crate::{
     actions::loot_npc::LootNpc,
     components::{games::game_state::GameState, player::PlayerCharacter},
-    errors::{item_not_found_error::ItemNotFoundError, npc_not_found_error::NpcNotFoundError},
+    errors::{ItemNotFoundError, NpcNotFoundError},
     events::{Event, ItemTakenFromNpc},
     utils::ids::parse_id,
 };

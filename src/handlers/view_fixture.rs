@@ -3,7 +3,7 @@ use std::error::Error;
 use crate::{
     actions::look_at_fixture::LookAtFixture,
     components::{fixtures::fixture::FixtureViewArgs, games::game_state::GameState},
-    errors::fixture_not_found_error::FixtureNotFoundError,
+    errors::FixtureNotFoundError,
     events::{Event, FixtureViewed},
     systems::view::fixture,
     utils::ids::parse_id,

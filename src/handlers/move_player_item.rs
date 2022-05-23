@@ -3,10 +3,7 @@ use std::error::Error;
 use crate::{
     actions::move_player_item::MovePlayerItem,
     components::player::PlayerCharacter,
-    errors::{
-        item_not_found_error::ItemNotFoundError,
-        too_many_weapons_equipped_error::TooManyWeaponsEquippedError,
-    },
+    errors::{ItemNotFoundError, TooManyWeaponsEquippedError},
     events::{Event, PlayerItemMoved},
     utils::ids::parse_id,
 };
