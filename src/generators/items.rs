@@ -1,4 +1,3 @@
-use enum_iterator::IntoEnumIterator;
 use rand::Rng;
 use std::ops::RangeInclusive;
 
@@ -19,7 +18,7 @@ pub fn item_generator(item_type: &ItemType, is_equipped: bool) -> impl Generator
     ItemPrototype {
         item_type: item_type.clone(),
         num_descriptors: 1..=2,
-        materials: possible_materials(item_type),
+        materials: super::utils::materials::possible_materials(item_type),
         is_equipped,
     }
 }
@@ -52,6 +51,7 @@ impl Generator<Item> for ItemPrototype {
             material,
             attack,
             defense,
+            consumable_effect: None,
         }
     }
 }
@@ -158,109 +158,6 @@ impl ItemPrototype {
             | ItemType::LoinCloth
             | ItemType::Shackles => Some(1),
             _ => None,
-        }
-    }
-}
-
-fn possible_materials(item_type: &ItemType) -> Vec<Material> {
-    match *item_type {
-        ItemType::Breastplate => vec![Material::Iron, Material::Leather, Material::Steel],
-        ItemType::Mask => vec![Material::Bone, Material::Iron],
-        ItemType::Cloak => {
-            vec![Material::Linen, Material::Hide, Material::Wool]
-        }
-        ItemType::Shirt => vec![
-            Material::Wool,
-            Material::Linen,
-            Material::Cotton,
-            Material::Silk,
-        ],
-        ItemType::Trousers => vec![
-            Material::Hide,
-            Material::Leather,
-            Material::Wool,
-            Material::Linen,
-        ],
-        ItemType::Crown => {
-            vec![Material::Bone, Material::Gold, Material::Stone]
-        }
-        ItemType::Boots => vec![
-            Material::Hide,
-            Material::Iron,
-            Material::Leather,
-            Material::Steel,
-        ],
-        ItemType::Gloves | ItemType::Vest => vec![Material::Fur, Material::Hide, Material::Leather],
-        ItemType::LoinCloth => vec![
-            Material::Hide,
-            Material::Wool,
-            Material::Leather,
-            Material::Silk,
-            Material::Linen,
-            Material::Cotton,
-        ],
-        ItemType::PlateBoots | ItemType::PlateGauntlets | ItemType::PlateHelmet => {
-            vec![Material::Iron, Material::Steel]
-        }
-        ItemType::Shackles => vec![Material::Iron, Material::Leather, Material::Steel],
-        ItemType::Buckler => {
-            vec![Material::Hide, Material::Iron, Material::Steel]
-        }
-        ItemType::Club => vec![Material::Bone, Material::Stone, Material::Wooden],
-        ItemType::Dagger => vec![
-            Material::Bone,
-            Material::Gold,
-            Material::Iron,
-            Material::Steel,
-            Material::Stone,
-        ],
-        ItemType::Dirk | ItemType::GreatSword => vec![
-            Material::Bone,
-            Material::Iron,
-            Material::Steel,
-            Material::Stone,
-        ],
-        ItemType::Hammer | ItemType::LongSword => {
-            vec![Material::Bone, Material::Iron, Material::Steel]
-        }
-        ItemType::Mace => vec![Material::Iron, Material::Steel],
-        ItemType::Morningstar => vec![Material::Iron, Material::Steel],
-        ItemType::Shield => vec![
-            Material::Hide,
-            Material::Iron,
-            Material::Leather,
-            Material::Steel,
-            Material::Wooden,
-        ],
-        ItemType::ShortSword => vec![Material::Iron, Material::Steel],
-        ItemType::Whip => vec![Material::Leather],
-        ItemType::Helm => vec![
-            Material::Iron,
-            Material::Hide,
-            Material::Steel,
-            Material::Leather,
-            Material::Fur,
-        ],
-        ItemType::Halberd => vec![
-            Material::Bone,
-            Material::Wooden,
-            Material::Steel,
-            Material::Iron,
-        ],
-        ItemType::Pike => vec![
-            Material::Bone,
-            Material::Wooden,
-            Material::Steel,
-            Material::Iron,
-        ],
-        ItemType::Spear => vec![
-            Material::Bone,
-            Material::Wooden,
-            Material::Steel,
-            Material::Iron,
-        ],
-        ItemType::BowlerHat | ItemType::Fedora | ItemType::TopHat => {
-            Material::into_enum_iter().collect()
         }
     }
 }

@@ -1,10 +1,21 @@
-use rand::Rng;
+use enum_iterator::IntoEnumIterator;
+use rand::{prelude::ThreadRng, Rng};
 use std::ops::RangeInclusive;
 
 use crate::{
     components::{
+        damage::{Attack, Defense},
+        identifier::Identifier,
         inventory::Inventory,
-        items::{character_item::CharacterItem, item_type::ItemType, location_tag::LocationTag},
+        items::{
+            character_item::CharacterItem,
+            consumable_effect::{ConsumableEffect, ConsumableEffectName, LearnSpellEffect},
+            item::Item,
+            item_type::ItemType,
+            location_tag::LocationTag,
+        },
+        spells::spell_name::SpellName,
+        tag::Tag,
     },
     utils::rolls::roll_d100,
 };
@@ -14,6 +25,8 @@ use super::{
     items::item_generator,
     utils::item_types::{type_inherently_multiple, type_is_for_weapon, type_is_for_wearable},
 };
+
+const GENERATE_SCROLL_CHANCE: i32 = 25;
 
 pub struct InventoryPrototype {
     pub item_types: Vec<ItemType>,
@@ -26,8 +39,7 @@ pub struct InventoryPrototype {
 }
 
 impl InventoryPrototype {
-    fn equipped_weapons(&self) -> Vec<CharacterItem> {
-        let mut rng = rand::thread_rng();
+    fn equipped_weapons(&self, rng: &mut ThreadRng) -> Vec<CharacterItem> {
         let count = rng.gen_range(self.num_equipped_weapons.clone());
 
         if count == 0 {
@@ -67,7 +79,7 @@ impl InventoryPrototype {
             let generator = item_generator(weapon_type, true);
             let weapon = generator.generate();
 
-            let hidden_roll = roll_d100(&mut rng, 1, 0);
+            let hidden_roll = roll_d100(rng, 1, 0);
             let multiple = type_inherently_multiple(weapon_type);
 
             equipped_weapons.push(CharacterItem {
@@ -82,8 +94,7 @@ impl InventoryPrototype {
         equipped_weapons
     }
 
-    fn equipped_wearables(&self) -> Vec<CharacterItem> {
-        let mut rng = rand::thread_rng();
+    fn equipped_wearables(&self, rng: &mut ThreadRng) -> Vec<CharacterItem> {
         let count = rng.gen_range(self.num_equipped_wearables.clone());
 
         if count == 0 {
@@ -123,7 +134,7 @@ impl InventoryPrototype {
             used_types.push(wearable_type.clone());
             let generator = item_generator(wearable_type, true);
             let wearable = generator.generate();
-            let hidden_roll = roll_d100(&mut rng, 1, 0);
+            let hidden_roll = roll_d100(rng, 1, 0);
             let multiple = type_inherently_multiple(wearable_type);
 
             equipped_wearables.push(CharacterItem {
@@ -137,17 +148,103 @@ impl InventoryPrototype {
 
         equipped_wearables
     }
+
+    fn spell_scrolls(&self, rng: &mut ThreadRng) -> Vec<CharacterItem> {
+        let spell_names: Vec<SpellName> = SpellName::into_enum_iter().collect();
+        let index = rng.gen_range(0..spell_names.len());
+        let spell_name = spell_names.get(index).unwrap();
+
+        let spell_uses: i32 = if spell_name == &SpellName::Phoenix {
+            1
+        } else {
+            rng.gen_range(1..=6)
+        };
+
+        let spell_attack = if matches!(
+            spell_name,
+            SpellName::RagingFireball | SpellName::ElectricBlast
+        ) {
+            Some(Attack {
+                num_rolls: 2,
+                modifier: 0,
+            })
+        } else if spell_name == &SpellName::Retribution {
+            Some(Attack {
+                num_rolls: 3,
+                modifier: -1,
+            })
+        } else if spell_name == &SpellName::QuickHeal {
+            Some(Attack {
+                num_rolls: 1,
+                modifier: 0,
+            })
+        } else if spell_name == &SpellName::Heal {
+            Some(Attack {
+                num_rolls: 2,
+                modifier: 0,
+            })
+        } else {
+            None
+        };
+
+        let spell_defense = if spell_name == &SpellName::TinyShield {
+            let damage_resistance = rng.gen_range(2..=10);
+            Some(Defense { damage_resistance })
+        } else {
+            None
+        };
+
+        let possible_materials = super::utils::materials::possible_materials(&ItemType::Scroll);
+        let material_index = rng.gen_range(0..possible_materials.len());
+        let material = possible_materials.get(material_index).cloned();
+
+        let item = Item {
+            identifier: Identifier::just_id(),
+            item_type: ItemType::Scroll,
+            tags: vec![Tag::Consumable, Tag::Teachable],
+            descriptors: Vec::new(),
+            material,
+            attack: None,
+            defense: None,
+            consumable_effect: Some(ConsumableEffect {
+                name: ConsumableEffectName::LearnSpell,
+                learn_spell_effect: Some(LearnSpellEffect {
+                    spell_name: spell_name.clone(),
+                    spell_attack,
+                    spell_defense,
+                    spell_uses,
+                }),
+            }),
+        };
+
+        vec![CharacterItem {
+            item,
+            is_hidden: false,
+            equipped_location: LocationTag::Packed,
+            is_multiple: false,
+            at_the_ready: false,
+        }]
+    }
 }
 
 impl Generator<Inventory> for InventoryPrototype {
     fn generate(&self) -> Inventory {
-        let equipped_weapons = self.equipped_weapons();
-        let equipped_wearables = self.equipped_wearables();
+        let mut rng = rand::thread_rng();
+
+        let equipped_weapons = self.equipped_weapons(&mut rng);
+        let equipped_wearables = self.equipped_wearables(&mut rng);
+
+        let spell_scrolls = if roll_d100(&mut rng, 1, 0) > GENERATE_SCROLL_CHANCE {
+            self.spell_scrolls(&mut rng)
+        } else {
+            Vec::new()
+        };
 
         Inventory {
             equipment: equipped_weapons
                 .into_iter()
                 .chain(equipped_wearables.into_iter())
+                .chain(spell_scrolls.into_iter())
                 .collect(),
         }
     }
@@ -189,5 +286,6 @@ fn item_type_is_for_tags(item_type: &ItemType, tag: &LocationTag) -> bool {
         ItemType::Mask => tag.eq(&LocationTag::Face),
         ItemType::Shackles => tag.eq(&LocationTag::Wrist) | tag.eq(&LocationTag::Ankle),
         ItemType::Trousers => tag.eq(&LocationTag::Leg),
+        ItemType::Scroll => tag.eq(&LocationTag::Packed) | tag.eq(&LocationTag::Pockets),
     }
 }
