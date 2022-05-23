@@ -1,4 +1,7 @@
-use crate::components::items::item::{Item, ItemView};
+use crate::components::items::{
+    consumable::ConsumableView,
+    item::{Item, ItemView},
+};
 
 pub fn view(item: &Item, sees_full_item: bool, knows_all: bool) -> ItemView {
     let (descriptors, descriptors_known) = if sees_full_item || knows_all {
@@ -25,6 +28,24 @@ pub fn view(item: &Item, sees_full_item: bool, knows_all: bool) -> ItemView {
         (None, false)
     };
 
+    let (consumable, knows_consumable) = if knows_all {
+        if let Some(c) = &item.consumable {
+            (
+                Some(ConsumableView {
+                    uses: c.uses,
+                    knows_uses: true,
+                    effect: c.effect.clone(),
+                    knows_effect: true,
+                }),
+                true,
+            )
+        } else {
+            (None, true)
+        }
+    } else {
+        (None, false)
+    };
+
     ItemView {
         identifier: super::identifier::view(&item.identifier, true),
         item_type: item.item_type.clone(),
@@ -37,5 +58,7 @@ pub fn view(item: &Item, sees_full_item: bool, knows_all: bool) -> ItemView {
         attack_known,
         defense,
         defense_known,
+        consumable,
+        knows_consumable,
     }
 }

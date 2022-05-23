@@ -14,7 +14,11 @@ use crate::components::{
     tag::Tag,
 };
 
-use super::{consumable::Consumable, descriptor::Descriptor, item_type::ItemType};
+use super::{
+    consumable::{Consumable, ConsumableView},
+    descriptor::Descriptor,
+    item_type::ItemType,
+};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -92,6 +96,9 @@ pub struct ItemView {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub defense: Option<Defense>,
     pub defense_known: bool,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub consumable: Option<ConsumableView>,
+    pub knows_consumable: bool,
 }
 
 impl ItemView {

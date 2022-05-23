@@ -14,8 +14,22 @@ use super::consumable_effect::ConsumableEffect;
     derive(Deserialize, Serialize),
     serde(rename_all = "snake_case")
 )]
-#[cfg_attr(feature = "openapi", derive(Object), oai(rename_all = "snake_case"))]
 pub struct Consumable {
     pub uses: i32,
     pub effect: ConsumableEffect,
+}
+
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(
+    feature = "serialization",
+    derive(Deserialize, Serialize),
+    serde(rename_all = "snake_case")
+)]
+#[cfg_attr(feature = "openapi", derive(Object), oai(rename = "Consumable"))]
+pub struct ConsumableView {
+    pub uses: i32,
+    pub knows_uses: bool,
+    pub effect: ConsumableEffect,
+    pub knows_effect: bool,
 }
