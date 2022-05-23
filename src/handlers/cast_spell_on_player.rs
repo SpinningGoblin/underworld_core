@@ -8,11 +8,7 @@ use crate::{
         spells::spell_name::SpellName,
     },
     errors::spell_not_found_error::SpellNotFoundError,
-    events::event::{
-        Event, PlayerGainsResurrectionAura, PlayerGainsRetributionAura, PlayerGainsShieldAura,
-        PlayerHealed, PlayerHit, PlayerSpellForgotten, PlayerSpellUsed,
-    },
-    utils::ids::parse_id,
+    utils::ids::parse_id, events::{Event, PlayerHit, PlayerHealed, PlayerGainsResurrectionAura, PlayerGainsRetributionAura, PlayerGainsShieldAura, PlayerSpellUsed, PlayerSpellForgotten},
 };
 
 pub fn handle(

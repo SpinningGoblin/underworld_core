@@ -4,7 +4,7 @@ use crate::{
     actions::exit_room::ExitRoom,
     components::games::game_state::GameState,
     errors::exit_not_found_error::ExitNotFoundError,
-    events::event::{Event, RoomExited, RoomFirstSeen, RoomGenerated},
+    events::{Event, RoomExited, RoomFirstSeen, RoomGenerated},
     generators::{generator::Generator, rooms::random_room_generator},
     utils::ids::parse_id,
 };

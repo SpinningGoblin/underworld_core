@@ -4,7 +4,7 @@ use crate::{
     actions::loot_npc::LootNpc,
     components::{games::game_state::GameState, player::PlayerCharacter},
     errors::{item_not_found_error::ItemNotFoundError, npc_not_found_error::NpcNotFoundError},
-    events::event::{Event, ItemTakenFromNpc},
+    events::{Event, ItemTakenFromNpc},
     utils::ids::parse_id,
 };
 

@@ -7,7 +7,7 @@ use crate::{
         item_not_found_error::ItemNotFoundError,
         too_many_weapons_equipped_error::TooManyWeaponsEquippedError,
     },
-    events::event::{Event, PlayerItemMoved},
+    events::{Event, PlayerItemMoved},
     utils::ids::parse_id,
 };
 
