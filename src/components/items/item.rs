@@ -55,6 +55,10 @@ impl Item {
     pub fn is_wearable(&self) -> bool {
         self.tags.iter().any(|tag| tag.is_wearable())
     }
+
+    pub fn is_consumable(&self) -> bool {
+        self.tags.iter().any(|tag| tag.is_consumable())
+    }
 }
 
 #[derive(Clone, Debug)]

@@ -47,6 +47,10 @@ impl CharacterItem {
     pub fn is_wearable(&self) -> bool {
         self.item.is_wearable()
     }
+
+    pub fn is_consumable(&self) -> bool {
+        self.item.is_consumable()
+    }
 }
 
 #[derive(Clone, Debug)]
