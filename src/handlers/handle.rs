@@ -49,6 +49,9 @@ pub fn handle_action(
         Action::CastSpellOnPlayer(cast_spell_on_player) => {
             super::cast_spell_on_player::handle(cast_spell_on_player, player)?
         }
+        Action::UseItemOnPlayer(use_item_on_player) => {
+            super::use_item_on_player::handle(use_item_on_player, player)?
+        }
     };
 
     let (new_state, new_player) = apply_events(&events, state, player);

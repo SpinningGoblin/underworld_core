@@ -18,5 +18,5 @@ pub use {
     cast_spell_on_player::CastSpellOnPlayer, exit_room::ExitRoom, inspect_fixture::InspectFixture,
     inspect_npc::InspectNpc, look_at_current_room::LookAtCurrentRoom,
     look_at_fixture::LookAtFixture, look_at_npc::LookAtNpc, loot_fixture::LootFixture,
-    loot_npc::LootNpc, move_player_item::MovePlayerItem,
+    loot_npc::LootNpc, move_player_item::MovePlayerItem, use_item_on_player::UseItemOnPlayer,
 };

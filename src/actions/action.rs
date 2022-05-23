@@ -23,4 +23,5 @@ pub enum Action {
     LootNpc(super::LootNpc),
     MovePlayerItem(super::MovePlayerItem),
     ExitRoom(super::ExitRoom),
+    UseItemOnPlayer(super::UseItemOnPlayer),
 }
