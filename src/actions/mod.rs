@@ -11,3 +11,4 @@ pub mod look_at_npc;
 pub mod loot_fixture;
 pub mod loot_npc;
 pub mod move_player_item;
+pub mod use_item_on_player;
