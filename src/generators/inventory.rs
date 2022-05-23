@@ -238,7 +238,7 @@ impl Generator<Inventory> for InventoryPrototype {
         let equipped_weapons = self.equipped_weapons(&mut rng);
         let equipped_wearables = self.equipped_wearables(&mut rng);
 
-        let spell_scrolls = if roll_d100(&mut rng, 1, 0) > GENERATE_SCROLL_CHANCE {
+        let spell_scrolls = if roll_d100(&mut rng, 1, 0) <= GENERATE_SCROLL_CHANCE {
             self.spell_scrolls(&mut rng)
         } else {
             Vec::new()
