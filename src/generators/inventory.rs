@@ -196,8 +196,12 @@ impl InventoryPrototype {
         };
 
         let possible_materials = super::utils::materials::possible_materials(&ItemType::Scroll);
-        let material_index = rng.gen_range(0..possible_materials.len());
-        let material = possible_materials.get(material_index).cloned();
+        let material = if possible_materials.is_empty() {
+            None
+        } else {
+            let material_index = rng.gen_range(0..possible_materials.len());
+            possible_materials.get(material_index).cloned()
+        };
 
         let item = Item {
             identifier: Identifier::just_id(),
