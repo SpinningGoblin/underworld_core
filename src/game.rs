@@ -6,8 +6,12 @@ use crate::{
         inspect_fixture::InspectFixture, inspect_npc::InspectNpc,
         look_at_current_room::LookAtCurrentRoom, look_at_fixture::LookAtFixture,
         look_at_npc::LookAtNpc, loot_npc::LootNpc, CastSpellOnNpc, CastSpellOnPlayer, LootFixture,
+        UseItemOnPlayer,
     },
-    components::{games::game_state::GameState, player::PlayerCharacter},
+    components::{
+        games::game_state::GameState, items::consumable_effect::ConsumableEffectName,
+        player::PlayerCharacter,
+    },
     events::event::Event,
     handlers::handle::HandledAction,
 };
@@ -118,14 +122,13 @@ impl Game {
                         }));
                     }
                 } else {
-                    let item_ids = match &npc.character.inventory {
-                        Some(it) => it
-                            .equipment
-                            .iter()
-                            .map(|character_item| character_item.item.identifier.id.to_string())
-                            .collect(),
-                        None => Vec::new(),
-                    };
+                    let item_ids = npc
+                        .character
+                        .inventory
+                        .equipment
+                        .iter()
+                        .map(|character_item| character_item.item.identifier.id.to_string())
+                        .collect();
 
                     actions.push(Action::LootNpc(LootNpc {
                         npc_id: npc.identifier.id.to_string(),
@@ -154,12 +157,30 @@ impl Game {
                 })
             });
 
+        let item_actions =
+            self.player
+                .character
+                .inventory
+                .equipment
+                .iter()
+                .flat_map(|character_item| match &character_item.item.consumable {
+                    Some(consumable) => match &consumable.effect.name {
+                        ConsumableEffectName::LearnSpell => {
+                            vec![Action::UseItemOnPlayer(UseItemOnPlayer {
+                                item_id: character_item.item.identifier.id.to_string(),
+                            })]
+                        }
+                    },
+                    None => Vec::new(),
+                });
+
         room_view_actions
             .into_iter()
             .chain(npc_actions)
             .chain(exit_actions)
             .chain(fixture_actions)
             .chain(spell_actions)
+            .chain(item_actions)
             .collect()
     }
 }
