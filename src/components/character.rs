@@ -28,7 +28,7 @@ pub struct Character {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub life_modifier: Option<LifeModifier>,
     #[cfg_attr(feature = "serialization", serde(default))]
-    pub inventory: Option<Inventory>,
+    pub inventory: Inventory,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub current_effects: Effects,
     #[cfg_attr(feature = "serialization", serde(default))]
@@ -45,11 +45,7 @@ impl Character {
     }
 
     pub fn find_item(&self, item_id: &Uuid) -> Option<CharacterItem> {
-        if let Some(inv) = &self.inventory {
-            inv.find_item(item_id)
-        } else {
-            None
-        }
+        self.inventory.find_item(item_id)
     }
 
     pub fn find_spell(&self, spell_id: &Uuid) -> Option<&LearnedSpell> {
@@ -64,11 +60,7 @@ impl Character {
     }
 
     pub fn remove_item(&mut self, item_id: &Uuid) -> Option<CharacterItem> {
-        if let Some(inventory) = self.inventory.as_mut() {
-            inventory.remove_item(item_id)
-        } else {
-            None
-        }
+        self.inventory.remove_item(item_id)
     }
 
     pub fn forget_spell(&mut self, spell_id: &Uuid) {
@@ -90,9 +82,7 @@ impl Character {
     }
 
     pub fn add_item(&mut self, character_item: CharacterItem) {
-        if let Some(inventory) = self.inventory.as_mut() {
-            inventory.add_item(character_item)
-        }
+        self.inventory.add_item(character_item)
     }
 
     pub fn get_current_health(&self) -> Option<i32> {
@@ -124,77 +114,56 @@ impl Character {
     }
 
     pub fn no_weapons_equipped(&self) -> bool {
-        match &self.inventory {
-            Some(inv) => inv.equipped_weapons().is_empty(),
-            None => true,
-        }
+        self.inventory.equipped_weapons().is_empty()
     }
 
     pub fn no_weapons_readied(&self) -> bool {
-        match &self.inventory {
-            Some(inv) => inv.readied_weapons().is_empty(),
-            None => true,
-        }
+        self.inventory.readied_weapons().is_empty()
     }
 
     pub fn count_weapons_at_ready(&self) -> usize {
-        match &self.inventory {
-            Some(inv) => inv.count_weapons_at_ready(),
-            None => 0,
-        }
+        self.inventory.count_weapons_at_ready()
     }
 
     pub fn strongest_non_readied_weapon(&self) -> Option<&CharacterItem> {
-        match &self.inventory {
-            Some(inv) => inv.strongest_non_readied_weapon(),
-            None => None,
-        }
+        self.inventory.strongest_non_readied_weapon()
     }
 
     pub fn strongest_unequipped_weapon(&self) -> Option<&CharacterItem> {
-        match &self.inventory {
-            Some(inv) => inv.strongest_unequipped_weapon(),
-            None => None,
-        }
+        self.inventory.strongest_unequipped_weapon()
     }
 
     pub fn attack(&self) -> i32 {
         let mut rng = rand::thread_rng();
 
-        match &self.inventory {
-            Some(inventory) => inventory
-                .equipment
-                .iter()
-                .filter(|character_item| character_item.at_the_ready)
-                .map(|character_item| {
-                    character_item
-                        .item
-                        .attack
-                        .as_ref()
-                        .map(|attack| attack.attack_roll(&mut rng))
-                        .unwrap_or_default()
-                })
-                .sum(),
-            None => 0,
-        }
+        self.inventory
+            .equipment
+            .iter()
+            .filter(|character_item| character_item.at_the_ready)
+            .map(|character_item| {
+                character_item
+                    .item
+                    .attack
+                    .as_ref()
+                    .map(|attack| attack.attack_roll(&mut rng))
+                    .unwrap_or_default()
+            })
+            .sum()
     }
 
     pub fn defense(&self) -> i32 {
-        match &self.inventory {
-            Some(inventory) => inventory
-                .equipment
-                .iter()
-                .map(|character_item| {
-                    character_item
-                        .item
-                        .defense
-                        .as_ref()
-                        .map(|defense| defense.damage_resistance)
-                        .unwrap_or_default()
-                })
-                .sum(),
-            None => 0,
-        }
+        self.inventory
+            .equipment
+            .iter()
+            .map(|character_item| {
+                character_item
+                    .item
+                    .defense
+                    .as_ref()
+                    .map(|defense| defense.damage_resistance)
+                    .unwrap_or_default()
+            })
+            .sum()
     }
 }
 
@@ -274,8 +243,9 @@ impl CharacterView {
 mod tests {
     use crate::{
         components::{
-            character::CharacterViewArgs, effects::Effects, life_modifier::LifeModifier,
-            species::Species, spells::spell_memory::SpellMemory, stats::Stats,
+            character::CharacterViewArgs, effects::Effects, inventory::Inventory,
+            life_modifier::LifeModifier, species::Species, spells::spell_memory::SpellMemory,
+            stats::Stats,
         },
         systems::view::character::view,
     };
@@ -291,7 +261,7 @@ mod tests {
             },
             species: Species::Goblin,
             life_modifier: None,
-            inventory: None,
+            inventory: Inventory::default(),
             current_effects: Effects::default(),
             spell_memory: SpellMemory::default(),
         };
@@ -309,7 +279,7 @@ mod tests {
             },
             species: Species::Goblin,
             life_modifier: Some(LifeModifier::Skeleton),
-            inventory: None,
+            inventory: Inventory::default(),
             current_effects: Effects::default(),
             spell_memory: SpellMemory::default(),
         };

@@ -12,7 +12,7 @@ use crate::utils::sentences::starters_and_joiners;
 
 use super::items::character_item::{CharacterItem, CharacterItemView};
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct Inventory {

@@ -26,14 +26,12 @@ pub fn view(character: &Character, args: &CharacterViewArgs, knows_all: bool) ->
 
     let (inventory, inventory_known) = if args.knows_inventory || knows_all {
         (
-            character.inventory.clone().map(|inv| {
-                super::inventory::view(
-                    &inv,
-                    args.knows_hidden_in_inventory,
-                    args.knows_packed_in_inventory,
-                    knows_all,
-                )
-            }),
+            Some(super::inventory::view(
+                &character.inventory,
+                args.knows_hidden_in_inventory,
+                args.knows_packed_in_inventory,
+                knows_all,
+            )),
             true,
         )
     } else {
