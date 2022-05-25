@@ -99,9 +99,9 @@ impl CharacterPrototype {
 impl Generator<Character> for CharacterPrototype {
     fn generate(&self) -> Character {
         let inventory = if self.has_inventory {
-            Some(self.inventory_generator.generate())
+            self.inventory_generator.generate()
         } else {
-            None
+            Inventory::default()
         };
 
         let stats_generator = build_default_health_rolls(&self.species);
@@ -128,6 +128,6 @@ mod goblin_tests {
     fn basic_goblin() {
         let prototype = CharacterPrototype::basic_goblin();
         let goblin = prototype.generate();
-        assert!(goblin.inventory.is_some());
+        assert!(!goblin.inventory.equipment.is_empty());
     }
 }

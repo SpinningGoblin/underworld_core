@@ -70,12 +70,12 @@ impl Generator<PlayerCharacter> for PlayerCharacterPrototype {
                 stats,
                 species,
                 life_modifier: None,
-                inventory: Some(Inventory {
+                inventory: Inventory {
                     equipment: starter_wearables
                         .into_iter()
                         .chain(vec![starter_weapon].into_iter())
                         .collect(),
-                }),
+                },
                 current_effects: Effects::default(),
                 spell_memory: SpellMemory {
                     spells: vec![LearnedSpell {
