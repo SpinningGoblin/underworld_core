@@ -5,7 +5,7 @@ use crate::{
         action::Action, attack_npc::AttackNpc, exit_room::ExitRoom,
         inspect_fixture::InspectFixture, inspect_npc::InspectNpc,
         look_at_current_room::LookAtCurrentRoom, look_at_fixture::LookAtFixture,
-        look_at_npc::LookAtNpc, loot_npc::LootNpc,
+        look_at_npc::LookAtNpc, loot_npc::LootNpc, CastSpellOnNpc, CastSpellOnPlayer, LootFixture,
     },
     components::{games::game_state::GameState, player::PlayerCharacter},
     events::event::Event,
@@ -40,7 +40,7 @@ impl Game {
             .iter()
             .flat_map(|fixture_position| fixture_position.fixtures.iter())
             .flat_map(|fixture| {
-                let actions = vec![
+                let mut actions = vec![
                     Action::LookAtFixture(LookAtFixture {
                         fixture_id: fixture.identifier.id.to_string(),
                     }),
@@ -52,6 +52,36 @@ impl Game {
                         discover_can_be_opened: true,
                     }),
                 ];
+
+                let knowledge = self.state.fixture_knowledge(&fixture.identifier.id);
+                let mut item_ids: Vec<String> = Vec::new();
+
+                if knowledge.knows_items {
+                    for fixture_item in fixture
+                        .items
+                        .iter()
+                        .filter(|fixture_item| !fixture_item.is_hidden)
+                    {
+                        item_ids.push(fixture_item.item.identifier.id.to_string());
+                    }
+                }
+
+                if knowledge.knows_hidden_items {
+                    for fixture_item in fixture
+                        .items
+                        .iter()
+                        .filter(|fixture_item| fixture_item.is_hidden)
+                    {
+                        item_ids.push(fixture_item.item.identifier.id.to_string());
+                    }
+                }
+
+                if !item_ids.is_empty() {
+                    actions.push(Action::LootFixture(LootFixture {
+                        fixture_id: fixture.identifier.id.to_string(),
+                        item_ids,
+                    }))
+                }
 
                 actions
             });
@@ -80,6 +110,13 @@ impl Game {
                     actions.push(Action::AttackNpc(AttackNpc {
                         npc_id: npc.identifier.id.to_string(),
                     }));
+
+                    for learned_spell in self.player.character.spell_memory.spells.iter() {
+                        actions.push(Action::CastSpellOnNpc(CastSpellOnNpc {
+                            spell_id: learned_spell.identifier.id.to_string(),
+                            npc_id: npc.identifier.id.to_string(),
+                        }));
+                    }
                 } else {
                     let item_ids = match &npc.character.inventory {
                         Some(it) => it
@@ -105,11 +142,24 @@ impl Game {
             })
         });
 
+        let spell_actions = self
+            .player
+            .character
+            .spell_memory
+            .spells
+            .iter()
+            .map(|learned_spell| {
+                Action::CastSpellOnPlayer(CastSpellOnPlayer {
+                    spell_id: learned_spell.identifier.id.to_string(),
+                })
+            });
+
         room_view_actions
             .into_iter()
             .chain(npc_actions)
             .chain(exit_actions)
             .chain(fixture_actions)
+            .chain(spell_actions)
             .collect()
     }
 }
