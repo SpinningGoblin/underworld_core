@@ -6,10 +6,14 @@ use crate::{
         inspect_fixture::InspectFixture, inspect_npc::InspectNpc,
         look_at_current_room::LookAtCurrentRoom, look_at_fixture::LookAtFixture,
         look_at_npc::LookAtNpc, loot_npc::LootNpc, CastSpellOnNpc, CastSpellOnPlayer, LootFixture,
-        UseItemOnPlayer,
+        MovePlayerItem, UseItemOnPlayer,
     },
     components::{
-        games::game_state::GameState, items::consumable_effect::ConsumableEffectName,
+        games::game_state::GameState,
+        items::{
+            consumable_effect::ConsumableEffectName,
+            location_tag::{packed_tags_for_item_type, ready_tag_for_item_type},
+        },
         player::PlayerCharacter,
     },
     events::event::Event,
@@ -163,15 +167,40 @@ impl Game {
                 .inventory
                 .equipment
                 .iter()
-                .flat_map(|character_item| match &character_item.item.consumable {
-                    Some(consumable) => match &consumable.effect.name {
-                        ConsumableEffectName::LearnSpell => {
-                            vec![Action::UseItemOnPlayer(UseItemOnPlayer {
-                                item_id: character_item.item.identifier.id.to_string(),
-                            })]
+                .flat_map(|character_item| {
+                    let mut actions: Vec<Action> = Vec::new();
+
+                    if character_item.is_consumable() {
+                        match &character_item.item.consumable {
+                            Some(consumable) => match &consumable.effect.name {
+                                ConsumableEffectName::LearnSpell => {
+                                    actions.push(Action::UseItemOnPlayer(UseItemOnPlayer {
+                                        item_id: character_item.item.identifier.id.to_string(),
+                                    }));
+                                }
+                            },
+                            None => {}
                         }
-                    },
-                    None => Vec::new(),
+                    } else if character_item.is_packed() {
+                        let location_tag = ready_tag_for_item_type(&character_item.item.item_type);
+                        actions.push(Action::MovePlayerItem(MovePlayerItem {
+                            item_id: character_item.item.identifier.id.to_string(),
+                            location_tag,
+                            put_at_the_ready: true,
+                        }));
+                    } else {
+                        for location_tag in
+                            packed_tags_for_item_type(&character_item.item.item_type).into_iter()
+                        {
+                            actions.push(Action::MovePlayerItem(MovePlayerItem {
+                                item_id: character_item.item.identifier.id.to_string(),
+                                location_tag,
+                                put_at_the_ready: false,
+                            }));
+                        }
+                    }
+
+                    actions
                 });
 
         room_view_actions
