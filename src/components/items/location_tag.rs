@@ -76,6 +76,99 @@ impl LocationTag {
     }
 }
 
+pub fn ready_tag_for_item_type(item_type: &ItemType) -> LocationTag {
+    match *item_type {
+        ItemType::Buckler
+        | ItemType::Club
+        | ItemType::Dagger
+        | ItemType::Dirk
+        | ItemType::GreatSword
+        | ItemType::Hammer
+        | ItemType::LongSword
+        | ItemType::Mace
+        | ItemType::Morningstar
+        | ItemType::Shield
+        | ItemType::ShortSword
+        | ItemType::Whip
+        | ItemType::Gloves
+        | ItemType::PlateGauntlets
+        | ItemType::Halberd
+        | ItemType::Pike
+        | ItemType::Spear => LocationTag::Hand,
+        ItemType::Breastplate | ItemType::Shirt | ItemType::Vest => LocationTag::Body,
+        ItemType::Mask
+        | ItemType::Crown
+        | ItemType::BowlerHat
+        | ItemType::Fedora
+        | ItemType::TopHat
+        | ItemType::PlateHelmet
+        | ItemType::Helm => LocationTag::Head,
+        ItemType::Boots | ItemType::PlateBoots => LocationTag::Feet,
+        ItemType::Trousers => LocationTag::Leg,
+        ItemType::Cloak => LocationTag::Shoulder,
+        ItemType::LoinCloth => LocationTag::Waist,
+        ItemType::Shackles => LocationTag::Wrist,
+        ItemType::Scroll => LocationTag::Pockets,
+    }
+}
+
+pub fn packed_tags_for_item_type(item_type: &ItemType) -> Vec<LocationTag> {
+    match *item_type {
+        ItemType::Buckler => vec![LocationTag::Packed],
+        ItemType::Club => vec![LocationTag::Packed, LocationTag::Hip],
+        ItemType::Dagger => vec![
+            LocationTag::Packed,
+            LocationTag::Hip,
+            LocationTag::HipSheath,
+        ],
+        ItemType::Dirk => vec![
+            LocationTag::Packed,
+            LocationTag::Hip,
+            LocationTag::HipSheath,
+        ],
+        ItemType::GreatSword => vec![LocationTag::Packed, LocationTag::Back],
+        ItemType::Hammer => vec![LocationTag::Packed, LocationTag::Hip],
+        ItemType::LongSword => vec![
+            LocationTag::Packed,
+            LocationTag::Hip,
+            LocationTag::HipSheath,
+            LocationTag::Back,
+        ],
+        ItemType::Mace => vec![LocationTag::Packed, LocationTag::Hip],
+        ItemType::Morningstar => vec![LocationTag::Packed, LocationTag::Hip],
+        ItemType::Shield => vec![LocationTag::Packed, LocationTag::Back],
+        ItemType::ShortSword => {
+            vec![
+                LocationTag::Packed,
+                LocationTag::Hip,
+                LocationTag::HipSheath,
+            ]
+        }
+        ItemType::Whip => vec![LocationTag::Packed, LocationTag::Hip],
+        ItemType::Breastplate => vec![LocationTag::Packed],
+        ItemType::Mask => vec![LocationTag::Packed],
+        ItemType::Cloak => vec![LocationTag::Packed],
+        ItemType::Shirt => vec![LocationTag::Packed],
+        ItemType::Trousers => vec![LocationTag::Packed],
+        ItemType::Crown | ItemType::BowlerHat | ItemType::Fedora | ItemType::TopHat => {
+            vec![LocationTag::Packed]
+        }
+        ItemType::Boots => vec![LocationTag::Packed],
+        ItemType::Gloves => vec![LocationTag::Packed, LocationTag::Pockets],
+        ItemType::LoinCloth => vec![LocationTag::Packed],
+        ItemType::PlateBoots => vec![LocationTag::Packed],
+        ItemType::PlateGauntlets => vec![LocationTag::Packed],
+        ItemType::PlateHelmet => vec![LocationTag::Packed],
+        ItemType::Shackles => vec![LocationTag::Packed],
+        ItemType::Vest => vec![LocationTag::Packed],
+        ItemType::Helm => vec![LocationTag::Packed],
+        ItemType::Halberd => vec![LocationTag::Packed, LocationTag::Back],
+        ItemType::Pike => vec![LocationTag::Packed, LocationTag::Back],
+        ItemType::Spear => vec![LocationTag::Packed, LocationTag::Back],
+        ItemType::Scroll => vec![LocationTag::Packed, LocationTag::Pockets],
+    }
+}
+
 pub fn location_tags_for_item_type(item_type: &ItemType) -> Vec<LocationTag> {
     match *item_type {
         ItemType::Buckler => vec![LocationTag::Hand],
