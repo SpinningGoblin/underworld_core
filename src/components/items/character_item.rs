@@ -32,8 +32,15 @@ impl CharacterItem {
     }
 
     pub fn is_packed(&self) -> bool {
-        self.equipped_location.eq(&LocationTag::Packed)
-            || self.equipped_location.eq(&LocationTag::Pockets)
+        !self.at_the_ready
+            || matches!(
+                self.equipped_location,
+                LocationTag::Packed
+                    | LocationTag::Pockets
+                    | LocationTag::Back
+                    | LocationTag::Hip
+                    | LocationTag::HipSheath
+            )
     }
 
     pub fn is_in_hand(&self) -> bool {
