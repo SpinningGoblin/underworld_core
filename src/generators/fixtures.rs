@@ -48,8 +48,12 @@ impl Generator<Fixture> for FixturePrototype {
 
         let material = if has_material {
             let possible_materials = self.fixture_type.possible_materials();
-            let index = rng.gen_range(0..possible_materials.len());
-            possible_materials.get(index).cloned()
+            if possible_materials.is_empty() {
+                None
+            } else {
+                let index = rng.gen_range(0..possible_materials.len());
+                possible_materials.get(index).cloned()
+            }
         } else {
             None
         };
@@ -57,10 +61,14 @@ impl Generator<Fixture> for FixturePrototype {
         let non_average_size_roll: i32 = roll_d100(&mut rng, 1, 0);
         let size = if non_average_size_roll <= HAS_NON_STANDARD_SIZE {
             let possibilities = non_average_sizes();
-            let index = rng.gen_range(0..possibilities.len());
-            match possibilities.get(index) {
-                Some(height) => height.clone(),
-                None => Size::Average,
+            if possibilities.is_empty() {
+                Size::Average
+            } else {
+                let index = rng.gen_range(0..possibilities.len());
+                match possibilities.get(index) {
+                    Some(height) => height.clone(),
+                    None => Size::Average,
+                }
             }
         } else {
             Size::Average
@@ -169,13 +177,17 @@ fn build_items(
     let item_types = possible_item_types(fixture_type, size);
     range
         .flat_map(|_| {
-            let item_type_index = rng.gen_range(0..item_types.len());
-            match item_types.get(item_type_index) {
-                Some(item_type) => {
-                    let generator = item_generator(item_type, false);
-                    Some(generator.generate())
+            if item_types.is_empty() {
+                None
+            } else {
+                let item_type_index = rng.gen_range(0..item_types.len());
+                match item_types.get(item_type_index) {
+                    Some(item_type) => {
+                        let generator = item_generator(item_type, false);
+                        Some(generator.generate())
+                    }
+                    None => None,
                 }
-                None => None,
             }
         })
         .collect()
