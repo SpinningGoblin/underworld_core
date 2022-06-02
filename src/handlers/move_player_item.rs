@@ -18,7 +18,10 @@ pub fn handle(
         None => return Err(Box::new(ItemNotFoundError(item_id.to_string()))),
     };
 
-    if character_item.is_weapon() && player.character.count_weapons_at_ready() >= 2 {
+    if character_item.is_weapon()
+        && player.character.count_weapons_at_ready() >= 2
+        && move_player_item.put_at_the_ready
+    {
         return Err(Box::new(TooManyWeaponsEquippedError));
     }
 
