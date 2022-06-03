@@ -83,10 +83,11 @@ impl FixturePositionView {
 mod tests {
     use std::collections::HashMap;
 
+    use uuid::Uuid;
+
     use crate::{
         components::{
             fixtures::{fixture::Fixture, fixture_type::FixtureType},
-            identifier::Identifier,
             rooms::{
                 fixture_position_descriptor::FixturePositionDescriptor,
                 group_descriptor::GroupDescriptor,
@@ -101,7 +102,8 @@ mod tests {
     #[test]
     fn display() {
         let table = Fixture {
-            identifier: Identifier::default(),
+            id: Uuid::new_v4(),
+            name: None,
             fixture_type: FixtureType::Table,
             material: None,
             size: Size::Average,
@@ -113,7 +115,8 @@ mod tests {
             hidden_compartment_open: false,
         };
         let chair = Fixture {
-            identifier: Identifier::default(),
+            id: Uuid::new_v4(),
+            name: None,
             fixture_type: FixtureType::Chair,
             material: None,
             size: Size::Average,

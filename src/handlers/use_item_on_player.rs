@@ -1,12 +1,13 @@
 use std::error::Error;
 
 use chrono::Utc;
+use uuid::Uuid;
 
 use crate::{
     actions::UseItemOnPlayer,
     components::{
-        identifier::Identifier, items::consumable_effect::ConsumableEffectName,
-        player::PlayerCharacter, spells::spell::Spell,
+        items::consumable_effect::ConsumableEffectName, player::PlayerCharacter,
+        spells::spell::Spell,
     },
     errors::{ItemNotDirectlyUsableError, ItemNotFoundError},
     events::{Event, PlayerItemRemoved, PlayerItemUsed, PlayerSpellLearned},
@@ -43,9 +44,9 @@ pub fn handle(
                 };
 
                 vec![Event::PlayerSpellLearned(PlayerSpellLearned {
-                    spell_identifier: Identifier::just_id(),
                     learned_at: Utc::now(),
                     spell,
+                    spell_id: Uuid::new_v4(),
                 })]
             } else {
                 Vec::new()

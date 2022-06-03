@@ -1,8 +1,9 @@
 use std::collections::HashMap;
 
+use uuid::Uuid;
+
 use crate::components::{
     games::game_state::GameState,
-    identifier::Identifier,
     rooms::room_type::RoomType,
     worlds::world::{ExitMap, World},
 };
@@ -23,16 +24,17 @@ impl Generator<GameState> for GamePrototype {
             .exits
             .iter()
             .map(|exit| ExitMap {
-                exit_id: exit.identifier.id,
-                left_room_id: Some(entry.identifier.id),
+                exit_id: exit.id,
+                left_room_id: Some(entry.id),
                 right_room_id: None,
             })
             .collect();
 
         GameState {
-            identifier: Identifier::just_id(),
-            current_room_id: entry.identifier.id,
-            rooms_seen: vec![entry.identifier.id],
+            id: Uuid::new_v4(),
+            name: None,
+            current_room_id: entry.id,
+            rooms_seen: vec![entry.id],
             world: World {
                 rooms: vec![entry],
                 exit_graph: exit_maps,

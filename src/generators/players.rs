@@ -7,7 +7,6 @@ use crate::components::{
     character::Character,
     damage::{Attack, Defense},
     effects::Effects,
-    identifier::Identifier,
     inventory::Inventory,
     items::{
         character_item::CharacterItem, descriptor::Descriptor, item::Item, item_type::ItemType,
@@ -79,7 +78,7 @@ impl Generator<PlayerCharacter> for PlayerCharacterPrototype {
                 current_effects: Effects::default(),
                 spell_memory: SpellMemory {
                     spells: vec![LearnedSpell {
-                        identifier: Identifier::just_id(),
+                        id: Uuid::new_v4(),
                         spell: Spell {
                             name: SpellName::Phoenix,
                             attack: None,
@@ -90,17 +89,16 @@ impl Generator<PlayerCharacter> for PlayerCharacterPrototype {
                     }],
                 },
             },
-            identifier: Identifier {
-                id: Uuid::new_v4(),
-                name: self.character_name.clone(),
-            },
+            id: Uuid::new_v4(),
+            name: self.character_name.clone(),
         }
     }
 }
 
 fn starter_wearables() -> Vec<CharacterItem> {
     let trousers = Item {
-        identifier: Identifier::just_id(),
+        id: Uuid::new_v4(),
+        name: None,
         item_type: ItemType::Trousers,
         tags: vec![Tag::Clothing, Tag::Cloth],
         descriptors: vec![Descriptor::Dirty, Descriptor::Stained],
@@ -113,7 +111,8 @@ fn starter_wearables() -> Vec<CharacterItem> {
     };
 
     let shirt = Item {
-        identifier: Identifier::just_id(),
+        id: Uuid::new_v4(),
+        name: None,
         item_type: ItemType::Shirt,
         tags: vec![Tag::Clothing, Tag::Cloth],
         descriptors: vec![Descriptor::Colourful],
@@ -126,7 +125,8 @@ fn starter_wearables() -> Vec<CharacterItem> {
     };
 
     let boots = Item {
-        identifier: Identifier::just_id(),
+        id: Uuid::new_v4(),
+        name: None,
         item_type: ItemType::Boots,
         tags: vec![Tag::Clothing, Tag::Leather],
         descriptors: vec![Descriptor::Dirty],
@@ -193,7 +193,8 @@ fn starter_weapon(rng: &mut ThreadRng) -> CharacterItem {
     };
 
     let item = Item {
-        identifier: Identifier::just_id(),
+        id: Uuid::new_v4(),
+        name: None,
         item_type,
         tags,
         material,

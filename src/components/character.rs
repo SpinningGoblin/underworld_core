@@ -56,7 +56,7 @@ impl Character {
         self.spell_memory
             .spells
             .iter_mut()
-            .find(|spell| spell.identifier.id.eq(spell_id))
+            .find(|spell| spell.id.eq(spell_id))
     }
 
     pub fn remove_item(&mut self, item_id: &Uuid) -> Option<CharacterItem> {
@@ -70,7 +70,7 @@ impl Character {
                 .iter()
                 .enumerate()
                 .find_map(|(i, learned_spell)| {
-                    if learned_spell.identifier.id.eq(spell_id) {
+                    if learned_spell.id.eq(spell_id) {
                         Some(i)
                     } else {
                         None

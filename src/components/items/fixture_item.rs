@@ -31,10 +31,11 @@ pub struct FixtureItemView {
 
 #[cfg(test)]
 mod display_tests {
+    use uuid::Uuid;
+
     use crate::{
         components::{
             fixtures::{fixture::FixtureViewArgs, fixture_type::FixtureType},
-            identifier::Identifier,
             material::Material,
         },
         systems::view::fixture::view,
@@ -49,7 +50,8 @@ mod display_tests {
             material: Some(Material::Steel),
             size: crate::components::size::Size::Average,
             descriptors: Vec::new(),
-            identifier: Identifier::default(),
+            id: Uuid::new_v4(),
+            name: None,
             items: Vec::new(),
             has_hidden_compartment: false,
             can_be_opened: true,

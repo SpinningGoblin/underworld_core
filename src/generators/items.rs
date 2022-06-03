@@ -1,9 +1,9 @@
 use rand::Rng;
 use std::ops::RangeInclusive;
+use uuid::Uuid;
 
 use crate::components::{
     damage::{Attack, Defense},
-    identifier::Identifier,
     items::{descriptor::Descriptor, item::Item, item_type::ItemType},
     material::Material,
     tag::{Tag, Tagged},
@@ -44,7 +44,8 @@ impl Generator<Item> for ItemPrototype {
         let tags = self.item_type.tags();
 
         Item {
-            identifier: Identifier::just_id(),
+            id: Uuid::new_v4(),
+            name: None,
             item_type: self.item_type.clone(),
             tags,
             descriptors,

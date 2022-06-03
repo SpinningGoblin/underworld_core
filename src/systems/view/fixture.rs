@@ -48,7 +48,8 @@ pub fn view(fixture: &Fixture, args: &FixtureViewArgs, knows_all: bool) -> Fixtu
     };
 
     FixtureView {
-        identifier: super::identifier::view(&fixture.identifier, true),
+        id: fixture.id.to_string(),
+        name: fixture.name.clone(),
         fixture_type: fixture.fixture_type.clone(),
         material: fixture.material.clone(),
         size: fixture.size.clone(),

@@ -21,7 +21,7 @@ pub fn handle(_: &LookAtCurrentRoom, state: &GameState) -> Result<Vec<Event>, Bo
         .fixture_positions
         .iter()
         .flat_map(|fixture_position| fixture_position.fixtures.iter())
-        .map(|fixture| fixture.identifier.id)
+        .map(|fixture| fixture.id)
     {
         let knowledge = state.fixture_knowledge(&fixture_id);
 
@@ -42,7 +42,7 @@ pub fn handle(_: &LookAtCurrentRoom, state: &GameState) -> Result<Vec<Event>, Bo
         .npc_positions
         .iter()
         .map(|npc_position| &npc_position.npc)
-        .map(|npc| npc.identifier.id)
+        .map(|npc| npc.id)
     {
         let knowledge = state.npc_knowledge(&npc_id);
         npc_args.insert(

@@ -50,10 +50,10 @@ impl Game {
             .flat_map(|fixture| {
                 let mut actions = vec![
                     Action::LookAtFixture(LookAtFixture {
-                        fixture_id: fixture.identifier.id.to_string(),
+                        fixture_id: fixture.id.to_string(),
                     }),
                     Action::InspectFixture(InspectFixture {
-                        fixture_id: fixture.identifier.id.to_string(),
+                        fixture_id: fixture.id.to_string(),
                         discover_hidden: true,
                         discover_hidden_items: true,
                         discover_contained: true,
@@ -61,7 +61,7 @@ impl Game {
                     }),
                 ];
 
-                let knowledge = self.state.fixture_knowledge(&fixture.identifier.id);
+                let knowledge = self.state.fixture_knowledge(&fixture.id);
                 let mut item_ids: Vec<String> = Vec::new();
 
                 if knowledge.knows_items {
@@ -70,7 +70,7 @@ impl Game {
                         .iter()
                         .filter(|fixture_item| !fixture_item.is_hidden)
                     {
-                        item_ids.push(fixture_item.item.identifier.id.to_string());
+                        item_ids.push(fixture_item.item.id.to_string());
                     }
                 }
 
@@ -80,13 +80,13 @@ impl Game {
                         .iter()
                         .filter(|fixture_item| fixture_item.is_hidden)
                     {
-                        item_ids.push(fixture_item.item.identifier.id.to_string());
+                        item_ids.push(fixture_item.item.id.to_string());
                     }
                 }
 
                 if !item_ids.is_empty() {
                     actions.push(Action::LootFixture(LootFixture {
-                        fixture_id: fixture.identifier.id.to_string(),
+                        fixture_id: fixture.id.to_string(),
                         item_ids,
                     }))
                 }
@@ -103,10 +103,10 @@ impl Game {
             .flat_map(|npc| {
                 let mut actions = vec![
                     Action::LookAtNpc(LookAtNpc {
-                        npc_id: npc.identifier.id.to_string(),
+                        npc_id: npc.id.to_string(),
                     }),
                     Action::InspectNpc(InspectNpc {
-                        npc_id: npc.identifier.id.to_string(),
+                        npc_id: npc.id.to_string(),
                         discover_health: true,
                         discover_name: true,
                         discover_packed_items: true,
@@ -116,13 +116,13 @@ impl Game {
 
                 if !npc.character.is_dead() {
                     actions.push(Action::AttackNpc(AttackNpc {
-                        npc_id: npc.identifier.id.to_string(),
+                        npc_id: npc.id.to_string(),
                     }));
 
                     for learned_spell in self.player.character.spell_memory.spells.iter() {
                         actions.push(Action::CastSpellOnNpc(CastSpellOnNpc {
-                            spell_id: learned_spell.identifier.id.to_string(),
-                            npc_id: npc.identifier.id.to_string(),
+                            spell_id: learned_spell.id.to_string(),
+                            npc_id: npc.id.to_string(),
                         }));
                     }
                 } else {
@@ -131,11 +131,11 @@ impl Game {
                         .inventory
                         .equipment
                         .iter()
-                        .map(|character_item| character_item.item.identifier.id.to_string())
+                        .map(|character_item| character_item.item.id.to_string())
                         .collect();
 
                     actions.push(Action::LootNpc(LootNpc {
-                        npc_id: npc.identifier.id.to_string(),
+                        npc_id: npc.id.to_string(),
                         item_ids,
                     }));
                 }
@@ -157,7 +157,7 @@ impl Game {
             .iter()
             .map(|learned_spell| {
                 Action::CastSpellOnPlayer(CastSpellOnPlayer {
-                    spell_id: learned_spell.identifier.id.to_string(),
+                    spell_id: learned_spell.id.to_string(),
                 })
             });
 
@@ -175,7 +175,7 @@ impl Game {
                             Some(consumable) => match &consumable.effect.name {
                                 ConsumableEffectName::LearnSpell => {
                                     actions.push(Action::UseItemOnPlayer(UseItemOnPlayer {
-                                        item_id: character_item.item.identifier.id.to_string(),
+                                        item_id: character_item.item.id.to_string(),
                                     }));
                                 }
                             },
@@ -184,7 +184,7 @@ impl Game {
                     } else if character_item.is_packed() {
                         let location_tag = ready_tag_for_item_type(&character_item.item.item_type);
                         actions.push(Action::MovePlayerItem(MovePlayerItem {
-                            item_id: character_item.item.identifier.id.to_string(),
+                            item_id: character_item.item.id.to_string(),
                             location_tag,
                             put_at_the_ready: true,
                         }));
@@ -193,7 +193,7 @@ impl Game {
                             packed_tags_for_item_type(&character_item.item.item_type).into_iter()
                         {
                             actions.push(Action::MovePlayerItem(MovePlayerItem {
-                                item_id: character_item.item.identifier.id.to_string(),
+                                item_id: character_item.item.id.to_string(),
                                 location_tag,
                                 put_at_the_ready: false,
                             }));

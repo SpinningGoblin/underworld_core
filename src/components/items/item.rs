@@ -6,10 +6,10 @@ use bevy_ecs::prelude::Component;
 use poem_openapi::Object;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 use crate::components::{
     damage::{Attack, Defense},
-    identifier::{Identifier, IdentifierView},
     material::Material,
     tag::Tag,
 };
@@ -28,7 +28,8 @@ use super::{
     serde(rename_all = "snake_case")
 )]
 pub struct Item {
-    pub identifier: Identifier,
+    pub id: Uuid,
+    pub name: Option<String>,
     pub item_type: ItemType,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub tags: Vec<Tag>,
@@ -80,7 +81,8 @@ impl Item {
 )]
 #[cfg_attr(feature = "openapi", derive(Object), oai(rename = "Item"))]
 pub struct ItemView {
-    pub identifier: IdentifierView,
+    pub id: String,
+    pub name: Option<String>,
     pub item_type: ItemType,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub tags: Vec<Tag>,

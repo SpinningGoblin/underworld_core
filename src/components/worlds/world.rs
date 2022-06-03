@@ -21,14 +21,14 @@ impl World {
             .iter_mut()
             .find(|exit_map| exit_map.exit_id.eq(&entrance_id))
         {
-            exit_map.set_room_id(room.identifier.id);
+            exit_map.set_room_id(room.id);
 
             room.exits
                 .iter()
-                .filter(|exit| exit.identifier.id.ne(&entrance_id))
+                .filter(|exit| exit.id.ne(&entrance_id))
                 .map(|exit| ExitMap {
-                    exit_id: exit.identifier.id,
-                    left_room_id: Some(room.identifier.id),
+                    exit_id: exit.id,
+                    left_room_id: Some(room.id),
                     right_room_id: None,
                 })
                 .for_each(|exit_map| self.exit_graph.push(exit_map));

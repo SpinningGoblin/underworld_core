@@ -6,7 +6,7 @@ use bevy_ecs::prelude::Component;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::components::{identifier::Identifier, rooms::room::Room, worlds::world::World};
+use crate::components::{rooms::room::Room, worlds::world::World};
 
 use super::{character_knowledge::CharacterKnowledge, fixture_knowledge::FixtureKnowledge};
 
@@ -14,7 +14,8 @@ use super::{character_knowledge::CharacterKnowledge, fixture_knowledge::FixtureK
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct GameState {
-    pub identifier: Identifier,
+    pub id: Uuid,
+    pub name: Option<String>,
     pub world: World,
     pub current_room_id: Uuid,
     #[cfg_attr(feature = "serialization", serde(default))]
@@ -53,7 +54,7 @@ impl GameState {
         self.current_room()
             .exits
             .iter()
-            .map(|exit| exit.identifier.id)
+            .map(|exit| exit.id)
             .collect()
     }
 
@@ -61,7 +62,7 @@ impl GameState {
         self.world
             .rooms
             .iter()
-            .find(|room| room.identifier.id.eq(&self.current_room_id))
+            .find(|room| room.id.eq(&self.current_room_id))
             .unwrap()
     }
 
@@ -69,7 +70,7 @@ impl GameState {
         self.world
             .rooms
             .iter_mut()
-            .find(|room| room.identifier.id.eq(&self.current_room_id))
+            .find(|room| room.id.eq(&self.current_room_id))
             .unwrap()
     }
 }

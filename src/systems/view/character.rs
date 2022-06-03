@@ -46,7 +46,7 @@ pub fn view(character: &Character, args: &CharacterViewArgs, knows_all: bool) ->
                     .spells
                     .iter()
                     .map(|learned_spell| LearnedSpellView {
-                        identifier: super::identifier::view(&learned_spell.identifier, true),
+                        id: learned_spell.id.to_string(),
                         spell: SpellView {
                             name: learned_spell.spell.name.clone(),
                             attack: learned_spell.spell.attack.clone(),

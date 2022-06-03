@@ -17,7 +17,7 @@ pub fn view(
         .iter()
         .map(|fixture| {
             let args = fixture_view_args
-                .get(&fixture.identifier.id)
+                .get(&fixture.id)
                 .cloned()
                 .unwrap_or_default();
             super::fixture::view(fixture, &args, knows_all)

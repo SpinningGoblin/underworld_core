@@ -3,7 +3,6 @@ use rand::{prelude::ThreadRng, Rng};
 use uuid::Uuid;
 
 use crate::components::{
-    identifier::Identifier,
     material::Material,
     rooms::{
         exit::Exit, exit_descriptor::ExitDescriptor, exit_type::ExitType, room_type::RoomType,
@@ -17,13 +16,13 @@ pub fn build_exits(room_type: &RoomType, entrance_id: Option<Uuid>) -> Vec<Exit>
 
     (0..num_exits)
         .map(|index| {
-            let identifier = if index == 0 {
+            let id = if index == 0 {
                 match entrance_id {
-                    Some(it) => Identifier { id: it, name: None },
-                    None => Identifier::just_id(),
+                    Some(it) => it,
+                    None => Uuid::new_v4(),
                 }
             } else {
-                Identifier::just_id()
+                Uuid::new_v4()
             };
 
             let exit_type = exit_type(&mut rng, room_type);
@@ -36,7 +35,8 @@ pub fn build_exits(room_type: &RoomType, entrance_id: Option<Uuid>) -> Vec<Exit>
                 material,
                 size,
                 descriptors,
-                identifier,
+                id,
+                name: None,
             }
         })
         .into_iter()

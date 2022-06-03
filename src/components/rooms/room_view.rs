@@ -8,7 +8,7 @@ use rand::Rng;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::components::{identifier::IdentifierView, non_player::NonPlayerView, species::Species};
+use crate::components::{non_player::NonPlayerView, species::Species};
 
 use super::{
     descriptor::Descriptor, dimensions::Dimensions, exit::ExitView,
@@ -21,7 +21,8 @@ use super::{
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 #[cfg_attr(feature = "openapi", derive(Object), oai(rename = "Room"))]
 pub struct RoomView {
-    pub identifier: IdentifierView,
+    pub id: String,
+    pub name: Option<String>,
     pub descriptors: Vec<Descriptor>,
     pub room_type: RoomType,
     pub fixture_positions: Vec<FixturePositionView>,

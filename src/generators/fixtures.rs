@@ -2,11 +2,11 @@ use std::ops::RangeInclusive;
 
 use enum_iterator::IntoEnumIterator;
 use rand::{prelude::ThreadRng, Rng};
+use uuid::Uuid;
 
 use crate::{
     components::{
         fixtures::{fixture::Fixture, fixture_type::FixtureType},
-        identifier::Identifier,
         items::{
             descriptor::Descriptor, fixture_item::FixtureItem, item::Item, item_type::ItemType,
         },
@@ -127,7 +127,8 @@ impl Generator<Fixture> for FixturePrototype {
         };
 
         Fixture {
-            identifier: Identifier::just_id(),
+            id: Uuid::new_v4(),
+            name: None,
             material,
             fixture_type: self.fixture_type.clone(),
             size,

@@ -40,7 +40,8 @@ pub fn view(
         .collect();
 
     RoomView {
-        identifier: super::identifier::view(&room.identifier, true),
+        id: room.id.to_string(),
+        name: room.name.clone(),
         descriptors: room.descriptors.clone(),
         room_type: room.room_type.clone(),
         fixture_positions,

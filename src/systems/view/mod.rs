@@ -3,7 +3,6 @@ pub mod character_item;
 pub mod exit;
 pub mod fixture;
 pub mod fixture_position;
-pub mod identifier;
 pub mod inventory;
 pub mod item;
 pub mod non_player;

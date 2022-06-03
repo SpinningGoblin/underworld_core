@@ -14,8 +14,8 @@ pub fn npc_attack_player(player: &PlayerCharacter, npc: &NonPlayer) -> Vec<Event
     if npc.character.no_weapons_readied() {
         if let Some(character_item) = npc.character.strongest_non_readied_weapon() {
             events.push(Event::NpcWeaponReadied(NpcWeaponReadied {
-                npc_id: npc.identifier.id,
-                item_id: character_item.item.identifier.id,
+                npc_id: npc.id,
+                item_id: character_item.item.id,
             }));
         }
     } else {
@@ -26,13 +26,11 @@ pub fn npc_attack_player(player: &PlayerCharacter, npc: &NonPlayer) -> Vec<Event
         // TODO Add handling for any defense aura player has.
 
         events.push(Event::PlayerHit(PlayerHit {
-            attacker_id: npc.identifier.id,
+            attacker_id: npc.id,
             damage: player_damage,
         }));
         if player_damage > player.character.get_current_health().unwrap() {
-            events.push(Event::PlayerKilled(PlayerKilled {
-                killer_id: npc.identifier.id,
-            }));
+            events.push(Event::PlayerKilled(PlayerKilled { killer_id: npc.id }));
 
             if player.character.current_effects.resurrection_aura {
                 events.push(Event::PlayerResurrected(PlayerResurrected));
@@ -61,15 +59,15 @@ pub fn damage_npc(
     can_counter: bool,
 ) -> Vec<Event> {
     let mut events: Vec<Event> = vec![Event::NpcHit(NpcHit {
-        npc_id: npc.identifier.id,
+        npc_id: npc.id,
         damage,
-        attacker_id: player.identifier.id,
+        attacker_id: player.id,
     })];
 
     if damage > npc.character.get_current_health().unwrap() {
         events.push(Event::NpcKilled(NpcKilled {
-            npc_id: npc.identifier.id,
-            killer_id: player.identifier.id,
+            npc_id: npc.id,
+            killer_id: player.id,
         }));
     } else if can_counter {
         let mut rng = rand::thread_rng();
@@ -77,7 +75,7 @@ pub fn damage_npc(
 
         if dodge_roll <= PLAYER_DODGE_CHANCE {
             events.push(Event::PlayerMissed(PlayerMissed {
-                attacker_id: npc.identifier.id,
+                attacker_id: npc.id,
             }));
         } else {
             events.append(&mut npc_attack_player(player, npc));

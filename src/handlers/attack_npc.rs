@@ -27,7 +27,7 @@ pub fn handle(
 
     if npc.character.is_dead() {
         events.push(Event::DeadNpcBeaten(DeadNpcBeaten {
-            attacker_id: player.identifier.id,
+            attacker_id: player.id,
             npc_id,
         }));
     } else {

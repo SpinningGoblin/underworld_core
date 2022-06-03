@@ -3,7 +3,6 @@ pub mod damage;
 pub mod effects;
 pub mod fixtures;
 pub mod games;
-pub mod identifier;
 pub mod inventory;
 pub mod items;
 pub mod life_modifier;

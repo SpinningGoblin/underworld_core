@@ -198,7 +198,7 @@ pub fn apply_events(
             }
             Event::PlayerSpellLearned(player_spell_learned) => {
                 new_player.character.spell_memory.add_spell(LearnedSpell {
-                    identifier: player_spell_learned.spell_identifier.clone(),
+                    id: player_spell_learned.spell_id,
                     spell: player_spell_learned.spell.clone(),
                     learned_at: player_spell_learned.learned_at,
                 });

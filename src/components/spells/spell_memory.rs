@@ -23,7 +23,7 @@ impl SpellMemory {
     pub fn find_spell(&self, spell_id: &Uuid) -> Option<&LearnedSpell> {
         self.spells
             .iter()
-            .find(|learned_spell| learned_spell.identifier.id.eq(spell_id))
+            .find(|learned_spell| learned_spell.id.eq(spell_id))
     }
 
     pub fn add_spell(&mut self, learned_spell: LearnedSpell) {

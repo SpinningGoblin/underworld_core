@@ -36,7 +36,7 @@ pub fn handle(exit_room: &ExitRoom, state: &GameState) -> Result<Vec<Event>, Box
         None => {
             let room_generator = random_room_generator(Some(exit_id));
             let room = room_generator.generate();
-            let room_id = room.identifier.id;
+            let room_id = room.id;
             events.push(Event::RoomGenerated(RoomGenerated {
                 room,
                 entrance_id: exit_id,

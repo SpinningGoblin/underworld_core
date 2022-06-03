@@ -30,7 +30,7 @@ impl Inventory {
     pub fn find_item(&self, item_id: &Uuid) -> Option<CharacterItem> {
         self.equipment
             .iter()
-            .find(|character_item| character_item.item.identifier.id.eq(item_id))
+            .find(|character_item| character_item.item.id.eq(item_id))
             .cloned()
     }
 
@@ -43,7 +43,7 @@ impl Inventory {
             .equipment
             .iter()
             .enumerate()
-            .find(|(_, character_item)| character_item.item.identifier.id.eq(item_id))
+            .find(|(_, character_item)| character_item.item.id.eq(item_id))
             .map(|(index, _)| index);
 
         match index {
@@ -218,9 +218,10 @@ impl Display for InventoryView {
 
 #[cfg(test)]
 mod inventory_tests {
+    use uuid::Uuid;
+
     use crate::{
         components::{
-            identifier::Identifier,
             items::{
                 character_item::CharacterItem, descriptor::Descriptor, item::Item,
                 item_type::ItemType, location_tag::LocationTag,
@@ -236,7 +237,8 @@ mod inventory_tests {
     #[test]
     fn display_with_multiple_weapons() {
         let long_sword = Item {
-            identifier: Identifier::default(),
+            id: Uuid::new_v4(),
+            name: None,
             attack: None,
             item_type: ItemType::LongSword,
             descriptors: vec![Descriptor::Broken],
@@ -246,7 +248,8 @@ mod inventory_tests {
             consumable: None,
         };
         let short_sword = Item {
-            identifier: Identifier::default(),
+            id: Uuid::new_v4(),
+            name: None,
             attack: None,
             item_type: ItemType::ShortSword,
             descriptors: vec![Descriptor::Rusty, Descriptor::Dull],
@@ -283,7 +286,8 @@ mod inventory_tests {
     #[test]
     fn display_with_one_weapon() {
         let long_sword = Item {
-            identifier: Identifier::default(),
+            id: Uuid::new_v4(),
+            name: None,
             attack: None,
             item_type: ItemType::LongSword,
             descriptors: vec![Descriptor::Broken],
@@ -310,7 +314,8 @@ mod inventory_tests {
     #[test]
     fn display_with_hidden_weapon_does_not_describe_them() {
         let long_sword = Item {
-            identifier: Identifier::default(),
+            id: Uuid::new_v4(),
+            name: None,
             attack: None,
             item_type: ItemType::LongSword,
             descriptors: vec![Descriptor::Broken],
@@ -320,7 +325,8 @@ mod inventory_tests {
             consumable: None,
         };
         let short_sword = Item {
-            identifier: Identifier::default(),
+            id: Uuid::new_v4(),
+            name: None,
             attack: None,
             item_type: ItemType::ShortSword,
             descriptors: vec![Descriptor::Rusty, Descriptor::Dull],
@@ -356,7 +362,8 @@ mod inventory_tests {
     #[test]
     fn display_with_one_wearable() {
         let chain_mail = Item {
-            identifier: Identifier::default(),
+            id: Uuid::new_v4(),
+            name: None,
             item_type: ItemType::PlateHelmet,
             material: Some(Material::Steel),
             descriptors: vec![Descriptor::SetOf, Descriptor::Drab],
@@ -384,7 +391,8 @@ mod inventory_tests {
     #[test]
     fn display_with_two_wearables() {
         let plate = Item {
-            identifier: Identifier::default(),
+            id: Uuid::new_v4(),
+            name: None,
             item_type: ItemType::Breastplate,
             material: Some(Material::Steel),
             descriptors: vec![Descriptor::Drab],
@@ -395,7 +403,8 @@ mod inventory_tests {
         };
 
         let shackles = Item {
-            identifier: Identifier::default(),
+            id: Uuid::new_v4(),
+            name: None,
             item_type: ItemType::Shackles,
             material: Some(Material::Iron),
             descriptors: vec![Descriptor::Rusty],

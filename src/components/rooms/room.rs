@@ -4,9 +4,7 @@ use bevy_ecs::prelude::Component;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::components::{
-    fixtures::fixture::Fixture, identifier::Identifier, non_player::NonPlayer,
-};
+use crate::components::{fixtures::fixture::Fixture, non_player::NonPlayer};
 
 use super::{
     descriptor::Descriptor, dimensions::Dimensions, exit::Exit, fixture_position::FixturePosition,
@@ -17,7 +15,9 @@ use super::{
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct Room {
-    pub identifier: Identifier,
+    pub id: Uuid,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub name: Option<String>,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub descriptors: Vec<Descriptor>,
     pub room_type: RoomType,
@@ -37,14 +37,14 @@ impl Room {
         self.npc_positions
             .iter()
             .map(|npc_position| &npc_position.npc)
-            .find(|npc| npc.identifier.id.eq(npc_id))
+            .find(|npc| npc.id.eq(npc_id))
     }
 
     pub fn find_fixture(&self, fixture_id: &Uuid) -> Option<&Fixture> {
         self.fixture_positions
             .iter()
             .flat_map(|fixture_position| fixture_position.fixtures.iter())
-            .find(|fixture| fixture.identifier.id.eq(fixture_id))
+            .find(|fixture| fixture.id.eq(fixture_id))
     }
 
     pub fn first_alive_npc(&self) -> Option<&NonPlayer> {
@@ -58,21 +58,21 @@ impl Room {
     pub fn find_npc_mut(&mut self, target_id: &Uuid) -> Option<&mut NpcPosition> {
         self.npc_positions
             .iter_mut()
-            .find(|npc_position| npc_position.npc.identifier.id.eq(target_id))
+            .find(|npc_position| npc_position.npc.id.eq(target_id))
     }
 
     pub fn find_fixture_mut(&mut self, fixture_id: &Uuid) -> Option<&mut Fixture> {
         self.fixture_positions
             .iter_mut()
             .flat_map(|fixture_position| fixture_position.fixtures.iter_mut())
-            .find(|fixture| fixture.identifier.id.eq(fixture_id))
+            .find(|fixture| fixture.id.eq(fixture_id))
     }
 
     pub fn index_of_npc_position(&self, npc_id: &Uuid) -> Option<usize> {
         self.npc_positions
             .iter()
             .enumerate()
-            .find(|(_, npc_position)| npc_position.npc.identifier.id.eq(npc_id))
+            .find(|(_, npc_position)| npc_position.npc.id.eq(npc_id))
             .map(|(index, _)| index)
     }
 

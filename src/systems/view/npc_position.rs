@@ -13,7 +13,7 @@ pub fn view(
     knows_all: bool,
 ) -> NpcPositionView {
     let args = non_player_args
-        .get(&npc_position.npc.identifier.id)
+        .get(&npc_position.npc.id)
         .cloned()
         .unwrap_or_default();
     let npc = super::non_player::view(

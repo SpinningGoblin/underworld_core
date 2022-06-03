@@ -16,6 +16,7 @@ pub fn check(player_character: PlayerCharacter) -> PlayerCharacterView {
 
     PlayerCharacterView {
         character,
-        identifier: super::identifier::view(&player_character.identifier, true),
+        id: player_character.id.to_string(),
+        name: player_character.name,
     }
 }

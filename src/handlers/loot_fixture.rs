@@ -28,7 +28,7 @@ pub fn handle(loot_fixture: &LootFixture, state: &GameState) -> Result<Vec<Event
     let matching_items = fixture
         .items
         .iter()
-        .filter(|fixture_item| item_ids.contains(&fixture_item.item.identifier.id));
+        .filter(|fixture_item| item_ids.contains(&fixture_item.item.id));
 
     // TODO: I should probably check to make sure the fixture is actually open here.
     // But for now I'm just going to blindly move the items from the fixture to the player.
@@ -37,7 +37,7 @@ pub fn handle(loot_fixture: &LootFixture, state: &GameState) -> Result<Vec<Event
     for matching_item in matching_items {
         events.push(Event::ItemTakenFromFixture(ItemTakenFromFixture {
             fixture_id,
-            item_id: matching_item.item.identifier.id,
+            item_id: matching_item.item.id,
         }));
     }
 

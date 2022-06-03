@@ -9,8 +9,15 @@ pub fn view(
     knows_name: bool,
     knows_all: bool,
 ) -> NonPlayerView {
+    let name = if knows_name || knows_all {
+        non_player.name.clone()
+    } else {
+        None
+    };
+
     NonPlayerView {
-        identifier: super::identifier::view(&non_player.identifier, knows_name || knows_all),
+        id: non_player.id.to_string(),
+        name,
         character: super::character::view(&non_player.character, character_args, knows_all),
     }
 }

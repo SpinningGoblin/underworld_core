@@ -4,18 +4,17 @@ use bevy_ecs::prelude::Component;
 use poem_openapi::Object;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
-use super::{
-    character::{Character, CharacterView},
-    identifier::{Identifier, IdentifierView},
-};
+use super::character::{Character, CharacterView};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct PlayerCharacter {
     pub character: Character,
-    pub identifier: Identifier,
+    pub id: Uuid,
+    pub name: Option<String>,
 }
 
 #[derive(Clone, Debug)]
@@ -24,5 +23,6 @@ pub struct PlayerCharacter {
 #[cfg_attr(feature = "openapi", derive(Object), oai(rename = "PlayerCharacter"))]
 pub struct PlayerCharacterView {
     pub character: CharacterView,
-    pub identifier: IdentifierView,
+    pub id: String,
+    pub name: Option<String>,
 }

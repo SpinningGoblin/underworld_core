@@ -5,8 +5,7 @@ use chrono::{DateTime, Utc};
 use poem_openapi::Object;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
-
-use crate::components::identifier::{Identifier, IdentifierView};
+use uuid::Uuid;
 
 use super::spell::{Spell, SpellView};
 
@@ -18,7 +17,7 @@ use super::spell::{Spell, SpellView};
     serde(rename_all = "snake_case")
 )]
 pub struct LearnedSpell {
-    pub identifier: Identifier,
+    pub id: Uuid,
     pub spell: Spell,
     pub learned_at: DateTime<Utc>,
 }
@@ -32,7 +31,7 @@ pub struct LearnedSpell {
 )]
 #[cfg_attr(feature = "openapi", derive(Object), oai(rename = "LearnedSpell"))]
 pub struct LearnedSpellView {
-    pub identifier: IdentifierView,
+    pub id: String,
     pub spell: SpellView,
     pub learned_at: String,
 }

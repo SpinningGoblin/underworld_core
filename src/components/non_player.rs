@@ -4,23 +4,22 @@ use bevy_ecs::prelude::Component;
 use poem_openapi::Object;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
-use super::{
-    character::{Character, CharacterView, CharacterViewArgs},
-    identifier::{Identifier, IdentifierView},
-};
+use super::character::{Character, CharacterView, CharacterViewArgs};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct NonPlayer {
     pub character: Character,
-    pub identifier: Identifier,
+    pub id: Uuid,
+    pub name: Option<String>,
 }
 
 impl NonPlayer {
     pub fn set_name(&mut self, name: &str) {
-        self.identifier.set_name(name);
+        self.name = Some(name.to_string());
     }
 
     pub fn kill(&mut self) {
@@ -36,12 +35,13 @@ impl NonPlayer {
 #[cfg_attr(feature = "openapi", derive(Object), oai(rename = "NonPlayer"))]
 pub struct NonPlayerView {
     pub character: CharacterView,
-    pub identifier: IdentifierView,
+    pub id: String,
+    pub name: Option<String>,
 }
 
 impl NonPlayerView {
     pub fn describe_name(&self) -> String {
-        match &self.identifier.name {
+        match &self.name {
             Some(name) => format!("It says its name is {}", name),
             _ => "It has no name.".to_string(),
         }

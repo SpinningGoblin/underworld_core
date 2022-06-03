@@ -9,7 +9,6 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use crate::components::{
-    identifier::{Identifier, IdentifierView},
     items::{
         descriptor::Descriptor,
         fixture_item::{FixtureItem, FixtureItemView},
@@ -28,7 +27,8 @@ use super::fixture_type::FixtureType;
     serde(rename_all = "snake_case")
 )]
 pub struct Fixture {
-    pub identifier: Identifier,
+    pub id: Uuid,
+    pub name: Option<String>,
     pub fixture_type: FixtureType,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub material: Option<Material>,
@@ -49,7 +49,7 @@ impl Fixture {
             .items
             .iter()
             .enumerate()
-            .find(|(_, fixture_item)| fixture_item.item.identifier.id.eq(item_id))
+            .find(|(_, fixture_item)| fixture_item.item.id.eq(item_id))
             .map(|(index, _)| index);
 
         match index {
@@ -68,7 +68,8 @@ impl Fixture {
 )]
 #[cfg_attr(feature = "openapi", derive(Object), oai(rename = "Fixture"))]
 pub struct FixtureView {
-    pub identifier: IdentifierView,
+    pub id: String,
+    pub name: Option<String>,
     pub fixture_type: FixtureType,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub material: Option<Material>,

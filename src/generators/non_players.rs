@@ -1,6 +1,6 @@
 use uuid::Uuid;
 
-use crate::components::{character::Character, identifier::Identifier, non_player::NonPlayer};
+use crate::components::{character::Character, non_player::NonPlayer};
 
 use super::{characters::random_character_generator, generator::Generator};
 
@@ -22,10 +22,8 @@ impl Generator<NonPlayer> for NonPlayerPrototype {
 
         NonPlayer {
             character,
-            identifier: Identifier {
-                id: Uuid::new_v4(),
-                name: self.name.clone(),
-            },
+            id: Uuid::new_v4(),
+            name: self.name.clone(),
         }
     }
 }

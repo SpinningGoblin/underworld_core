@@ -47,7 +47,8 @@ pub fn view(item: &Item, sees_full_item: bool, knows_all: bool) -> ItemView {
     };
 
     ItemView {
-        identifier: super::identifier::view(&item.identifier, true),
+        id: item.id.to_string(),
+        name: item.name.clone(),
         item_type: item.item_type.clone(),
         tags: item.tags.clone(),
         descriptors,

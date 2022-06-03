@@ -1,11 +1,11 @@
 use enum_iterator::IntoEnumIterator;
 use rand::{prelude::ThreadRng, Rng};
 use std::ops::RangeInclusive;
+use uuid::Uuid;
 
 use crate::{
     components::{
         damage::{Attack, Defense},
-        identifier::Identifier,
         inventory::Inventory,
         items::{
             character_item::CharacterItem,
@@ -204,7 +204,8 @@ impl InventoryPrototype {
         };
 
         let item = Item {
-            identifier: Identifier::just_id(),
+            id: Uuid::new_v4(),
+            name: None,
             item_type: ItemType::Scroll,
             tags: vec![Tag::Consumable, Tag::Teachable],
             descriptors: Vec::new(),
