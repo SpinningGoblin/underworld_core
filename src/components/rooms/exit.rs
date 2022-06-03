@@ -34,4 +34,5 @@ pub struct ExitView {
     pub material: Option<Material>,
     pub descriptors: Vec<ExitDescriptor>,
     pub size: Option<Size>,
+    pub has_visited_connected_room: bool,
 }

@@ -8,7 +8,7 @@ use underworld_core::{
 pub fn main() {
     let room_generator = random_room_generator(None);
     let room = room_generator.generate();
-    let view = view(&room, HashMap::new(), HashMap::new(), true);
+    let view = view(&room, HashMap::new(), HashMap::new(), HashMap::new(), true);
 
     println!("{}", &view);
     println!();

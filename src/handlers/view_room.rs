@@ -61,7 +61,31 @@ pub fn handle(_: &LookAtCurrentRoom, state: &GameState) -> Result<Vec<Event>, Bo
         );
     }
 
-    let view = view(room, npc_args, fixture_args, state.player_knows_all);
+    let mut exit_visitations: HashMap<Uuid, bool> = HashMap::new();
+    let room_id = room.id;
+    for exit in room.exits.iter() {
+        let exit_map = match state
+            .world
+            .exit_graph
+            .iter()
+            .find(|exit_map| exit_map.exit_id.eq(&exit.id))
+        {
+            Some(it) => it,
+            None => continue,
+        };
+
+        let has_visited_other_room = exit_map.other_room_id(room_id).is_some();
+
+        exit_visitations.insert(exit.id, has_visited_other_room);
+    }
+
+    let view = view(
+        room,
+        npc_args,
+        fixture_args,
+        exit_visitations,
+        state.player_knows_all,
+    );
 
     Ok(vec![Event::RoomViewed(RoomViewed { view })])
 }

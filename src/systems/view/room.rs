@@ -15,6 +15,7 @@ pub fn view(
     room: &Room,
     non_player_args: HashMap<Uuid, NonPlayerViewArgs>,
     fixture_args: HashMap<Uuid, FixtureViewArgs>,
+    exit_visitations: HashMap<Uuid, bool>,
     knows_all: bool,
 ) -> RoomView {
     let fixture_positions: Vec<FixturePositionView> = room
@@ -35,7 +36,11 @@ pub fn view(
     let exits: Vec<ExitView> = room
         .exits
         .iter()
-        .map(super::exit::view)
+        .map(|exit| {
+            let has_visited_connected_room =
+                exit_visitations.get(&exit.id).cloned().unwrap_or_default();
+            super::exit::view(exit, has_visited_connected_room)
+        })
         .into_iter()
         .collect();
 

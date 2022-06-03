@@ -1,7 +1,8 @@
 use crate::components::rooms::exit::{Exit, ExitView};
 
-pub fn view(exit: &Exit) -> ExitView {
+pub fn view(exit: &Exit, has_visited_connected_room: bool) -> ExitView {
     ExitView {
+        has_visited_connected_room,
         id: exit.id.to_string(),
         name: exit.name.clone(),
         exit_type: exit.exit_type.clone(),
