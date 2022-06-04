@@ -174,6 +174,7 @@ pub fn apply_events(
             }
             Event::PlayerResurrected(_) => {
                 new_player.character.heal_to_max();
+                new_player.character.current_effects.resurrection_aura = false;
             }
             Event::PlayerRetributionAuraDissipated(_) => {
                 new_player.character.current_effects.retribution_aura = None;
