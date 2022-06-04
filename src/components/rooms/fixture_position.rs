@@ -22,8 +22,8 @@ use super::{
 pub struct FixturePosition {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub group_descriptor: Option<GroupDescriptor>,
-    pub fixtures: Vec<Fixture>,
-    pub position_descriptors: Vec<FixturePositionDescriptor>,
+    pub fixture: Fixture,
+    pub position_descriptor: Option<FixturePositionDescriptor>,
 }
 
 #[derive(Clone, Debug)]
@@ -33,17 +33,22 @@ pub struct FixturePosition {
 pub struct FixturePositionView {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub group_descriptor: Option<GroupDescriptor>,
-    pub fixtures: Vec<FixtureView>,
-    pub position_descriptors: Vec<FixturePositionDescriptor>,
+    pub fixture: FixtureView,
+    pub position_descriptor: Option<FixturePositionDescriptor>,
 }
 
 impl Display for FixturePositionView {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut parts: Vec<String> = Vec::new();
 
-        for descriptor in self.position_descriptors.iter().filter(|d| d.is_pre()) {
-            parts.push(format!("{}", descriptor));
-        }
+        match &self.position_descriptor {
+            Some(descriptor) => {
+                if descriptor.is_pre() {
+                    parts.push(format!("{}", descriptor));
+                }
+            }
+            None => {}
+        };
 
         if let Some(group_descriptor) = &self.group_descriptor {
             parts.push(format!("{}", group_descriptor));
@@ -51,9 +56,14 @@ impl Display for FixturePositionView {
 
         parts.push(self.fixtures_description());
 
-        for descriptor in self.position_descriptors.iter().filter(|d| d.is_post()) {
-            parts.push(format!("{}", descriptor));
-        }
+        match &self.position_descriptor {
+            Some(descriptor) => {
+                if descriptor.is_post() {
+                    parts.push(format!("{}", descriptor));
+                }
+            }
+            None => {}
+        };
 
         write!(f, "{}", parts.join(" "))
     }
@@ -65,17 +75,7 @@ impl FixturePositionView {
     }
 
     pub fn fixtures_description(&self) -> String {
-        let counts = crate::utils::frequencies::sorted_frequencies(
-            self.fixtures.iter().map(|f| f.fixture_type.clone()),
-        );
-
-        let mut parts: Vec<String> = Vec::new();
-
-        for (fixture, count) in counts {
-            parts.push(fixture.describe_count(count));
-        }
-
-        parts.join(" and ")
+        self.fixture.describe()
     }
 }
 
@@ -114,7 +114,7 @@ mod tests {
             open: false,
             hidden_compartment_open: false,
         };
-        let chair = Fixture {
+        let _chair = Fixture {
             id: Uuid::new_v4(),
             name: None,
             fixture_type: FixtureType::Chair,
@@ -129,12 +129,12 @@ mod tests {
         };
         let fixture_position = FixturePosition {
             group_descriptor: Some(GroupDescriptor::A),
-            fixtures: vec![table, chair.clone(), chair],
-            position_descriptors: vec![FixturePositionDescriptor::IsInTheCorner],
+            fixture: table,
+            position_descriptor: Some(FixturePositionDescriptor::IsInTheCorner),
         };
 
         assert_eq!(
-            "a table and chairs is in the corner",
+            "a table is in the corner",
             format!("{}", view(&fixture_position, &HashMap::new(), true))
         )
     }

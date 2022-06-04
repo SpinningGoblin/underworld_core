@@ -230,11 +230,11 @@ fn take_item_from_fixture(
     fixture_id: &Uuid,
     item_id: &Uuid,
 ) {
-    let fixture = new_game
+    let fixture_position = new_game
         .current_room_mut()
         .find_fixture_mut(fixture_id)
         .unwrap();
-    let fixture_item = fixture.remove_item(item_id).unwrap();
+    let fixture_item = fixture_position.fixture.remove_item(item_id).unwrap();
 
     let packed_item = CharacterItem {
         is_hidden: false,

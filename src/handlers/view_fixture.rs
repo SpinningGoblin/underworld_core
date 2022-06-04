@@ -15,7 +15,7 @@ pub fn handle(
 ) -> Result<Vec<Event>, Box<dyn Error>> {
     let fixture_id = parse_id(&look_at_fixture.fixture_id)?;
 
-    let fixture = match state.current_room().find_fixture(&fixture_id) {
+    let fixture_position = match state.current_room().find_fixture(&fixture_id) {
         Some(it) => it,
         None => return Err(Box::new(FixtureNotFoundError(fixture_id.to_string()))),
     };
@@ -29,7 +29,7 @@ pub fn handle(
         knows_can_be_opened: knowledge.knows_can_be_opened,
     };
 
-    let view = fixture::view(fixture, &args, state.player_knows_all);
+    let view = fixture::view(&fixture_position.fixture, &args, state.player_knows_all);
 
     Ok(vec![Event::FixtureViewed(FixtureViewed {
         fixture_view: view,

@@ -143,11 +143,7 @@ impl RoomView {
             return "".to_string();
         }
 
-        if self
-            .fixture_positions
-            .iter()
-            .all(|fixture_position| fixture_position.fixtures.is_empty())
-        {
+        if self.fixture_positions.is_empty() {
             return "".to_string();
         }
 

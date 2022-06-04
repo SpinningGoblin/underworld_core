@@ -20,8 +20,7 @@ pub fn handle(_: &LookAtCurrentRoom, state: &GameState) -> Result<Vec<Event>, Bo
     for fixture_id in room
         .fixture_positions
         .iter()
-        .flat_map(|fixture_position| fixture_position.fixtures.iter())
-        .map(|fixture| fixture.id)
+        .map(|fixture_position| fixture_position.fixture.id)
     {
         let knowledge = state.fixture_knowledge(&fixture_id);
 

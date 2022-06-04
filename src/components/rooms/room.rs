@@ -4,7 +4,7 @@ use bevy_ecs::prelude::Component;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::components::{fixtures::fixture::Fixture, non_player::NonPlayer};
+use crate::components::non_player::NonPlayer;
 
 use super::{
     descriptor::Descriptor, dimensions::Dimensions, exit::Exit, fixture_position::FixturePosition,
@@ -40,11 +40,10 @@ impl Room {
             .find(|npc| npc.id.eq(npc_id))
     }
 
-    pub fn find_fixture(&self, fixture_id: &Uuid) -> Option<&Fixture> {
+    pub fn find_fixture(&self, fixture_id: &Uuid) -> Option<&FixturePosition> {
         self.fixture_positions
             .iter()
-            .flat_map(|fixture_position| fixture_position.fixtures.iter())
-            .find(|fixture| fixture.id.eq(fixture_id))
+            .find(|fixture_position| fixture_position.fixture.id.eq(fixture_id))
     }
 
     pub fn first_alive_npc(&self) -> Option<&NonPlayer> {
@@ -61,11 +60,10 @@ impl Room {
             .find(|npc_position| npc_position.npc.id.eq(target_id))
     }
 
-    pub fn find_fixture_mut(&mut self, fixture_id: &Uuid) -> Option<&mut Fixture> {
+    pub fn find_fixture_mut(&mut self, fixture_id: &Uuid) -> Option<&mut FixturePosition> {
         self.fixture_positions
             .iter_mut()
-            .flat_map(|fixture_position| fixture_position.fixtures.iter_mut())
-            .find(|fixture| fixture.id.eq(fixture_id))
+            .find(|fixture_position| fixture_position.fixture.id.eq(fixture_id))
     }
 
     pub fn index_of_npc_position(&self, npc_id: &Uuid) -> Option<usize> {

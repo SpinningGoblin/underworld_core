@@ -21,93 +21,54 @@ pub fn build_fixture_positions(room_type: &RoomType) -> (Vec<FixturePosition>, V
     }
 
     let mut rng = rand::thread_rng();
-
-    let mut used_descriptors: Vec<FixturePositionDescriptor> = Vec::new();
     let mut used_fixtures: Vec<FixtureType> = Vec::new();
     let mut positions: Vec<FixturePosition> = Vec::new();
     for _ in num_groups_range {
         let mut fixture_generators =
             FixtureGenerators::build_with_previous(room_type, &used_fixtures);
-        let fixtures: Vec<Fixture> = (0..group_size(room_type))
-            .filter_map(|_| {
-                if let Some(generator) = fixture_generators.next() {
-                    let fixture = generator.generate();
-                    if !used_fixtures.contains(&fixture.fixture_type) {
-                        used_fixtures.push(fixture.fixture_type.clone());
-                    }
-                    Some(fixture)
-                } else {
-                    None
-                }
-            })
-            .collect();
 
-        let current_fixtures: Vec<FixtureType> =
-            fixtures.iter().map(|f| f.fixture_type.clone()).collect();
-        let counts = crate::utils::frequencies::sorted_frequencies(
-            fixtures.iter().map(|f| f.fixture_type.clone()),
-        );
-        let possible_groups = if counts.get(0).unwrap().1 > 1 {
-            multi_group_descriptors()
-        } else {
-            single_group_descriptors()
-        };
+        let range = 0..group_size(room_type);
 
-        // Base the group descriptor off of how many fixtures are in the start.
-        let index = rng.gen_range(0..possible_groups.len());
-        let group_descriptor = possible_groups.get(index);
-        let possible_positions = possible_positions(&current_fixtures);
-
-        let mut num_position_descriptors: usize = rng.gen_range(1..=2);
-        let mut position_descriptors: Vec<FixturePositionDescriptor> = Vec::new();
-        while num_position_descriptors > 0 {
-            let current_possibilities: Vec<FixturePositionDescriptor> = current_possibilities(
-                &possible_positions,
-                &used_descriptors,
-                &position_descriptors,
-            );
-
-            if current_possibilities.is_empty() {
-                break;
-            }
-
-            let index = rng.gen_range(0..current_possibilities.len());
-            let position_descriptor = current_possibilities.get(index).unwrap();
-            position_descriptors.push(position_descriptor.clone());
-            used_descriptors.push(position_descriptor.clone());
-
-            num_position_descriptors -= 1;
+        if range.is_empty() {
+            continue;
         }
 
-        positions.push(FixturePosition {
-            group_descriptor: group_descriptor.cloned(),
-            fixtures,
-            position_descriptors,
-        });
+        for _ in range {
+            let fixture = if let Some(generator) = fixture_generators.next() {
+                let fixture = generator.generate();
+                if !used_fixtures.contains(&fixture.fixture_type) {
+                    used_fixtures.push(fixture.fixture_type.clone());
+                }
+                fixture
+            } else {
+                continue;
+            };
+
+            let group_descriptors = single_group_descriptors();
+            let group_descriptor = if group_descriptors.is_empty() {
+                None
+            } else {
+                let index = rng.gen_range(0..group_descriptors.len());
+                group_descriptors.get(index)
+            };
+
+            let possible_positions = possible_positions(&[fixture.fixture_type.clone()]);
+            let position_descriptor = if possible_positions.is_empty() {
+                None
+            } else {
+                let index = rng.gen_range(0..possible_positions.len());
+                possible_positions.get(index).cloned()
+            };
+
+            positions.push(FixturePosition {
+                group_descriptor: group_descriptor.cloned(),
+                fixture,
+                position_descriptor,
+            });
+        }
     }
 
     (positions, used_fixtures)
-}
-
-fn current_possibilities(
-    possible_positions: &[FixturePositionDescriptor],
-    used_descriptors: &[FixturePositionDescriptor],
-    position_descriptors: &[FixturePositionDescriptor],
-) -> Vec<FixturePositionDescriptor> {
-    possible_positions
-        .iter()
-        .filter(|descriptor| !used_descriptors.contains(*descriptor))
-        .filter(|descriptor| {
-            if position_descriptors.is_empty() {
-                true
-            } else {
-                position_descriptors
-                    .iter()
-                    .all(|p| !p.unable_to_be_used_with(descriptor))
-            }
-        })
-        .cloned()
-        .collect()
 }
 
 fn possible_positions(fixture_types: &[FixtureType]) -> Vec<FixturePositionDescriptor> {
@@ -155,10 +116,6 @@ fn single_group_descriptors() -> Vec<GroupDescriptor> {
         GroupDescriptor::ALone,
         GroupDescriptor::ASingle,
     ]
-}
-
-fn multi_group_descriptors() -> Vec<GroupDescriptor> {
-    vec![GroupDescriptor::Some, GroupDescriptor::AFew]
 }
 
 fn num_groups(room_type: &RoomType) -> usize {

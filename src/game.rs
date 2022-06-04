@@ -46,7 +46,7 @@ impl Game {
             .current_room()
             .fixture_positions
             .iter()
-            .flat_map(|fixture_position| fixture_position.fixtures.iter())
+            .flat_map(|fixture_position| Some(&fixture_position.fixture))
             .flat_map(|fixture| {
                 let mut actions = vec![
                     Action::LookAtFixture(LookAtFixture {

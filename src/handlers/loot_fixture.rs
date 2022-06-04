@@ -12,7 +12,7 @@ use crate::{
 
 pub fn handle(loot_fixture: &LootFixture, state: &GameState) -> Result<Vec<Event>, Box<dyn Error>> {
     let fixture_id = parse_id(&loot_fixture.fixture_id)?;
-    let fixture = match state.current_room().find_fixture(&fixture_id) {
+    let fixture_position = match state.current_room().find_fixture(&fixture_id) {
         Some(it) => it,
         None => return Err(Box::new(FixtureNotFoundError(fixture_id.to_string()))),
     };
@@ -25,7 +25,8 @@ pub fn handle(loot_fixture: &LootFixture, state: &GameState) -> Result<Vec<Event
             Err(_) => None,
         })
         .collect();
-    let matching_items = fixture
+    let matching_items = fixture_position
+        .fixture
         .items
         .iter()
         .filter(|fixture_item| item_ids.contains(&fixture_item.item.id));
