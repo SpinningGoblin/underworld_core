@@ -52,7 +52,7 @@ pub fn build_fixture_positions(room_type: &RoomType) -> (Vec<FixturePosition>, V
                 group_descriptors.get(index)
             };
 
-            let possible_positions = possible_positions(&[fixture.fixture_type.clone()]);
+            let possible_positions = possible_positions(&fixture.fixture_type);
             let position_descriptor = if possible_positions.is_empty() {
                 None
             } else {
@@ -71,12 +71,8 @@ pub fn build_fixture_positions(room_type: &RoomType) -> (Vec<FixturePosition>, V
     (positions, used_fixtures)
 }
 
-fn possible_positions(fixture_types: &[FixtureType]) -> Vec<FixturePositionDescriptor> {
-    let mut possibilities = if fixture_types.len() == 1 {
-        single_possible_positions()
-    } else {
-        multi_possible_positions()
-    };
+fn possible_positions(fixture_type: &FixtureType) -> Vec<FixturePositionDescriptor> {
+    let mut possibilities = single_possible_positions();
 
     let can_be_broken_on_ground = vec![
         FixtureType::StatueWarrior,
@@ -84,10 +80,7 @@ fn possible_positions(fixture_types: &[FixtureType]) -> Vec<FixturePositionDescr
         FixtureType::Pillar,
     ];
 
-    if fixture_types
-        .iter()
-        .all(|fixture_type| can_be_broken_on_ground.contains(fixture_type))
-    {
+    if can_be_broken_on_ground.contains(fixture_type) {
         possibilities.push(FixturePositionDescriptor::CrackedAndBrokenOnTheGround);
     }
 
@@ -99,14 +92,6 @@ fn single_possible_positions() -> Vec<FixturePositionDescriptor> {
         FixturePositionDescriptor::IsInTheCorner,
         FixturePositionDescriptor::SitsAlongOneSide,
         FixturePositionDescriptor::StandsInTheCorner,
-    ]
-}
-
-fn multi_possible_positions() -> Vec<FixturePositionDescriptor> {
-    vec![
-        FixturePositionDescriptor::AreInTheCorner,
-        FixturePositionDescriptor::AreAlongOneSide,
-        FixturePositionDescriptor::AreScatteredAboutTheRoom,
     ]
 }
 

@@ -19,11 +19,7 @@ use super::descriptor_position::DescriptorPosition;
 )]
 #[cfg_attr(feature = "openapi", derive(Enum), oai(rename_all = "snake_case"))]
 pub enum FixturePositionDescriptor {
-    AreAlongOneSide,
-    AreInTheCorner,
     IsInTheCorner,
-    AreScatteredAboutTheRoom,
-    SitAlongOneSide,
     SitsAlongOneSide,
     StandsInTheCorner,
     CrackedAndBrokenOnTheGround,
@@ -33,10 +29,6 @@ impl FixturePositionDescriptor {
     fn descriptor_position(&self) -> DescriptorPosition {
         match *self {
             FixturePositionDescriptor::IsInTheCorner => DescriptorPosition::Post,
-            FixturePositionDescriptor::AreInTheCorner => DescriptorPosition::Post,
-            FixturePositionDescriptor::AreAlongOneSide => DescriptorPosition::Post,
-            FixturePositionDescriptor::AreScatteredAboutTheRoom => DescriptorPosition::Post,
-            FixturePositionDescriptor::SitAlongOneSide => DescriptorPosition::Post,
             FixturePositionDescriptor::SitsAlongOneSide => DescriptorPosition::Post,
             FixturePositionDescriptor::StandsInTheCorner => DescriptorPosition::Post,
             FixturePositionDescriptor::CrackedAndBrokenOnTheGround => DescriptorPosition::Post,
@@ -64,10 +56,6 @@ impl Display for FixturePositionDescriptor {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let text = match *self {
             FixturePositionDescriptor::IsInTheCorner => "is in the corner",
-            FixturePositionDescriptor::AreInTheCorner => "are in the corner",
-            FixturePositionDescriptor::AreAlongOneSide => "are along one side",
-            FixturePositionDescriptor::AreScatteredAboutTheRoom => "are scattered about the room",
-            FixturePositionDescriptor::SitAlongOneSide => "sit along one side",
             FixturePositionDescriptor::SitsAlongOneSide => "sits along one side",
             FixturePositionDescriptor::StandsInTheCorner => "stands in the corner",
             FixturePositionDescriptor::CrackedAndBrokenOnTheGround => {
