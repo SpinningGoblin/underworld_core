@@ -1,6 +1,6 @@
 use chrono::Utc;
-use enum_iterator::IntoEnumIterator;
 use rand::{prelude::ThreadRng, Rng};
+use strum::IntoEnumIterator;
 use uuid::Uuid;
 
 use crate::components::{
@@ -55,7 +55,7 @@ impl Generator<PlayerCharacter> for PlayerCharacterPrototype {
         let species = match &self.species {
             Some(it) => it.clone(),
             None => {
-                let options: Vec<Species> = Species::into_enum_iter().collect();
+                let options: Vec<Species> = Species::iter().collect();
                 let index = rng.gen_range(0..options.len());
                 options.get(index).unwrap().clone()
             }

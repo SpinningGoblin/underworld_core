@@ -1,5 +1,5 @@
-use enum_iterator::IntoEnumIterator;
 use rand::Rng;
+use strum::IntoEnumIterator;
 
 use crate::{
     components::{
@@ -108,7 +108,7 @@ fn switch_species(species: &Species) -> Species {
 }
 
 fn choose_species() -> Species {
-    let all_species: Vec<Species> = Species::into_enum_iter().collect();
+    let all_species: Vec<Species> = Species::iter().collect();
     let mut rng = rand::thread_rng();
     let index = rng.gen_range(0..all_species.len());
     all_species.get(index).cloned().unwrap_or(Species::Shadow)
@@ -249,7 +249,7 @@ fn life_modifier(species: &Species) -> Option<LifeModifier> {
 
 fn npc_prototype(species: &Species, life_modifier: Option<LifeModifier>) -> NonPlayerPrototype {
     let inventory_prototype = InventoryPrototype {
-        item_types: ItemType::into_enum_iter().collect(),
+        item_types: ItemType::iter().collect(),
         num_equipped_weapons: 1..=1,
         num_equipped_wearables: 1..=4,
         num_carried_weapons: 0..=1,

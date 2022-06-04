@@ -1,5 +1,5 @@
-use enum_iterator::IntoEnumIterator;
 use rand::Rng;
+use strum::IntoEnumIterator;
 
 use crate::{
     components::{
@@ -237,6 +237,6 @@ fn possible_fixtures(room_type: &RoomType) -> Vec<FixtureType> {
             FixtureType::Crate,
             FixtureType::Bucket,
         ],
-        _ => FixtureType::into_enum_iter().collect(),
+        _ => FixtureType::iter().collect(),
     }
 }

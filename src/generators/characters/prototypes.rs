@@ -1,7 +1,7 @@
 use std::ops::RangeInclusive;
 
-use enum_iterator::IntoEnumIterator;
 use rand::Rng;
+use strum::IntoEnumIterator;
 
 use crate::{
     components::{items::item_type::ItemType, life_modifier::LifeModifier, species::Species},
@@ -28,7 +28,7 @@ pub fn basic_character(species: Species) -> CharacterPrototype {
         num_equipped_wearables: 1..=2,
         num_carried_weapons: 0..=1,
         num_carried_wearables: 0..=1,
-        item_types: ItemType::into_enum_iter().collect(),
+        item_types: ItemType::iter().collect(),
         life_modifier: None,
         has_inventory: true,
     };
@@ -43,7 +43,7 @@ pub fn overloaded_character(species: Species) -> CharacterPrototype {
         num_equipped_wearables: 2..=3,
         num_carried_weapons: 2..=5,
         num_carried_wearables: 2..=5,
-        item_types: ItemType::into_enum_iter().collect(),
+        item_types: ItemType::iter().collect(),
         life_modifier: None,
         has_inventory: true,
     };
@@ -65,7 +65,7 @@ pub fn undead_character(species: Species) -> CharacterPrototype {
         num_equipped_wearables: 1..=2,
         num_carried_weapons: 0..=1,
         num_carried_wearables: 0..=1,
-        item_types: ItemType::into_enum_iter().collect(),
+        item_types: ItemType::iter().collect(),
         has_inventory: true,
     };
 

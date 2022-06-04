@@ -26,7 +26,11 @@ pub struct Effects {
     derive(Deserialize, Serialize),
     serde(rename_all = "snake_case")
 )]
-#[cfg_attr(feature = "openapi", derive(Object), oai(rename_all = "snake_case"))]
+#[cfg_attr(
+    feature = "openapi",
+    derive(Object),
+    oai(rename_all = "snake_case", rename = "Effects")
+)]
 pub struct EffectsView {
     pub shield_aura: Option<Defense>,
     pub knows_has_shield_aura: bool,

@@ -1,5 +1,5 @@
-use enum_iterator::IntoEnumIterator;
 use rand::{prelude::ThreadRng, Rng};
+use strum::IntoEnumIterator;
 use std::ops::RangeInclusive;
 use uuid::Uuid;
 
@@ -151,7 +151,7 @@ impl InventoryPrototype {
     }
 
     fn spell_scrolls(&self, rng: &mut ThreadRng) -> Vec<CharacterItem> {
-        let spell_names: Vec<SpellName> = SpellName::into_enum_iter().collect();
+        let spell_names: Vec<SpellName> = SpellName::iter().collect();
         let index = rng.gen_range(0..spell_names.len());
         let spell_name = spell_names.get(index).unwrap();
 

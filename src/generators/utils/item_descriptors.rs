@@ -1,4 +1,4 @@
-use enum_iterator::IntoEnumIterator;
+use strum::IntoEnumIterator;
 
 use crate::components::{items::descriptor::Descriptor, tag::Tag};
 
@@ -7,7 +7,7 @@ pub fn descriptor_for_equipped(descriptor: &Descriptor) -> bool {
 }
 
 pub fn matches_tags(tags: &[Tag]) -> Vec<Descriptor> {
-    Descriptor::into_enum_iter()
+   Descriptor::iter()
         .filter(|descriptor| {
             tags_for_descriptor(descriptor)
                 .iter()

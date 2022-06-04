@@ -1,11 +1,10 @@
-use enum_iterator::IntoEnumIterator;
-
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
 #[cfg(feature = "openapi")]
 use poem_openapi::{Enum, Object};
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
+use strum_macros::EnumIter;
 
 use crate::components::{
     damage::{Attack, Defense},
@@ -25,7 +24,7 @@ pub struct ConsumableEffect {
     pub learn_spell_effect: Option<LearnSpellEffect>,
 }
 
-#[derive(Clone, Debug, IntoEnumIterator, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, EnumIter, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
     feature = "serialization",

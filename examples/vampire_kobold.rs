@@ -1,4 +1,3 @@
-use enum_iterator::IntoEnumIterator;
 use underworld_core::{
     components::{
         character::CharacterViewArgs, items::item_type::ItemType, life_modifier::LifeModifier,
@@ -8,10 +7,11 @@ use underworld_core::{
     },
     systems::view::character::view,
 };
+use strum::IntoEnumIterator;
 
 pub fn main() {
     let inventory_prototype = InventoryPrototype {
-        item_types: ItemType::into_enum_iter().collect(),
+        item_types: ItemType::iter().collect(),
         num_equipped_weapons: 1..=3,
         num_equipped_wearables: 1..=3,
         num_carried_weapons: 1..=2,

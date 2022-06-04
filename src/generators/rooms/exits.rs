@@ -1,5 +1,5 @@
-use enum_iterator::IntoEnumIterator;
 use rand::{prelude::ThreadRng, Rng};
+use strum::IntoEnumIterator;
 use uuid::Uuid;
 
 use crate::components::{
@@ -67,7 +67,7 @@ fn exit_type(rng: &mut ThreadRng, room_type: &RoomType) -> ExitType {
             ExitType::HoleInTheFloor,
             ExitType::HoleInTheWall,
         ],
-        _ => ExitType::into_enum_iter().collect(),
+        _ => ExitType::iter().collect(),
     };
 
     let index = rng.gen_range(0..possible_types.len());

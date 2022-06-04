@@ -1,7 +1,7 @@
 use std::ops::RangeInclusive;
 
-use enum_iterator::IntoEnumIterator;
 use rand::{prelude::ThreadRng, Rng};
+use strum::IntoEnumIterator;
 use uuid::Uuid;
 
 use crate::{
@@ -391,7 +391,7 @@ fn possible_item_types(fixture_type: &FixtureType, size: &Size) -> Vec<ItemType>
         | (FixtureType::WeaponRack, Size::Squat)
         | (FixtureType::WeaponRack, Size::Tall)
         | (FixtureType::WeaponRack, Size::Tiny)
-        | (FixtureType::WeaponRack, Size::Wide) => ItemType::into_enum_iter().collect(),
+        | (FixtureType::WeaponRack, Size::Wide) => ItemType::iter().collect(),
         _ => Vec::new(),
     }
 }

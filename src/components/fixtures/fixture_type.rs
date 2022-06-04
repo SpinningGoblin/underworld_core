@@ -1,10 +1,10 @@
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
-use enum_iterator::IntoEnumIterator;
 #[cfg(feature = "openapi")]
 use poem_openapi::Enum;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
+use strum_macros::EnumIter;
 
 use std::fmt::Display;
 
@@ -13,7 +13,7 @@ use crate::components::{
     tag::{Tag, Tagged},
 };
 
-#[derive(Clone, Debug, IntoEnumIterator, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, EnumIter, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
     feature = "serialization",

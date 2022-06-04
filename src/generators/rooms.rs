@@ -5,8 +5,8 @@ pub mod npcs;
 
 use std::ops::RangeInclusive;
 
-use enum_iterator::IntoEnumIterator;
 use rand::Rng;
+use strum::IntoEnumIterator;
 use uuid::Uuid;
 
 use crate::components::rooms::{
@@ -76,7 +76,7 @@ pub fn room_generator(room_type: &RoomType, entrance_id: Option<Uuid>) -> impl G
 }
 
 pub fn random_room_generator(entrance_id: Option<Uuid>) -> impl Generator<Room> {
-    let room_types: Vec<RoomType> = RoomType::into_enum_iter().collect();
+    let room_types: Vec<RoomType> = RoomType::iter().collect();
     let mut rng = rand::thread_rng();
     let index = rng.gen_range(0..room_types.len());
     let room_type = room_types.get(index).unwrap();
@@ -86,10 +86,10 @@ pub fn random_room_generator(entrance_id: Option<Uuid>) -> impl Generator<Room> 
 
 impl RoomType {
     fn possible_descriptors(&self) -> Vec<Descriptor> {
-        Descriptor::into_enum_iter().collect()
+        Descriptor::iter().collect()
     }
 
     fn possible_flavours(&self) -> Vec<Flavour> {
-        Flavour::into_enum_iter().collect()
+        Flavour::iter().collect()
     }
 }
