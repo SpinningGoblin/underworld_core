@@ -29,7 +29,7 @@ pub fn npc_attack_player(player: &PlayerCharacter, npc: &NonPlayer) -> Vec<Event
             attacker_id: npc.id,
             damage: player_damage,
         }));
-        if player_damage > player.character.get_current_health().unwrap() {
+        if player_damage >= player.character.get_current_health().unwrap() {
             events.push(Event::PlayerKilled(PlayerKilled { killer_id: npc.id }));
 
             if player.character.current_effects.resurrection_aura {
