@@ -12,18 +12,6 @@ pub fn view(character: &Character, args: &CharacterViewArgs, knows_all: bool) ->
         (None, false)
     };
 
-    let (species, species_known) = if args.knows_species || knows_all {
-        (Some(character.species.clone()), true)
-    } else {
-        (None, false)
-    };
-
-    let (life_modifier, life_modifier_known) = if args.knows_life_modifier || knows_all {
-        (character.life_modifier.clone(), true)
-    } else {
-        (None, false)
-    };
-
     let (inventory, inventory_known) = if args.knows_inventory || knows_all {
         (
             Some(super::inventory::view(
@@ -89,10 +77,8 @@ pub fn view(character: &Character, args: &CharacterViewArgs, knows_all: bool) ->
             health_known,
             height: character.stats.height.clone(),
         },
-        species,
-        species_known,
-        life_modifier,
-        life_modifier_known,
+        species: character.species.clone(),
+        life_modifier: character.life_modifier.clone(),
         inventory,
         inventory_known,
         spell_memory,

@@ -49,8 +49,6 @@ pub fn handle(_: &LookAtCurrentRoom, state: &GameState) -> Result<Vec<Event>, Bo
             NonPlayerViewArgs {
                 character_args: CharacterViewArgs {
                     knows_health: knowledge.knows_health,
-                    knows_species: knowledge.knows_species,
-                    knows_life_modifier: knowledge.knows_life_modifier,
                     knows_inventory: knowledge.knows_inventory,
                     knows_hidden_in_inventory: knowledge.knows_hidden_in_inventory,
                     knows_packed_in_inventory: knowledge.knows_packed_in_inventory,

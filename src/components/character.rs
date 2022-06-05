@@ -173,12 +173,9 @@ impl Character {
 #[cfg_attr(feature = "openapi", derive(Object), oai(rename = "Character"))]
 pub struct CharacterView {
     pub stats: StatsView,
-    #[cfg_attr(feature = "serialization", serde(default))]
-    pub species: Option<Species>,
-    pub species_known: bool,
+    pub species: Species,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub life_modifier: Option<LifeModifier>,
-    pub life_modifier_known: bool,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub inventory: Option<InventoryView>,
     pub inventory_known: bool,
@@ -195,8 +192,6 @@ pub struct CharacterView {
 #[cfg_attr(feature = "openapi", derive(Object))]
 pub struct CharacterViewArgs {
     pub knows_health: bool,
-    pub knows_species: bool,
-    pub knows_life_modifier: bool,
     pub knows_inventory: bool,
     pub knows_hidden_in_inventory: bool,
     pub knows_packed_in_inventory: bool,
@@ -210,17 +205,11 @@ impl CharacterView {
             descriptions.push(format!("{}", self.stats.height));
         }
 
-        if self.life_modifier_known {
-            if let Some(life_modifier) = &self.life_modifier {
-                descriptions.push(format!("{}", life_modifier));
-            }
+        if let Some(life_modifier) = &self.life_modifier {
+            descriptions.push(format!("{}", life_modifier));
         }
 
-        if self.species_known {
-            if let Some(species) = &self.species {
-                descriptions.push(format!("{}", species));
-            }
-        }
+        descriptions.push(format!("{}", &self.species));
 
         descriptions.join(" ")
     }

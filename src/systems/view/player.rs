@@ -6,8 +6,6 @@ use crate::components::{
 pub fn check(player_character: PlayerCharacter) -> PlayerCharacterView {
     let args = CharacterViewArgs {
         knows_health: true,
-        knows_species: true,
-        knows_life_modifier: true,
         knows_inventory: true,
         knows_hidden_in_inventory: true,
         knows_packed_in_inventory: true,

@@ -75,17 +75,10 @@ impl RoomView {
         let original_species_counts = self.species_counts(&non_players);
         let mut current_counts = original_species_counts.clone();
         for npc in non_players.iter() {
-            if !npc.character.species_known {
-                continue;
-            }
-
-            let (original_species_count, current_species_count) = match &npc.character.species {
-                Some(it) => (
-                    original_species_counts.get(it).unwrap(),
-                    current_counts.get(it).unwrap(),
-                ),
-                None => continue,
-            };
+            let (original_species_count, current_species_count) = (
+                original_species_counts.get(&npc.character.species).unwrap(),
+                current_counts.get(&npc.character.species).unwrap(),
+            );
 
             if original_species_count.eq(&1) {
                 descriptions.push(npc.describe(""));
@@ -93,9 +86,9 @@ impl RoomView {
                 let starter = get_count_text(original_species_count, current_species_count);
                 descriptions.push(npc.describe(&starter));
                 let new_count = *current_species_count - 1;
-                if let Some(species) = &npc.character.species {
-                    current_counts.insert(species.clone(), new_count).unwrap();
-                }
+                current_counts
+                    .insert(npc.character.species.clone(), new_count)
+                    .unwrap();
             }
         }
 
@@ -128,11 +121,7 @@ impl RoomView {
 
     fn species_counts(&self, non_players: &[&NonPlayerView]) -> HashMap<Species, usize> {
         non_players.iter().fold(HashMap::new(), |mut acc, npc| {
-            if npc.character.species_known {
-                if let Some(species) = &npc.character.species {
-                    *acc.entry(species.clone()).or_insert(0) += 1;
-                }
-            }
+            *acc.entry(npc.character.species.clone()).or_insert(0) += 1;
             acc
         })
     }

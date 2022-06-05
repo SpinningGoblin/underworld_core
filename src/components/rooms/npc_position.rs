@@ -59,12 +59,7 @@ impl Display for NpcPositionView {
 
 impl NpcPositionView {
     fn species_description(&self) -> String {
-        self.npc
-            .character
-            .species
-            .clone()
-            .map(|species| species.describe_count(1))
-            .unwrap_or_default()
+        self.npc.character.species.describe_count(1)
     }
 
     pub fn display_as_sentence(&self) -> String {
