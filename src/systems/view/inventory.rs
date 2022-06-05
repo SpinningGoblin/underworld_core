@@ -15,7 +15,7 @@ pub fn view(
                 Some(super::character_item::view(
                     character_item,
                     knows_hidden,
-                    knows_all,
+                    true,
                 ))
             } else {
                 None
@@ -28,7 +28,7 @@ pub fn view(
         .filter(|character_item| character_item.is_packed())
         .filter_map(|character_item| {
             if knows_packed || knows_all {
-                Some(super::character_item::view(character_item, true, knows_all))
+                Some(super::character_item::view(character_item, true, true))
             } else {
                 None
             }
