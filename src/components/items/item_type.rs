@@ -1,5 +1,3 @@
-use std::fmt::Display;
-
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
 #[cfg(feature = "openapi")]
@@ -124,48 +122,5 @@ impl Tagged for ItemType {
             ItemType::TopHat => vec![Tag::Clothing],
             ItemType::Scroll => vec![Tag::Consumable, Tag::Teachable],
         }
-    }
-}
-
-impl Display for ItemType {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let text = match *self {
-            ItemType::Breastplate => "breast plate",
-            ItemType::Boots => "boots",
-            ItemType::Buckler => "buckler",
-            ItemType::Cloak => "cloak",
-            ItemType::Club => "club",
-            ItemType::Crown => "crown",
-            ItemType::Dagger => "dagger",
-            ItemType::Dirk => "dirk",
-            ItemType::Gloves => "gloves",
-            ItemType::GreatSword => "great sword",
-            ItemType::Hammer => "hammer",
-            ItemType::Helm => "helm",
-            ItemType::LoinCloth => "loin cloth",
-            ItemType::LongSword => "long sword",
-            ItemType::Mace => "mace",
-            ItemType::Mask => "mask",
-            ItemType::Morningstar => "morningstar",
-            ItemType::PlateBoots => "plate boots",
-            ItemType::PlateGauntlets => "plate gauntlets",
-            ItemType::PlateHelmet => "plate helmet",
-            ItemType::Shield => "shield",
-            ItemType::ShortSword => "short sword",
-            ItemType::Shirt => "shirt",
-            ItemType::Shackles => "shackles",
-            ItemType::Trousers => "trousers",
-            ItemType::Vest => "vest",
-            ItemType::Whip => "whip",
-            ItemType::Halberd => "halberd",
-            ItemType::Pike => "pike",
-            ItemType::Spear => "spear",
-            ItemType::BowlerHat => "bowler hat",
-            ItemType::Fedora => "fedora",
-            ItemType::TopHat => "top hat",
-            ItemType::Scroll => "scroll",
-        };
-
-        write!(f, "{}", text)
     }
 }

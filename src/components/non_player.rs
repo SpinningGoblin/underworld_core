@@ -39,21 +39,6 @@ pub struct NonPlayerView {
     pub name: Option<String>,
 }
 
-impl NonPlayerView {
-    pub fn describe_name(&self) -> String {
-        match &self.name {
-            Some(name) => format!("It says its name is {}", name),
-            _ => "It has no name.".to_string(),
-        }
-    }
-
-    pub fn describe(&self, starter: &str) -> String {
-        let descriptions: Vec<String> = vec![self.character.describe_inventory(starter)];
-
-        descriptions.join("")
-    }
-}
-
 #[derive(Clone, Debug, Default)]
 pub struct NonPlayerViewArgs {
     pub character_args: CharacterViewArgs,

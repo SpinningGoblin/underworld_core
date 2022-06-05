@@ -6,8 +6,6 @@ use poem_openapi::Enum;
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
-use std::fmt::Display;
-
 use crate::components::{
     material::{BuiltWithMaterial, Material},
     tag::{Tag, Tagged},
@@ -36,39 +34,6 @@ pub enum FixtureType {
     StatueWarrior,
     Table,
     WeaponRack,
-}
-
-impl FixtureType {
-    pub fn describe_count(&self, count: usize) -> String {
-        if count > 1 {
-            format!("{}s", self)
-        } else {
-            format!("{}", self)
-        }
-    }
-}
-
-impl Display for FixtureType {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let text = match *self {
-            FixtureType::Bucket => "bucket",
-            FixtureType::Table => "table",
-            FixtureType::Chair => "chair",
-            FixtureType::Chest => "chest",
-            FixtureType::WeaponRack => "weapon rack",
-            FixtureType::Bed => "bed",
-            FixtureType::Cot => "cot",
-            FixtureType::SleepingRoll => "sleeping roll",
-            FixtureType::Barrel => "barrel",
-            FixtureType::Crate => "crate",
-            FixtureType::Coffin => "coffin",
-            FixtureType::Pillar => "pillar",
-            FixtureType::StatueTentacledMonstrosity => "statue of tentacled monstrosity",
-            FixtureType::StatueWarrior => "statue of a warrior",
-        };
-
-        write!(f, "{}", text)
-    }
 }
 
 impl Tagged for FixtureType {

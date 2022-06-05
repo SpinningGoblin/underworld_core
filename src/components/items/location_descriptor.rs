@@ -1,5 +1,3 @@
-use std::fmt::Display;
-
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
 #[cfg(feature = "openapi")]
@@ -140,27 +138,5 @@ impl LocationDescriptor {
                 | LocationDescriptor::HangingMoldySheath
                 | LocationDescriptor::SheathedAtHip
         )
-    }
-}
-
-impl Display for LocationDescriptor {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match *self {
-            LocationDescriptor::StrappedToThigh => write!(f, "strapped to its thigh"),
-            LocationDescriptor::ClenchedInFist => write!(f, "clenched in its fist"),
-            LocationDescriptor::HeldLoosely => write!(f, "held loosely"),
-            LocationDescriptor::StrappedToBack => write!(f, "strapped to its back"),
-            LocationDescriptor::SheathedAtHip => write!(f, "sheathed at its hip"),
-            LocationDescriptor::HangingMoldySheath => write!(f, "hanging in a moldy sheath"),
-            LocationDescriptor::HangingLooselyShoulders => {
-                write!(f, "which hangs loosely around its shoulders")
-            }
-            LocationDescriptor::DanglingFromWrists => write!(f, "dangling from its wrists"),
-            LocationDescriptor::HangingHip => write!(f, "hanging at its hip"),
-            LocationDescriptor::AlmostFallingGrip => write!(f, "almost falling from its grip"),
-            LocationDescriptor::ClenchedInFists => write!(f, "clenched in its fists"),
-            LocationDescriptor::None => write!(f, ""),
-            LocationDescriptor::CoiledAtWaist => write!(f, "coiled at its waist"),
-        }
     }
 }

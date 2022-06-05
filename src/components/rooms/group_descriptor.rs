@@ -1,5 +1,3 @@
-use std::fmt::Display;
-
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
 #[cfg(feature = "openapi")]
@@ -19,14 +17,4 @@ pub enum GroupDescriptor {
     A,
     ALone,
     ASingle,
-}
-
-impl Display for GroupDescriptor {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match *self {
-            GroupDescriptor::ALone => write!(f, "a lone"),
-            GroupDescriptor::ASingle => write!(f, "a single"),
-            GroupDescriptor::A => write!(f, "a"),
-        }
-    }
 }

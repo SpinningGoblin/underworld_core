@@ -1,5 +1,3 @@
-use std::fmt::Display;
-
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
 #[cfg(feature = "openapi")]
@@ -49,20 +47,5 @@ impl FixturePositionDescriptor {
 
     pub fn is_post(&self) -> bool {
         self.descriptor_position() == DescriptorPosition::Post
-    }
-}
-
-impl Display for FixturePositionDescriptor {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let text = match *self {
-            FixturePositionDescriptor::IsInTheCorner => "is in the corner",
-            FixturePositionDescriptor::SitsAlongOneSide => "sits along one side",
-            FixturePositionDescriptor::StandsInTheCorner => "stands in the corner",
-            FixturePositionDescriptor::CrackedAndBrokenOnTheGround => {
-                "cracked and broken on the ground"
-            }
-        };
-
-        write!(f, "{}", text)
     }
 }

@@ -1,5 +1,3 @@
-use std::fmt::Display;
-
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
 #[cfg(feature = "openapi")]
@@ -28,18 +26,6 @@ pub enum Descriptor {
     Dim,
     Grimy,
     Moist,
-}
-
-impl Display for Descriptor {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match *self {
-            Descriptor::Chill => write!(f, "chill"),
-            Descriptor::Dark => write!(f, "dark"),
-            Descriptor::Dim => write!(f, "dim"),
-            Descriptor::Grimy => write!(f, "grimy"),
-            Descriptor::Moist => write!(f, "moist"),
-        }
-    }
 }
 
 impl Descriptor {

@@ -1,5 +1,3 @@
-use std::fmt::Display;
-
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
 #[cfg(feature = "openapi")]
@@ -29,28 +27,6 @@ pub enum Size {
     Tall,
     Tiny,
     Wide,
-}
-
-impl Display for Size {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let text = match *self {
-            Size::Average => "average",
-            Size::Huge => "huge",
-            Size::Long => "long",
-            Size::Massive => "massive",
-            Size::Medium => "medium",
-            Size::Narrow => "narrow",
-            Size::Short => "short",
-            Size::Squat => "squat",
-            Size::Tall => "tall",
-            Size::Wide => "wide",
-            Size::Large => "large",
-            Size::Small => "small",
-            Size::Tiny => "tiny",
-        };
-
-        write!(f, "{}", text)
-    }
 }
 
 impl Size {

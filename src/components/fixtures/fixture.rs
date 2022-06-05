@@ -1,5 +1,3 @@
-use std::fmt::Display;
-
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
 #[cfg(feature = "openapi")]
@@ -84,30 +82,6 @@ pub struct FixtureView {
     pub can_be_opened: bool,
     pub knows_if_can_be_opened: bool,
     pub hidden_compartment_open: bool,
-}
-
-impl Display for FixtureView {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.describe())
-    }
-}
-
-impl FixtureView {
-    pub fn describe(&self) -> String {
-        let mut descriptions: Vec<String> = Vec::new();
-
-        if !self.size.is_average() {
-            descriptions.push(format!("{}", &self.size));
-        }
-
-        match &self.material {
-            Some(material) => descriptions.push(format!("{}", material)),
-            None => {}
-        }
-
-        descriptions.push(format!("{}", &self.fixture_type));
-        descriptions.join(" ")
-    }
 }
 
 #[derive(Clone, Debug, Default)]

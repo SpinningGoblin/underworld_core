@@ -1,5 +1,3 @@
-use std::fmt::Display;
-
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
 #[cfg(feature = "openapi")]
@@ -27,23 +25,4 @@ pub enum RoomType {
     Cemetery,
     Crypt,
     TempleHall,
-}
-
-impl Display for RoomType {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let text = match *self {
-            RoomType::Cave => "cave",
-            RoomType::Cavern => "cavern",
-            RoomType::EntryWay => "entryway",
-            RoomType::PrisonCell => "prison cell",
-            RoomType::Room => "room",
-            RoomType::TavernHall => "tavern hall",
-            RoomType::Mausoleum => "mausoleum",
-            RoomType::Cemetery => "cemetery",
-            RoomType::Crypt => "crypt",
-            RoomType::TempleHall => "temple hall",
-        };
-
-        write!(f, "{}", text)
-    }
 }
