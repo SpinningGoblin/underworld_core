@@ -28,22 +28,28 @@ pub fn handle(
         None => return Err(Box::new(NpcNotFoundError(npc_id.to_string()))),
     };
 
-    let mut rng = rand::thread_rng();
-
-    if inspect_npc.discover_health && roll_d6(&mut rng, 1, 0) >= DISCOVER_HEALTH_CHANCE {
+    if npc.character.is_dead() {
         events.push(Event::NpcHealthDiscovered(NpcHealthDiscovered { npc_id }));
-    }
-
-    if inspect_npc.discover_packed_items && roll_d6(&mut rng, 1, 0) >= DISCOVER_PACKED_CHANCE {
         events.push(Event::NpcPackedDiscovered(NpcPackedDiscovered { npc_id }));
-    }
-
-    if inspect_npc.discover_hidden_items && roll_d6(&mut rng, 1, 0) >= DISCOVER_HIDDEN_CHANCE {
         events.push(Event::NpcHiddenDiscovered(NpcHiddenDiscovered { npc_id }));
-    }
+    } else {
+        let mut rng = rand::thread_rng();
 
-    if roll_d6(&mut rng, 1, 0) >= NPC_ATTACKS_CHANCE {
-        events.append(&mut npc_attack_player(player, npc));
+        if inspect_npc.discover_health && roll_d6(&mut rng, 1, 0) >= DISCOVER_HEALTH_CHANCE {
+            events.push(Event::NpcHealthDiscovered(NpcHealthDiscovered { npc_id }));
+        }
+
+        if inspect_npc.discover_packed_items && roll_d6(&mut rng, 1, 0) >= DISCOVER_PACKED_CHANCE {
+            events.push(Event::NpcPackedDiscovered(NpcPackedDiscovered { npc_id }));
+        }
+
+        if inspect_npc.discover_hidden_items && roll_d6(&mut rng, 1, 0) >= DISCOVER_HIDDEN_CHANCE {
+            events.push(Event::NpcHiddenDiscovered(NpcHiddenDiscovered { npc_id }));
+        }
+
+        if roll_d6(&mut rng, 1, 0) >= NPC_ATTACKS_CHANCE {
+            events.append(&mut npc_attack_player(player, npc));
+        }
     }
 
     Ok(events)
