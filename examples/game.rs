@@ -34,7 +34,6 @@ pub fn main() {
         let inspect = InspectNpc {
             npc_id: npc_id.to_string(),
             discover_health: true,
-            discover_name: true,
             discover_packed_items: true,
             discover_hidden_items: true,
         };

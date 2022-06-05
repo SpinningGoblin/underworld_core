@@ -55,7 +55,6 @@ pub fn handle(_: &LookAtCurrentRoom, state: &GameState) -> Result<Vec<Event>, Bo
                     knows_hidden_in_inventory: knowledge.knows_hidden_in_inventory,
                     knows_packed_in_inventory: knowledge.knows_packed_in_inventory,
                 },
-                knows_name: knowledge.knows_name,
             },
         );
     }

@@ -1,6 +1,6 @@
 use rand::{prelude::ThreadRng, Rng};
-use strum::IntoEnumIterator;
 use std::ops::RangeInclusive;
+use strum::IntoEnumIterator;
 use uuid::Uuid;
 
 use crate::{

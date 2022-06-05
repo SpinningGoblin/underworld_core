@@ -4,16 +4,13 @@ use crate::{
     actions::InspectNpc,
     components::{games::game_state::GameState, player::PlayerCharacter},
     errors::NpcNotFoundError,
-    events::{
-        Event, NpcHealthDiscovered, NpcHiddenDiscovered, NpcNameDiscovered, NpcPackedDiscovered,
-    },
+    events::{Event, NpcHealthDiscovered, NpcHiddenDiscovered, NpcPackedDiscovered},
     utils::{ids::parse_id, rolls::roll_d6},
 };
 
 use super::helpers::npc_attack_player;
 
 const DISCOVER_HEALTH_CHANCE: i32 = 5;
-const DISCOVER_NAME_CHANCE: i32 = 6;
 const DISCOVER_PACKED_CHANCE: i32 = 4;
 const DISCOVER_HIDDEN_CHANCE: i32 = 2;
 const NPC_ATTACKS_CHANCE: i32 = 5;
@@ -35,10 +32,6 @@ pub fn handle(
 
     if inspect_npc.discover_health && roll_d6(&mut rng, 1, 0) >= DISCOVER_HEALTH_CHANCE {
         events.push(Event::NpcHealthDiscovered(NpcHealthDiscovered { npc_id }));
-    }
-
-    if inspect_npc.discover_name && roll_d6(&mut rng, 1, 0) >= DISCOVER_NAME_CHANCE {
-        events.push(Event::NpcNameDiscovered(NpcNameDiscovered { npc_id }));
     }
 
     if inspect_npc.discover_packed_items && roll_d6(&mut rng, 1, 0) >= DISCOVER_PACKED_CHANCE {

@@ -16,12 +16,7 @@ pub fn view(
         .get(&npc_position.npc.id)
         .cloned()
         .unwrap_or_default();
-    let npc = super::non_player::view(
-        &npc_position.npc,
-        &args.character_args,
-        args.knows_name,
-        knows_all,
-    );
+    let npc = super::non_player::view(&npc_position.npc, &args.character_args, knows_all);
     NpcPositionView {
         group_descriptor: npc_position.group_descriptor.clone(),
         npc,

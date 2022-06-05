@@ -1,3 +1,4 @@
+use strum::IntoEnumIterator;
 use underworld_core::{
     components::{
         character::CharacterViewArgs, items::item_type::ItemType, life_modifier::LifeModifier,
@@ -7,7 +8,6 @@ use underworld_core::{
     },
     systems::view::character::view,
 };
-use strum::IntoEnumIterator;
 
 pub fn main() {
     let inventory_prototype = InventoryPrototype {

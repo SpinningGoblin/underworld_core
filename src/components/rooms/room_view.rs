@@ -37,7 +37,6 @@ pub struct RoomViewArgs {
     pub can_see_hidden: bool,
     pub can_see_packed: bool,
     pub knows_character_health: bool,
-    pub knows_names: bool,
     pub knows_fixture_items: bool,
     pub knows_fixture_hidden: bool,
     pub knows_fixture_can_be_opened: bool,

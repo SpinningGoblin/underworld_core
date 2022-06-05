@@ -32,7 +32,6 @@ pub enum Event {
     NpcHit(super::NpcHit),
     NpcKilled(super::NpcKilled),
     NpcMissed(super::NpcMissed),
-    NpcNameDiscovered(super::NpcNameDiscovered),
     NpcPackedDiscovered(super::NpcPackedDiscovered),
     NpcViewed(super::NpcViewed),
     NpcWeaponReadied(super::NpcWeaponReadied),
@@ -118,11 +117,6 @@ pub fn apply_events(
                 let mut knowledge = new_game.npc_knowledge(&hidden_discovered.npc_id);
                 knowledge.knows_hidden_in_inventory = true;
                 new_game.set_npc_knowledge(hidden_discovered.npc_id, knowledge);
-            }
-            Event::NpcNameDiscovered(name_discovered) => {
-                let mut knowledge = new_game.npc_knowledge(&name_discovered.npc_id);
-                knowledge.knows_name = true;
-                new_game.set_npc_knowledge(name_discovered.npc_id, knowledge);
             }
             Event::NpcPackedDiscovered(packed_discovered) => {
                 let mut knowledge = new_game.npc_knowledge(&packed_discovered.npc_id);

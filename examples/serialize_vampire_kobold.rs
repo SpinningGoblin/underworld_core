@@ -2,6 +2,7 @@ pub fn main() {
     #[cfg(feature = "serialization")]
     #[cfg(feature = "json")]
     {
+        use strum::IntoEnumIterator;
         use underworld_core::components::items::item_type::ItemType;
         use underworld_core::{
             components::life_modifier::LifeModifier,
@@ -10,7 +11,6 @@ pub fn main() {
                 inventory::InventoryPrototype, non_players::NonPlayerPrototype,
             },
         };
-        use strum::IntoEnumIterator;
 
         let inventory_prototype = InventoryPrototype {
             item_types: ItemType::iter().collect(),

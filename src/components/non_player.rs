@@ -57,5 +57,4 @@ impl NonPlayerView {
 #[derive(Clone, Debug, Default)]
 pub struct NonPlayerViewArgs {
     pub character_args: CharacterViewArgs,
-    pub knows_name: bool,
 }

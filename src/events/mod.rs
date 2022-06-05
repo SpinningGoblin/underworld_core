@@ -12,7 +12,6 @@ pub mod npc_hidden_discovered;
 pub mod npc_hit;
 pub mod npc_killed;
 pub mod npc_missed;
-pub mod npc_name_discovered;
 pub mod npc_packed_discovered;
 pub mod npc_viewed;
 pub mod npc_weapon_readied;
@@ -45,8 +44,8 @@ pub use {
     item_taken_from_fixture::ItemTakenFromFixture, item_taken_from_npc::ItemTakenFromNpc,
     npc_health_discovered::NpcHealthDiscovered, npc_hidden_discovered::NpcHiddenDiscovered,
     npc_hit::NpcHit, npc_killed::NpcKilled, npc_missed::NpcMissed,
-    npc_name_discovered::NpcNameDiscovered, npc_packed_discovered::NpcPackedDiscovered,
-    npc_viewed::NpcViewed, npc_weapon_readied::NpcWeaponReadied,
+    npc_packed_discovered::NpcPackedDiscovered, npc_viewed::NpcViewed,
+    npc_weapon_readied::NpcWeaponReadied,
     player_gains_resurrection_aura::PlayerGainsResurrectionAura,
     player_gains_retribution_aura::PlayerGainsRetributionAura,
     player_gains_shield_aura::PlayerGainsShieldAura, player_healed::PlayerHealed,

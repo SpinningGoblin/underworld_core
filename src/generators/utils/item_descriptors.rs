@@ -7,7 +7,7 @@ pub fn descriptor_for_equipped(descriptor: &Descriptor) -> bool {
 }
 
 pub fn matches_tags(tags: &[Tag]) -> Vec<Descriptor> {
-   Descriptor::iter()
+    Descriptor::iter()
         .filter(|descriptor| {
             tags_for_descriptor(descriptor)
                 .iter()
