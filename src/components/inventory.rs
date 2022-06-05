@@ -55,15 +55,7 @@ impl Inventory {
     pub fn equipped_wearables(&self) -> Vec<CharacterItem> {
         self.equipment
             .iter()
-            .filter(|item| item.is_wearable() && item.is_equipped())
-            .cloned()
-            .collect()
-    }
-
-    pub fn equipped_weapons(&self) -> Vec<CharacterItem> {
-        self.equipment
-            .iter()
-            .filter(|item| item.is_weapon() && item.is_equipped())
+            .filter(|item| item.is_wearable() && item.is_at_the_ready())
             .cloned()
             .collect()
     }
@@ -83,21 +75,8 @@ impl Inventory {
             .collect()
     }
 
-    pub fn unequipped_weapons(&self) -> Vec<&CharacterItem> {
-        self.equipment
-            .iter()
-            .filter(|item| item.is_weapon() && !item.is_equipped())
-            .collect()
-    }
-
     pub fn strongest_non_readied_weapon(&self) -> Option<&CharacterItem> {
         self.non_readied_weapons()
-            .into_iter()
-            .max_by(|a, b| a.item.num_attack_rolls().cmp(&b.item.num_attack_rolls()))
-    }
-
-    pub fn strongest_unequipped_weapon(&self) -> Option<&CharacterItem> {
-        self.unequipped_weapons()
             .into_iter()
             .max_by(|a, b| a.item.num_attack_rolls().cmp(&b.item.num_attack_rolls()))
     }

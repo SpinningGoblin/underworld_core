@@ -113,10 +113,6 @@ impl Character {
         }
     }
 
-    pub fn no_weapons_equipped(&self) -> bool {
-        self.inventory.equipped_weapons().is_empty()
-    }
-
     pub fn no_weapons_readied(&self) -> bool {
         self.inventory.readied_weapons().is_empty()
     }
@@ -127,10 +123,6 @@ impl Character {
 
     pub fn strongest_non_readied_weapon(&self) -> Option<&CharacterItem> {
         self.inventory.strongest_non_readied_weapon()
-    }
-
-    pub fn strongest_unequipped_weapon(&self) -> Option<&CharacterItem> {
-        self.inventory.strongest_unequipped_weapon()
     }
 
     pub fn attack(&self) -> i32 {

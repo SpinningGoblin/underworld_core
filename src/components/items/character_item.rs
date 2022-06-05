@@ -22,11 +22,6 @@ pub struct CharacterItem {
 }
 
 impl CharacterItem {
-    pub fn is_equipped(&self) -> bool {
-        self.equipped_location.ne(&LocationTag::Packed)
-            && self.equipped_location.ne(&LocationTag::Pockets)
-    }
-
     pub fn is_at_the_ready(&self) -> bool {
         self.at_the_ready
     }

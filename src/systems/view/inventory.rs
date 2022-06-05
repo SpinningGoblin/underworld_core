@@ -9,7 +9,7 @@ pub fn view(
     let equipped_items = inventory
         .equipment
         .iter()
-        .filter(|character_item| character_item.is_equipped())
+        .filter(|character_item| character_item.is_at_the_ready())
         .filter_map(|character_item| {
             if !character_item.is_hidden || knows_hidden || knows_all {
                 Some(super::character_item::view(
