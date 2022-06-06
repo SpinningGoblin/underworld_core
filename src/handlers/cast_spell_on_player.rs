@@ -30,6 +30,7 @@ pub fn handle(
         SpellName::ElectricBlast | SpellName::RagingFireball => {
             let damage = learned_spell.spell.damage();
             events.push(Event::PlayerHit(PlayerHit {
+                player_id: player.id,
                 attacker_id: player.id,
                 damage,
             }));

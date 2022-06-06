@@ -1,8 +1,8 @@
 use crate::{
     components::{non_player::NonPlayer, player::PlayerCharacter},
     events::{
-        Event, NpcHit, NpcKilled, NpcWeaponReadied, PlayerHit, PlayerKilled, PlayerMissed,
-        PlayerResurrected, PlayerRetributionAuraDissipated,
+        Event, NpcWeaponReadied, PlayerHit, PlayerHitNpc, PlayerKilled, PlayerKilledNpc,
+        PlayerMissed, PlayerResurrected, PlayerRetributionAuraDissipated,
     },
     utils::rolls::roll_d6,
 };
@@ -28,6 +28,7 @@ pub fn npc_attack_player(player: &PlayerCharacter, npc: &NonPlayer) -> Vec<Event
         events.push(Event::PlayerHit(PlayerHit {
             attacker_id: npc.id,
             damage: player_damage,
+            player_id: player.id,
         }));
         if player_damage >= player.character.get_current_health().unwrap() {
             events.push(Event::PlayerKilled(PlayerKilled { killer_id: npc.id }));
@@ -58,14 +59,14 @@ pub fn damage_npc(
     damage: i32,
     can_counter: bool,
 ) -> Vec<Event> {
-    let mut events: Vec<Event> = vec![Event::NpcHit(NpcHit {
+    let mut events: Vec<Event> = vec![Event::PlayerHitNpc(PlayerHitNpc {
         npc_id: npc.id,
         damage,
         attacker_id: player.id,
     })];
 
     if damage > npc.character.get_current_health().unwrap() {
-        events.push(Event::NpcKilled(NpcKilled {
+        events.push(Event::PlayerKilledNpc(PlayerKilledNpc {
             npc_id: npc.id,
             killer_id: player.id,
         }));

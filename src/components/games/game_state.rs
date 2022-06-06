@@ -17,7 +17,10 @@ use crate::{
     systems::view::room::view,
 };
 
-use super::{character_knowledge::CharacterKnowledge, fixture_knowledge::FixtureKnowledge};
+use super::{
+    character_knowledge::CharacterKnowledge, fixture_knowledge::FixtureKnowledge,
+    statistics::Statistics,
+};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -34,6 +37,8 @@ pub struct GameState {
     pub player_npc_knowledge: HashMap<Uuid, CharacterKnowledge>,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub player_fixture_knowledge: HashMap<Uuid, FixtureKnowledge>,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub player_statistics: HashMap<Uuid, Statistics>,
 }
 
 impl GameState {
@@ -53,6 +58,28 @@ impl GameState {
 
     pub fn set_npc_knowledge(&mut self, npc_id: Uuid, knowledge: CharacterKnowledge) {
         self.player_npc_knowledge.insert(npc_id, knowledge);
+    }
+
+    pub fn add_player_kill_to_stats(&mut self, pc_id: &Uuid) {
+        let statistics = self.player_statistics.entry(*pc_id).or_default();
+        statistics.num_killed += 1;
+    }
+
+    pub fn add_player_damage_taken_to_stats(&mut self, pc_id: &Uuid, damage: i32) {
+        let statistics = self.player_statistics.entry(*pc_id).or_default();
+        statistics.total_damage_taken += damage;
+    }
+
+    pub fn add_player_damage_done_to_stats(&mut self, pc_id: &Uuid, damage: i32) {
+        let statistics = self.player_statistics.entry(*pc_id).or_default();
+        statistics.total_damage_done += damage;
+    }
+
+    pub fn player_stats(&self, pc_id: &Uuid) -> Statistics {
+        self.player_statistics
+            .get(pc_id)
+            .cloned()
+            .unwrap_or_default()
     }
 
     pub fn set_fixture_knowledge(&mut self, fixture_id: Uuid, knowledge: FixtureKnowledge) {
@@ -153,5 +180,22 @@ impl GameState {
             exit_visitations,
             self.player_knows_all,
         )
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use uuid::Uuid;
+
+    use crate::generators::{game::game_generator, generator::Generator};
+
+    #[test]
+    fn test() {
+        let mut state = game_generator().generate();
+        let pc_id = Uuid::new_v4();
+        state.add_player_kill_to_stats(&pc_id);
+        let stats = state.player_stats(&pc_id);
+
+        assert_eq!(stats.num_killed, 1);
     }
 }

@@ -7,8 +7,7 @@ use uuid::Uuid;
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
-pub struct NpcHit {
-    pub attacker_id: Uuid,
+pub struct PlayerKilledNpc {
+    pub killer_id: Uuid,
     pub npc_id: Uuid,
-    pub damage: i32,
 }

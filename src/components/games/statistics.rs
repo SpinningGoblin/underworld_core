@@ -2,12 +2,12 @@
 use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
-pub struct NpcKilled {
-    pub killer_id: Uuid,
-    pub npc_id: Uuid,
+pub struct Statistics {
+    pub num_killed: i64,
+    pub total_damage_taken: i32,
+    pub total_damage_done: i32,
 }

@@ -29,8 +29,6 @@ pub enum Event {
     ItemTakenFromNpc(super::ItemTakenFromNpc),
     NpcHealthDiscovered(super::NpcHealthDiscovered),
     NpcHiddenDiscovered(super::NpcHiddenDiscovered),
-    NpcHit(super::NpcHit),
-    NpcKilled(super::NpcKilled),
     NpcMissed(super::NpcMissed),
     NpcPackedDiscovered(super::NpcPackedDiscovered),
     NpcViewed(super::NpcViewed),
@@ -40,10 +38,12 @@ pub enum Event {
     PlayerGainsShieldAura(super::PlayerGainsShieldAura),
     PlayerHealed(super::PlayerHealed),
     PlayerHit(super::PlayerHit),
+    PlayerHitNpc(super::PlayerHitNpc),
     PlayerItemMoved(super::PlayerItemMoved),
     PlayerItemRemoved(super::PlayerItemRemoved),
     PlayerItemUsed(super::PlayerItemUsed),
     PlayerKilled(super::PlayerKilled),
+    PlayerKilledNpc(super::PlayerKilledNpc),
     PlayerMissed(super::PlayerMissed),
     PlayerResurrected(super::PlayerResurrected),
     PlayerRetributionAuraDissipated(super::PlayerRetributionAuraDissipated),
@@ -71,20 +71,23 @@ pub fn apply_events(
             Event::RoomGenerated(room_generated) => new_game
                 .world
                 .add_room(room_generated.entrance_id, room_generated.room.clone()),
-            Event::NpcHit(npc_hit) => {
+            Event::PlayerHitNpc(npc_hit) => {
                 if let Some(position) = new_game.current_room_mut().find_npc_mut(&npc_hit.npc_id) {
                     position.npc.character.damage(npc_hit.damage);
                 }
+                new_game.add_player_damage_done_to_stats(&npc_hit.attacker_id, npc_hit.damage);
             }
-            Event::NpcKilled(npc_killed) => {
+            Event::PlayerKilledNpc(npc_killed) => {
                 let room = new_game.current_room_mut();
                 if let Some(position) = room.find_npc_mut(&npc_killed.npc_id) {
                     position.npc.character.kill();
                     position.position_descriptor = None;
                 }
+                new_game.add_player_kill_to_stats(&npc_killed.killer_id);
             }
             Event::PlayerHit(player_hit) => {
                 new_player.character.damage(player_hit.damage);
+                new_game.add_player_damage_taken_to_stats(&player_hit.player_id, player_hit.damage);
             }
             Event::PlayerKilled(_) => new_player.character.kill(),
             Event::ItemTakenFromNpc(item_taken_from_npc) => take_item_from_npc(
