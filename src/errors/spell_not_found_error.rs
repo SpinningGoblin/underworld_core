@@ -1,6 +1,6 @@
-use std::{error::Error, fmt::Display};
+use std::fmt::Display;
 
-#[derive(Debug)]
+#[derive(Debug, thiserror::Error)]
 pub struct SpellNotFoundError(pub String);
 
 impl Display for SpellNotFoundError {
@@ -8,5 +8,3 @@ impl Display for SpellNotFoundError {
         write!(f, "SpellNotFound:{}", self.0)
     }
 }
-
-impl Error for SpellNotFoundError {}

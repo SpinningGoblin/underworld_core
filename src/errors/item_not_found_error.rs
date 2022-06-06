@@ -1,6 +1,6 @@
-use std::{error::Error, fmt::Display};
+use std::fmt::Display;
 
-#[derive(Debug)]
+#[derive(Debug, thiserror::Error)]
 pub struct ItemNotFoundError(pub String);
 
 impl Display for ItemNotFoundError {
@@ -8,5 +8,3 @@ impl Display for ItemNotFoundError {
         write!(f, "ItemNotFound:{}", self.0)
     }
 }
-
-impl Error for ItemNotFoundError {}

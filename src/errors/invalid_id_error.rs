@@ -1,6 +1,6 @@
-use std::{error::Error, fmt::Display};
+use std::fmt::Display;
 
-#[derive(Debug)]
+#[derive(Debug, thiserror::Error)]
 pub struct InvalidIdError(pub String);
 
 impl Display for InvalidIdError {
@@ -8,5 +8,3 @@ impl Display for InvalidIdError {
         write!(f, "InvalidId:{}", self.0)
     }
 }
-
-impl Error for InvalidIdError {}

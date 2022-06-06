@@ -1,6 +1,6 @@
-use std::{error::Error, fmt::Display};
+use std::fmt::Display;
 
-#[derive(Debug)]
+#[derive(Debug, thiserror::Error)]
 pub struct ExitNotFoundError(pub String);
 
 impl Display for ExitNotFoundError {
@@ -8,5 +8,3 @@ impl Display for ExitNotFoundError {
         write!(f, "ExitNotFound:{}", self.0)
     }
 }
-
-impl Error for ExitNotFoundError {}

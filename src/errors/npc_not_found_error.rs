@@ -1,6 +1,6 @@
-use std::{error::Error, fmt::Display};
+use std::fmt::Display;
 
-#[derive(Debug)]
+#[derive(Debug, thiserror::Error)]
 pub struct NpcNotFoundError(pub String);
 
 impl Display for NpcNotFoundError {
@@ -8,5 +8,3 @@ impl Display for NpcNotFoundError {
         write!(f, "NpcNotFound:{}", self.0)
     }
 }
-
-impl Error for NpcNotFoundError {}

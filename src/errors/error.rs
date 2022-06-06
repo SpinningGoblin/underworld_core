@@ -4,7 +4,7 @@ use super::{
     TooManyWeaponsEquippedError,
 };
 
-#[derive(Debug)]
+#[derive(Debug, thiserror::Error, strum_macros::Display)]
 pub enum Error {
     ExitNotFoundError(ExitNotFoundError),
     FixtureNotFoundError(FixtureNotFoundError),

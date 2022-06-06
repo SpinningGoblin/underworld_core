@@ -1,6 +1,6 @@
-use std::{error::Error, fmt::Display};
+use std::fmt::Display;
 
-#[derive(Debug)]
+#[derive(Debug, thiserror::Error)]
 pub struct PlayerIsDeadError;
 
 impl Display for PlayerIsDeadError {
@@ -8,5 +8,3 @@ impl Display for PlayerIsDeadError {
         write!(f, "PlayerIsDead")
     }
 }
-
-impl Error for PlayerIsDeadError {}

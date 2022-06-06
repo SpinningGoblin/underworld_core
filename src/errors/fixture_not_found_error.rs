@@ -1,6 +1,6 @@
-use std::{error::Error, fmt::Display};
+use std::fmt::Display;
 
-#[derive(Debug)]
+#[derive(Debug, thiserror::Error)]
 pub struct FixtureNotFoundError(pub String);
 
 impl Display for FixtureNotFoundError {
@@ -8,5 +8,3 @@ impl Display for FixtureNotFoundError {
         write!(f, "FixtureNotFound:{}", self.0)
     }
 }
-
-impl Error for FixtureNotFoundError {}

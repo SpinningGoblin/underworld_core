@@ -1,6 +1,6 @@
-use std::{error::Error, fmt::Display};
+use std::fmt::Display;
 
-#[derive(Debug)]
+#[derive(Debug, thiserror::Error)]
 pub struct ItemNotDirectlyUsableError(pub String);
 
 impl Display for ItemNotDirectlyUsableError {
@@ -8,5 +8,3 @@ impl Display for ItemNotDirectlyUsableError {
         write!(f, "ItemNotDirectlyUsable:{}", self.0)
     }
 }
-
-impl Error for ItemNotDirectlyUsableError {}
