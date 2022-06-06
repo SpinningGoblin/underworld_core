@@ -83,7 +83,7 @@ impl GameState {
             .unwrap()
     }
 
-    pub fn view_current_room(&mut self) -> RoomView {
+    pub fn view_current_room(&self) -> RoomView {
         let room = self.current_room();
 
         let mut fixture_args: HashMap<Uuid, FixtureViewArgs> = HashMap::new();
