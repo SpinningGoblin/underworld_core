@@ -1,9 +1,7 @@
-use std::error::Error;
-
 use crate::{
     actions::InspectFixture,
     components::{games::game_state::GameState, player::PlayerCharacter},
-    errors::FixtureNotFoundError,
+    errors::{Error, FixtureNotFoundError},
     events::{
         Event, FixtureCanBeOpenedDiscovered, FixtureContainedDiscovered,
         FixtureHasHiddenDiscovered, FixtureHiddenItemsDiscovered,
@@ -23,12 +21,14 @@ pub fn handle(
     inspect_fixture: &InspectFixture,
     state: &GameState,
     player: &PlayerCharacter,
-) -> Result<Vec<Event>, Box<dyn Error>> {
+) -> Result<Vec<Event>, Error> {
     let mut events: Vec<Event> = Vec::new();
     let fixture_id = parse_id(&inspect_fixture.fixture_id)?;
 
     if state.current_room().find_fixture(&fixture_id).is_none() {
-        return Err(Box::new(FixtureNotFoundError(fixture_id.to_string())));
+        return Err(Error::FixtureNotFoundError(FixtureNotFoundError(
+            fixture_id.to_string(),
+        )));
     }
 
     let mut rng = rand::thread_rng();

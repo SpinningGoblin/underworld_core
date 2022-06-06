@@ -1,12 +1,12 @@
-use std::{error::Error, str::FromStr};
+use std::str::FromStr;
 
 use uuid::Uuid;
 
-use crate::errors::invalid_id_error::InvalidIdError;
+use crate::errors::{Error, InvalidIdError};
 
-pub fn parse_id(id: &str) -> Result<Uuid, Box<dyn Error>> {
+pub fn parse_id(id: &str) -> Result<Uuid, Error> {
     match Uuid::from_str(id) {
         Ok(it) => Ok(it),
-        Err(_) => Err(Box::new(InvalidIdError(id.to_string()))),
+        Err(_) => Err(Error::InvalidIdError(InvalidIdError(id.to_string()))),
     }
 }

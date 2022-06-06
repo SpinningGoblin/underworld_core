@@ -1,9 +1,7 @@
-use std::error::Error;
-
 use crate::{
     actions::LootNpc,
     components::{games::game_state::GameState, player::PlayerCharacter},
-    errors::{ItemNotFoundError, NpcNotFoundError},
+    errors::{Error, ItemNotFoundError, NpcNotFoundError},
     events::{Event, ItemTakenFromNpc},
     utils::ids::parse_id,
 };
@@ -14,14 +12,18 @@ pub fn handle(
     loot_npc: &LootNpc,
     state: &GameState,
     player: &PlayerCharacter,
-) -> Result<Vec<Event>, Box<dyn Error>> {
+) -> Result<Vec<Event>, Error> {
     let npc_id = parse_id(&loot_npc.npc_id)?;
 
     let room = state.current_room();
 
     let npc = match room.find_npc(&npc_id) {
         Some(it) => it,
-        None => return Err(Box::new(NpcNotFoundError(npc_id.to_string()))),
+        None => {
+            return Err(Error::NpcNotFoundError(NpcNotFoundError(
+                npc_id.to_string(),
+            )))
+        }
     };
 
     let mut events: Vec<Event> = Vec::new();
@@ -36,7 +38,11 @@ pub fn handle(
                     item_id,
                     npc_id,
                 })),
-                None => return Err(Box::new(ItemNotFoundError(item_id.to_string()))),
+                None => {
+                    return Err(Error::ItemNotFoundError(ItemNotFoundError(
+                        item_id.to_string(),
+                    )))
+                }
             }
         }
     }

@@ -1,5 +1,3 @@
-use std::error::Error;
-
 use crate::{
     actions::{
         action::Action, attack_npc::AttackNpc, exit_room::ExitRoom,
@@ -15,6 +13,7 @@ use crate::{
         },
         player::PlayerCharacter,
     },
+    errors::Error,
     events::event::Event,
     handlers::handle::HandledAction,
 };
@@ -25,7 +24,7 @@ pub struct Game {
 }
 
 impl Game {
-    pub fn handle_action(&mut self, action: &Action) -> Result<Vec<Event>, Box<dyn Error>> {
+    pub fn handle_action(&mut self, action: &Action) -> Result<Vec<Event>, Error> {
         let HandledAction {
             events,
             new_state,

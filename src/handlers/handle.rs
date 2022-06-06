@@ -1,9 +1,7 @@
-use std::error::Error;
-
 use crate::{
     actions::Action,
     components::{games::game_state::GameState, player::PlayerCharacter},
-    errors::PlayerIsDeadError,
+    errors::{Error, PlayerIsDeadError},
     events::event::{apply_events, Event},
 };
 
@@ -17,11 +15,11 @@ pub fn handle_action(
     action: &Action,
     state: &GameState,
     player: &PlayerCharacter,
-) -> Result<HandledAction, Box<dyn Error>> {
+) -> Result<HandledAction, Error> {
     if player.character.is_dead() {
         // TODO: Later we might want more specific handling for this,
         // where maybe some things could happen with a dead player.
-        return Err(Box::new(PlayerIsDeadError));
+        return Err(Error::PlayerIsDeadError(PlayerIsDeadError));
     }
 
     let events = match action {

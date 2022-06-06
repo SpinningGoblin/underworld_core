@@ -1,9 +1,7 @@
-use std::error::Error;
-
 use crate::{
     actions::AttackNpc,
     components::{games::game_state::GameState, player::PlayerCharacter},
-    errors::NpcNotFoundError,
+    errors::{Error, NpcNotFoundError},
     events::{DeadNpcBeaten, Event},
     utils::ids::parse_id,
 };
@@ -14,7 +12,7 @@ pub fn handle(
     attack_npc: &AttackNpc,
     state: &GameState,
     player: &PlayerCharacter,
-) -> Result<Vec<Event>, Box<dyn Error>> {
+) -> Result<Vec<Event>, Error> {
     let mut events: Vec<Event> = Vec::new();
 
     let room = state.current_room();
@@ -22,7 +20,11 @@ pub fn handle(
 
     let npc = match room.find_npc(&npc_id) {
         Some(it) => it,
-        None => return Err(Box::new(NpcNotFoundError(npc_id.to_string()))),
+        None => {
+            return Err(Error::NpcNotFoundError(NpcNotFoundError(
+                npc_id.to_string(),
+            )))
+        }
     };
 
     if npc.character.is_dead() {

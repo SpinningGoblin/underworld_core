@@ -1,9 +1,7 @@
-use std::error::Error;
-
 use crate::{
     actions::InspectNpc,
     components::{games::game_state::GameState, player::PlayerCharacter},
-    errors::NpcNotFoundError,
+    errors::{Error, NpcNotFoundError},
     events::{Event, NpcHealthDiscovered, NpcHiddenDiscovered, NpcPackedDiscovered},
     utils::{ids::parse_id, rolls::roll_d6},
 };
@@ -19,13 +17,17 @@ pub fn handle(
     inspect_npc: &InspectNpc,
     state: &GameState,
     player: &PlayerCharacter,
-) -> Result<Vec<Event>, Box<dyn Error>> {
+) -> Result<Vec<Event>, Error> {
     let mut events: Vec<Event> = Vec::new();
     let npc_id = parse_id(&inspect_npc.npc_id)?;
 
     let npc = match state.current_room().find_npc(&npc_id) {
         Some(it) => it,
-        None => return Err(Box::new(NpcNotFoundError(npc_id.to_string()))),
+        None => {
+            return Err(Error::NpcNotFoundError(NpcNotFoundError(
+                npc_id.to_string(),
+            )))
+        }
     };
 
     if npc.character.is_dead() {

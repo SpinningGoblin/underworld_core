@@ -1,5 +1,3 @@
-use std::error::Error;
-
 use chrono::Utc;
 use uuid::Uuid;
 
@@ -9,7 +7,7 @@ use crate::{
         items::consumable_effect::ConsumableEffectName, player::PlayerCharacter,
         spells::spell::Spell,
     },
-    errors::{ItemNotDirectlyUsableError, ItemNotFoundError},
+    errors::{Error, ItemNotDirectlyUsableError, ItemNotFoundError},
     events::{Event, PlayerItemRemoved, PlayerItemUsed, PlayerSpellLearned},
     utils::ids::parse_id,
 };
@@ -17,15 +15,21 @@ use crate::{
 pub fn handle(
     use_item_on_player: &UseItemOnPlayer,
     player: &PlayerCharacter,
-) -> Result<Vec<Event>, Box<dyn Error>> {
+) -> Result<Vec<Event>, Error> {
     let item_id = parse_id(&use_item_on_player.item_id)?;
     let character_item = match player.character.find_item(&item_id) {
         Some(it) => it,
-        None => return Err(Box::new(ItemNotFoundError(item_id.to_string()))),
+        None => {
+            return Err(Error::ItemNotFoundError(ItemNotFoundError(
+                item_id.to_string(),
+            )))
+        }
     };
 
     if !character_item.is_consumable() {
-        return Err(Box::new(ItemNotDirectlyUsableError(item_id.to_string())));
+        return Err(Error::ItemNotDirectlyUsableError(
+            ItemNotDirectlyUsableError(item_id.to_string()),
+        ));
     }
 
     let consumable = match character_item.item.consumable {

@@ -1,5 +1,3 @@
-use std::error::Error;
-
 use crate::{
     actions::CastSpellOnPlayer,
     components::{
@@ -7,7 +5,7 @@ use crate::{
         player::PlayerCharacter,
         spells::spell_name::SpellName,
     },
-    errors::SpellNotFoundError,
+    errors::{Error, SpellNotFoundError},
     events::{
         Event, PlayerGainsResurrectionAura, PlayerGainsRetributionAura, PlayerGainsShieldAura,
         PlayerHealed, PlayerHit, PlayerSpellForgotten, PlayerSpellUsed,
@@ -18,11 +16,15 @@ use crate::{
 pub fn handle(
     cast_spell_on_player: &CastSpellOnPlayer,
     player: &PlayerCharacter,
-) -> Result<Vec<Event>, Box<dyn Error>> {
+) -> Result<Vec<Event>, Error> {
     let spell_id = parse_id(&cast_spell_on_player.spell_id)?;
     let learned_spell = match player.character.find_spell(&spell_id) {
         Some(it) => it,
-        None => return Err(Box::new(SpellNotFoundError(spell_id.to_string()))),
+        None => {
+            return Err(Error::SpellNotFoundError(SpellNotFoundError(
+                spell_id.to_string(),
+            )))
+        }
     };
 
     let mut events: Vec<Event> = Vec::new();

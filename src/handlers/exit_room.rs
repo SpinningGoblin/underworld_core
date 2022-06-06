@@ -1,15 +1,13 @@
-use std::error::Error;
-
 use crate::{
     actions::ExitRoom,
     components::games::game_state::GameState,
-    errors::ExitNotFoundError,
+    errors::{Error, ExitNotFoundError},
     events::{Event, RoomExited, RoomFirstSeen, RoomGenerated},
     generators::{generator::Generator, rooms::random_room_generator},
     utils::ids::parse_id,
 };
 
-pub fn handle(exit_room: &ExitRoom, state: &GameState) -> Result<Vec<Event>, Box<dyn Error>> {
+pub fn handle(exit_room: &ExitRoom, state: &GameState) -> Result<Vec<Event>, Error> {
     // We need to check the exit maps for one with the room_id and exit.
     // If there's another exit id then find the room with that exit id and move
     // the player to that room.
@@ -27,7 +25,11 @@ pub fn handle(exit_room: &ExitRoom, state: &GameState) -> Result<Vec<Event>, Box
         .find(|exit_map| exit_map.exit_id.eq(&exit_id))
     {
         Some(it) => it,
-        None => return Err(Box::new(ExitNotFoundError(exit_id.to_string()))),
+        None => {
+            return Err(Error::ExitNotFoundError(ExitNotFoundError(
+                exit_id.to_string(),
+            )))
+        }
     };
 
     let other_room_id = exit_map.other_room_id(state.current_room_id);
