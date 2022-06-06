@@ -16,7 +16,6 @@ pub enum Action {
     CastSpellOnPlayer(super::CastSpellOnPlayer),
     InspectFixture(super::InspectFixture),
     InspectNpc(super::InspectNpc),
-    LookAtCurrentRoom(super::LookAtCurrentRoom),
     LookAtFixture(super::LookAtFixture),
     LookAtNpc(super::LookAtNpc),
     LootFixture(super::LootFixture),

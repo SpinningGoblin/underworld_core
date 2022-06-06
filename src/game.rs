@@ -3,8 +3,7 @@ use std::error::Error;
 use crate::{
     actions::{
         action::Action, attack_npc::AttackNpc, exit_room::ExitRoom,
-        inspect_fixture::InspectFixture, inspect_npc::InspectNpc,
-        look_at_current_room::LookAtCurrentRoom, look_at_fixture::LookAtFixture,
+        inspect_fixture::InspectFixture, inspect_npc::InspectNpc, look_at_fixture::LookAtFixture,
         look_at_npc::LookAtNpc, loot_npc::LootNpc, CastSpellOnNpc, CastSpellOnPlayer, LootFixture,
         MovePlayerItem, UseItemOnPlayer,
     },
@@ -39,8 +38,6 @@ impl Game {
     }
 
     pub fn current_actions(&self) -> Vec<Action> {
-        let room_view_actions = vec![Action::LookAtCurrentRoom(LookAtCurrentRoom)];
-
         let fixture_actions = self
             .state
             .current_room()
@@ -202,9 +199,7 @@ impl Game {
                     actions
                 });
 
-        room_view_actions
-            .into_iter()
-            .chain(npc_actions)
+        npc_actions
             .chain(exit_actions)
             .chain(fixture_actions)
             .chain(spell_actions)

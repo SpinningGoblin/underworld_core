@@ -18,12 +18,7 @@ pub fn handle_action(
     state: &GameState,
     player: &PlayerCharacter,
 ) -> Result<HandledAction, Box<dyn Error>> {
-    let not_viewing_room = match &action {
-        Action::LookAtCurrentRoom(_) => false,
-        _ => true,
-    };
-
-    if player.character.is_dead() && not_viewing_room {
+    if player.character.is_dead() {
         // TODO: Later we might want more specific handling for this,
         // where maybe some things could happen with a dead player.
         return Err(Box::new(PlayerIsDeadError));
@@ -36,9 +31,6 @@ pub fn handle_action(
         Action::LookAtNpc(look_at_npc) => super::view_npc::handle(look_at_npc, state)?,
         Action::MovePlayerItem(move_player_item) => {
             super::move_player_item::handle(move_player_item, player)?
-        }
-        Action::LookAtCurrentRoom(look_at_current_room) => {
-            super::view_room::handle(look_at_current_room, state)?
         }
         Action::InspectNpc(inspect_npc) => super::inspect_npc::handle(inspect_npc, state, player)?,
         Action::InspectFixture(inspect_fixture) => {

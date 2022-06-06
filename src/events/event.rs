@@ -53,7 +53,6 @@ pub enum Event {
     RoomExited(super::RoomExited),
     RoomGenerated(super::RoomGenerated),
     RoomFirstSeen(super::RoomFirstSeen),
-    RoomViewed(super::RoomViewed),
 }
 
 pub fn apply_events(
@@ -211,8 +210,7 @@ pub fn apply_events(
             | Event::DeadNpcBeaten(_)
             | Event::PlayerMissed(_)
             | Event::NpcViewed(_)
-            | Event::FixtureViewed(_)
-            | Event::RoomViewed(_) => {}
+            | Event::FixtureViewed(_) => {}
         }
     }
 

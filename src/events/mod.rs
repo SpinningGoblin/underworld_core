@@ -33,7 +33,6 @@ pub mod player_spell_used;
 pub mod room_exited;
 pub mod room_first_seen;
 pub mod room_generated;
-pub mod room_viewed;
 
 pub use {
     dead_npc_beaten::DeadNpcBeaten, event::Event,
@@ -56,5 +55,5 @@ pub use {
     player_retribution_aura_dissipated::PlayerRetributionAuraDissipated,
     player_spell_forgotten::PlayerSpellForgotten, player_spell_learned::PlayerSpellLearned,
     player_spell_used::PlayerSpellUsed, room_exited::RoomExited, room_first_seen::RoomFirstSeen,
-    room_generated::RoomGenerated, room_viewed::RoomViewed,
+    room_generated::RoomGenerated,
 };

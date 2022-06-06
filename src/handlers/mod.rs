@@ -11,6 +11,5 @@ mod move_player_item;
 mod use_item_on_player;
 mod view_fixture;
 mod view_npc;
-mod view_room;
 
 pub mod handle;
