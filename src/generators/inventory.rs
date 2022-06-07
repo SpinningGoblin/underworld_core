@@ -28,6 +28,7 @@ use super::{
 };
 
 const GENERATE_SCROLL_CHANCE: i32 = 25;
+const WEAPON_NOT_IN_HAND_CHANCE: i32 = 10;
 
 pub struct InventoryPrototype {
     pub item_types: Vec<ItemType>,
@@ -53,14 +54,19 @@ impl InventoryPrototype {
             .iter()
             .filter(|item_type| type_is_for_weapon(item_type))
             .collect();
-        let mut location_tags = LocationTag::weapon_tags();
+        let mut location_tags = LocationTag::not_at_ready_weapon_tags();
         for _ in 1..=count {
             if location_tags.is_empty() {
                 break;
             }
 
-            let tag_index = rng.gen_range(0..location_tags.len());
-            let tag = location_tags.remove(tag_index);
+            let roll = roll_d100(rng, 1, 0);
+            let tag = if roll > WEAPON_NOT_IN_HAND_CHANCE {
+                LocationTag::Hand
+            } else {
+                let tag_index = rng.gen_range(0..location_tags.len());
+                location_tags.remove(tag_index)
+            };
 
             let possible_weapon_types: Vec<&ItemType> = weapon_types
                 .iter()
@@ -117,8 +123,9 @@ impl InventoryPrototype {
             let possible_types: Vec<ItemType> = self
                 .item_types
                 .iter()
-                .filter(|item_type| type_is_for_wearable(item_type))
-                .filter(|item_type| item_type_is_for_tags(item_type, &tag))
+                .filter(|item_type| {
+                    type_is_for_wearable(item_type) && item_type_is_for_tags(item_type, &tag)
+                })
                 .cloned()
                 .collect();
 

@@ -65,13 +65,8 @@ impl LocationTag {
         ]
     }
 
-    pub fn weapon_tags() -> Vec<LocationTag> {
-        vec![
-            LocationTag::Hand,
-            LocationTag::Hip,
-            LocationTag::HipSheath,
-            LocationTag::Back,
-        ]
+    pub fn not_at_ready_weapon_tags() -> Vec<LocationTag> {
+        vec![LocationTag::Hip, LocationTag::HipSheath, LocationTag::Back]
     }
 }
 
