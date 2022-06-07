@@ -16,17 +16,13 @@ pub fn handle(
     let spell_id = parse_id(&cast_spell_on_npc.spell_id)?;
     let learned_spell = match player.character.find_spell(&spell_id) {
         Some(it) => it,
-        None => {
-            return Err(Error::SpellNotFoundError(spell_id.to_string()))
-        }
+        None => return Err(Error::SpellNotFoundError(spell_id.to_string())),
     };
 
     let npc_id = parse_id(&cast_spell_on_npc.npc_id)?;
     match &state.current_room().find_npc(&npc_id) {
         Some(_) => {}
-        None => {
-            return Err(Error::NpcNotFoundError(npc_id.to_string()))
-        }
+        None => return Err(Error::NpcNotFoundError(npc_id.to_string())),
     };
 
     let mut events: Vec<Event> = Vec::new();

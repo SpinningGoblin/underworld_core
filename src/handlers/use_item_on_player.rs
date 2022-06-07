@@ -19,9 +19,7 @@ pub fn handle(
     let item_id = parse_id(&use_item_on_player.item_id)?;
     let character_item = match player.character.find_item(&item_id) {
         Some(it) => it,
-        None => {
-            return Err(Error::ItemNotFoundError(item_id.to_string()))
-        }
+        None => return Err(Error::ItemNotFoundError(item_id.to_string())),
     };
 
     if !character_item.is_consumable() {

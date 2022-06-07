@@ -12,9 +12,7 @@ pub fn handle(look_at_npc: &LookAtNpc, state: &GameState) -> Result<Vec<Event>, 
 
     let npc = match state.current_room().find_npc(&npc_id) {
         Some(it) => it,
-        None => {
-            return Err(Error::NpcNotFoundError(npc_id.to_string()))
-        }
+        None => return Err(Error::NpcNotFoundError(npc_id.to_string())),
     };
 
     let knowledge = state.npc_knowledge(&npc_id);

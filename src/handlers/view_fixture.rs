@@ -12,9 +12,7 @@ pub fn handle(look_at_fixture: &LookAtFixture, state: &GameState) -> Result<Vec<
 
     let fixture_position = match state.current_room().find_fixture(&fixture_id) {
         Some(it) => it,
-        None => {
-            return Err(Error::FixtureNotFoundError(fixture_id.to_string()))
-        }
+        None => return Err(Error::FixtureNotFoundError(fixture_id.to_string())),
     };
 
     let knowledge = state.fixture_knowledge(&fixture_id);

@@ -19,9 +19,7 @@ pub fn handle(
 
     let npc = match room.find_npc(&npc_id) {
         Some(it) => it,
-        None => {
-            return Err(Error::NpcNotFoundError(npc_id.to_string()))
-        }
+        None => return Err(Error::NpcNotFoundError(npc_id.to_string())),
     };
 
     let mut events: Vec<Event> = Vec::new();
@@ -36,9 +34,7 @@ pub fn handle(
                     item_id,
                     npc_id,
                 })),
-                None => {
-                    return Err(Error::ItemNotFoundError(item_id.to_string()))
-                }
+                None => return Err(Error::ItemNotFoundError(item_id.to_string())),
             }
         }
     }

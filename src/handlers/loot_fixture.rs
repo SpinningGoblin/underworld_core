@@ -12,9 +12,7 @@ pub fn handle(loot_fixture: &LootFixture, state: &GameState) -> Result<Vec<Event
     let fixture_id = parse_id(&loot_fixture.fixture_id)?;
     let fixture_position = match state.current_room().find_fixture(&fixture_id) {
         Some(it) => it,
-        None => {
-            return Err(Error::FixtureNotFoundError(fixture_id.to_string()))
-        }
+        None => return Err(Error::FixtureNotFoundError(fixture_id.to_string())),
     };
 
     let item_ids: Vec<Uuid> = loot_fixture

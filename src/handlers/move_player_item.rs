@@ -16,9 +16,7 @@ pub fn handle(
     let item_id = parse_id(&move_player_item.item_id)?;
     let character_item = match player.character.find_item(&item_id) {
         Some(it) => it,
-        None => {
-            return Err(Error::ItemNotFoundError(item_id.to_string()))
-        }
+        None => return Err(Error::ItemNotFoundError(item_id.to_string())),
     };
 
     if character_item.is_weapon()
@@ -32,7 +30,7 @@ pub fn handle(
         && player.character.count_wearables_at_ready() >= MAX_WEARABLES_AT_READY
         && move_player_item.put_at_the_ready
     {
-        return Err(Error::TooManyWearablesEquippedError)
+        return Err(Error::TooManyWearablesEquippedError);
     }
 
     Ok(vec![Event::PlayerItemMoved(PlayerItemMoved {

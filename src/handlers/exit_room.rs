@@ -25,9 +25,7 @@ pub fn handle(exit_room: &ExitRoom, state: &GameState) -> Result<Vec<Event>, Err
         .find(|exit_map| exit_map.exit_id.eq(&exit_id))
     {
         Some(it) => it,
-        None => {
-            return Err(Error::ExitNotFoundError(exit_id.to_string()))
-        }
+        None => return Err(Error::ExitNotFoundError(exit_id.to_string())),
     };
 
     let other_room_id = exit_map.other_room_id(state.current_room_id);

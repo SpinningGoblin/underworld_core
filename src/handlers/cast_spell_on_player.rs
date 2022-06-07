@@ -20,9 +20,7 @@ pub fn handle(
     let spell_id = parse_id(&cast_spell_on_player.spell_id)?;
     let learned_spell = match player.character.find_spell(&spell_id) {
         Some(it) => it,
-        None => {
-            return Err(Error::SpellNotFoundError(spell_id.to_string()))
-        }
+        None => return Err(Error::SpellNotFoundError(spell_id.to_string())),
     };
 
     let mut events: Vec<Event> = Vec::new();

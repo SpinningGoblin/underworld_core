@@ -20,9 +20,7 @@ pub fn handle(
 
     let npc = match room.find_npc(&npc_id) {
         Some(it) => it,
-        None => {
-            return Err(Error::NpcNotFoundError(npc_id.to_string()))
-        }
+        None => return Err(Error::NpcNotFoundError(npc_id.to_string())),
     };
 
     if npc.character.is_dead() {
