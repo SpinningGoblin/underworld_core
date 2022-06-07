@@ -1,10 +1,13 @@
 use crate::{
     actions::MovePlayerItem,
     components::player::PlayerCharacter,
-    errors::{Error, ItemNotFoundError, TooManyWeaponsEquippedError},
+    errors::Error,
     events::{Event, PlayerItemMoved},
     utils::ids::parse_id,
 };
+
+const MAX_WEAPONS_AT_READY: usize = 2;
+const MAX_WEARABLES_AT_READY: usize = 8;
 
 pub fn handle(
     move_player_item: &MovePlayerItem,
@@ -14,19 +17,22 @@ pub fn handle(
     let character_item = match player.character.find_item(&item_id) {
         Some(it) => it,
         None => {
-            return Err(Error::ItemNotFoundError(ItemNotFoundError(
-                item_id.to_string(),
-            )))
+            return Err(Error::ItemNotFoundError(item_id.to_string()))
         }
     };
 
     if character_item.is_weapon()
-        && player.character.count_weapons_at_ready() >= 2
+        && player.character.count_weapons_at_ready() >= MAX_WEAPONS_AT_READY
         && move_player_item.put_at_the_ready
     {
-        return Err(Error::TooManyWeaponsEquippedError(
-            TooManyWeaponsEquippedError,
-        ));
+        return Err(Error::TooManyWeaponsEquippedError);
+    }
+
+    if character_item.is_wearable()
+        && player.character.count_wearables_at_ready() >= MAX_WEARABLES_AT_READY
+        && move_player_item.put_at_the_ready
+    {
+        return Err(Error::TooManyWearablesEquippedError)
     }
 
     Ok(vec![Event::PlayerItemMoved(PlayerItemMoved {

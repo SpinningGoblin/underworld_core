@@ -121,6 +121,10 @@ impl Character {
         self.inventory.count_weapons_at_ready()
     }
 
+    pub fn count_wearables_at_ready(&self) -> usize {
+        self.inventory.count_wearables_at_ready()
+    }
+
     pub fn strongest_non_readied_weapon(&self) -> Option<&CharacterItem> {
         self.inventory.strongest_non_readied_weapon()
     }
