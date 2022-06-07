@@ -35,6 +35,7 @@ impl NonPlayer {
 #[cfg_attr(feature = "openapi", derive(Object), oai(rename = "NonPlayer"))]
 pub struct NonPlayerView {
     pub character: CharacterView,
+    pub can_be_looted: bool,
     pub id: String,
     pub name: Option<String>,
 }
