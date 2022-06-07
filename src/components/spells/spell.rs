@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::components::damage::{Attack, Defense};
 
-use super::spell_name::SpellName;
+use super::{spell_name::SpellName, SpellType};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -34,6 +34,10 @@ impl Spell {
             None => 0,
         }
     }
+
+    pub fn spell_type(&self) -> SpellType {
+        self.name.spell_type()
+    }
 }
 
 #[derive(Clone, Debug)]
@@ -52,4 +56,5 @@ pub struct SpellView {
     pub knows_defense: bool,
     pub uses: i32,
     pub knows_uses: bool,
+    pub spell_type: SpellType,
 }

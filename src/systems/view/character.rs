@@ -43,6 +43,7 @@ pub fn view(character: &Character, args: &CharacterViewArgs, knows_all: bool) ->
                             knows_defense: true,
                             uses: learned_spell.spell.uses,
                             knows_uses: true,
+                            spell_type: learned_spell.spell.spell_type(),
                         },
                         learned_at: learned_spell.learned_at.to_rfc3339(),
                     })

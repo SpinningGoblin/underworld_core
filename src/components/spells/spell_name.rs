@@ -6,6 +6,8 @@ use poem_openapi::Enum;
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
+use super::SpellType;
+
 #[derive(Clone, Debug, EnumIter, PartialEq)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
@@ -22,4 +24,14 @@ pub enum SpellName {
     RagingFireball,
     Retribution,
     TinyShield,
+}
+
+impl SpellName {
+    pub fn spell_type(&self) -> SpellType {
+        match *self {
+            SpellName::ElectricBlast | SpellName::RagingFireball => SpellType::Attack,
+            SpellName::Heal | SpellName::QuickHeal => SpellType::Healing,
+            SpellName::Phoenix | SpellName::Retribution | SpellName::TinyShield => SpellType::Aura,
+        }
+    }
 }
