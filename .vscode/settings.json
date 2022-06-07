@@ -16,5 +16,8 @@
     "json",
     "openapi"
   ],
-  "cSpell.words": ["Equippable"]
+  "cSpell.words": [
+    "Equippable",
+    "thiserror"
+]
 }
