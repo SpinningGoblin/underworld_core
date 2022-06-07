@@ -23,6 +23,13 @@ impl Inventory {
             .count()
     }
 
+    pub fn count_wearables_at_ready(&self) -> usize {
+        self.equipment
+            .iter()
+            .filter(|item| item.is_wearable() && item.at_the_ready)
+            .count()
+    }
+
     pub fn find_item(&self, item_id: &Uuid) -> Option<CharacterItem> {
         self.equipment
             .iter()

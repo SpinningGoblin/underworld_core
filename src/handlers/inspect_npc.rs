@@ -1,7 +1,7 @@
 use crate::{
     actions::InspectNpc,
     components::{games::game_state::GameState, player::PlayerCharacter},
-    errors::{Error, NpcNotFoundError},
+    errors::Error,
     events::{Event, NpcHealthDiscovered, NpcHiddenDiscovered, NpcPackedDiscovered},
     utils::{ids::parse_id, rolls::roll_d6},
 };
@@ -24,9 +24,7 @@ pub fn handle(
     let npc = match state.current_room().find_npc(&npc_id) {
         Some(it) => it,
         None => {
-            return Err(Error::NpcNotFoundError(NpcNotFoundError(
-                npc_id.to_string(),
-            )))
+            return Err(Error::NpcNotFoundError(npc_id.to_string()))
         }
     };
 

@@ -1,7 +1,7 @@
 use crate::{
     actions::ExitRoom,
     components::games::game_state::GameState,
-    errors::{Error, ExitNotFoundError},
+    errors::Error,
     events::{Event, RoomExited, RoomFirstSeen, RoomGenerated},
     generators::{generator::Generator, rooms::random_room_generator},
     utils::ids::parse_id,
@@ -26,9 +26,7 @@ pub fn handle(exit_room: &ExitRoom, state: &GameState) -> Result<Vec<Event>, Err
     {
         Some(it) => it,
         None => {
-            return Err(Error::ExitNotFoundError(ExitNotFoundError(
-                exit_id.to_string(),
-            )))
+            return Err(Error::ExitNotFoundError(exit_id.to_string()))
         }
     };
 

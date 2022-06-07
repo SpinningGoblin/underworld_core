@@ -7,7 +7,7 @@ use crate::{
         items::consumable_effect::ConsumableEffectName, player::PlayerCharacter,
         spells::spell::Spell,
     },
-    errors::{Error, ItemNotDirectlyUsableError, ItemNotFoundError},
+    errors::Error,
     events::{Event, PlayerItemRemoved, PlayerItemUsed, PlayerSpellLearned},
     utils::ids::parse_id,
 };
@@ -20,16 +20,12 @@ pub fn handle(
     let character_item = match player.character.find_item(&item_id) {
         Some(it) => it,
         None => {
-            return Err(Error::ItemNotFoundError(ItemNotFoundError(
-                item_id.to_string(),
-            )))
+            return Err(Error::ItemNotFoundError(item_id.to_string()))
         }
     };
 
     if !character_item.is_consumable() {
-        return Err(Error::ItemNotDirectlyUsableError(
-            ItemNotDirectlyUsableError(item_id.to_string()),
-        ));
+        return Err(Error::ItemNotDirectlyUsableError(item_id.to_string()));
     }
 
     let consumable = match character_item.item.consumable {

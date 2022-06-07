@@ -1,7 +1,7 @@
 use crate::{
     actions::LookAtFixture,
     components::{fixtures::fixture::FixtureViewArgs, games::game_state::GameState},
-    errors::{Error, FixtureNotFoundError},
+    errors::Error,
     events::{Event, FixtureViewed},
     systems::view::fixture,
     utils::ids::parse_id,
@@ -13,9 +13,7 @@ pub fn handle(look_at_fixture: &LookAtFixture, state: &GameState) -> Result<Vec<
     let fixture_position = match state.current_room().find_fixture(&fixture_id) {
         Some(it) => it,
         None => {
-            return Err(Error::FixtureNotFoundError(FixtureNotFoundError(
-                fixture_id.to_string(),
-            )))
+            return Err(Error::FixtureNotFoundError(fixture_id.to_string()))
         }
     };
 

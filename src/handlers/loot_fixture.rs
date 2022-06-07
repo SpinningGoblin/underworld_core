@@ -3,7 +3,7 @@ use uuid::Uuid;
 use crate::{
     actions::LootFixture,
     components::games::game_state::GameState,
-    errors::{Error, FixtureNotFoundError},
+    errors::Error,
     events::{Event, ItemTakenFromFixture},
     utils::ids::parse_id,
 };
@@ -13,9 +13,7 @@ pub fn handle(loot_fixture: &LootFixture, state: &GameState) -> Result<Vec<Event
     let fixture_position = match state.current_room().find_fixture(&fixture_id) {
         Some(it) => it,
         None => {
-            return Err(Error::FixtureNotFoundError(FixtureNotFoundError(
-                fixture_id.to_string(),
-            )))
+            return Err(Error::FixtureNotFoundError(fixture_id.to_string()))
         }
     };
 

@@ -1,7 +1,7 @@
 use crate::{
     actions::InspectFixture,
     components::{games::game_state::GameState, player::PlayerCharacter},
-    errors::{Error, FixtureNotFoundError},
+    errors::Error,
     events::{
         Event, FixtureCanBeOpenedDiscovered, FixtureContainedDiscovered,
         FixtureHasHiddenDiscovered, FixtureHiddenItemsDiscovered,
@@ -26,9 +26,7 @@ pub fn handle(
     let fixture_id = parse_id(&inspect_fixture.fixture_id)?;
 
     if state.current_room().find_fixture(&fixture_id).is_none() {
-        return Err(Error::FixtureNotFoundError(FixtureNotFoundError(
-            fixture_id.to_string(),
-        )));
+        return Err(Error::FixtureNotFoundError(fixture_id.to_string()));
     }
 
     let mut rng = rand::thread_rng();

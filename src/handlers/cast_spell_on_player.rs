@@ -5,7 +5,7 @@ use crate::{
         player::PlayerCharacter,
         spells::spell_name::SpellName,
     },
-    errors::{Error, SpellNotFoundError},
+    errors::Error,
     events::{
         Event, PlayerGainsResurrectionAura, PlayerGainsRetributionAura, PlayerGainsShieldAura,
         PlayerHealed, PlayerHit, PlayerSpellForgotten, PlayerSpellUsed,
@@ -21,9 +21,7 @@ pub fn handle(
     let learned_spell = match player.character.find_spell(&spell_id) {
         Some(it) => it,
         None => {
-            return Err(Error::SpellNotFoundError(SpellNotFoundError(
-                spell_id.to_string(),
-            )))
+            return Err(Error::SpellNotFoundError(spell_id.to_string()))
         }
     };
 

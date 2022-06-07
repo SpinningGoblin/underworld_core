@@ -1,7 +1,7 @@
 use crate::{
     actions::LootNpc,
     components::{games::game_state::GameState, player::PlayerCharacter},
-    errors::{Error, ItemNotFoundError, NpcNotFoundError},
+    errors::Error,
     events::{Event, ItemTakenFromNpc},
     utils::ids::parse_id,
 };
@@ -20,9 +20,7 @@ pub fn handle(
     let npc = match room.find_npc(&npc_id) {
         Some(it) => it,
         None => {
-            return Err(Error::NpcNotFoundError(NpcNotFoundError(
-                npc_id.to_string(),
-            )))
+            return Err(Error::NpcNotFoundError(npc_id.to_string()))
         }
     };
 
@@ -39,9 +37,7 @@ pub fn handle(
                     npc_id,
                 })),
                 None => {
-                    return Err(Error::ItemNotFoundError(ItemNotFoundError(
-                        item_id.to_string(),
-                    )))
+                    return Err(Error::ItemNotFoundError(item_id.to_string()))
                 }
             }
         }

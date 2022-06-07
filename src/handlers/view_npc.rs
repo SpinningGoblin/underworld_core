@@ -1,7 +1,7 @@
 use crate::{
     actions::LookAtNpc,
     components::{character::CharacterViewArgs, games::game_state::GameState},
-    errors::{Error, NpcNotFoundError},
+    errors::Error,
     events::{Event, NpcViewed},
     systems::view::non_player,
     utils::ids::parse_id,
@@ -13,9 +13,7 @@ pub fn handle(look_at_npc: &LookAtNpc, state: &GameState) -> Result<Vec<Event>, 
     let npc = match state.current_room().find_npc(&npc_id) {
         Some(it) => it,
         None => {
-            return Err(Error::NpcNotFoundError(NpcNotFoundError(
-                npc_id.to_string(),
-            )))
+            return Err(Error::NpcNotFoundError(npc_id.to_string()))
         }
     };
 

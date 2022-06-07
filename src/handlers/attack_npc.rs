@@ -1,7 +1,7 @@
 use crate::{
     actions::AttackNpc,
     components::{games::game_state::GameState, player::PlayerCharacter},
-    errors::{Error, NpcNotFoundError},
+    errors::Error,
     events::{DeadNpcBeaten, Event},
     utils::ids::parse_id,
 };
@@ -21,9 +21,7 @@ pub fn handle(
     let npc = match room.find_npc(&npc_id) {
         Some(it) => it,
         None => {
-            return Err(Error::NpcNotFoundError(NpcNotFoundError(
-                npc_id.to_string(),
-            )))
+            return Err(Error::NpcNotFoundError(npc_id.to_string()))
         }
     };
 

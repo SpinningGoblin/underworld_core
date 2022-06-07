@@ -3,7 +3,7 @@ use crate::{
     components::{
         games::game_state::GameState, player::PlayerCharacter, spells::spell_name::SpellName,
     },
-    errors::{Error, NpcNotFoundError, SpellNotFoundError},
+    errors::Error,
     events::{event::Event, PlayerHitNpc, PlayerSpellForgotten, PlayerSpellUsed},
     utils::ids::parse_id,
 };
@@ -17,9 +17,7 @@ pub fn handle(
     let learned_spell = match player.character.find_spell(&spell_id) {
         Some(it) => it,
         None => {
-            return Err(Error::SpellNotFoundError(SpellNotFoundError(
-                spell_id.to_string(),
-            )))
+            return Err(Error::SpellNotFoundError(spell_id.to_string()))
         }
     };
 
@@ -27,9 +25,7 @@ pub fn handle(
     match &state.current_room().find_npc(&npc_id) {
         Some(_) => {}
         None => {
-            return Err(Error::NpcNotFoundError(NpcNotFoundError(
-                npc_id.to_string(),
-            )))
+            return Err(Error::NpcNotFoundError(npc_id.to_string()))
         }
     };
 
