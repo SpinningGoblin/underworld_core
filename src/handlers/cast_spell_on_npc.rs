@@ -4,9 +4,11 @@ use crate::{
         games::game_state::GameState, player::PlayerCharacter, spells::spell_name::SpellName,
     },
     errors::Error,
-    events::{event::Event, PlayerHitNpc, PlayerSpellForgotten, PlayerSpellUsed},
+    events::{event::Event, PlayerSpellForgotten, PlayerSpellUsed},
     utils::ids::parse_id,
 };
+
+use super::helpers::damage_npc;
 
 pub fn handle(
     cast_spell_on_npc: &CastSpellOnNpc,
@@ -19,9 +21,10 @@ pub fn handle(
         None => return Err(Error::SpellNotFoundError(spell_id.to_string())),
     };
 
+    let room = state.current_room();
     let npc_id = parse_id(&cast_spell_on_npc.npc_id)?;
-    match &state.current_room().find_npc(&npc_id) {
-        Some(_) => {}
+    let npc = match room.find_npc(&npc_id) {
+        Some(it) => it,
         None => return Err(Error::NpcNotFoundError(npc_id.to_string())),
     };
 
@@ -29,11 +32,7 @@ pub fn handle(
     match learned_spell.spell.name {
         SpellName::ElectricBlast | SpellName::RagingFireball => {
             let damage = learned_spell.spell.damage();
-            events.push(Event::PlayerHitNpc(PlayerHitNpc {
-                attacker_id: player.id,
-                npc_id,
-                damage,
-            }));
+            events.append(&mut damage_npc(player, npc, damage, true));
         }
         // TODO: There are non-damage spells that someone could cast on NPCs.
         _ => {}
