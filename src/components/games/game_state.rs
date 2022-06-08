@@ -190,7 +190,7 @@ mod tests {
     use crate::generators::{game::game_generator, generator::Generator};
 
     #[test]
-    fn test() {
+    fn stats_can_be_incremented() {
         let mut state = game_generator().generate();
         let pc_id = Uuid::new_v4();
         state.add_player_kill_to_stats(&pc_id);
