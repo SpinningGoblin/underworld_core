@@ -117,6 +117,10 @@ impl Character {
         self.inventory.readied_weapons().is_empty()
     }
 
+    pub fn has_weapons_readied(&self) -> bool {
+        !self.inventory.readied_weapons().is_empty()
+    }
+
     pub fn count_weapons_at_ready(&self) -> usize {
         self.inventory.count_weapons_at_ready()
     }

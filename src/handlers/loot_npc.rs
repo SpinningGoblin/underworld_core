@@ -25,7 +25,7 @@ pub fn handle(
     let mut events: Vec<Event> = Vec::new();
 
     if !npc.character.is_dead() {
-        events.append(&mut npc_attack_player(player, npc));
+        events.append(&mut npc_attack_player(player, npc, true));
     } else {
         for id in &loot_npc.item_ids {
             let item_id = parse_id(id)?;

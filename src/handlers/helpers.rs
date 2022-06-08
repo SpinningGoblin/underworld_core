@@ -7,18 +7,14 @@ use crate::{
     utils::rolls::roll_d6,
 };
 
-pub fn npc_attack_player(player: &PlayerCharacter, npc: &NonPlayer) -> Vec<Event> {
+pub fn npc_attack_player(
+    player: &PlayerCharacter,
+    npc: &NonPlayer,
+    npc_can_ready: bool,
+) -> Vec<Event> {
     let mut events: Vec<Event> = Vec::new();
 
-    // If there are no weapons equipped, then all the NPC does is ready the weapon.
-    if npc.character.no_weapons_readied() {
-        if let Some(character_item) = npc.character.strongest_non_readied_weapon() {
-            events.push(Event::NpcWeaponReadied(NpcWeaponReadied {
-                npc_id: npc.id,
-                item_id: character_item.item.id,
-            }));
-        }
-    } else {
+    if npc.character.has_weapons_readied() {
         let player_defense = player.character.defense();
         let character_attack = npc.character.attack();
         let player_damage = (character_attack - player_defense).max(1);
@@ -46,8 +42,15 @@ pub fn npc_attack_player(player: &PlayerCharacter, npc: &NonPlayer) -> Vec<Event
                 PlayerRetributionAuraDissipated,
             ))
         }
+    } else if npc_can_ready {
+        // If there are no weapons readied, then all the NPC does is ready the weapon.
+        if let Some(character_item) = npc.character.strongest_non_readied_weapon() {
+            events.push(Event::NpcWeaponReadied(NpcWeaponReadied {
+                npc_id: npc.id,
+                item_id: character_item.item.id,
+            }));
     }
-
+    }
     events
 }
 
@@ -65,12 +68,11 @@ pub fn damage_npc(
         attacker_id: player.id,
     })];
 
-    if damage > npc.character.get_current_health().unwrap() {
-        events.push(Event::PlayerKilledNpc(PlayerKilledNpc {
-            npc_id: npc.id,
-            killer_id: player.id,
-        }));
-    } else if can_counter {
+    let npc_dead = damage > npc.character.get_current_health().unwrap();
+
+    // I always am going to have the NPC attack back if they can.
+    // That way I can ensure the NPC will always get a shot.
+    if can_counter {
         let mut rng = rand::thread_rng();
         let dodge_roll = roll_d6(&mut rng, 1, 0);
 
@@ -79,8 +81,15 @@ pub fn damage_npc(
                 attacker_id: npc.id,
             }));
         } else {
-            events.append(&mut npc_attack_player(player, npc));
+            events.append(&mut npc_attack_player(player, npc, !npc_dead));
         }
+    }
+
+    if npc_dead {
+        events.push(Event::PlayerKilledNpc(PlayerKilledNpc {
+            npc_id: npc.id,
+            killer_id: player.id,
+        }));
     }
 
     events

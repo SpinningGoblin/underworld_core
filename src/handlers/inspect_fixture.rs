@@ -61,7 +61,7 @@ pub fn handle(
 
     if roll_d6(&mut rng, 1, 0) >= NPC_ATTACKS_CHANCE {
         match state.current_room().first_alive_npc() {
-            Some(it) => events.append(&mut npc_attack_player(player, it)),
+            Some(it) => events.append(&mut npc_attack_player(player, it, true)),
             None => {}
         };
     }

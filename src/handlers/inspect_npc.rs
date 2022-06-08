@@ -46,7 +46,7 @@ pub fn handle(
         }
 
         if roll_d6(&mut rng, 1, 0) >= NPC_ATTACKS_CHANCE {
-            events.append(&mut npc_attack_player(player, npc));
+            events.append(&mut npc_attack_player(player, npc, true));
         }
     }
 
