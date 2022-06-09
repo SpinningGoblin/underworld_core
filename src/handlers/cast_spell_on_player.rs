@@ -36,11 +36,7 @@ pub fn handle(
         SpellName::Heal | SpellName::QuickHeal => {
             let healing = learned_spell.spell.damage();
             if let Some(health) = &player.character.stats.health {
-                let damage_healed = if health.current + healing > health.max {
-                    (health.current + healing) - health.max
-                } else {
-                    healing
-                };
+                let damage_healed = healing.min(health.max - health.current);
                 events.push(Event::PlayerHealed(PlayerHealed { damage_healed }));
             }
         }
