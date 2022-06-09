@@ -49,7 +49,7 @@ pub fn npc_attack_player(
                 npc_id: npc.id,
                 item_id: character_item.item.id,
             }));
-    }
+        }
     }
     events
 }

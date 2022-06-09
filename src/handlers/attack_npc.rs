@@ -1,12 +1,12 @@
 use crate::{
     actions::AttackNpc,
-    components::{games::game_state::GameState, player::PlayerCharacter},
+    components::{games::game_state::GameState, player::PlayerCharacter, species::Species},
     errors::Error,
-    events::{DeadNpcBeaten, Event},
-    utils::ids::parse_id,
+    events::{DeadNpcBeaten, Event, NpcMissed},
+    utils::{ids::parse_id, rolls::roll_d100},
 };
 
-use super::helpers::damage_npc;
+use super::helpers::{damage_npc, npc_attack_player};
 
 pub fn handle(
     attack_npc: &AttackNpc,
@@ -28,6 +28,13 @@ pub fn handle(
             attacker_id: player.id,
             npc_id,
         }));
+    } else if npc_will_dodge(&npc.character.species) {
+        events.push(Event::NpcMissed(NpcMissed {
+            attacker_id: player.id,
+            npc_id,
+        }));
+
+        events.append(&mut npc_attack_player(player, npc, true));
     } else {
         let defense = npc.character.defense();
         let attack = player.character.attack();
@@ -37,4 +44,18 @@ pub fn handle(
     }
 
     Ok(events)
+}
+
+const PHANTOM_DODGE_CHANCE: i32 = 15;
+const SHADOW_DODGE_CHANCE: i32 = 25;
+
+fn npc_will_dodge(species: &Species) -> bool {
+    let mut rng = rand::thread_rng();
+    let dodge_roll = roll_d100(&mut rng, 1, 0);
+
+    match *species {
+        Species::Phantom => dodge_roll <= PHANTOM_DODGE_CHANCE,
+        Species::Shadow => dodge_roll <= SHADOW_DODGE_CHANCE,
+        _ => false,
+    }
 }
