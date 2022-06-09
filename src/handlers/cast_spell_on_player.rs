@@ -34,8 +34,15 @@ pub fn handle(
             }));
         }
         SpellName::Heal | SpellName::QuickHeal => {
-            let damage_healed = learned_spell.spell.damage();
-            events.push(Event::PlayerHealed(PlayerHealed { damage_healed }));
+            let healing = learned_spell.spell.damage();
+            if let Some(health) = &player.character.stats.health {
+                let damage_healed = if health.current + healing > health.max {
+                    (health.current + healing) - health.max
+                } else {
+                    healing
+                };
+                events.push(Event::PlayerHealed(PlayerHealed { damage_healed }));
+            }
         }
         SpellName::Phoenix => events.push(Event::PlayerGainsResurrectionAura(
             PlayerGainsResurrectionAura,
