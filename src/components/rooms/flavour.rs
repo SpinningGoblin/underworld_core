@@ -22,4 +22,8 @@ pub enum Flavour {
     AStrangeBreezeBlows,
     MoldMossCoversWalls,
     UnseenLightsFlickerWalls,
+    SmellsLikeOldGoblinSocks,
+    SomethingSquishyAllOverFloor,
+    IsSomethingWatchingYou,
+    YouHearScratchingAllAroundYou,
 }

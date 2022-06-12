@@ -73,5 +73,13 @@ fn tags_for_descriptor(descriptor: &Descriptor) -> Vec<Tag> {
             vec![Tag::Bone, Tag::Leather, Tag::Wood]
         }
         Descriptor::Rotting => vec![Tag::Cloth, Tag::Clothing],
+        Descriptor::Soiled => vec![Tag::Cloth, Tag::Clothing],
+        Descriptor::Moldy => vec![
+            Tag::Cloth,
+            Tag::Clothing,
+            Tag::Leather,
+            Tag::Wood,
+            Tag::Paper,
+        ],
     }
 }

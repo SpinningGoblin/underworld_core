@@ -6,8 +6,6 @@ use poem_openapi::Enum;
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
-use super::descriptor_position::DescriptorPosition;
-
 #[derive(Clone, Debug, EnumIter)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
@@ -26,20 +24,65 @@ pub enum Descriptor {
     Dim,
     Grimy,
     Moist,
+    Freezing,
+    Steamy,
+    Sweltering,
 }
 
 impl Descriptor {
-    pub fn get_position(&self) -> DescriptorPosition {
-        match *self {
-            Descriptor::Chill => DescriptorPosition::Pre,
-            Descriptor::Dark => DescriptorPosition::Pre,
-            Descriptor::Dim => DescriptorPosition::Pre,
-            Descriptor::Grimy => DescriptorPosition::Pre,
-            Descriptor::Moist => DescriptorPosition::Pre,
+    pub fn can_be_used_with(&self, other: &Descriptor) -> bool {
+        match self {
+            Descriptor::Chill => matches!(
+                other,
+                Descriptor::Dark
+                    | Descriptor::Dim
+                    | Descriptor::Grimy
+                    | Descriptor::Moist
+                    | Descriptor::Freezing
+            ),
+            Descriptor::Dark => matches!(
+                other,
+                Descriptor::Dark
+                    | Descriptor::Grimy
+                    | Descriptor::Moist
+                    | Descriptor::Freezing
+                    | Descriptor::Sweltering
+                    | Descriptor::Steamy
+            ),
+            Descriptor::Dim => matches!(
+                other,
+                Descriptor::Grimy
+                    | Descriptor::Moist
+                    | Descriptor::Freezing
+                    | Descriptor::Sweltering
+                    | Descriptor::Steamy
+            ),
+            Descriptor::Grimy => true,
+            Descriptor::Moist => matches!(
+                other,
+                Descriptor::Dark
+                    | Descriptor::Dim
+                    | Descriptor::Grimy
+                    | Descriptor::Moist
+                    | Descriptor::Sweltering
+                    | Descriptor::Steamy
+            ),
+            Descriptor::Freezing => matches!(
+                other,
+                Descriptor::Dark | Descriptor::Grimy | Descriptor::Freezing
+            ),
+            Descriptor::Steamy => matches!(
+                other,
+                Descriptor::Dark
+                    | Descriptor::Grimy
+                    | Descriptor::Moist
+                    | Descriptor::Sweltering
+                    | Descriptor::Steamy
+            ),
+            Descriptor::Sweltering => matches!(
+                other,
+                Descriptor::Dark | Descriptor::Grimy | Descriptor::Moist | Descriptor::Steamy
+            ),
         }
-    }
-
-    pub fn is_pre(&self) -> bool {
-        self.get_position() == DescriptorPosition::Pre
     }
 }
