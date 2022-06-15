@@ -2,10 +2,6 @@ use strum::IntoEnumIterator;
 
 use crate::components::{items::descriptor::Descriptor, tag::Tag};
 
-pub fn descriptor_for_equipped(descriptor: &Descriptor) -> bool {
-    tags_for_descriptor(descriptor).contains(&Tag::Equipped)
-}
-
 pub fn matches_tags(tags: &[Tag]) -> Vec<Descriptor> {
     Descriptor::iter()
         .filter(|descriptor| {
@@ -46,12 +42,6 @@ fn tags_for_descriptor(descriptor: &Descriptor) -> Vec<Tag> {
         }
         Descriptor::Drab => vec![Tag::Clothing],
         Descriptor::Dull => vec![Tag::Blade],
-        Descriptor::IllFitting => {
-            vec![Tag::Armour, Tag::Clothing, Tag::Equipped]
-        }
-        Descriptor::LooseFitting => {
-            vec![Tag::Armour, Tag::Clothing, Tag::Equipped]
-        }
         Descriptor::Ripped => vec![Tag::Cloth],
         Descriptor::Rusty => vec![Tag::Metal],
         Descriptor::Scuffed => vec![Tag::Leather],
@@ -81,5 +71,8 @@ fn tags_for_descriptor(descriptor: &Descriptor) -> Vec<Tag> {
             Tag::Wood,
             Tag::Paper,
         ],
+        Descriptor::Heavy => vec![Tag::Blunt],
+        Descriptor::Keen => vec![Tag::Blade],
+        Descriptor::Quality => vec![Tag::Blade, Tag::Blunt],
     }
 }

@@ -9,10 +9,7 @@ use crate::components::{
     tag::{Tag, Tagged},
 };
 
-use super::{
-    generator::Generator,
-    utils::item_descriptors::{descriptor_for_equipped, matches_tags},
-};
+use super::{generator::Generator, utils::item_descriptors::matches_tags};
 
 pub fn item_generator(item_type: &ItemType, is_equipped: bool) -> impl Generator<Item> {
     ItemPrototype {
@@ -115,7 +112,6 @@ impl ItemPrototype {
             None => matches_tags(&self.item_type.tags()),
         }
         .into_iter()
-        .filter(|descriptor| self.is_equipped || !descriptor_for_equipped(descriptor))
         .collect()
     }
 
