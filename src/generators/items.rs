@@ -9,7 +9,10 @@ use crate::components::{
     tag::{Tag, Tagged},
 };
 
-use super::{generator::Generator, utils::item_descriptors::matches_tags};
+use super::{
+    generator::Generator,
+    utils::item_descriptors::{matches_tags, valid_for_level},
+};
 
 pub fn item_generator(item_type: &ItemType, is_equipped: bool) -> impl Generator<Item> {
     ItemPrototype {
@@ -17,6 +20,21 @@ pub fn item_generator(item_type: &ItemType, is_equipped: bool) -> impl Generator
         num_descriptors: 1..=2,
         materials: super::utils::materials::possible_materials(item_type),
         is_equipped,
+        item_level: None,
+    }
+}
+
+pub fn item_generator_for_level(
+    item_type: &ItemType,
+    is_equipped: bool,
+    level: u32,
+) -> impl Generator<Item> {
+    ItemPrototype {
+        item_type: item_type.clone(),
+        num_descriptors: 1..=2,
+        materials: super::utils::materials::possible_materials(item_type),
+        is_equipped,
+        item_level: Some(level),
     }
 }
 
@@ -25,6 +43,7 @@ pub struct ItemPrototype {
     pub num_descriptors: RangeInclusive<usize>,
     pub materials: Vec<Material>,
     pub is_equipped: bool,
+    pub item_level: Option<u32>,
 }
 
 impl Generator<Item> for ItemPrototype {
@@ -112,49 +131,169 @@ impl ItemPrototype {
             None => matches_tags(&self.item_type.tags()),
         }
         .into_iter()
+        .filter(|descriptor| valid_for_level(descriptor, self.level()))
         .collect()
     }
 
     fn num_attack_rolls(&self) -> Option<usize> {
-        match self.item_type {
+        let base_rolls = match self.item_type {
             ItemType::Buckler
             | ItemType::Dagger
             | ItemType::Dirk
             | ItemType::Shield
-            | ItemType::ShortSword => Some(1),
+            | ItemType::ShortSword => 2,
             ItemType::Club
             | ItemType::Hammer
             | ItemType::LongSword
             | ItemType::Mace
             | ItemType::Morningstar
-            | ItemType::Whip => Some(2),
-            ItemType::GreatSword => Some(3),
-            _ => None,
-        }
+            | ItemType::Whip
+            | ItemType::Spear
+            | ItemType::Pike => 3,
+            ItemType::GreatSword | ItemType::Halberd => 4,
+            ItemType::Breastplate
+            | ItemType::Boots
+            | ItemType::BowlerHat
+            | ItemType::Cloak
+            | ItemType::Crown
+            | ItemType::Fedora
+            | ItemType::Gloves
+            | ItemType::Helm
+            | ItemType::LoinCloth
+            | ItemType::Mask
+            | ItemType::PlateBoots
+            | ItemType::PlateGauntlets
+            | ItemType::PlateHelmet
+            | ItemType::Scroll
+            | ItemType::Shirt
+            | ItemType::Shackles
+            | ItemType::TopHat
+            | ItemType::Trousers
+            | ItemType::Vest => return None,
+        };
+
+        let level = self.level();
+        let roll_modifier = if level == 1 {
+            0
+        } else if level >= 2 && level <= 10 {
+            1
+        } else if level >= 11 && level <= 20 {
+            3
+        } else {
+            5
+        };
+
+        Some(base_rolls + roll_modifier)
     }
 
     fn attack_modifier(&self) -> Option<i32> {
-        match self.item_type {
+        let base_modifier = match self.item_type {
             ItemType::Buckler
             | ItemType::Shield
             | ItemType::ShortSword
             | ItemType::Dagger
-            | ItemType::Dirk => Some(-1),
-            ItemType::GreatSword => Some(2),
-            _ => None,
-        }
+            | ItemType::Dirk => -1,
+            ItemType::LongSword
+            | ItemType::Spear
+            | ItemType::Pike
+            | ItemType::Hammer
+            | ItemType::Morningstar
+            | ItemType::Whip => 1,
+            ItemType::GreatSword | ItemType::Halberd => 2,
+            ItemType::Breastplate
+            | ItemType::Boots
+            | ItemType::BowlerHat
+            | ItemType::Cloak
+            | ItemType::Club
+            | ItemType::Crown
+            | ItemType::Fedora
+            | ItemType::Gloves
+            | ItemType::Helm
+            | ItemType::LoinCloth
+            | ItemType::Mace
+            | ItemType::Mask
+            | ItemType::PlateBoots
+            | ItemType::PlateGauntlets
+            | ItemType::PlateHelmet
+            | ItemType::Scroll
+            | ItemType::Shirt
+            | ItemType::Shackles
+            | ItemType::TopHat
+            | ItemType::Trousers
+            | ItemType::Vest => return None,
+        };
+
+        let level = self.level();
+        let level_modifier = if level == 1 {
+            0
+        } else if level >= 2 && level <= 10 {
+            2
+        } else if level >= 11 && level <= 20 {
+            4
+        } else if level >= 21 && level <= 30 {
+            6
+        } else {
+            10
+        };
+
+        Some(base_modifier + level_modifier)
     }
 
     fn resistance(&self) -> Option<i32> {
-        match self.item_type {
-            ItemType::Boots | ItemType::Buckler | ItemType::Shield | ItemType::Vest => Some(2),
+        let base_resistance = match self.item_type {
+            ItemType::Boots
+            | ItemType::Buckler
+            | ItemType::Shield
+            | ItemType::Vest
+            | ItemType::Helm => 2,
             ItemType::Shirt
             | ItemType::Gloves
             | ItemType::Trousers
             | ItemType::Cloak
             | ItemType::LoinCloth
-            | ItemType::Shackles => Some(1),
-            _ => None,
-        }
+            | ItemType::Shackles
+            | ItemType::BowlerHat
+            | ItemType::Crown
+            | ItemType::Fedora
+            | ItemType::Mask
+            | ItemType::TopHat => 0,
+            ItemType::Breastplate
+            | ItemType::PlateBoots
+            | ItemType::PlateGauntlets
+            | ItemType::PlateHelmet => 4,
+            ItemType::Club
+            | ItemType::Dagger
+            | ItemType::Dirk
+            | ItemType::GreatSword
+            | ItemType::Halberd
+            | ItemType::Hammer
+            | ItemType::LongSword
+            | ItemType::Mace
+            | ItemType::Morningstar
+            | ItemType::Pike
+            | ItemType::Scroll
+            | ItemType::ShortSword
+            | ItemType::Spear
+            | ItemType::Whip => return None,
+        };
+
+        let level = self.level();
+        let level_modifier = if level == 1 {
+            0
+        } else if level >= 2 && level <= 10 {
+            1
+        } else if level >= 11 && level <= 20 {
+            3
+        } else if level >= 21 && level <= 30 {
+            5
+        } else {
+            8
+        };
+
+        Some(base_resistance + level_modifier)
+    }
+
+    fn level(&self) -> u32 {
+        self.item_level.unwrap_or(1)
     }
 }

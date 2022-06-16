@@ -2,6 +2,41 @@ use strum::IntoEnumIterator;
 
 use crate::components::{items::descriptor::Descriptor, tag::Tag};
 
+pub fn valid_for_level(descriptor: &Descriptor, level: u32) -> bool {
+    match descriptor {
+        Descriptor::Beaten
+        | Descriptor::Broken
+        | Descriptor::Cracked
+        | Descriptor::Chipped
+        | Descriptor::Crumbling => level <= 5,
+        Descriptor::Dingy
+        | Descriptor::Dull
+        | Descriptor::Moldy
+        | Descriptor::Ripped
+        | Descriptor::Rotting
+        | Descriptor::Rusty
+        | Descriptor::Scuffed
+        | Descriptor::Soiled
+        | Descriptor::Splintered
+        | Descriptor::Stained
+        | Descriptor::Tangled
+        | Descriptor::WaterLogged
+        | Descriptor::Torn => level <= 10,
+        Descriptor::Heavy | Descriptor::Keen | Descriptor::Shimmering | Descriptor::Shiny => {
+            level > 10
+        }
+        Descriptor::Tarnished => level <= 15,
+        Descriptor::Bleached | Descriptor::Drab => level <= 20,
+        Descriptor::Quality => level > 20,
+        Descriptor::Dirty => level <= 50,
+        Descriptor::Bloodstained
+        | Descriptor::Colourful
+        | Descriptor::SetOf
+        | Descriptor::Smoothed
+        | Descriptor::Weathered => true,
+    }
+}
+
 pub fn matches_tags(tags: &[Tag]) -> Vec<Descriptor> {
     Descriptor::iter()
         .filter(|descriptor| {
