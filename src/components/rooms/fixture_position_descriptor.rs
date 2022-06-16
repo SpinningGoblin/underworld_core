@@ -6,7 +6,7 @@ use poem_openapi::Enum;
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
-#[derive(Clone, Debug, EnumIter, PartialEq)]
+#[derive(Clone, Debug, EnumIter, PartialEq, Eq)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
     feature = "serialization",

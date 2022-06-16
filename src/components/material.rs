@@ -8,7 +8,7 @@ use strum_macros::EnumIter;
 
 use super::tag::{Tag, Tagged};
 
-#[derive(Clone, Debug, PartialEq, EnumIter)]
+#[derive(Clone, Debug, PartialEq, Eq, EnumIter)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
     feature = "serialization",

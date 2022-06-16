@@ -9,7 +9,7 @@ pub trait Tagged {
     fn tags(&self) -> Vec<Tag>;
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
     feature = "serialization",
