@@ -175,9 +175,9 @@ impl ItemPrototype {
         let level = self.level();
         let roll_modifier = if level == 1 {
             0
-        } else if level >= 2 && level <= 10 {
+        } else if (2..=10).contains(&level) {
             1
-        } else if level >= 11 && level <= 20 {
+        } else if (11..=20).contains(&level) {
             3
         } else {
             5
@@ -226,11 +226,11 @@ impl ItemPrototype {
         let level = self.level();
         let level_modifier = if level == 1 {
             0
-        } else if level >= 2 && level <= 10 {
+        } else if (2..=10).contains(&level) {
             2
-        } else if level >= 11 && level <= 20 {
+        } else if (11..=20).contains(&level) {
             4
-        } else if level >= 21 && level <= 30 {
+        } else if (21..=30).contains(&level) {
             6
         } else {
             10
@@ -280,11 +280,11 @@ impl ItemPrototype {
         let level = self.level();
         let level_modifier = if level == 1 {
             0
-        } else if level >= 2 && level <= 10 {
+        } else if (2..=10).contains(&level) {
             1
-        } else if level >= 11 && level <= 20 {
+        } else if (11..=20).contains(&level) {
             3
-        } else if level >= 21 && level <= 30 {
+        } else if (21..=30).contains(&level) {
             5
         } else {
             8
