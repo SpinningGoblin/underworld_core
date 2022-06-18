@@ -90,6 +90,8 @@ pub fn damage_npc(
             npc_id: npc.id,
             killer_id: player.id,
         }));
+
+        events.push(Event::GameDangerLevelIncreased(1));
     }
 
     events

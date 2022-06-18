@@ -39,6 +39,8 @@ pub struct GameState {
     pub player_fixture_knowledge: HashMap<Uuid, FixtureKnowledge>,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub player_statistics: HashMap<Uuid, Statistics>,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub danger_level: u32,
 }
 
 impl GameState {

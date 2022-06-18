@@ -19,6 +19,7 @@ use crate::components::{
     serde(rename_all = "snake_case", tag = "event_type")
 )]
 pub enum Event {
+    GameDangerLevelIncreased(u32),
     DeadNpcBeaten(super::DeadNpcBeaten),
     FixtureCanBeOpenedDiscovered(super::FixtureCanBeOpenedDiscovered),
     FixtureContainedDiscovered(super::FixtureContainedDiscovered),
@@ -214,6 +215,7 @@ pub fn apply_events(
             | Event::PlayerMissed(_)
             | Event::NpcViewed(_)
             | Event::FixtureViewed(_) => {}
+            Event::GameDangerLevelIncreased(level) => new_game.danger_level += level,
         }
     }
 

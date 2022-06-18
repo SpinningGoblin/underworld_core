@@ -43,6 +43,7 @@ impl Generator<GameState> for GamePrototype {
             player_npc_knowledge: HashMap::new(),
             player_fixture_knowledge: HashMap::new(),
             player_statistics: HashMap::new(),
+            danger_level: 1,
         }
     }
 }

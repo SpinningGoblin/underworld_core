@@ -51,6 +51,7 @@ pub fn handle(exit_room: &ExitRoom, state: &GameState) -> Result<Vec<Event>, Err
 
     if !state.rooms_seen.contains(&room_id) {
         events.push(Event::RoomFirstSeen(RoomFirstSeen { room_id }));
+        events.push(Event::GameDangerLevelIncreased(1));
     }
 
     Ok(events)
