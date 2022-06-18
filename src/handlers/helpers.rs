@@ -26,7 +26,7 @@ pub fn npc_attack_player(
             damage: player_damage,
             player_id: player.id,
         }));
-        if player_damage >= player.character.get_current_health().unwrap() {
+        if player_damage >= player.character.get_current_health() {
             events.push(Event::PlayerKilled(PlayerKilled { killer_id: npc.id }));
 
             if player.character.current_effects.resurrection_aura {
@@ -68,7 +68,7 @@ pub fn damage_npc(
         attacker_id: player.id,
     })];
 
-    let npc_dead = damage > npc.character.get_current_health().unwrap();
+    let npc_dead = damage > npc.character.get_current_health();
 
     // I always am going to have the NPC attack back if they can.
     // That way I can ensure the NPC will always get a shot.

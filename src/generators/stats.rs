@@ -9,7 +9,6 @@ use super::generator::Generator;
 
 pub fn build_specific_health(max_health: i32) -> StatsPrototype {
     StatsPrototype {
-        has_health: true,
         max_health: Some(max_health),
         num_health_rolls: 0,
     }
@@ -17,7 +16,6 @@ pub fn build_specific_health(max_health: i32) -> StatsPrototype {
 
 pub fn build(num_health_rolls: usize) -> StatsPrototype {
     StatsPrototype {
-        has_health: true,
         max_health: None,
         num_health_rolls,
     }
@@ -31,14 +29,12 @@ pub fn build_default_health_rolls(species: &Species) -> StatsPrototype {
     };
 
     StatsPrototype {
-        has_health: true,
         max_health: None,
         num_health_rolls,
     }
 }
 
 pub struct StatsPrototype {
-    pub has_health: bool,
     pub max_health: Option<i32>,
     pub num_health_rolls: usize,
 }
@@ -71,26 +67,22 @@ impl Generator<Stats> for StatsPrototype {
             Size::Average
         };
 
-        let health = if self.has_health {
-            let max_health = match self.max_health {
-                Some(max) => max,
-                _ => {
-                    let range = 0..self.num_health_rolls;
+        let max_health = match self.max_health {
+            Some(max) => max,
+            _ => {
+                let range = 0..self.num_health_rolls;
 
-                    if range.is_empty() {
-                        0
-                    } else {
-                        let mut rng = rand::thread_rng();
-                        range.map(|_| roll_d6(&mut rng, 1, 0)).sum()
-                    }
+                if range.is_empty() {
+                    0
+                } else {
+                    let mut rng = rand::thread_rng();
+                    range.map(|_| roll_d6(&mut rng, 1, 0)).sum()
                 }
-            };
-            Some(Health {
-                current: max_health,
-                max: max_health,
-            })
-        } else {
-            None
+            }
+        };
+        let health = Health {
+            current: max_health,
+            max: max_health,
         };
 
         Stats { health, height }

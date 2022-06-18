@@ -37,11 +37,7 @@ pub struct Character {
 
 impl Character {
     pub fn is_dead(&self) -> bool {
-        if let Some(health) = &self.stats.health {
-            health.current == 0
-        } else {
-            true
-        }
+        self.stats.health.current == 0
     }
 
     pub fn find_item(&self, item_id: &Uuid) -> Option<CharacterItem> {
@@ -85,32 +81,24 @@ impl Character {
         self.inventory.add_item(character_item)
     }
 
-    pub fn get_current_health(&self) -> Option<i32> {
-        self.stats.health.as_ref().map(|health| health.current)
+    pub fn get_current_health(&self) -> i32 {
+        self.stats.health.current
     }
 
     pub fn damage(&mut self, damage: i32) {
-        if let Some(mut health) = self.stats.health.as_mut() {
-            health.current -= damage;
-        }
+        self.stats.health.current -= damage;
     }
 
     pub fn heal(&mut self, damage_healed: i32) {
-        if let Some(mut health) = self.stats.health.as_mut() {
-            health.current += damage_healed;
-        }
+        self.stats.health.current += damage_healed;
     }
 
     pub fn heal_to_max(&mut self) {
-        if let Some(mut health) = self.stats.health.as_mut() {
-            health.current = health.max;
-        }
+        self.stats.health.current = self.stats.health.max;
     }
 
     pub fn kill(&mut self) {
-        if let Some(mut health) = self.stats.health.as_mut() {
-            health.current = 0;
-        }
+        self.stats.health.current = 0;
     }
 
     pub fn no_weapons_readied(&self) -> bool {

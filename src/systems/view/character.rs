@@ -7,7 +7,7 @@ use crate::components::{
 
 pub fn view(character: &Character, args: &CharacterViewArgs, knows_all: bool) -> CharacterView {
     let (health, health_known) = if args.knows_health || knows_all {
-        (character.stats.health.clone(), true)
+        (Some(character.stats.health.clone()), true)
     } else {
         (None, false)
     };
