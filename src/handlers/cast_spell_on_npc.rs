@@ -29,6 +29,8 @@ pub fn handle(
     };
 
     let mut events: Vec<Event> = Vec::new();
+
+    events.push(Event::PlayerSpellUsed(PlayerSpellUsed { spell_id }));
     match learned_spell.spell.name {
         SpellName::ElectricBlast | SpellName::RagingFireball => {
             let damage = learned_spell.spell.damage();
@@ -37,8 +39,6 @@ pub fn handle(
         // TODO: There are non-damage spells that someone could cast on NPCs.
         _ => {}
     }
-
-    events.push(Event::PlayerSpellUsed(PlayerSpellUsed { spell_id }));
 
     if learned_spell.spell.uses - 1 == 0 {
         events.push(Event::PlayerSpellForgotten(PlayerSpellForgotten {
