@@ -81,6 +81,7 @@ fn character(args: CharacterArgs) -> CharacterPrototype {
         num_carried_wearables: args.num_carried_wearables,
         hidden_weapon_chance: 0,
         hidden_wearable_chance: 0,
+        danger_level: 1,
     };
 
     CharacterPrototype {
@@ -88,5 +89,6 @@ fn character(args: CharacterArgs) -> CharacterPrototype {
         species: args.species,
         life_modifier: args.life_modifier,
         has_inventory: args.has_inventory,
+        danger_level: 1,
     }
 }

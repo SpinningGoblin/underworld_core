@@ -23,7 +23,7 @@ use crate::{
 
 use super::{
     generator::Generator,
-    items::item_generator,
+    items::{item_generator, item_generator_for_level},
     utils::item_types::{type_inherently_multiple, type_is_for_weapon, type_is_for_wearable},
 };
 
@@ -38,6 +38,7 @@ pub struct InventoryPrototype {
     pub num_carried_wearables: RangeInclusive<usize>,
     pub hidden_weapon_chance: i32,
     pub hidden_wearable_chance: i32,
+    pub danger_level: u32,
 }
 
 impl InventoryPrototype {
@@ -83,7 +84,7 @@ impl InventoryPrototype {
                 Some(it) => *it,
                 None => continue,
             };
-            let generator = item_generator(weapon_type, true);
+            let generator = item_generator_for_level(weapon_type, true, self.danger_level);
             let weapon = generator.generate();
 
             let hidden_roll = roll_d100(rng, 1, 0);

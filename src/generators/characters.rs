@@ -16,6 +16,7 @@ pub struct CharacterPrototype {
     pub species: Species,
     pub life_modifier: Option<LifeModifier>,
     pub has_inventory: bool,
+    pub danger_level: u32,
 }
 
 pub fn random_character_generator() -> impl Generator<Character> {

@@ -24,6 +24,7 @@ const SWITCH_SPECIES_CHANCE: i32 = 10;
 pub fn build_npc_positions(
     room_type: &RoomType,
     fixtures_in_room: Vec<FixtureType>,
+    danger_level: u32,
 ) -> Vec<NpcPosition> {
     // Decide how many "groups" I would like in the room.
     let num_groups = num_groups(room_type);
@@ -40,13 +41,14 @@ pub fn build_npc_positions(
             let group_size = group_size(&starter_species);
             let life_modifier = life_modifier(&starter_species);
             let mut species = starter_species.clone();
-            let mut prototype = npc_prototype(&starter_species, life_modifier.clone());
+            let mut prototype =
+                npc_prototype(&starter_species, life_modifier.clone(), danger_level);
 
             let mut npc_positions: Vec<NpcPosition> = Vec::new();
             (0..group_size).for_each(|index| {
                 if index > 0 {
                     species = switch_species(&species);
-                    prototype = npc_prototype(&species, life_modifier.clone());
+                    prototype = npc_prototype(&species, life_modifier.clone(), danger_level);
                 }
                 let mut npc = prototype.generate();
 
@@ -247,8 +249,13 @@ fn life_modifier(species: &Species) -> Option<LifeModifier> {
     }
 }
 
-fn npc_prototype(species: &Species, life_modifier: Option<LifeModifier>) -> NonPlayerPrototype {
+fn npc_prototype(
+    species: &Species,
+    life_modifier: Option<LifeModifier>,
+    danger_level: u32,
+) -> NonPlayerPrototype {
     let inventory_prototype = InventoryPrototype {
+        danger_level,
         item_types: ItemType::iter().collect(),
         num_equipped_weapons: 1..=1,
         num_equipped_wearables: 1..=4,
@@ -263,6 +270,7 @@ fn npc_prototype(species: &Species, life_modifier: Option<LifeModifier>) -> NonP
         inventory_generator: Box::new(inventory_prototype),
         life_modifier,
         has_inventory: true,
+        danger_level,
     };
 
     NonPlayerPrototype {

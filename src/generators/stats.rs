@@ -11,6 +11,7 @@ pub fn build_specific_health(max_health: i32) -> StatsPrototype {
     StatsPrototype {
         max_health: Some(max_health),
         num_health_rolls: 0,
+        danger_level: 1,
     }
 }
 
@@ -18,6 +19,7 @@ pub fn build(num_health_rolls: usize) -> StatsPrototype {
     StatsPrototype {
         max_health: None,
         num_health_rolls,
+        danger_level: 1,
     }
 }
 
@@ -31,12 +33,31 @@ pub fn build_default_health_rolls(species: &Species) -> StatsPrototype {
     StatsPrototype {
         max_health: None,
         num_health_rolls,
+        danger_level: 1,
+    }
+}
+
+pub fn build_default_health_rolls_for_danger_level(
+    species: &Species,
+    danger_level: u32,
+) -> StatsPrototype {
+    let num_health_rolls = match *species {
+        Species::Ogre => 5,
+        Species::Dragonkin | Species::Phantom | Species::Rockoblin | Species::Shadow => 4,
+        _ => 3,
+    };
+
+    StatsPrototype {
+        max_health: None,
+        num_health_rolls,
+        danger_level,
     }
 }
 
 pub struct StatsPrototype {
     pub max_health: Option<i32>,
     pub num_health_rolls: usize,
+    pub danger_level: u32,
 }
 
 const NON_AVERAGE_HEIGHT_CHANCE: i32 = 40;
@@ -70,7 +91,18 @@ impl Generator<Stats> for StatsPrototype {
         let max_health = match self.max_health {
             Some(max) => max,
             _ => {
-                let range = 0..self.num_health_rolls;
+                let additional_rolls = if (1..=10).contains(&self.danger_level) {
+                    0
+                } else if (11..=20).contains(&self.danger_level) {
+                    1
+                } else if (21..=30).contains(&self.danger_level) {
+                    3
+                } else {
+                    6
+                };
+
+                let num_rolls = self.num_health_rolls + additional_rolls;
+                let range = 0..num_rolls;
 
                 if range.is_empty() {
                     0
