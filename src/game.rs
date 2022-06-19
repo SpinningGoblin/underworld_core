@@ -3,7 +3,7 @@ use crate::{
         action::Action, attack_npc::AttackNpc, exit_room::ExitRoom,
         inspect_fixture::InspectFixture, inspect_npc::InspectNpc, look_at_fixture::LookAtFixture,
         look_at_npc::LookAtNpc, loot_npc::LootNpc, CastSpellOnNpc, CastSpellOnPlayer, LootFixture,
-        MovePlayerItem, UseItemOnPlayer,
+        MovePlayerItem, OpenFixture, OpenFixtureHiddenCompartment, UseItemOnPlayer,
     },
     components::{
         games::game_state::GameState,
@@ -53,6 +53,24 @@ impl Game {
                         discover_hidden_compartment: true,
                     }),
                 ];
+
+                if fixture.can_be_opened && !fixture.open {
+                    actions.push(Action::OpenFixture(OpenFixture {
+                        fixture_id: fixture.id.to_string(),
+                    }));
+                }
+
+                let knowledge = self.state.fixture_knowledge(&fixture.id);
+                if knowledge.knows_has_hidden_compartment
+                    && !fixture.hidden_compartment_open
+                    && fixture.has_hidden_compartment
+                {
+                    actions.push(Action::OpenFixtureHiddenCompartment(
+                        OpenFixtureHiddenCompartment {
+                            fixture_id: fixture.id.to_string(),
+                        },
+                    ));
+                }
 
                 let mut item_ids: Vec<String> = Vec::new();
 
