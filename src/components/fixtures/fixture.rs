@@ -35,9 +35,9 @@ pub struct Fixture {
     pub descriptors: Vec<Descriptor>,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub items: Vec<FixtureItem>,
-    pub has_hidden_compartment: bool,
     pub can_be_opened: bool,
     pub open: bool,
+    pub has_hidden_compartment: bool,
     pub hidden_compartment_open: bool,
 }
 
@@ -74,20 +74,14 @@ pub struct FixtureView {
     pub size: Size,
     pub descriptors: Vec<Descriptor>,
     pub items: Vec<FixtureItemView>,
-    pub knows_contained_items: bool,
-    pub knows_hidden_compartment_items: bool,
     pub has_hidden_compartment: bool,
     pub knows_if_hidden_compartment: bool,
     pub open: bool,
     pub can_be_opened: bool,
-    pub knows_if_can_be_opened: bool,
     pub hidden_compartment_open: bool,
 }
 
 #[derive(Clone, Debug, Default)]
 pub struct FixtureViewArgs {
-    pub knows_items: bool,
-    pub knows_hidden: bool,
-    pub knows_has_hidden: bool,
-    pub knows_can_be_opened: bool,
+    pub knows_has_hidden_compartment: bool,
 }

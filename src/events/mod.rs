@@ -1,9 +1,6 @@
 pub mod dead_npc_beaten;
 pub mod event;
-pub mod fixture_can_be_opened_discovered;
-pub mod fixture_contained_discovered;
-pub mod fixture_has_hidden_discovered;
-pub mod fixture_hidden_items_discovered;
+pub mod fixture_has_hidden_compartment_discovered;
 pub mod fixture_viewed;
 pub mod item_taken_from_fixture;
 pub mod item_taken_from_npc;
@@ -36,13 +33,11 @@ pub mod room_generated;
 
 pub use {
     dead_npc_beaten::DeadNpcBeaten, event::Event,
-    fixture_can_be_opened_discovered::FixtureCanBeOpenedDiscovered,
-    fixture_contained_discovered::FixtureContainedDiscovered,
-    fixture_has_hidden_discovered::FixtureHasHiddenDiscovered,
-    fixture_hidden_items_discovered::FixtureHiddenItemsDiscovered, fixture_viewed::FixtureViewed,
-    item_taken_from_fixture::ItemTakenFromFixture, item_taken_from_npc::ItemTakenFromNpc,
-    npc_health_discovered::NpcHealthDiscovered, npc_hidden_discovered::NpcHiddenDiscovered,
-    npc_missed::NpcMissed, npc_packed_discovered::NpcPackedDiscovered, npc_viewed::NpcViewed,
+    fixture_has_hidden_compartment_discovered::FixtureHasHiddenCompartmentDiscovered,
+    fixture_viewed::FixtureViewed, item_taken_from_fixture::ItemTakenFromFixture,
+    item_taken_from_npc::ItemTakenFromNpc, npc_health_discovered::NpcHealthDiscovered,
+    npc_hidden_discovered::NpcHiddenDiscovered, npc_missed::NpcMissed,
+    npc_packed_discovered::NpcPackedDiscovered, npc_viewed::NpcViewed,
     npc_weapon_readied::NpcWeaponReadied,
     player_gains_resurrection_aura::PlayerGainsResurrectionAura,
     player_gains_retribution_aura::PlayerGainsRetributionAura,

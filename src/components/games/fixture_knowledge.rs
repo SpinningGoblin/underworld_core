@@ -7,8 +7,5 @@ use serde::{Deserialize, Serialize};
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct FixtureKnowledge {
-    pub knows_items: bool,
-    pub knows_can_be_opened: bool,
-    pub knows_has_hidden: bool,
-    pub knows_hidden_items: bool,
+    pub knows_has_hidden_compartment: bool,
 }

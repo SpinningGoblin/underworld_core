@@ -18,11 +18,5 @@ use serde::{Deserialize, Serialize};
 pub struct InspectFixture {
     pub fixture_id: String,
     /// Attempt to discover any hidden compartments and its contents.
-    pub discover_hidden: bool,
-    /// Attempt to discover any items in any hidden compartments.
-    pub discover_hidden_items: bool,
-    /// Attempt to discover the items inside of the container, without opening.
-    pub discover_contained: bool,
-    /// Attempt to discover if the fixture can be opened.
-    pub discover_can_be_opened: bool,
+    pub discover_hidden_compartment: bool,
 }

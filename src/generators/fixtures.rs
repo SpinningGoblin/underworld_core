@@ -24,7 +24,7 @@ const HAS_NON_STANDARD_SIZE: i32 = 50;
 
 pub struct FixturePrototype {
     pub fixture_type: FixtureType,
-    pub num_contained_items: RangeInclusive<usize>,
+    pub num_items: RangeInclusive<usize>,
     pub num_hidden_items: RangeInclusive<usize>,
     pub has_hidden_compartment: bool,
 }
@@ -36,8 +36,8 @@ pub fn get_generator(
     FixturePrototype {
         fixture_type: fixture_type.clone(),
         has_hidden_compartment,
-        num_contained_items: 1..=2,
-        num_hidden_items: 1..=2,
+        num_items: 0..=2,
+        num_hidden_items: 0..=2,
     }
 }
 
@@ -101,12 +101,13 @@ impl Generator<Fixture> for FixturePrototype {
         }
 
         let items: Vec<FixtureItem> = if fixture_can_have_items(&self.fixture_type) {
-            let num_items = rng.gen_range(self.num_contained_items.clone());
+            let num_items = rng.gen_range(self.num_items.clone());
             build_items(&self.fixture_type, num_items, &size, &mut rng)
                 .into_iter()
                 .map(|item| FixtureItem {
                     item,
-                    is_hidden: false,
+                    is_inside: items_go_inside(&self.fixture_type),
+                    is_in_hidden_compartment: false,
                 })
                 .collect()
         } else {
@@ -119,7 +120,8 @@ impl Generator<Fixture> for FixturePrototype {
                 .into_iter()
                 .map(|item| FixtureItem {
                     item,
-                    is_hidden: true,
+                    is_inside: false,
+                    is_in_hidden_compartment: true,
                 })
                 .collect()
         } else {
@@ -142,6 +144,22 @@ impl Generator<Fixture> for FixturePrototype {
             open: false,
             hidden_compartment_open: false,
         }
+    }
+}
+
+fn items_go_inside(fixture_type: &FixtureType) -> bool {
+    match *fixture_type {
+        FixtureType::Barrel | FixtureType::Chest | FixtureType::Coffin | FixtureType::Crate => true,
+        FixtureType::Bed
+        | FixtureType::Bucket
+        | FixtureType::Chair
+        | FixtureType::Cot
+        | FixtureType::Pillar
+        | FixtureType::SleepingRoll
+        | FixtureType::StatueTentacledMonstrosity
+        | FixtureType::StatueWarrior
+        | FixtureType::Table
+        | FixtureType::WeaponRack => false,
     }
 }
 
@@ -203,11 +221,11 @@ fn fixture_can_have_items(fixture_type: &FixtureType) -> bool {
         | FixtureType::Coffin
         | FixtureType::WeaponRack
         | FixtureType::Table
-        | FixtureType::Crate => true,
-        FixtureType::Chair
+        | FixtureType::Crate
+        | FixtureType::Chair
         | FixtureType::Cot
-        | FixtureType::Pillar
-        | FixtureType::SleepingRoll
+        | FixtureType::SleepingRoll => true,
+        FixtureType::Pillar
         | FixtureType::StatueTentacledMonstrosity
         | FixtureType::StatueWarrior => false,
     }

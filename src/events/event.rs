@@ -21,10 +21,7 @@ use crate::components::{
 pub enum Event {
     GameDangerLevelIncreased(u32),
     DeadNpcBeaten(super::DeadNpcBeaten),
-    FixtureCanBeOpenedDiscovered(super::FixtureCanBeOpenedDiscovered),
-    FixtureContainedDiscovered(super::FixtureContainedDiscovered),
-    FixtureHasHiddenDiscovered(super::FixtureHasHiddenDiscovered),
-    FixtureHiddenItemsDiscovered(super::FixtureHiddenItemsDiscovered),
+    FixtureHasHiddenCompartmentDiscovered(super::FixtureHasHiddenCompartmentDiscovered),
     FixtureViewed(super::FixtureViewed),
     ItemTakenFromFixture(super::ItemTakenFromFixture),
     ItemTakenFromNpc(super::ItemTakenFromNpc),
@@ -126,25 +123,10 @@ pub fn apply_events(
                 knowledge.knows_packed_in_inventory = true;
                 new_game.set_npc_knowledge(packed_discovered.npc_id, knowledge);
             }
-            Event::FixtureCanBeOpenedDiscovered(opened_discovered) => {
-                let mut knowledge = new_game.fixture_knowledge(&opened_discovered.fixture_id);
-                knowledge.knows_can_be_opened = true;
-                new_game.set_fixture_knowledge(opened_discovered.fixture_id, knowledge);
-            }
-            Event::FixtureContainedDiscovered(contained_discovered) => {
-                let mut knowledge = new_game.fixture_knowledge(&contained_discovered.fixture_id);
-                knowledge.knows_items = true;
-                new_game.set_fixture_knowledge(contained_discovered.fixture_id, knowledge);
-            }
-            Event::FixtureHasHiddenDiscovered(has_hidden) => {
+            Event::FixtureHasHiddenCompartmentDiscovered(has_hidden) => {
                 let mut knowledge = new_game.fixture_knowledge(&has_hidden.fixture_id);
-                knowledge.knows_has_hidden = true;
+                knowledge.knows_has_hidden_compartment = true;
                 new_game.set_fixture_knowledge(has_hidden.fixture_id, knowledge);
-            }
-            Event::FixtureHiddenItemsDiscovered(hidden_items) => {
-                let mut knowledge = new_game.fixture_knowledge(&hidden_items.fixture_id);
-                knowledge.knows_hidden_items = true;
-                new_game.set_fixture_knowledge(hidden_items.fixture_id, knowledge);
             }
             Event::RoomFirstSeen(first_seen) => {
                 new_game.rooms_seen.push(first_seen.room_id);

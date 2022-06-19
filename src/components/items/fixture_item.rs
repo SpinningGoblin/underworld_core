@@ -12,7 +12,8 @@ use crate::components::items::item::{Item, ItemView};
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct FixtureItem {
     pub item: Item,
-    pub is_hidden: bool,
+    pub is_inside: bool,
+    pub is_in_hidden_compartment: bool,
 }
 
 #[derive(Clone, Debug)]
@@ -25,6 +26,7 @@ pub struct FixtureItem {
 #[cfg_attr(feature = "openapi", derive(Object), oai(rename = "FixtureItem"))]
 pub struct FixtureItemView {
     pub item: ItemView,
-    pub is_hidden: bool,
-    pub is_hidden_known: bool,
+    pub is_inside: bool,
+    pub is_in_hidden_compartment: Option<bool>,
+    pub is_in_hidden_compartment_known: bool,
 }

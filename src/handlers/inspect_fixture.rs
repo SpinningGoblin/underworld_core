@@ -2,19 +2,13 @@ use crate::{
     actions::InspectFixture,
     components::{games::game_state::GameState, player::PlayerCharacter},
     errors::Error,
-    events::{
-        Event, FixtureCanBeOpenedDiscovered, FixtureContainedDiscovered,
-        FixtureHasHiddenDiscovered, FixtureHiddenItemsDiscovered,
-    },
+    events::{Event, FixtureHasHiddenCompartmentDiscovered},
     utils::{ids::parse_id, rolls::roll_d6},
 };
 
 use super::helpers::npc_attack_player;
 
-const DISCOVER_HIDDEN_CHANCE: i32 = 3;
-const DISCOVER_CONTAINED_CHANCE: i32 = 5;
-const DISCOVER_CAN_BE_OPENED_CHANCE: i32 = 1;
-const DISCOVER_HIDDEN_ITEMS_CHANCE: i32 = 5;
+const DISCOVER_HIDDEN_COMPARTMENT_CHANCE: i32 = 2;
 const NPC_ATTACKS_CHANCE: i32 = 5;
 
 pub fn handle(
@@ -31,32 +25,12 @@ pub fn handle(
 
     let mut rng = rand::thread_rng();
 
-    if inspect_fixture.discover_can_be_opened
-        && roll_d6(&mut rng, 1, 0) >= DISCOVER_CAN_BE_OPENED_CHANCE
+    if inspect_fixture.discover_hidden_compartment
+        && roll_d6(&mut rng, 1, 0) >= DISCOVER_HIDDEN_COMPARTMENT_CHANCE
     {
-        events.push(Event::FixtureCanBeOpenedDiscovered(
-            FixtureCanBeOpenedDiscovered { fixture_id },
+        events.push(Event::FixtureHasHiddenCompartmentDiscovered(
+            FixtureHasHiddenCompartmentDiscovered { fixture_id },
         ));
-    }
-
-    if inspect_fixture.discover_contained && roll_d6(&mut rng, 1, 0) >= DISCOVER_CONTAINED_CHANCE {
-        events.push(Event::FixtureContainedDiscovered(
-            FixtureContainedDiscovered { fixture_id },
-        ));
-    }
-
-    if inspect_fixture.discover_hidden && roll_d6(&mut rng, 1, 0) >= DISCOVER_HIDDEN_CHANCE {
-        events.push(Event::FixtureHasHiddenDiscovered(
-            FixtureHasHiddenDiscovered { fixture_id },
-        ));
-
-        if inspect_fixture.discover_hidden_items
-            && roll_d6(&mut rng, 1, 0) >= DISCOVER_HIDDEN_ITEMS_CHANCE
-        {
-            events.push(Event::FixtureHiddenItemsDiscovered(
-                FixtureHiddenItemsDiscovered { fixture_id },
-            ));
-        }
     }
 
     if roll_d6(&mut rng, 1, 0) >= NPC_ATTACKS_CHANCE {

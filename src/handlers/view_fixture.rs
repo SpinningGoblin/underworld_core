@@ -18,10 +18,7 @@ pub fn handle(look_at_fixture: &LookAtFixture, state: &GameState) -> Result<Vec<
     let knowledge = state.fixture_knowledge(&fixture_id);
 
     let args = FixtureViewArgs {
-        knows_items: knowledge.knows_items,
-        knows_hidden: knowledge.knows_hidden_items,
-        knows_has_hidden: knowledge.knows_has_hidden,
-        knows_can_be_opened: knowledge.knows_can_be_opened,
+        knows_has_hidden_compartment: knowledge.knows_has_hidden_compartment,
     };
 
     let view = fixture::view(&fixture_position.fixture, &args, state.player_knows_all);

@@ -127,10 +127,7 @@ impl GameState {
             fixture_args.insert(
                 fixture_id,
                 FixtureViewArgs {
-                    knows_items: knowledge.knows_items,
-                    knows_hidden: knowledge.knows_hidden_items,
-                    knows_has_hidden: knowledge.knows_has_hidden,
-                    knows_can_be_opened: knowledge.knows_can_be_opened,
+                    knows_has_hidden_compartment: knowledge.knows_has_hidden_compartment,
                 },
             );
         }

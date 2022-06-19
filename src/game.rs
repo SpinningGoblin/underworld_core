@@ -50,34 +50,36 @@ impl Game {
                     }),
                     Action::InspectFixture(InspectFixture {
                         fixture_id: fixture.id.to_string(),
-                        discover_hidden: true,
-                        discover_hidden_items: true,
-                        discover_contained: true,
-                        discover_can_be_opened: true,
+                        discover_hidden_compartment: true,
                     }),
                 ];
 
-                let knowledge = self.state.fixture_knowledge(&fixture.id);
                 let mut item_ids: Vec<String> = Vec::new();
 
-                if knowledge.knows_items {
+                if fixture.open {
                     for fixture_item in fixture
                         .items
                         .iter()
-                        .filter(|fixture_item| !fixture_item.is_hidden)
+                        .filter(|fixture_item| fixture_item.is_inside)
                     {
                         item_ids.push(fixture_item.item.id.to_string());
                     }
                 }
 
-                if knowledge.knows_hidden_items {
+                if fixture.hidden_compartment_open {
                     for fixture_item in fixture
                         .items
                         .iter()
-                        .filter(|fixture_item| fixture_item.is_hidden)
+                        .filter(|fixture_item| fixture_item.is_in_hidden_compartment)
                     {
                         item_ids.push(fixture_item.item.id.to_string());
                     }
+                }
+
+                for fixture_item in fixture.items.iter().filter(|fixture_item| {
+                    !fixture_item.is_inside && !fixture_item.is_in_hidden_compartment
+                }) {
+                    item_ids.push(fixture_item.item.id.to_string());
                 }
 
                 if !item_ids.is_empty() {

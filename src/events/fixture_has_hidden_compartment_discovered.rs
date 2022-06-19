@@ -7,6 +7,6 @@ use uuid::Uuid;
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
-pub struct FixtureCanBeOpenedDiscovered {
+pub struct FixtureHasHiddenCompartmentDiscovered {
     pub fixture_id: Uuid,
 }
