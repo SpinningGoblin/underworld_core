@@ -2,6 +2,10 @@
 pub enum Error {
     ExitNotFoundError(String),
     FixtureNotFoundError(String),
+    FixtureCannotBeFound(String),
+    FixtureCannotBeOpened(String),
+    FixtureHasNoHiddenCompartment(String),
+    FixtureHasHiddenCompartmentUnknown(String),
     InvalidIdError(String),
     ItemNotDirectlyUsableError(String),
     ItemNotFoundError(String),

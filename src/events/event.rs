@@ -22,6 +22,8 @@ pub enum Event {
     GameDangerLevelIncreased(u32),
     DeadNpcBeaten(super::DeadNpcBeaten),
     FixtureHasHiddenCompartmentDiscovered(super::FixtureHasHiddenCompartmentDiscovered),
+    FixtureHiddenCompartmentOpened(super::FixtureHiddenCompartmentOpened),
+    FixtureOpened(super::FixtureOpened),
     FixtureViewed(super::FixtureViewed),
     ItemTakenFromFixture(super::ItemTakenFromFixture),
     ItemTakenFromNpc(super::ItemTakenFromNpc),
@@ -192,6 +194,10 @@ pub fn apply_events(
                 character_item.decrease_uses();
                 new_player.character.add_item(character_item);
             }
+            Event::FixtureOpened(opened) => open_fixture(&mut new_game, &opened.fixture_id),
+            Event::FixtureHiddenCompartmentOpened(opened) => {
+                open_fixture_hidden_compartment(&mut new_game, &opened.fixture_id)
+            }
             Event::NpcMissed(_)
             | Event::DeadNpcBeaten(_)
             | Event::PlayerMissed(_)
@@ -202,6 +208,22 @@ pub fn apply_events(
     }
 
     (new_game, new_player)
+}
+
+fn open_fixture(new_game: &mut GameState, fixture_id: &Uuid) {
+    let fixture_position = new_game
+        .current_room_mut()
+        .find_fixture_mut(fixture_id)
+        .unwrap();
+    fixture_position.fixture.open = true;
+}
+
+fn open_fixture_hidden_compartment(new_game: &mut GameState, fixture_id: &Uuid) {
+    let fixture_position = new_game
+        .current_room_mut()
+        .find_fixture_mut(fixture_id)
+        .unwrap();
+    fixture_position.fixture.hidden_compartment_open = true;
 }
 
 fn take_item_from_fixture(

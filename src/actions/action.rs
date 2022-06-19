@@ -21,6 +21,8 @@ pub enum Action {
     LootFixture(super::LootFixture),
     LootNpc(super::LootNpc),
     MovePlayerItem(super::MovePlayerItem),
+    OpenFixture(super::OpenFixture),
+    OpenFixtureHiddenCompartment(super::OpenFixtureHiddenCompartment),
     ExitRoom(super::ExitRoom),
     UseItemOnPlayer(super::UseItemOnPlayer),
 }

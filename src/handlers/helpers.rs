@@ -1,11 +1,26 @@
 use crate::{
-    components::{non_player::NonPlayer, player::PlayerCharacter},
+    components::{games::game_state::GameState, non_player::NonPlayer, player::PlayerCharacter},
     events::{
         Event, NpcWeaponReadied, PlayerHit, PlayerHitNpc, PlayerKilled, PlayerKilledNpc,
         PlayerMissed, PlayerResurrected, PlayerRetributionAuraDissipated,
     },
     utils::rolls::roll_d6,
 };
+
+const NPC_ATTACKS_CHANCE: i32 = 1;
+
+pub fn first_npc_possibly_attacks(player: &PlayerCharacter, state: &GameState) -> Vec<Event> {
+    let mut rng = rand::thread_rng();
+
+    if roll_d6(&mut rng, 1, 0) <= NPC_ATTACKS_CHANCE {
+        match state.current_room().first_alive_npc() {
+            Some(it) => npc_attack_player(player, it, true),
+            None => Vec::new(),
+        }
+    } else {
+        Vec::new()
+    }
+}
 
 pub fn npc_attack_player(
     player: &PlayerCharacter,

@@ -47,6 +47,16 @@ pub fn handle_action(
         Action::UseItemOnPlayer(use_item_on_player) => {
             super::use_item_on_player::handle(use_item_on_player, player)?
         }
+        Action::OpenFixture(open_fixture) => {
+            super::open_fixture::handle(open_fixture, state, player)?
+        }
+        Action::OpenFixtureHiddenCompartment(open_fixture_hidden_compartment) => {
+            super::open_fixture_hidden_compartment::handle(
+                open_fixture_hidden_compartment,
+                state,
+                player,
+            )?
+        }
     };
 
     let (new_state, new_player) = apply_events(&events, state, player);
