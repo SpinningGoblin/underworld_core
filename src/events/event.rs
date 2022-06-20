@@ -44,6 +44,7 @@ pub enum Event {
     PlayerItemUsed(super::PlayerItemUsed),
     PlayerKilled(super::PlayerKilled),
     PlayerKilledNpc(super::PlayerKilledNpc),
+    PlayerMaxHealthChanged(i32),
     PlayerMissed(super::PlayerMissed),
     PlayerResurrected(super::PlayerResurrected),
     PlayerRetributionAuraDissipated(super::PlayerRetributionAuraDissipated),
@@ -198,6 +199,10 @@ pub fn apply_events(
             Event::FixtureHiddenCompartmentOpened(opened) => {
                 open_fixture_hidden_compartment(&mut new_game, &opened.fixture_id)
             }
+            Event::PlayerMaxHealthChanged(change) => {
+                new_player.character.stats.health.current += change;
+                new_player.character.stats.health.max += change;
+            },
             Event::NpcMissed(_)
             | Event::DeadNpcBeaten(_)
             | Event::PlayerMissed(_)

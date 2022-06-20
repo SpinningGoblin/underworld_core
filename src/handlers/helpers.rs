@@ -107,6 +107,7 @@ pub fn damage_npc(
         }));
 
         events.push(Event::GameDangerLevelIncreased(1));
+        events.push(Event::PlayerMaxHealthChanged(1))
     }
 
     events
