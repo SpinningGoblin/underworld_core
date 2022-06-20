@@ -1,4 +1,4 @@
-use rand::Rng;
+use rand::{prelude::ThreadRng, Rng};
 use std::ops::RangeInclusive;
 use uuid::Uuid;
 
@@ -48,15 +48,11 @@ pub struct ItemPrototype {
 
 impl Generator<Item> for ItemPrototype {
     fn generate(&self) -> Item {
+        let mut rng = rand::thread_rng();
         let material = self.material();
         let descriptors = self.descriptors(&material);
-        let attack = self.num_attack_rolls().map(|num_rolls| Attack {
-            num_rolls,
-            modifier: self.attack_modifier().unwrap_or_default(),
-        });
-        let defense = self.resistance().map(|resistance| Defense {
-            damage_resistance: resistance,
-        });
+        let attack = self.attack(&mut rng);
+        let defense = self.defense(&mut rng);
         let tags = self.item_type.tags();
 
         Item {
@@ -135,13 +131,13 @@ impl ItemPrototype {
         .collect()
     }
 
-    fn num_attack_rolls(&self) -> Option<usize> {
+    fn attack(&self, rng: &mut ThreadRng) -> Option<Attack> {
         let base_rolls = match self.item_type {
             ItemType::Buckler
             | ItemType::Dagger
             | ItemType::Dirk
             | ItemType::Shield
-            | ItemType::ShortSword => 2,
+            | ItemType::ShortSword => 1,
             ItemType::Club
             | ItemType::Hammer
             | ItemType::LongSword
@@ -149,8 +145,8 @@ impl ItemPrototype {
             | ItemType::Morningstar
             | ItemType::Whip
             | ItemType::Spear
-            | ItemType::Pike => 3,
-            ItemType::GreatSword | ItemType::Halberd => 4,
+            | ItemType::Pike => 2,
+            ItemType::GreatSword | ItemType::Halberd => 3,
             ItemType::Breastplate
             | ItemType::Boots
             | ItemType::BowlerHat
@@ -173,73 +169,37 @@ impl ItemPrototype {
         };
 
         let level = self.level();
-        let roll_modifier = if level == 1 {
-            0
-        } else if (2..=10).contains(&level) {
-            1
-        } else if (11..=20).contains(&level) {
-            3
+        let (additional_rolls, modifier) = if level == 1 {
+            (0, -1)
+        } else if (2..=5).contains(&level) {
+            (0, rng.gen_range(0..=2))
+        } else if (6..=10).contains(&level) {
+            (1, 0)
+        } else if (11..=15).contains(&level) {
+            (1, rng.gen_range(0..=2))
+        } else if (16..=20).contains(&level) {
+            (2, 0)
+        } else if (21..=25).contains(&level) {
+            (2, rng.gen_range(0..=2))
+        } else if (26..=30).contains(&level) {
+            (3, 0)
+        } else if (31..=35).contains(&level) {
+            (3, rng.gen_range(0..=2))
+        } else if (36..=40).contains(&level) {
+            (4, 0)
+        } else if (41..=45).contains(&level) {
+            (4, rng.gen_range(0..=2))
         } else {
-            5
+            (5, 1)
         };
 
-        Some(base_rolls + roll_modifier)
+        Some(Attack {
+            num_rolls: base_rolls + additional_rolls,
+            modifier,
+        })
     }
 
-    fn attack_modifier(&self) -> Option<i32> {
-        let base_modifier = match self.item_type {
-            ItemType::Buckler
-            | ItemType::Shield
-            | ItemType::ShortSword
-            | ItemType::Dagger
-            | ItemType::Dirk => -1,
-            ItemType::LongSword
-            | ItemType::Spear
-            | ItemType::Pike
-            | ItemType::Hammer
-            | ItemType::Morningstar
-            | ItemType::Whip => 1,
-            ItemType::GreatSword | ItemType::Halberd => 2,
-            ItemType::Breastplate
-            | ItemType::Boots
-            | ItemType::BowlerHat
-            | ItemType::Cloak
-            | ItemType::Club
-            | ItemType::Crown
-            | ItemType::Fedora
-            | ItemType::Gloves
-            | ItemType::Helm
-            | ItemType::LoinCloth
-            | ItemType::Mace
-            | ItemType::Mask
-            | ItemType::PlateBoots
-            | ItemType::PlateGauntlets
-            | ItemType::PlateHelmet
-            | ItemType::Scroll
-            | ItemType::Shirt
-            | ItemType::Shackles
-            | ItemType::TopHat
-            | ItemType::Trousers
-            | ItemType::Vest => return None,
-        };
-
-        let level = self.level();
-        let level_modifier = if level == 1 {
-            0
-        } else if (2..=10).contains(&level) {
-            2
-        } else if (11..=20).contains(&level) {
-            4
-        } else if (21..=30).contains(&level) {
-            6
-        } else {
-            10
-        };
-
-        Some(base_modifier + level_modifier)
-    }
-
-    fn resistance(&self) -> Option<i32> {
+    fn defense(&self, rng: &mut ThreadRng) -> Option<Defense> {
         let base_resistance = match self.item_type {
             ItemType::Boots
             | ItemType::Buckler
@@ -281,16 +241,18 @@ impl ItemPrototype {
         let level_modifier = if level == 1 {
             0
         } else if (2..=10).contains(&level) {
-            1
+            rng.gen_range(1..=3)
         } else if (11..=20).contains(&level) {
-            3
+            rng.gen_range(2..=4)
         } else if (21..=30).contains(&level) {
-            5
+            rng.gen_range(4..=6)
         } else {
-            8
+            rng.gen_range(7..=9)
         };
 
-        Some(base_resistance + level_modifier)
+        Some(Defense {
+            damage_resistance: base_resistance + level_modifier,
+        })
     }
 
     fn level(&self) -> u32 {
