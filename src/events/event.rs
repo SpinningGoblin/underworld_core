@@ -11,6 +11,8 @@ use crate::components::{
     spells::learned_spell::LearnedSpell,
 };
 
+use super::NpcDamagedByPoison;
+
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
@@ -27,12 +29,15 @@ pub enum Event {
     FixtureViewed(super::FixtureViewed),
     ItemTakenFromFixture(super::ItemTakenFromFixture),
     ItemTakenFromNpc(super::ItemTakenFromNpc),
+    NpcDamagedByPoison(NpcDamagedByPoison),
     NpcHealthDiscovered(super::NpcHealthDiscovered),
     NpcHiddenDiscovered(super::NpcHiddenDiscovered),
     NpcMissed(super::NpcMissed),
     NpcPackedDiscovered(super::NpcPackedDiscovered),
+    NpcPoisonEffectDurationChanged(super::NpcPoisonEffectDurationChanged),
     NpcViewed(super::NpcViewed),
     NpcWeaponReadied(super::NpcWeaponReadied),
+    PlayerDamagedByPoison(i32),
     PlayerGainsResurrectionAura(super::PlayerGainsResurrectionAura),
     PlayerGainsRetributionAura(super::PlayerGainsRetributionAura),
     PlayerGainsShieldAura(super::PlayerGainsShieldAura),
@@ -46,6 +51,7 @@ pub enum Event {
     PlayerKilledNpc(super::PlayerKilledNpc),
     PlayerMaxHealthChanged(i32),
     PlayerMissed(super::PlayerMissed),
+    PlayerPoisonDurationChanged(i32),
     PlayerResurrected(super::PlayerResurrected),
     PlayerRetributionAuraDissipated(super::PlayerRetributionAuraDissipated),
     PlayerSpellForgotten(super::PlayerSpellForgotten),
@@ -203,12 +209,38 @@ pub fn apply_events(
                 new_player.character.stats.health.current += change;
                 new_player.character.stats.health.max += change;
             }
+            Event::GameDangerLevelIncreased(level) => new_game.danger_level += level,
+            Event::NpcDamagedByPoison(poison_damage) => {
+                if let Some(position) = new_game
+                    .current_room_mut()
+                    .find_npc_mut(&poison_damage.npc_id)
+                {
+                    position.npc.character.damage(poison_damage.damage);
+                }
+            }
+            Event::PlayerDamagedByPoison(damage) => {
+                new_player.character.damage(*damage);
+            }
+            Event::PlayerPoisonDurationChanged(change) => {
+                if let Some(poison) = new_player.character.current_effects.poison.as_mut() {
+                    poison.duration += change;
+                }
+            }
+            Event::NpcPoisonEffectDurationChanged(poison_change) => {
+                if let Some(position) = new_game
+                    .current_room_mut()
+                    .find_npc_mut(&poison_change.npc_id)
+                {
+                    if let Some(poison) = position.npc.character.current_effects.poison.as_mut() {
+                        poison.duration += poison_change.duration;
+                    }
+                }
+            }
             Event::NpcMissed(_)
             | Event::DeadNpcBeaten(_)
             | Event::PlayerMissed(_)
             | Event::NpcViewed(_)
             | Event::FixtureViewed(_) => {}
-            Event::GameDangerLevelIncreased(level) => new_game.danger_level += level,
         }
     }
 

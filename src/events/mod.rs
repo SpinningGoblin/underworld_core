@@ -6,10 +6,12 @@ pub mod fixture_opened;
 pub mod fixture_viewed;
 pub mod item_taken_from_fixture;
 pub mod item_taken_from_npc;
+pub mod npc_damaged_by_poison;
 pub mod npc_health_discovered;
 pub mod npc_hidden_discovered;
 pub mod npc_missed;
 pub mod npc_packed_discovered;
+pub mod npc_poison_effect_duration_changed;
 pub mod npc_viewed;
 pub mod npc_weapon_readied;
 pub mod player_gains_resurrection_aura;
@@ -39,8 +41,10 @@ pub use {
     fixture_hidden_compartment_opened::FixtureHiddenCompartmentOpened,
     fixture_opened::FixtureOpened, fixture_viewed::FixtureViewed,
     item_taken_from_fixture::ItemTakenFromFixture, item_taken_from_npc::ItemTakenFromNpc,
-    npc_health_discovered::NpcHealthDiscovered, npc_hidden_discovered::NpcHiddenDiscovered,
-    npc_missed::NpcMissed, npc_packed_discovered::NpcPackedDiscovered, npc_viewed::NpcViewed,
+    npc_damaged_by_poison::NpcDamagedByPoison, npc_health_discovered::NpcHealthDiscovered,
+    npc_hidden_discovered::NpcHiddenDiscovered, npc_missed::NpcMissed,
+    npc_packed_discovered::NpcPackedDiscovered,
+    npc_poison_effect_duration_changed::NpcPoisonEffectDurationChanged, npc_viewed::NpcViewed,
     npc_weapon_readied::NpcWeaponReadied,
     player_gains_resurrection_aura::PlayerGainsResurrectionAura,
     player_gains_retribution_aura::PlayerGainsRetributionAura,

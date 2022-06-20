@@ -9,23 +9,16 @@ use super::damage::{Attack, Defense};
 
 #[derive(Clone, Debug, Default)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
-#[cfg_attr(
-    feature = "serialization",
-    derive(Deserialize, Serialize),
-    serde(rename_all = "snake_case")
-)]
+#[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct Effects {
     pub shield_aura: Option<Defense>,
     pub retribution_aura: Option<Attack>,
+    pub poison: Option<Poison>,
     pub resurrection_aura: bool,
 }
 
 #[derive(Clone, Debug)]
-#[cfg_attr(
-    feature = "serialization",
-    derive(Deserialize, Serialize),
-    serde(rename_all = "snake_case")
-)]
+#[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 #[cfg_attr(
     feature = "openapi",
     derive(Object),
@@ -38,4 +31,12 @@ pub struct EffectsView {
     pub knows_has_retribution_aura: bool,
     pub resurrection_aura: bool,
     pub knows_has_resurrection_aura: bool,
+}
+
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
+#[cfg_attr(feature = "openapi", derive(Object))]
+pub struct Poison {
+    pub damage: i32,
+    pub duration: i32,
 }
