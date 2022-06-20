@@ -409,7 +409,9 @@ fn possible_item_types(fixture_type: &FixtureType, size: &Size) -> Vec<ItemType>
         | (FixtureType::WeaponRack, Size::Squat)
         | (FixtureType::WeaponRack, Size::Tall)
         | (FixtureType::WeaponRack, Size::Tiny)
-        | (FixtureType::WeaponRack, Size::Wide) => ItemType::iter().collect(),
+        | (FixtureType::WeaponRack, Size::Wide) => ItemType::iter()
+            .filter(|item_type| !matches!(item_type, ItemType::Scroll))
+            .collect(),
         _ => Vec::new(),
     }
 }
