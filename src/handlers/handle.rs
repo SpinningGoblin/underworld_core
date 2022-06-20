@@ -22,7 +22,7 @@ pub fn handle_action(
         return Err(Error::PlayerIsDeadError);
     }
 
-    let events = match action {
+    let mut events = match action {
         Action::ExitRoom(exit_room) => super::exit_room::handle(exit_room, state)?,
         Action::AttackNpc(attack_npc) => super::attack_npc::handle(attack_npc, state, player)?,
         Action::LootNpc(loot_npc) => super::loot_npc::handle(loot_npc, state, player)?,
@@ -58,6 +58,8 @@ pub fn handle_action(
             )?
         }
     };
+
+    events.append(&mut super::global_effects::handle(state, player));
 
     let (new_state, new_player) = apply_events(&events, state, player);
 

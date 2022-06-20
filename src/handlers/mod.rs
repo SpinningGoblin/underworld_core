@@ -2,6 +2,7 @@ mod attack_npc;
 mod cast_spell_on_npc;
 mod cast_spell_on_player;
 mod exit_room;
+mod global_effects;
 mod helpers;
 mod inspect_fixture;
 mod inspect_npc;
