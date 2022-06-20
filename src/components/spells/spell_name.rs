@@ -18,6 +18,7 @@ use super::SpellType;
 #[cfg_attr(feature = "openapi", derive(Enum), oai(rename_all = "snake_case"))]
 pub enum SpellName {
     ElectricBlast,
+    GreatHeal,
     Heal,
     Phoenix,
     QuickHeal,
@@ -30,8 +31,10 @@ impl SpellName {
     pub fn spell_type(&self) -> SpellType {
         match *self {
             SpellName::ElectricBlast | SpellName::RagingFireball => SpellType::Attack,
-            SpellName::Heal | SpellName::QuickHeal => SpellType::Healing,
-            SpellName::Phoenix | SpellName::Retribution | SpellName::TinyShield => SpellType::Aura,
+            SpellName::Heal | SpellName::QuickHeal | SpellName::GreatHeal => SpellType::Healing,
+            SpellName::Phoenix | SpellName::Retribution | SpellName::TinyShield => {
+                SpellType::PlayerEffect
+            }
         }
     }
 }

@@ -62,6 +62,11 @@ pub fn handle(
                 defense,
             }));
         }
+        SpellName::GreatHeal => {
+            let damage_healed =
+                0.min(player.character.stats.health.max - player.character.stats.health.current);
+            events.push(Event::PlayerHealed(PlayerHealed { damage_healed }));
+        }
     }
 
     if learned_spell.spell.uses - 1 == 0 {

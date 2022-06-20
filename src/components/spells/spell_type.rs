@@ -15,6 +15,6 @@ use serde::{Deserialize, Serialize};
 #[cfg_attr(feature = "openapi", derive(Enum), oai(rename_all = "snake_case"))]
 pub enum SpellType {
     Attack,
-    Aura,
     Healing,
+    PlayerEffect,
 }
