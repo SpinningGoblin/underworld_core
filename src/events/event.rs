@@ -202,7 +202,7 @@ pub fn apply_events(
             Event::PlayerMaxHealthChanged(change) => {
                 new_player.character.stats.health.current += change;
                 new_player.character.stats.health.max += change;
-            },
+            }
             Event::NpcMissed(_)
             | Event::DeadNpcBeaten(_)
             | Event::PlayerMissed(_)
