@@ -45,6 +45,7 @@ pub enum Event {
     PlayerGainsRetributionAura(super::PlayerGainsRetributionAura),
     PlayerGainsShieldAura(super::PlayerGainsShieldAura),
     PlayerHealed(super::PlayerHealed),
+    PlayerHealthFullyRestored,
     PlayerHit(super::PlayerHit),
     PlayerHitNpc(super::PlayerHitNpc),
     PlayerItemMoved(super::PlayerItemMoved),
@@ -154,6 +155,7 @@ pub fn apply_events(
             Event::PlayerHealed(player_healed) => {
                 new_player.character.heal(player_healed.damage_healed)
             }
+            Event::PlayerHealthFullyRestored => new_player.character.heal_to_max(),
             Event::PlayerGainsResurrectionAura(_) => {
                 new_player.character.current_effects.resurrection_aura = true;
             }

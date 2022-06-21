@@ -62,9 +62,7 @@ pub fn handle(
             }));
         }
         SpellName::GreatHeal => {
-            let damage_healed =
-                0.min(player.character.stats.health.max - player.character.stats.health.current);
-            events.push(Event::PlayerHealed(PlayerHealed { damage_healed }));
+            events.push(Event::PlayerHealthFullyRestored);
         }
         SpellName::PoisonCloud | SpellName::PoisonDart => {
             if player.character.current_effects.poison.is_none() {
