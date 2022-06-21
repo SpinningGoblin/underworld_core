@@ -24,13 +24,18 @@ pub enum SpellName {
     QuickHeal,
     RagingFireball,
     Retribution,
+    PoisonCloud,
+    PoisonDart,
     TinyShield,
 }
 
 impl SpellName {
     pub fn spell_type(&self) -> SpellType {
         match *self {
-            SpellName::ElectricBlast | SpellName::RagingFireball => SpellType::Attack,
+            SpellName::ElectricBlast
+            | SpellName::RagingFireball
+            | SpellName::PoisonCloud
+            | SpellName::PoisonDart => SpellType::Attack,
             SpellName::Heal | SpellName::QuickHeal | SpellName::GreatHeal => SpellType::Healing,
             SpellName::Phoenix | SpellName::Retribution | SpellName::TinyShield => {
                 SpellType::PlayerEffect
