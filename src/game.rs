@@ -14,7 +14,7 @@ use crate::{
         player::PlayerCharacter,
     },
     errors::Error,
-    events::event::Event,
+    events::Event,
     handlers::handle::HandledAction,
 };
 

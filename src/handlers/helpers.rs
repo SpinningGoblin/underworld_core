@@ -2,7 +2,7 @@ use crate::{
     components::{games::game_state::GameState, non_player::NonPlayer, player::PlayerCharacter},
     events::{
         Event, NpcWeaponReadied, PlayerHit, PlayerHitNpc, PlayerKilled, PlayerKilledNpc,
-        PlayerMissed, PlayerResurrected, PlayerRetributionAuraDissipated,
+        PlayerMissed,
     },
     utils::rolls::roll_d6,
 };
@@ -39,13 +39,12 @@ pub fn npc_attack_player(
         events.push(Event::PlayerHit(PlayerHit {
             attacker_id: npc.id,
             damage: player_damage,
-            player_id: player.id,
         }));
         if player_damage >= player.character.get_current_health() {
             events.push(Event::PlayerKilled(PlayerKilled { killer_id: npc.id }));
 
             if player.character.current_effects.resurrection_aura {
-                events.push(Event::PlayerResurrected(PlayerResurrected));
+                events.push(Event::PlayerResurrected);
             }
         }
 
@@ -53,9 +52,7 @@ pub fn npc_attack_player(
             let mut rng = rand::thread_rng();
             let damage = retribution_aura.attack_roll(&mut rng);
             events.append(&mut damage_npc(player, npc, damage, false));
-            events.push(Event::PlayerRetributionAuraDissipated(
-                PlayerRetributionAuraDissipated,
-            ))
+            events.push(Event::PlayerRetributionAuraDissipated)
         }
     } else if npc_can_ready {
         // If there are no weapons readied, then all the NPC does is ready the weapon.
