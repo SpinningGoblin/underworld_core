@@ -103,8 +103,10 @@ pub fn damage_npc(
             killer_id: player.id,
         }));
 
-        events.push(Event::GameDangerLevelIncreased(1));
-        events.push(Event::PlayerMaxHealthChanged(1))
+        if !events.iter().any(|event| matches!(event, Event::PlayerKilled(_))) {
+            events.push(Event::GameDangerLevelIncreased(1));
+            events.push(Event::PlayerMaxHealthChanged(1))
+        }
     }
 
     events
