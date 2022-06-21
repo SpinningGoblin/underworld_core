@@ -3,6 +3,7 @@ mod cast_spell_on_npc;
 mod cast_spell_on_player;
 mod exit_room;
 mod global_effects;
+mod handle;
 mod helpers;
 mod inspect_fixture;
 mod inspect_npc;
@@ -15,4 +16,4 @@ mod use_item_on_player;
 mod view_fixture;
 mod view_npc;
 
-pub mod handle;
+pub use handle::{handle_action, HandledAction};
