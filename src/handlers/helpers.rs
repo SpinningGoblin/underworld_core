@@ -80,7 +80,7 @@ pub fn damage_npc(
         attacker_id: player.id,
     })];
 
-    let npc_dead = damage > npc.character.get_current_health();
+    let npc_dead = damage >= npc.character.get_current_health();
 
     // I always am going to have the NPC attack back if they can.
     // That way I can ensure the NPC will always get a shot.

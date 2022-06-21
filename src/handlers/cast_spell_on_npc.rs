@@ -43,7 +43,8 @@ pub fn handle(
     events.push(Event::PlayerSpellUsed(PlayerSpellUsed { spell_id }));
     match learned_spell.spell.name {
         SpellName::ElectricBlast | SpellName::RagingFireball => {
-            let damage = learned_spell.spell.damage();
+            let spell_damage = learned_spell.spell.damage();
+            let damage = spell_damage.min(npc.character.get_current_health());
             events.append(&mut damage_npc(player, npc, damage, true));
         }
         SpellName::PoisonDart => {

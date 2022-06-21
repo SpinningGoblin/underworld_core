@@ -38,7 +38,8 @@ pub fn handle(
     } else {
         let defense = npc.character.defense();
         let attack = player.character.attack();
-        let damage = (attack - defense).max(1);
+        let attack_damage = (attack - defense).max(1);
+        let damage = attack_damage.min(npc.character.get_current_health());
 
         events.append(&mut damage_npc(player, npc, damage, true));
     }
