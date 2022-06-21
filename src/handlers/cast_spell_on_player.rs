@@ -8,7 +8,7 @@ use crate::{
     errors::Error,
     events::{
         Event, PlayerGainsResurrectionAura, PlayerGainsRetributionAura, PlayerGainsShieldAura,
-        PlayerHealed, PlayerHit, PlayerSpellForgotten, PlayerSpellUsed,
+        PlayerHealed, PlayerHit, PlayerPoisoned, PlayerSpellForgotten, PlayerSpellUsed,
     },
     utils::ids::parse_id,
 };
@@ -31,7 +31,6 @@ pub fn handle(
         SpellName::ElectricBlast | SpellName::RagingFireball => {
             let damage = learned_spell.spell.damage();
             events.push(Event::PlayerHit(PlayerHit {
-                player_id: player.id,
                 attacker_id: player.id,
                 damage,
             }));
@@ -66,6 +65,17 @@ pub fn handle(
             let damage_healed =
                 0.min(player.character.stats.health.max - player.character.stats.health.current);
             events.push(Event::PlayerHealed(PlayerHealed { damage_healed }));
+        }
+        SpellName::PoisonCloud | SpellName::PoisonDart => {
+            if player.character.current_effects.poison.is_none() {
+                events.push(Event::PlayerPoisoned(PlayerPoisoned {
+                    damage: 1,
+                    duration: 1,
+                }));
+            } else {
+                events.push(Event::PlayerPoisonLevelChanged(1));
+                events.push(Event::PlayerPoisonDurationChanged(1));
+            }
         }
     }
 

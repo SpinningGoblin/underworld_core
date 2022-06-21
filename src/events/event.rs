@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use crate::components::{
+    effects::Poison,
     games::game_state::GameState,
     items::{character_item::CharacterItem, location_tag::LocationTag},
     player::PlayerCharacter,
@@ -34,7 +35,9 @@ pub enum Event {
     NpcHiddenDiscovered(super::NpcHiddenDiscovered),
     NpcMissed(super::NpcMissed),
     NpcPackedDiscovered(super::NpcPackedDiscovered),
-    NpcPoisonEffectDurationChanged(super::NpcPoisonEffectDurationChanged),
+    NpcPoisonDurationChanged(super::NpcPoisonEffectDurationChanged),
+    NpcPoisonLevelChanged(super::NpcPoisonLevelChanged),
+    NpcPoisoned(super::NpcPoisoned),
     NpcViewed(super::NpcViewed),
     NpcWeaponReadied(super::NpcWeaponReadied),
     PlayerDamagedByPoison(i32),
@@ -51,9 +54,11 @@ pub enum Event {
     PlayerKilledNpc(super::PlayerKilledNpc),
     PlayerMaxHealthChanged(i32),
     PlayerMissed(super::PlayerMissed),
+    PlayerPoisonLevelChanged(i32),
+    PlayerPoisoned(super::PlayerPoisoned),
     PlayerPoisonDurationChanged(i32),
-    PlayerResurrected(super::PlayerResurrected),
-    PlayerRetributionAuraDissipated(super::PlayerRetributionAuraDissipated),
+    PlayerResurrected,
+    PlayerRetributionAuraDissipated,
     PlayerSpellForgotten(super::PlayerSpellForgotten),
     PlayerSpellLearned(super::PlayerSpellLearned),
     PlayerSpellUsed(super::PlayerSpellUsed),
@@ -94,7 +99,7 @@ pub fn apply_events(
             }
             Event::PlayerHit(player_hit) => {
                 new_player.character.damage(player_hit.damage);
-                new_game.add_player_damage_taken_to_stats(&player_hit.player_id, player_hit.damage);
+                new_game.add_player_damage_taken_to_stats(&player.id, player_hit.damage);
             }
             Event::PlayerKilled(_) => new_player.character.kill(),
             Event::ItemTakenFromNpc(item_taken_from_npc) => take_item_from_npc(
@@ -160,11 +165,11 @@ pub fn apply_events(
                 new_player.character.current_effects.shield_aura =
                     Some(gain_shield_aura.defense.clone())
             }
-            Event::PlayerResurrected(_) => {
+            Event::PlayerResurrected => {
                 new_player.character.heal_to_max();
                 new_player.character.current_effects.resurrection_aura = false;
             }
-            Event::PlayerRetributionAuraDissipated(_) => {
+            Event::PlayerRetributionAuraDissipated => {
                 new_player.character.current_effects.retribution_aura = None;
             }
             Event::PlayerSpellForgotten(player_spell_forgotten) => {
@@ -226,7 +231,7 @@ pub fn apply_events(
                     poison.duration += change;
                 }
             }
-            Event::NpcPoisonEffectDurationChanged(poison_change) => {
+            Event::NpcPoisonDurationChanged(poison_change) => {
                 if let Some(position) = new_game
                     .current_room_mut()
                     .find_npc_mut(&poison_change.npc_id)
@@ -235,6 +240,35 @@ pub fn apply_events(
                         poison.duration += poison_change.duration;
                     }
                 }
+            }
+            Event::NpcPoisonLevelChanged(poison_change) => {
+                if let Some(position) = new_game
+                    .current_room_mut()
+                    .find_npc_mut(&poison_change.npc_id)
+                {
+                    if let Some(poison) = position.npc.character.current_effects.poison.as_mut() {
+                        poison.duration += poison_change.damage;
+                    }
+                }
+            }
+            Event::NpcPoisoned(poisoned) => {
+                if let Some(position) = new_game.current_room_mut().find_npc_mut(&poisoned.npc_id) {
+                    position.npc.character.current_effects.poison = Some(Poison {
+                        damage: poisoned.damage,
+                        duration: poisoned.duration,
+                    });
+                }
+            }
+            Event::PlayerPoisonLevelChanged(change) => {
+                if let Some(poison) = new_player.character.current_effects.poison.as_mut() {
+                    poison.damage += change;
+                }
+            }
+            Event::PlayerPoisoned(poisoned) => {
+                new_player.character.current_effects.poison = Some(Poison {
+                    damage: poisoned.damage,
+                    duration: poisoned.duration,
+                })
             }
             Event::NpcMissed(_)
             | Event::DeadNpcBeaten(_)

@@ -23,7 +23,7 @@ pub fn handle(state: &GameState, player: &PlayerCharacter) -> Vec<Event> {
                 damage: poison_effect.damage,
             }));
 
-            events.push(Event::NpcPoisonEffectDurationChanged(
+            events.push(Event::NpcPoisonDurationChanged(
                 NpcPoisonEffectDurationChanged {
                     npc_id: npc.id,
                     duration: -1,

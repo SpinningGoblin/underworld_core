@@ -1,14 +1,24 @@
+use std::ops::RangeInclusive;
+
+use rand::Rng;
+
 use crate::{
     actions::CastSpellOnNpc,
     components::{
         games::game_state::GameState, player::PlayerCharacter, spells::spell_name::SpellName,
     },
     errors::Error,
-    events::{event::Event, PlayerSpellForgotten, PlayerSpellUsed},
+    events::{
+        Event, NpcPoisonEffectDurationChanged, NpcPoisonLevelChanged, NpcPoisoned,
+        PlayerSpellForgotten, PlayerSpellUsed,
+    },
     utils::ids::parse_id,
 };
 
 use super::helpers::damage_npc;
+
+const POISON_DART_DAMAGE_RANGE: RangeInclusive<i32> = 2..=6;
+const POISON_DART_DURATION_RANGE: RangeInclusive<i32> = 1..=4;
 
 pub fn handle(
     cast_spell_on_npc: &CastSpellOnNpc,
@@ -35,6 +45,31 @@ pub fn handle(
         SpellName::ElectricBlast | SpellName::RagingFireball => {
             let damage = learned_spell.spell.damage();
             events.append(&mut damage_npc(player, npc, damage, true));
+        }
+        SpellName::PoisonDart => {
+            if npc.character.current_effects.poison.is_none() {
+                let mut rng = rand::thread_rng();
+                let damage = rng.gen_range(POISON_DART_DAMAGE_RANGE);
+                let duration = rng.gen_range(POISON_DART_DURATION_RANGE);
+
+                events.push(Event::NpcPoisoned(NpcPoisoned {
+                    npc_id,
+                    damage,
+                    duration,
+                }));
+            } else {
+                let mut rng = rand::thread_rng();
+                let damage = rng.gen_range(POISON_DART_DAMAGE_RANGE);
+                let duration = rng.gen_range(POISON_DART_DURATION_RANGE);
+
+                events.push(Event::NpcPoisonLevelChanged(NpcPoisonLevelChanged {
+                    npc_id,
+                    damage,
+                }));
+                events.push(Event::NpcPoisonDurationChanged(
+                    NpcPoisonEffectDurationChanged { npc_id, duration },
+                ));
+            }
         }
         // TODO: There are non-damage spells that someone could cast on NPCs.
         _ => {}
