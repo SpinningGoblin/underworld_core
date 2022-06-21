@@ -213,8 +213,7 @@ pub fn apply_events(
                 open_fixture_hidden_compartment(&mut new_game, &opened.fixture_id)
             }
             Event::PlayerMaxHealthChanged(change) => {
-                new_player.character.stats.health.current += change;
-                new_player.character.stats.health.max += change;
+                new_player.character.increase_max_health(*change);
             }
             Event::GameDangerLevelIncreased(level) => new_game.danger_level += level,
             Event::NpcDamagedByPoison(poison_damage) => {

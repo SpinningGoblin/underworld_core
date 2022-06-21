@@ -97,6 +97,11 @@ impl Character {
         self.stats.health.current = self.stats.health.max;
     }
 
+    pub fn increase_max_health(&mut self, change: i32) {
+        self.stats.health.max += change;
+        self.stats.health.current += change;
+    }
+
     pub fn kill(&mut self) {
         self.stats.health.current = 0;
     }
