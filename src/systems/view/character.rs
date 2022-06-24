@@ -56,22 +56,6 @@ pub fn view(character: &Character, args: &CharacterViewArgs, knows_all: bool) ->
         (None, false)
     };
 
-    let (current_effects, current_effects_known) = if knows_all {
-        (
-            Some(EffectsView {
-                shield_aura: character.current_effects.shield_aura.clone(),
-                knows_has_shield_aura: true,
-                retribution_aura: character.current_effects.retribution_aura.clone(),
-                knows_has_retribution_aura: true,
-                resurrection_aura: character.current_effects.resurrection_aura,
-                knows_has_resurrection_aura: true,
-            }),
-            true,
-        )
-    } else {
-        (None, false)
-    };
-
     CharacterView {
         stats: StatsView {
             health,
@@ -84,7 +68,13 @@ pub fn view(character: &Character, args: &CharacterViewArgs, knows_all: bool) ->
         inventory_known,
         spell_memory,
         spell_memory_known,
-        current_effects,
-        current_effects_known,
+        current_effects: EffectsView {
+            shield_aura: character.current_effects.shield_aura.clone(),
+            knows_has_shield_aura: true,
+            retribution_aura: character.current_effects.retribution_aura.clone(),
+            knows_has_retribution_aura: true,
+            resurrection_aura: character.current_effects.resurrection_aura,
+            knows_has_resurrection_aura: true,
+        },
     }
 }

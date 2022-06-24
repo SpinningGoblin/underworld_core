@@ -172,9 +172,7 @@ pub struct CharacterView {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub inventory: Option<InventoryView>,
     pub inventory_known: bool,
-    #[cfg_attr(feature = "serialization", serde(default))]
-    pub current_effects: Option<EffectsView>,
-    pub current_effects_known: bool,
+    pub current_effects: EffectsView,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub spell_memory: Option<SpellMemoryView>,
     pub spell_memory_known: bool,
