@@ -31,6 +31,7 @@ pub struct EffectsView {
     pub knows_has_retribution_aura: bool,
     pub resurrection_aura: bool,
     pub knows_has_resurrection_aura: bool,
+    pub poison: Option<Poison>,
 }
 
 #[derive(Clone, Debug)]
