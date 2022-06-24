@@ -20,6 +20,9 @@ use super::helpers::damage_npc;
 const POISON_DART_DAMAGE_RANGE: RangeInclusive<i32> = 2..=6;
 const POISON_DART_DURATION_RANGE: RangeInclusive<i32> = 1..=4;
 
+const POISON_CLOUD_DAMAGE_RANGE: RangeInclusive<i32> = 1..=8;
+const POISON_CLOUD_DURATION_RANGE: RangeInclusive<i32> = 2..=5;
+
 pub fn handle(
     cast_spell_on_npc: &CastSpellOnNpc,
     state: &GameState,
@@ -50,8 +53,8 @@ pub fn handle(
         SpellName::PoisonDart => {
             if npc.character.current_effects.poison.is_none() {
                 let mut rng = rand::thread_rng();
-                let damage = rng.gen_range(POISON_DART_DAMAGE_RANGE);
-                let duration = rng.gen_range(POISON_DART_DURATION_RANGE);
+                let damage = rng.gen_range(POISON_CLOUD_DAMAGE_RANGE);
+                let duration = rng.gen_range(POISON_CLOUD_DURATION_RANGE);
 
                 events.push(Event::NpcPoisoned(NpcPoisoned {
                     npc_id,
@@ -60,8 +63,8 @@ pub fn handle(
                 }));
             } else {
                 let mut rng = rand::thread_rng();
-                let damage = rng.gen_range(POISON_DART_DAMAGE_RANGE);
-                let duration = rng.gen_range(POISON_DART_DURATION_RANGE);
+                let damage = rng.gen_range(POISON_CLOUD_DAMAGE_RANGE);
+                let duration = rng.gen_range(POISON_CLOUD_DURATION_RANGE);
 
                 events.push(Event::NpcPoisonLevelChanged(NpcPoisonLevelChanged {
                     npc_id,
@@ -70,6 +73,36 @@ pub fn handle(
                 events.push(Event::NpcPoisonDurationChanged(
                     NpcPoisonEffectDurationChanged { npc_id, duration },
                 ));
+            }
+        }
+        SpellName::PoisonCloud => {
+            for npc_position in state.current_room().npc_positions.iter() {
+                if npc_position.npc.character.current_effects.poison.is_none() {
+                    let mut rng = rand::thread_rng();
+                    let damage = rng.gen_range(POISON_DART_DAMAGE_RANGE);
+                    let duration = rng.gen_range(POISON_DART_DURATION_RANGE);
+
+                    events.push(Event::NpcPoisoned(NpcPoisoned {
+                        npc_id: npc_position.npc.id,
+                        damage,
+                        duration,
+                    }));
+                } else {
+                    let mut rng = rand::thread_rng();
+                    let damage = rng.gen_range(POISON_DART_DAMAGE_RANGE);
+                    let duration = rng.gen_range(POISON_DART_DURATION_RANGE);
+
+                    events.push(Event::NpcPoisonLevelChanged(NpcPoisonLevelChanged {
+                        npc_id: npc_position.npc.id,
+                        damage,
+                    }));
+                    events.push(Event::NpcPoisonDurationChanged(
+                        NpcPoisonEffectDurationChanged {
+                            npc_id: npc_position.npc.id,
+                            duration,
+                        },
+                    ));
+                }
             }
         }
         // TODO: There are non-damage spells that someone could cast on NPCs.
