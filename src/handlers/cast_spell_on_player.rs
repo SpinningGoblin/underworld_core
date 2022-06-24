@@ -7,8 +7,8 @@ use crate::{
     },
     errors::Error,
     events::{
-        Event, PlayerGainsResurrectionAura, PlayerGainsRetributionAura, PlayerGainsShieldAura,
-        PlayerHealed, PlayerHit, PlayerPoisoned, PlayerSpellForgotten, PlayerSpellUsed,
+        Event, PlayerGainsRetributionAura, PlayerGainsShieldAura, PlayerHealed, PlayerHit,
+        PlayerPoisoned, PlayerSpellForgotten, PlayerSpellUsed,
     },
     utils::ids::parse_id,
 };
@@ -41,9 +41,7 @@ pub fn handle(
                 .min(player.character.stats.health.max - player.character.stats.health.current);
             events.push(Event::PlayerHealed(PlayerHealed { damage_healed }));
         }
-        SpellName::Phoenix => events.push(Event::PlayerGainsResurrectionAura(
-            PlayerGainsResurrectionAura,
-        )),
+        SpellName::Phoenix => events.push(Event::PlayerGainsResurrectionAura),
         SpellName::Retribution => {
             let attack = learned_spell.spell.attack.clone().unwrap_or(Attack {
                 num_rolls: 2,

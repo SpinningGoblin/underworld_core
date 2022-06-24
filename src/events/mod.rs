@@ -16,7 +16,6 @@ mod npc_poison_level_changed;
 mod npc_poisoned;
 mod npc_viewed;
 mod npc_weapon_readied;
-mod player_gains_resurrection_aura;
 mod player_gains_retribution_aura;
 mod player_gains_shield_aura;
 mod player_healed;
@@ -48,7 +47,6 @@ pub use {
     npc_poison_effect_duration_changed::NpcPoisonEffectDurationChanged,
     npc_poison_level_changed::NpcPoisonLevelChanged, npc_poisoned::NpcPoisoned,
     npc_viewed::NpcViewed, npc_weapon_readied::NpcWeaponReadied,
-    player_gains_resurrection_aura::PlayerGainsResurrectionAura,
     player_gains_retribution_aura::PlayerGainsRetributionAura,
     player_gains_shield_aura::PlayerGainsShieldAura, player_healed::PlayerHealed,
     player_hit::PlayerHit, player_hit_npc::PlayerHitNpc, player_item_moved::PlayerItemMoved,
