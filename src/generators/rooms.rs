@@ -51,7 +51,8 @@ impl Generator<Room> for RoomPrototype {
         let index = rng.gen_range(0..flavour_options.len());
         let flavour = flavour_options.get(index).cloned();
 
-        let (fixture_positions, used_fixtures) = build_fixture_positions(&self.room_type);
+        let (fixture_positions, used_fixtures) =
+            build_fixture_positions(&self.room_type, self.danger_level);
 
         Room {
             dimensions: build_dimensions(),

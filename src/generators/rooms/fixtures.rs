@@ -10,11 +10,14 @@ use crate::{
             group_descriptor::GroupDescriptor, room_type::RoomType,
         },
     },
-    generators::{fixtures::get_generator, generator::Generator},
+    generators::{fixtures::get_generator_for_level, generator::Generator},
     utils::rolls::roll_d100,
 };
 
-pub fn build_fixture_positions(room_type: &RoomType) -> (Vec<FixturePosition>, Vec<FixtureType>) {
+pub fn build_fixture_positions(
+    room_type: &RoomType,
+    danger_level: u32,
+) -> (Vec<FixturePosition>, Vec<FixtureType>) {
     let num_groups_range = 0..num_groups(room_type);
     if num_groups_range.is_empty() {
         return (Vec::new(), Vec::new());
@@ -25,7 +28,7 @@ pub fn build_fixture_positions(room_type: &RoomType) -> (Vec<FixturePosition>, V
     let mut positions: Vec<FixturePosition> = Vec::new();
     for _ in num_groups_range {
         let mut fixture_generators =
-            FixtureGenerators::build_with_previous(room_type, &used_fixtures);
+            FixtureGenerators::build_with_previous(room_type, &used_fixtures, danger_level);
 
         let range = 0..group_size(room_type);
 
@@ -129,10 +132,15 @@ struct FixtureGenerators {
     fixture_types: Vec<FixtureType>,
     current_index: usize,
     generated_once: bool,
+    danger_level: u32,
 }
 
 impl FixtureGenerators {
-    fn build_with_previous(room_type: &RoomType, previous: &[FixtureType]) -> Self {
+    fn build_with_previous(
+        room_type: &RoomType,
+        previous: &[FixtureType],
+        danger_level: u32,
+    ) -> Self {
         let possible_fixtures: Vec<FixtureType> = possible_fixtures(room_type)
             .iter()
             .filter(|fixture| !previous.contains(fixture))
@@ -148,6 +156,7 @@ impl FixtureGenerators {
             fixture_types: possible_fixtures,
             current_index: index,
             generated_once: false,
+            danger_level,
         }
     }
 
@@ -155,9 +164,10 @@ impl FixtureGenerators {
         if !self.generated_once {
             self.generated_once = true;
             let fixture_type = self.fixture_types.get(self.current_index).unwrap();
-            return Some(get_generator(
+            return Some(get_generator_for_level(
                 fixture_type,
                 has_hidden_compartment(fixture_type),
+                self.danger_level,
             ));
         }
 
@@ -165,31 +175,35 @@ impl FixtureGenerators {
         let roll = roll_d100(&mut rng, 1, 0);
         let last_generated = self.fixture_types.get(self.current_index).unwrap();
         if last_generated == &FixtureType::Table && roll <= 75 {
-            return Some(get_generator(
+            return Some(get_generator_for_level(
                 &FixtureType::Chair,
                 has_hidden_compartment(&FixtureType::Chair),
+                self.danger_level,
             ));
         } else if last_generated == &FixtureType::Barrel && roll <= 75 {
-            return Some(get_generator(
+            return Some(get_generator_for_level(
                 &FixtureType::Crate,
                 has_hidden_compartment(&FixtureType::Crate),
+                self.danger_level,
             ));
         }
 
         // I don't really want to switch up generators all that often
         if roll <= 95 {
-            return Some(get_generator(
+            return Some(get_generator_for_level(
                 last_generated,
                 has_hidden_compartment(last_generated),
+                self.danger_level,
             ));
         }
 
         let index = rng.gen_range(0..self.fixture_types.len());
         self.current_index = index;
         let fixture_type = self.fixture_types.get(index).unwrap();
-        Some(get_generator(
+        Some(get_generator_for_level(
             fixture_type,
             has_hidden_compartment(fixture_type),
+            self.danger_level,
         ))
     }
 }

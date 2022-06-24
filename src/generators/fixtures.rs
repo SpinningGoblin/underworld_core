@@ -17,7 +17,9 @@ use crate::{
     utils::rolls::roll_d100,
 };
 
-use super::{generator::Generator, items::item_generator, utils::item_descriptors::matches_tags};
+use super::{
+    generator::Generator, items::item_generator_for_level, utils::item_descriptors::matches_tags,
+};
 
 const HAS_MATERIAL_CHANCE: i32 = 90;
 const HAS_NON_STANDARD_SIZE: i32 = 50;
@@ -27,6 +29,7 @@ pub struct FixturePrototype {
     pub num_items: RangeInclusive<usize>,
     pub num_hidden_items: RangeInclusive<usize>,
     pub has_hidden_compartment: bool,
+    pub danger_level: u32,
 }
 
 pub fn get_generator(
@@ -34,6 +37,21 @@ pub fn get_generator(
     has_hidden_compartment: bool,
 ) -> impl Generator<Fixture> {
     FixturePrototype {
+        fixture_type: fixture_type.clone(),
+        has_hidden_compartment,
+        num_items: 0..=2,
+        num_hidden_items: 0..=2,
+        danger_level: 1,
+    }
+}
+
+pub fn get_generator_for_level(
+    fixture_type: &FixtureType,
+    has_hidden_compartment: bool,
+    danger_level: u32,
+) -> impl Generator<Fixture> {
+    FixturePrototype {
+        danger_level,
         fixture_type: fixture_type.clone(),
         has_hidden_compartment,
         num_items: 0..=2,
@@ -102,28 +120,40 @@ impl Generator<Fixture> for FixturePrototype {
 
         let items: Vec<FixtureItem> = if fixture_can_have_items(&self.fixture_type) {
             let num_items = rng.gen_range(self.num_items.clone());
-            build_items(&self.fixture_type, num_items, &size, &mut rng)
-                .into_iter()
-                .map(|item| FixtureItem {
-                    item,
-                    is_inside: items_go_inside(&self.fixture_type),
-                    is_in_hidden_compartment: false,
-                })
-                .collect()
+            build_items(
+                &self.fixture_type,
+                num_items,
+                &size,
+                &mut rng,
+                self.danger_level,
+            )
+            .into_iter()
+            .map(|item| FixtureItem {
+                item,
+                is_inside: items_go_inside(&self.fixture_type),
+                is_in_hidden_compartment: false,
+            })
+            .collect()
         } else {
             Vec::new()
         };
 
         let hidden_compartment_items: Vec<FixtureItem> = if self.has_hidden_compartment {
             let num_items = rng.gen_range(self.num_hidden_items.clone());
-            build_items(&self.fixture_type, num_items, &size, &mut rng)
-                .into_iter()
-                .map(|item| FixtureItem {
-                    item,
-                    is_inside: false,
-                    is_in_hidden_compartment: true,
-                })
-                .collect()
+            build_items(
+                &self.fixture_type,
+                num_items,
+                &size,
+                &mut rng,
+                self.danger_level,
+            )
+            .into_iter()
+            .map(|item| FixtureItem {
+                item,
+                is_inside: false,
+                is_in_hidden_compartment: true,
+            })
+            .collect()
         } else {
             Vec::new()
         };
@@ -187,6 +217,7 @@ fn build_items(
     num_items: usize,
     size: &Size,
     rng: &mut ThreadRng,
+    danger_level: u32,
 ) -> Vec<Item> {
     if num_items == 0 {
         return Vec::new();
@@ -202,7 +233,7 @@ fn build_items(
                 let item_type_index = rng.gen_range(0..item_types.len());
                 match item_types.get(item_type_index) {
                     Some(item_type) => {
-                        let generator = item_generator(item_type, false);
+                        let generator = item_generator_for_level(item_type, false, danger_level);
                         Some(generator.generate())
                     }
                     None => None,

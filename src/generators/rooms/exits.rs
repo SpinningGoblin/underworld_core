@@ -53,7 +53,7 @@ fn num_exits(rng: &mut ThreadRng, room_type: &RoomType) -> usize {
         | RoomType::Crypt
         | RoomType::TempleHall
         | RoomType::Cave
-        | RoomType::Room => rng.gen_range(2..=4),
+        | RoomType::Room => rng.gen_range(3..=5),
         RoomType::EntryWay => 2,
     }
 }
