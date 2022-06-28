@@ -256,8 +256,10 @@ impl ItemPrototype {
             rng.gen_range(2..=4)
         } else if (21..=30).contains(&level) {
             rng.gen_range(4..=6)
-        } else {
+        } else if (31..=40).contains(&level) {
             rng.gen_range(7..=9)
+        } else {
+            rng.gen_range(10..=25)
         };
 
         Some(Defense {
