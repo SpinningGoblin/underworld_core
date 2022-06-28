@@ -189,12 +189,22 @@ impl ItemPrototype {
             (4, 0)
         } else if (41..=45).contains(&level) {
             (4, rng.gen_range(0..=2))
-        } else {
+        } else if (46..=50).contains(&level) {
             (5, 1)
+        } else if (51..=55).contains(&level) {
+            (5, rng.gen_range(0..=2))
+        } else {
+            (7, 1)
         };
 
+        let max_rolls = base_rolls + additional_rolls;
+        let roll_range = base_rolls..=max_rolls;
+
+        let mut rng = rand::thread_rng();
+        let num_rolls = rng.gen_range(roll_range);
+
         Some(Attack {
-            num_rolls: base_rolls + additional_rolls,
+            num_rolls,
             modifier,
         })
     }
