@@ -14,6 +14,7 @@ pub enum Action {
     AttackNpc(super::AttackNpc),
     CastSpellOnNpc(super::CastSpellOnNpc),
     CastSpellOnPlayer(super::CastSpellOnPlayer),
+    ExitRoom(super::ExitRoom),
     InspectFixture(super::InspectFixture),
     InspectNpc(super::InspectNpc),
     LookAtFixture(super::LookAtFixture),
@@ -23,6 +24,5 @@ pub enum Action {
     MovePlayerItem(super::MovePlayerItem),
     OpenFixture(super::OpenFixture),
     OpenFixtureHiddenCompartment(super::OpenFixtureHiddenCompartment),
-    ExitRoom(super::ExitRoom),
     UseItemOnPlayer(super::UseItemOnPlayer),
 }
