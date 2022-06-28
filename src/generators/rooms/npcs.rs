@@ -254,13 +254,29 @@ fn npc_prototype(
     life_modifier: Option<LifeModifier>,
     danger_level: u32,
 ) -> NonPlayerPrototype {
+    let num_equipped_weapons = if (1..=10).contains(&danger_level) {
+        1..=1
+    } else if (11..=40).contains(&danger_level) {
+        1..=2
+    } else {
+        2..=2
+    };
+
+    let num_equipped_wearables = if (1..=10).contains(&danger_level) {
+        1..=4
+    } else if (11..=20).contains(&danger_level) {
+        2..=5
+    } else if (21..=40).contains(&danger_level) {
+        3..=6
+    } else {
+        4..=8
+    };
+
     let inventory_prototype = InventoryPrototype {
         danger_level,
         item_types: ItemType::iter().collect(),
-        num_equipped_weapons: 1..=1,
-        num_equipped_wearables: 1..=4,
-        num_carried_weapons: 0..=1,
-        num_carried_wearables: 0..=1,
+        num_equipped_weapons,
+        num_equipped_wearables,
         hidden_weapon_chance: 0,
         hidden_wearable_chance: 0,
     };

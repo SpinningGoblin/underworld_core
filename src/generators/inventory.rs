@@ -34,8 +34,6 @@ pub struct InventoryPrototype {
     pub item_types: Vec<ItemType>,
     pub num_equipped_weapons: RangeInclusive<usize>,
     pub num_equipped_wearables: RangeInclusive<usize>,
-    pub num_carried_weapons: RangeInclusive<usize>,
-    pub num_carried_wearables: RangeInclusive<usize>,
     pub hidden_weapon_chance: i32,
     pub hidden_wearable_chance: i32,
     pub danger_level: u32,

@@ -9,7 +9,8 @@ use crate::components::{
 };
 
 use super::{
-    generator::Generator, inventory::InventoryPrototype, stats::build_default_health_rolls,
+    generator::Generator, inventory::InventoryPrototype,
+    stats::build_default_health_rolls_for_danger_level,
 };
 
 pub struct CharacterPrototype {
@@ -23,8 +24,6 @@ pub struct CharacterPrototype {
 struct CharacterArgs {
     num_equipped_weapons: RangeInclusive<usize>,
     num_equipped_wearables: RangeInclusive<usize>,
-    num_carried_weapons: RangeInclusive<usize>,
-    num_carried_wearables: RangeInclusive<usize>,
     species: Species,
     item_types: Vec<ItemType>,
     life_modifier: Option<LifeModifier>,
@@ -44,8 +43,6 @@ fn basic_character(species: Species) -> CharacterPrototype {
         species,
         num_equipped_weapons: 1..=2,
         num_equipped_wearables: 1..=2,
-        num_carried_weapons: 0..=1,
-        num_carried_wearables: 0..=1,
         item_types: ItemType::iter().collect(),
         life_modifier: None,
         has_inventory: true,
@@ -59,8 +56,6 @@ fn character(args: CharacterArgs) -> CharacterPrototype {
         item_types: args.item_types,
         num_equipped_weapons: args.num_equipped_weapons,
         num_equipped_wearables: args.num_equipped_wearables,
-        num_carried_weapons: args.num_carried_weapons,
-        num_carried_wearables: args.num_carried_wearables,
         hidden_weapon_chance: 0,
         hidden_wearable_chance: 0,
         danger_level: 1,
@@ -92,7 +87,8 @@ impl Generator<Character> for CharacterPrototype {
             Inventory::default()
         };
 
-        let stats_generator = build_default_health_rolls(&self.species);
+        let stats_generator =
+            build_default_health_rolls_for_danger_level(&self.species, self.danger_level);
         let stats = stats_generator.generate();
 
         Character {
