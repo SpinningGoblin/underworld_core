@@ -1,15 +1,16 @@
-mod prototypes;
+use std::ops::RangeInclusive;
 
 use rand::Rng;
+use strum::IntoEnumIterator;
 
 use crate::components::{
-    character::Character, effects::Effects, inventory::Inventory, life_modifier::LifeModifier,
-    species::Species, spells::spell_memory::SpellMemory,
+    character::Character, effects::Effects, inventory::Inventory, items::item_type::ItemType,
+    life_modifier::LifeModifier, species::Species, spells::spell_memory::SpellMemory,
 };
 
-use self::prototypes::{basic_character, overloaded_character, undead_character};
-
-use super::{generator::Generator, stats::build_default_health_rolls};
+use super::{
+    generator::Generator, inventory::InventoryPrototype, stats::build_default_health_rolls,
+};
 
 pub struct CharacterPrototype {
     pub inventory_generator: Box<dyn Generator<Inventory>>,
@@ -19,82 +20,68 @@ pub struct CharacterPrototype {
     pub danger_level: u32,
 }
 
-pub fn random_character_generator() -> impl Generator<Character> {
-    CharacterPrototype::random_species_character()
+struct CharacterArgs {
+    num_equipped_weapons: RangeInclusive<usize>,
+    num_equipped_wearables: RangeInclusive<usize>,
+    num_carried_weapons: RangeInclusive<usize>,
+    num_carried_wearables: RangeInclusive<usize>,
+    species: Species,
+    item_types: Vec<ItemType>,
+    life_modifier: Option<LifeModifier>,
+    has_inventory: bool,
 }
 
-pub fn random_overloaded_character_generator() -> impl Generator<Character> {
-    CharacterPrototype::random_species_overloaded()
+pub fn random_character_generator() -> impl Generator<Character> {
+    random_species_character()
 }
 
 pub fn species_character_generator(species: Species) -> impl Generator<Character> {
     basic_character(species)
 }
 
-pub fn overloaded_species_character_generator(species: Species) -> impl Generator<Character> {
-    overloaded_character(species)
+fn basic_character(species: Species) -> CharacterPrototype {
+    let args = CharacterArgs {
+        species,
+        num_equipped_weapons: 1..=2,
+        num_equipped_wearables: 1..=2,
+        num_carried_weapons: 0..=1,
+        num_carried_wearables: 0..=1,
+        item_types: ItemType::iter().collect(),
+        life_modifier: None,
+        has_inventory: true,
+    };
+
+    character(args)
 }
 
-impl CharacterPrototype {
-    pub fn basic_goblin() -> Self {
-        basic_character(Species::Goblin)
+fn character(args: CharacterArgs) -> CharacterPrototype {
+    let inventory_prototype = InventoryPrototype {
+        item_types: args.item_types,
+        num_equipped_weapons: args.num_equipped_weapons,
+        num_equipped_wearables: args.num_equipped_wearables,
+        num_carried_weapons: args.num_carried_weapons,
+        num_carried_wearables: args.num_carried_wearables,
+        hidden_weapon_chance: 0,
+        hidden_wearable_chance: 0,
+        danger_level: 1,
+    };
+
+    CharacterPrototype {
+        inventory_generator: Box::new(inventory_prototype),
+        species: args.species,
+        life_modifier: args.life_modifier,
+        has_inventory: args.has_inventory,
+        danger_level: 1,
     }
+}
 
-    pub fn undead_goblin() -> Self {
-        undead_character(Species::Goblin)
-    }
+fn random_species_character() -> CharacterPrototype {
+    let mut rng = rand::thread_rng();
+    let all_species: Vec<Species> = Species::iter().collect();
+    let index = rng.gen_range(0..all_species.len());
+    let species = all_species.get(index).cloned().unwrap_or(Species::Shadow);
 
-    pub fn overloaded_goblin() -> Self {
-        overloaded_character(Species::Goblin)
-    }
-
-    pub fn basic_kobold() -> Self {
-        basic_character(Species::Kobold)
-    }
-
-    pub fn undead_kobold() -> Self {
-        undead_character(Species::Kobold)
-    }
-
-    pub fn overloaded_kobold() -> Self {
-        overloaded_character(Species::Kobold)
-    }
-
-    pub fn overloaded_character(species: Species) -> Self {
-        overloaded_character(species)
-    }
-
-    pub fn random_species_character() -> Self {
-        let mut rng = rand::thread_rng();
-        let all_species = vec![
-            Species::Bugbear,
-            Species::Goblin,
-            Species::Kobold,
-            Species::Ogre,
-            Species::Orc,
-            Species::Shadow,
-        ];
-        let index = rng.gen_range(0..all_species.len());
-        let species = all_species.get(index).cloned().unwrap_or(Species::Shadow);
-
-        basic_character(species)
-    }
-
-    pub fn random_species_overloaded() -> Self {
-        let mut rng = rand::thread_rng();
-        let all_species = vec![
-            Species::Bugbear,
-            Species::Goblin,
-            Species::Kobold,
-            Species::Ogre,
-            Species::Orc,
-            Species::Shadow,
-        ];
-        let index = rng.gen_range(0..all_species.len());
-        let species = all_species.get(index).cloned().unwrap_or(Species::Shadow);
-
-        overloaded_character(species)
-    }
+    basic_character(species)
 }
 
 impl Generator<Character> for CharacterPrototype {
@@ -116,19 +103,5 @@ impl Generator<Character> for CharacterPrototype {
             current_effects: Effects::default(),
             spell_memory: SpellMemory::default(),
         }
-    }
-}
-
-#[cfg(test)]
-mod goblin_tests {
-    use crate::generators::generator::Generator;
-
-    use super::CharacterPrototype;
-
-    #[test]
-    fn basic_goblin() {
-        let prototype = CharacterPrototype::basic_goblin();
-        let goblin = prototype.generate();
-        assert!(!goblin.inventory.equipment.is_empty());
     }
 }
