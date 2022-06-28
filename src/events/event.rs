@@ -41,6 +41,7 @@ pub enum Event {
     NpcViewed(super::NpcViewed),
     NpcWeaponReadied(super::NpcWeaponReadied),
     PlayerDamagedByPoison(i32),
+    PlayerGainedGold(u32),
     PlayerGainsResurrectionAura,
     PlayerGainsRetributionAura(super::PlayerGainsRetributionAura),
     PlayerGainsShieldAura(super::PlayerGainsShieldAura),
@@ -271,6 +272,9 @@ pub fn apply_events(
                     duration: poisoned.duration,
                 })
             }
+            Event::PlayerGainedGold(gold) => {
+                new_player.gold += gold;
+            },
             Event::NpcMissed(_)
             | Event::DeadNpcBeaten(_)
             | Event::PlayerMissed(_)
