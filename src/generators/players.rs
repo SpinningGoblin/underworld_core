@@ -91,6 +91,7 @@ impl Generator<PlayerCharacter> for PlayerCharacterPrototype {
             },
             id: Uuid::new_v4(),
             name: self.character_name.clone(),
+            gold: 0,
         }
     }
 }

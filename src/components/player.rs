@@ -14,6 +14,8 @@ use super::character::{Character, CharacterView};
 pub struct PlayerCharacter {
     pub character: Character,
     pub id: Uuid,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub gold: u32,
     pub name: Option<String>,
 }
 
@@ -24,5 +26,6 @@ pub struct PlayerCharacter {
 pub struct PlayerCharacterView {
     pub character: CharacterView,
     pub id: String,
+    pub gold: u32,
     pub name: Option<String>,
 }

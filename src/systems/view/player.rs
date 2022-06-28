@@ -15,6 +15,7 @@ pub fn check(player_character: PlayerCharacter) -> PlayerCharacterView {
     PlayerCharacterView {
         character,
         id: player_character.id.to_string(),
+        gold: player_character.gold,
         name: player_character.name,
     }
 }
