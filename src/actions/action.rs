@@ -24,5 +24,6 @@ pub enum Action {
     MovePlayerItem(super::MovePlayerItem),
     OpenFixture(super::OpenFixture),
     OpenFixtureHiddenCompartment(super::OpenFixtureHiddenCompartment),
+    SellPlayerItem(super::SellPlayerItem),
     UseItemOnPlayer(super::UseItemOnPlayer),
 }

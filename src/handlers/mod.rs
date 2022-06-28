@@ -12,6 +12,7 @@ mod loot_npc;
 mod move_player_item;
 mod open_fixture;
 mod open_fixture_hidden_compartment;
+mod sell_player_item;
 mod use_item_on_player;
 mod view_fixture;
 mod view_npc;

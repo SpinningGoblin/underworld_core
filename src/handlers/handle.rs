@@ -57,6 +57,9 @@ pub fn handle_action(
                 player,
             )?
         }
+        Action::SellPlayerItem(sell_player_item) => {
+            super::sell_player_item::handle(sell_player_item, &player)?
+        }
     };
 
     events.append(&mut super::global_effects::handle(state, player));

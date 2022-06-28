@@ -274,7 +274,7 @@ pub fn apply_events(
             }
             Event::PlayerGainedGold(gold) => {
                 new_player.gold += gold;
-            },
+            }
             Event::NpcMissed(_)
             | Event::DeadNpcBeaten(_)
             | Event::PlayerMissed(_)
