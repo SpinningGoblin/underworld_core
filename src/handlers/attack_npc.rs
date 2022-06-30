@@ -6,7 +6,7 @@ use crate::{
     utils::{ids::parse_id, rolls::roll_d100},
 };
 
-use super::helpers::{damage_npc, npc_attack_player};
+use super::helpers::damage_npc;
 
 pub fn handle(
     attack_npc: &AttackNpc,
@@ -33,15 +33,13 @@ pub fn handle(
             attacker_id: player.id,
             npc_id,
         }));
-
-        events.append(&mut npc_attack_player(player, npc, true));
     } else {
         let defense = npc.character.defense();
         let attack = player.character.attack();
         let attack_damage = (attack - defense).max(1);
         let damage = attack_damage.min(npc.character.get_current_health());
 
-        events.append(&mut damage_npc(player, npc, damage, true));
+        events.append(&mut damage_npc(player, npc, damage));
     }
 
     Ok(events)

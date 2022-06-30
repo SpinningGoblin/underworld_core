@@ -1,18 +1,12 @@
 use crate::{
     actions::LootNpc,
-    components::{games::game_state::GameState, player::PlayerCharacter},
+    components::games::game_state::GameState,
     errors::Error,
     events::{Event, ItemTakenFromNpc},
     utils::ids::parse_id,
 };
 
-use super::helpers::npc_attack_player;
-
-pub fn handle(
-    loot_npc: &LootNpc,
-    state: &GameState,
-    player: &PlayerCharacter,
-) -> Result<Vec<Event>, Error> {
+pub fn handle(loot_npc: &LootNpc, state: &GameState) -> Result<Vec<Event>, Error> {
     let npc_id = parse_id(&loot_npc.npc_id)?;
 
     let room = state.current_room();
@@ -24,9 +18,7 @@ pub fn handle(
 
     let mut events: Vec<Event> = Vec::new();
 
-    if !npc.character.is_dead() {
-        events.append(&mut npc_attack_player(player, npc, true));
-    } else {
+    if npc.character.is_dead() {
         for id in &loot_npc.item_ids {
             let item_id = parse_id(id)?;
             match npc.character.find_item(&item_id) {

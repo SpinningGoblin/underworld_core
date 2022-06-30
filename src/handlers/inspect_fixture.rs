@@ -1,21 +1,14 @@
 use crate::{
     actions::InspectFixture,
-    components::{games::game_state::GameState, player::PlayerCharacter},
+    components::games::game_state::GameState,
     errors::Error,
     events::{Event, FixtureHasHiddenCompartmentDiscovered},
     utils::{ids::parse_id, rolls::roll_d6},
 };
 
-use super::helpers::npc_attack_player;
-
 const DISCOVER_HIDDEN_COMPARTMENT_CHANCE: i32 = 2;
-const NPC_ATTACKS_CHANCE: i32 = 5;
 
-pub fn handle(
-    inspect_fixture: &InspectFixture,
-    state: &GameState,
-    player: &PlayerCharacter,
-) -> Result<Vec<Event>, Error> {
+pub fn handle(inspect_fixture: &InspectFixture, state: &GameState) -> Result<Vec<Event>, Error> {
     let mut events: Vec<Event> = Vec::new();
     let fixture_id = parse_id(&inspect_fixture.fixture_id)?;
 
@@ -31,13 +24,6 @@ pub fn handle(
         events.push(Event::FixtureHasHiddenCompartmentDiscovered(
             FixtureHasHiddenCompartmentDiscovered { fixture_id },
         ));
-    }
-
-    if roll_d6(&mut rng, 1, 0) >= NPC_ATTACKS_CHANCE {
-        match state.current_room().first_alive_npc() {
-            Some(it) => events.append(&mut npc_attack_player(player, it, true)),
-            None => {}
-        };
     }
 
     Ok(events)

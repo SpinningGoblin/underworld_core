@@ -48,7 +48,7 @@ pub fn handle(
         SpellName::ElectricBlast | SpellName::RagingFireball => {
             let spell_damage = learned_spell.spell.damage();
             let damage = spell_damage.min(npc.character.get_current_health());
-            events.append(&mut damage_npc(player, npc, damage, true));
+            events.append(&mut damage_npc(player, npc, damage));
         }
         SpellName::PoisonDart => {
             if npc.character.current_effects.poison.is_none() {

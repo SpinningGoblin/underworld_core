@@ -1,23 +1,16 @@
 use crate::{
     actions::InspectNpc,
-    components::{games::game_state::GameState, player::PlayerCharacter},
+    components::games::game_state::GameState,
     errors::Error,
     events::{Event, NpcHealthDiscovered, NpcHiddenDiscovered, NpcPackedDiscovered},
     utils::{ids::parse_id, rolls::roll_d6},
 };
 
-use super::helpers::npc_attack_player;
-
 const DISCOVER_HEALTH_CHANCE: i32 = 5;
 const DISCOVER_PACKED_CHANCE: i32 = 4;
 const DISCOVER_HIDDEN_CHANCE: i32 = 2;
-const NPC_ATTACKS_CHANCE: i32 = 5;
 
-pub fn handle(
-    inspect_npc: &InspectNpc,
-    state: &GameState,
-    player: &PlayerCharacter,
-) -> Result<Vec<Event>, Error> {
+pub fn handle(inspect_npc: &InspectNpc, state: &GameState) -> Result<Vec<Event>, Error> {
     let mut events: Vec<Event> = Vec::new();
     let npc_id = parse_id(&inspect_npc.npc_id)?;
 
@@ -43,10 +36,6 @@ pub fn handle(
 
         if inspect_npc.discover_hidden_items && roll_d6(&mut rng, 1, 0) >= DISCOVER_HIDDEN_CHANCE {
             events.push(Event::NpcHiddenDiscovered(NpcHiddenDiscovered { npc_id }));
-        }
-
-        if roll_d6(&mut rng, 1, 0) >= NPC_ATTACKS_CHANCE {
-            events.append(&mut npc_attack_player(player, npc, true));
         }
     }
 
