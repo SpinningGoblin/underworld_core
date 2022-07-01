@@ -65,7 +65,6 @@ pub fn npc_attack_player(
                 item_id: weapon.item.id,
             }));
         }
-
     }
     events
 }
