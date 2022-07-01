@@ -51,12 +51,21 @@ pub fn npc_attack_player(
         }
     } else if npc_can_ready {
         // If there are no weapons readied, then all the NPC does is ready the weapon.
-        if let Some(character_item) = npc.character.strongest_non_readied_weapon() {
+        let mut weapons = npc.character.inventory.non_readied_weapons();
+        weapons.sort_by(|a, b| a.item.num_attack_rolls().cmp(&b.item.num_attack_rolls()));
+        if let Some(weapon) = weapons.get(0) {
             events.push(Event::NpcWeaponReadied(NpcWeaponReadied {
                 npc_id: npc.id,
-                item_id: character_item.item.id,
+                item_id: weapon.item.id,
             }));
         }
+        if let Some(weapon) = weapons.get(1) {
+            events.push(Event::NpcWeaponReadied(NpcWeaponReadied {
+                npc_id: npc.id,
+                item_id: weapon.item.id,
+            }));
+        }
+
     }
     events
 }
