@@ -36,6 +36,7 @@ pub enum Event {
     NpcMissed(super::NpcMissed),
     NpcPackedDiscovered(super::NpcPackedDiscovered),
     NpcPoisonDurationChanged(super::NpcPoisonEffectDurationChanged),
+    NpcPoisonEffectDissipated(super::NpcPoisonEffectDissipated),
     NpcPoisonLevelChanged(super::NpcPoisonLevelChanged),
     NpcPoisoned(super::NpcPoisoned),
     NpcViewed(super::NpcViewed),
@@ -61,6 +62,8 @@ pub enum Event {
     PlayerPoisonDurationChanged(i32),
     PlayerResurrected,
     PlayerRetributionAuraDissipated,
+    PlayerShieldAuraDamaged(i32),
+    PlayerShieldAuraDissipated,
     PlayerSpellForgotten(super::PlayerSpellForgotten),
     PlayerSpellLearned(super::PlayerSpellLearned),
     PlayerSpellUsed(super::PlayerSpellUsed),
@@ -274,6 +277,23 @@ pub fn apply_events(
             }
             Event::PlayerGainedGold(gold) => {
                 new_player.gold += gold;
+            }
+            Event::PlayerShieldAuraDamaged(damage) => {
+                if let Some(shield_aura) = new_player.character.current_effects.shield_aura.as_mut()
+                {
+                    shield_aura.damage_resistance -= damage;
+                }
+            }
+            Event::PlayerShieldAuraDissipated => {
+                new_player.character.current_effects.shield_aura = None
+            }
+            Event::NpcPoisonEffectDissipated(effect_dissipated) => {
+                if let Some(position) = new_game
+                    .current_room_mut()
+                    .find_npc_mut(&effect_dissipated.npc_id)
+                {
+                    position.npc.character.current_effects.poison = None;
+                }
             }
             Event::NpcMissed(_)
             | Event::DeadNpcBeaten(_)

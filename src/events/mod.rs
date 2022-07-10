@@ -11,6 +11,7 @@ mod npc_health_discovered;
 mod npc_hidden_discovered;
 mod npc_missed;
 mod npc_packed_discovered;
+mod npc_poison_effect_dissipated;
 mod npc_poison_effect_duration_changed;
 mod npc_poison_level_changed;
 mod npc_poisoned;
@@ -44,6 +45,7 @@ pub use {
     npc_damaged_by_poison::NpcDamagedByPoison, npc_health_discovered::NpcHealthDiscovered,
     npc_hidden_discovered::NpcHiddenDiscovered, npc_missed::NpcMissed,
     npc_packed_discovered::NpcPackedDiscovered,
+    npc_poison_effect_dissipated::NpcPoisonEffectDissipated,
     npc_poison_effect_duration_changed::NpcPoisonEffectDurationChanged,
     npc_poison_level_changed::NpcPoisonLevelChanged, npc_poisoned::NpcPoisoned,
     npc_viewed::NpcViewed, npc_weapon_readied::NpcWeaponReadied,

@@ -1,6 +1,9 @@
 use crate::{
     components::{games::game_state::GameState, player::PlayerCharacter},
-    events::{Event, NpcDamagedByPoison, NpcPoisonEffectDurationChanged, PlayerKilledNpc},
+    events::{
+        Event, NpcDamagedByPoison, NpcPoisonEffectDissipated, NpcPoisonEffectDurationChanged,
+        PlayerKilledNpc,
+    },
 };
 
 pub fn handle(state: &GameState, player: &PlayerCharacter) -> Vec<Event> {
@@ -34,12 +37,18 @@ pub fn handle(state: &GameState, player: &PlayerCharacter) -> Vec<Event> {
                 events.push(Event::PlayerMaxHealthChanged(1))
             }
 
-            events.push(Event::NpcPoisonDurationChanged(
-                NpcPoisonEffectDurationChanged {
-                    npc_id: npc.id,
-                    duration: -1,
-                },
-            ));
+            if poison_effect.duration - 1 > 0 {
+                events.push(Event::NpcPoisonDurationChanged(
+                    NpcPoisonEffectDurationChanged {
+                        npc_id: npc.id,
+                        duration: -1,
+                    },
+                ));
+            } else {
+                events.push(Event::NpcPoisonEffectDissipated(
+                    NpcPoisonEffectDissipated { npc_id: npc.id },
+                ));
+            }
         }
     }
 

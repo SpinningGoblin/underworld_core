@@ -27,14 +27,32 @@ pub fn npc_attack_player(
     if npc.character.has_weapons_readied() {
         let player_defense = player.character.defense();
         let character_attack = npc.character.attack();
-        let player_damage = (character_attack - player_defense).max(1);
+        let mut player_damage = (character_attack - player_defense).max(1);
 
-        // TODO Add handling for any defense aura player has.
+        if let Some(defense_aura) = &player.character.current_effects.shield_aura {
+            let actual_damage = player_damage - defense_aura.damage_resistance;
 
-        events.push(Event::PlayerHit(PlayerHit {
-            attacker_id: npc.id,
-            damage: player_damage,
-        }));
+            // Greater than 0, damage is higher than shield aura. Shield aura takes it and is dispelled
+            // Otherwise shield takes all of the damage and is still there.
+            if actual_damage >= 0 {
+                events.push(Event::PlayerShieldAuraDamaged(
+                    defense_aura.damage_resistance,
+                ));
+                events.push(Event::PlayerShieldAuraDissipated);
+            } else {
+                events.push(Event::PlayerShieldAuraDamaged(player_damage))
+            }
+
+            player_damage = actual_damage;
+        }
+
+        if player_damage > 0 {
+            events.push(Event::PlayerHit(PlayerHit {
+                attacker_id: npc.id,
+                damage: player_damage,
+            }));
+        }
+
         if player_damage >= player.character.get_current_health() {
             events.push(Event::PlayerKilled(PlayerKilled { killer_id: npc.id }));
 
