@@ -4,7 +4,7 @@ use uuid::Uuid;
 
 use crate::components::{
     damage::{Attack, Defense},
-    items::{descriptor::Descriptor, item::Item, item_type::ItemType},
+    items::{Descriptor, Item, ItemType},
     material::Material,
     tag::{Tag, Tagged},
 };

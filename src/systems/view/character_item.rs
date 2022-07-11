@@ -1,4 +1,4 @@
-use crate::components::items::character_item::{CharacterItem, CharacterItemView};
+use crate::components::items::{CharacterItem, CharacterItemView};
 
 pub fn view(
     character_item: &CharacterItem,

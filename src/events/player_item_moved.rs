@@ -4,7 +4,7 @@ use bevy_ecs::prelude::Component;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::components::items::location_tag::LocationTag;
+use crate::components::items::LocationTag;
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]

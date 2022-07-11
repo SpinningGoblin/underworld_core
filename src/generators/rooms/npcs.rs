@@ -4,7 +4,7 @@ use strum::IntoEnumIterator;
 use crate::{
     components::{
         fixtures::fixture_type::FixtureType,
-        items::item_type::ItemType,
+        items::ItemType,
         life_modifier::LifeModifier,
         rooms::{
             group_descriptor::GroupDescriptor, npc_position::NpcPosition,

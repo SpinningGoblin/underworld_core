@@ -1,6 +1,5 @@
 use crate::components::items::{
-    consumable::ConsumableView,
-    item::{Item, ItemView},
+    ConsumableView, {Item, ItemView},
 };
 
 pub fn view(item: &Item, sees_full_item: bool, knows_all: bool) -> ItemView {

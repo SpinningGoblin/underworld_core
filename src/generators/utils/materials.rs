@@ -1,4 +1,4 @@
-use crate::components::{items::item_type::ItemType, material::Material};
+use crate::components::{items::ItemType, material::Material};
 
 pub fn possible_materials(item_type: &ItemType) -> Vec<Material> {
     match *item_type {

@@ -8,8 +8,7 @@ use uuid::Uuid;
 
 use crate::components::{
     items::{
-        descriptor::Descriptor,
-        fixture_item::{FixtureItem, FixtureItemView},
+        Descriptor, {FixtureItem, FixtureItemView},
     },
     material::Material,
     size::Size,

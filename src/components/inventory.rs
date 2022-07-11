@@ -6,7 +6,7 @@ use poem_openapi::Object;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use super::items::character_item::{CharacterItem, CharacterItemView};
+use super::items::{CharacterItem, CharacterItemView};
 
 #[derive(Clone, Debug, Default)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]

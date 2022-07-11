@@ -9,7 +9,7 @@ use uuid::Uuid;
 use super::{
     effects::{Effects, EffectsView},
     inventory::{Inventory, InventoryView},
-    items::character_item::CharacterItem,
+    items::CharacterItem,
     life_modifier::LifeModifier,
     species::Species,
     spells::{

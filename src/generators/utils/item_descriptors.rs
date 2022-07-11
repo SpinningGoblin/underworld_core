@@ -1,6 +1,6 @@
 use strum::IntoEnumIterator;
 
-use crate::components::{items::descriptor::Descriptor, tag::Tag};
+use crate::components::{items::Descriptor, tag::Tag};
 
 pub fn valid_for_level(descriptor: &Descriptor, level: u32) -> bool {
     match descriptor {

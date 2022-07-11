@@ -8,8 +8,7 @@ use crate::{
     components::{
         games::game_state::GameState,
         items::{
-            consumable_effect::ConsumableEffectName,
-            location_tag::{packed_tags_for_item_type, ready_tag_for_item_type},
+            ConsumableEffectName, {packed_tags_for_item_type, ready_tag_for_item_type},
         },
         player::PlayerCharacter,
     },

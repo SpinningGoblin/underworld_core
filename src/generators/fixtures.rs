@@ -7,9 +7,7 @@ use uuid::Uuid;
 use crate::{
     components::{
         fixtures::{fixture::Fixture, fixture_type::FixtureType},
-        items::{
-            descriptor::Descriptor, fixture_item::FixtureItem, item::Item, item_type::ItemType,
-        },
+        items::{Descriptor, FixtureItem, Item, ItemType},
         material::BuiltWithMaterial,
         size::Size,
         tag::{Tag, Tagged},
