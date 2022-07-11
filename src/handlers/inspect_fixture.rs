@@ -1,6 +1,6 @@
 use crate::{
     actions::InspectFixture,
-    components::games::game_state::GameState,
+    components::games::GameState,
     errors::Error,
     events::{Event, FixtureHasHiddenCompartmentDiscovered},
     utils::{ids::parse_id, rolls::roll_d6},

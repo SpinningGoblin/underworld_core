@@ -1,6 +1,6 @@
 use crate::{
     actions::OpenFixtureHiddenCompartment,
-    components::games::game_state::GameState,
+    components::games::GameState,
     errors::Error,
     events::{Event, FixtureHiddenCompartmentOpened},
     utils::ids::parse_id,

@@ -6,7 +6,7 @@ use uuid::Uuid;
 
 use crate::components::{
     effects::Poison,
-    games::game_state::GameState,
+    games::GameState,
     items::{character_item::CharacterItem, location_tag::LocationTag},
     player::PlayerCharacter,
     spells::learned_spell::LearnedSpell,

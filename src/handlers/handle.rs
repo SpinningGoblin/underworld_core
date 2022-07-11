@@ -2,7 +2,7 @@ use uuid::Uuid;
 
 use crate::{
     actions::Action,
-    components::{games::game_state::GameState, player::PlayerCharacter},
+    components::{games::GameState, player::PlayerCharacter},
     errors::Error,
     events::{apply_events, Event},
 };

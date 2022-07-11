@@ -1,6 +1,6 @@
 use crate::{
     actions::InspectNpc,
-    components::games::game_state::GameState,
+    components::games::GameState,
     errors::Error,
     events::{Event, NpcHealthDiscovered, NpcHiddenDiscovered, NpcPackedDiscovered},
     utils::{ids::parse_id, rolls::roll_d6},

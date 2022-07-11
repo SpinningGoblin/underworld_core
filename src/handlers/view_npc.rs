@@ -1,6 +1,6 @@
 use crate::{
     actions::LookAtNpc,
-    components::{character::CharacterViewArgs, games::game_state::GameState},
+    components::{character::CharacterViewArgs, games::GameState},
     errors::Error,
     events::{Event, NpcViewed},
     systems::view::non_player,

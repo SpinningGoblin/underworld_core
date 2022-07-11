@@ -1,6 +1,6 @@
 use crate::{
     actions::ExitRoom,
-    components::games::game_state::GameState,
+    components::games::GameState,
     errors::Error,
     events::{Event, RoomExited, RoomFirstSeen, RoomGenerated},
     generators::{generator::Generator, rooms::random_room_generator_for_danger_level},

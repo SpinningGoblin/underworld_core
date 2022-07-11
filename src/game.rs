@@ -6,7 +6,7 @@ use crate::{
         MovePlayerItem, OpenFixture, OpenFixtureHiddenCompartment, UseItemOnPlayer,
     },
     components::{
-        games::game_state::GameState,
+        games::GameState,
         items::{
             ConsumableEffectName, {packed_tags_for_item_type, ready_tag_for_item_type},
         },

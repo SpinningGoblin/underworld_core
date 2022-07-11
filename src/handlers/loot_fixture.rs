@@ -2,7 +2,7 @@ use uuid::Uuid;
 
 use crate::{
     actions::LootFixture,
-    components::games::game_state::GameState,
+    components::games::GameState,
     errors::Error,
     events::{Event, ItemTakenFromFixture},
     utils::ids::parse_id,

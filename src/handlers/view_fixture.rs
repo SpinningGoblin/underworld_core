@@ -1,6 +1,6 @@
 use crate::{
     actions::LookAtFixture,
-    components::{fixtures::FixtureViewArgs, games::game_state::GameState},
+    components::{fixtures::FixtureViewArgs, games::GameState},
     errors::Error,
     events::{Event, FixtureViewed},
     systems::view::fixture,

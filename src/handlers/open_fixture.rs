@@ -1,6 +1,6 @@
 use crate::{
     actions::OpenFixture,
-    components::games::game_state::GameState,
+    components::games::GameState,
     errors::Error,
     events::{Event, FixtureOpened},
     utils::ids::parse_id,

@@ -1,6 +1,6 @@
 use crate::{
     actions::LootNpc,
-    components::games::game_state::GameState,
+    components::games::GameState,
     errors::Error,
     events::{Event, ItemTakenFromNpc},
     utils::ids::parse_id,
