@@ -4,7 +4,7 @@ use uuid::Uuid;
 
 use crate::components::{
     fixtures::FixtureViewArgs,
-    rooms::fixture_position::{FixturePosition, FixturePositionView},
+    rooms::{FixturePosition, FixturePositionView},
 };
 
 pub fn view(

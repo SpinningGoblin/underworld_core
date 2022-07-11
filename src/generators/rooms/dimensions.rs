@@ -1,7 +1,7 @@
 use rand::Rng;
 
 use crate::{
-    components::{rooms::dimensions::Dimensions, size::Size},
+    components::{rooms::Dimensions, size::Size},
     utils::rolls::roll_d100,
 };
 

@@ -6,10 +6,7 @@ use crate::{
         fixtures::FixtureType,
         items::ItemType,
         life_modifier::LifeModifier,
-        rooms::{
-            group_descriptor::GroupDescriptor, npc_position::NpcPosition,
-            npc_position_descriptor::NpcPositionDescriptor, room_type::RoomType,
-        },
+        rooms::{GroupDescriptor, NpcPosition, NpcPositionDescriptor, RoomType},
         species::Species,
     },
     generators::{

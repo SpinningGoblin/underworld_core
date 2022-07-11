@@ -4,7 +4,7 @@ use uuid::Uuid;
 
 use crate::components::{
     games::game_state::GameState,
-    rooms::room_type::RoomType,
+    rooms::RoomType,
     worlds::world::{ExitMap, World},
 };
 

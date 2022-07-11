@@ -5,7 +5,7 @@ use poem_openapi::Object;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::components::rooms::room_view::RoomView;
+use crate::components::rooms::RoomView;
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]

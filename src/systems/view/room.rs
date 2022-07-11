@@ -5,10 +5,7 @@ use uuid::Uuid;
 use crate::components::{
     fixtures::FixtureViewArgs,
     non_player::NonPlayerViewArgs,
-    rooms::{
-        exit::ExitView, fixture_position::FixturePositionView, npc_position::NpcPositionView,
-        room::Room, room_view::RoomView,
-    },
+    rooms::{ExitView, FixturePositionView, NpcPositionView, Room, RoomView},
 };
 
 pub fn view(

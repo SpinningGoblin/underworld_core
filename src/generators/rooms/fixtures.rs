@@ -4,11 +4,7 @@ use strum::IntoEnumIterator;
 use crate::{
     components::{
         fixtures::{Fixture, FixtureType},
-        rooms::{
-            fixture_position::FixturePosition,
-            fixture_position_descriptor::FixturePositionDescriptor,
-            group_descriptor::GroupDescriptor, room_type::RoomType,
-        },
+        rooms::{FixturePosition, FixturePositionDescriptor, GroupDescriptor, RoomType},
     },
     generators::{fixtures::get_generator_for_level, generator::Generator},
     utils::rolls::roll_d100,

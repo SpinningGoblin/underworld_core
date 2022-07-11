@@ -9,9 +9,7 @@ use rand::Rng;
 use strum::IntoEnumIterator;
 use uuid::Uuid;
 
-use crate::components::rooms::{
-    descriptor::Descriptor, flavour::Flavour, room::Room, room_type::RoomType,
-};
+use crate::components::rooms::{Descriptor, Flavour, Room, RoomType};
 
 use self::{
     dimensions::build_dimensions, exits::build_exits, fixtures::build_fixture_positions,

@@ -4,7 +4,7 @@ use uuid::Uuid;
 
 use crate::components::{
     non_player::NonPlayerViewArgs,
-    rooms::npc_position::{NpcPosition, NpcPositionView},
+    rooms::{NpcPosition, NpcPositionView},
 };
 
 pub fn view(

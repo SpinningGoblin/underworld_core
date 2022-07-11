@@ -4,7 +4,7 @@ use bevy_ecs::prelude::Component;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::components::rooms::room::Room;
+use crate::components::rooms::Room;
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]

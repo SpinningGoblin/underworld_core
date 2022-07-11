@@ -1,4 +1,4 @@
-use crate::components::rooms::exit::{Exit, ExitView};
+use crate::components::rooms::{Exit, ExitView};
 
 pub fn view(exit: &Exit, has_visited_connected_room: bool) -> ExitView {
     ExitView {

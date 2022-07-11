@@ -4,9 +4,7 @@ use uuid::Uuid;
 
 use crate::components::{
     material::Material,
-    rooms::{
-        exit::Exit, exit_descriptor::ExitDescriptor, exit_type::ExitType, room_type::RoomType,
-    },
+    rooms::{Exit, ExitDescriptor, ExitType, RoomType},
     size::Size,
 };
 

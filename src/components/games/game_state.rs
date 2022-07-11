@@ -11,7 +11,7 @@ use crate::{
         character::CharacterViewArgs,
         fixtures::FixtureViewArgs,
         non_player::NonPlayerViewArgs,
-        rooms::{room::Room, room_view::RoomView},
+        rooms::{Room, RoomView},
         worlds::world::World,
     },
     systems::view::room::view,
