@@ -3,7 +3,7 @@ use bevy_ecs::prelude::Component;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::components::fixtures::fixture::FixtureView;
+use crate::components::fixtures::FixtureView;
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]

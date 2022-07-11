@@ -3,7 +3,7 @@ use strum::IntoEnumIterator;
 
 use crate::{
     components::{
-        fixtures::fixture_type::FixtureType,
+        fixtures::FixtureType,
         items::ItemType,
         life_modifier::LifeModifier,
         rooms::{

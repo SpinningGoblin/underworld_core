@@ -9,7 +9,7 @@ use uuid::Uuid;
 use crate::{
     components::{
         character::CharacterViewArgs,
-        fixtures::fixture::FixtureViewArgs,
+        fixtures::FixtureViewArgs,
         non_player::NonPlayerViewArgs,
         rooms::{room::Room, room_view::RoomView},
         worlds::world::World,

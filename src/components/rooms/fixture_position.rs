@@ -5,7 +5,7 @@ use poem_openapi::Object;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::components::fixtures::fixture::{Fixture, FixtureView};
+use crate::components::fixtures::{Fixture, FixtureView};
 
 use super::{
     fixture_position_descriptor::FixturePositionDescriptor, group_descriptor::GroupDescriptor,

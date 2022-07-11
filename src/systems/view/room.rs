@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use uuid::Uuid;
 
 use crate::components::{
-    fixtures::fixture::FixtureViewArgs,
+    fixtures::FixtureViewArgs,
     non_player::NonPlayerViewArgs,
     rooms::{
         exit::ExitView, fixture_position::FixturePositionView, npc_position::NpcPositionView,

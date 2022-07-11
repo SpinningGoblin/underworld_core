@@ -1,5 +1,5 @@
 use crate::components::{
-    fixtures::fixture::{Fixture, FixtureView, FixtureViewArgs},
+    fixtures::{Fixture, FixtureView, FixtureViewArgs},
     items::FixtureItemView,
 };
 

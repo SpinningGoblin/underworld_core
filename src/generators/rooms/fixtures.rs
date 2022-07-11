@@ -3,7 +3,7 @@ use strum::IntoEnumIterator;
 
 use crate::{
     components::{
-        fixtures::{fixture::Fixture, fixture_type::FixtureType},
+        fixtures::{Fixture, FixtureType},
         rooms::{
             fixture_position::FixturePosition,
             fixture_position_descriptor::FixturePositionDescriptor,
