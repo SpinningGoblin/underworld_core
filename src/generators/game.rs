@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use uuid::Uuid;
 
 use crate::components::{
-    games::game_state::GameState,
+    games::GameState,
     rooms::RoomType,
     worlds::{ExitMap, World},
 };

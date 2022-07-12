@@ -4,7 +4,7 @@ use rand::Rng;
 
 use crate::{
     actions::CastSpellOnNpc,
-    components::{games::game_state::GameState, player::PlayerCharacter, spells::SpellName},
+    components::{games::GameState, player::PlayerCharacter, spells::SpellName},
     errors::Error,
     events::{
         Event, NpcPoisonEffectDurationChanged, NpcPoisonLevelChanged, NpcPoisoned,
