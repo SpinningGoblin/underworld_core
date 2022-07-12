@@ -12,7 +12,7 @@ use crate::{
         fixtures::FixtureViewArgs,
         non_player::NonPlayerViewArgs,
         rooms::{Room, RoomView},
-        worlds::world::World,
+        worlds::World,
     },
     systems::view::room::view,
 };

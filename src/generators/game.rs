@@ -5,7 +5,7 @@ use uuid::Uuid;
 use crate::components::{
     games::game_state::GameState,
     rooms::RoomType,
-    worlds::world::{ExitMap, World},
+    worlds::{ExitMap, World},
 };
 
 use super::{generator::Generator, rooms::room_generator};
