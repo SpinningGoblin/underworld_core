@@ -5,7 +5,7 @@ use strum::IntoEnumIterator;
 
 use crate::components::{
     character::Character, effects::Effects, inventory::Inventory, items::ItemType,
-    life_modifier::LifeModifier, species::Species, spells::spell_memory::SpellMemory,
+    life_modifier::LifeModifier, species::Species, spells::SpellMemory,
 };
 
 use super::{

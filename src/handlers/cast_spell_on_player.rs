@@ -3,7 +3,7 @@ use crate::{
     components::{
         damage::{Attack, Defense},
         player::PlayerCharacter,
-        spells::spell_name::SpellName,
+        spells::SpellName,
     },
     errors::Error,
     events::{

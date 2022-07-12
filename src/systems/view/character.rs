@@ -1,7 +1,7 @@
 use crate::components::{
     character::{Character, CharacterView, CharacterViewArgs},
     effects::EffectsView,
-    spells::{learned_spell::LearnedSpellView, spell::SpellView, spell_memory::SpellMemoryView},
+    spells::{LearnedSpellView, SpellMemoryView, SpellView},
     stats::StatsView,
 };
 

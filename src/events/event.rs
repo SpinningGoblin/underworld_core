@@ -9,7 +9,7 @@ use crate::components::{
     games::GameState,
     items::{character_item::CharacterItem, location_tag::LocationTag},
     player::PlayerCharacter,
-    spells::learned_spell::LearnedSpell,
+    spells::LearnedSpell,
 };
 
 use super::NpcDamagedByPoison;

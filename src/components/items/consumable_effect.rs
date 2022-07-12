@@ -8,7 +8,7 @@ use strum_macros::EnumIter;
 
 use crate::components::{
     damage::{Attack, Defense},
-    spells::spell_name::SpellName,
+    spells::SpellName,
 };
 
 #[derive(Clone, Debug)]

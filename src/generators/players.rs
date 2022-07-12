@@ -16,9 +16,7 @@ use crate::components::{
     player::PlayerCharacter,
     size::Size,
     species::Species,
-    spells::{
-        learned_spell::LearnedSpell, spell::Spell, spell_memory::SpellMemory, spell_name::SpellName,
-    },
+    spells::{LearnedSpell, Spell, SpellMemory, SpellName},
     tag::Tag,
 };
 

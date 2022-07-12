@@ -11,7 +11,7 @@ use crate::{
             CharacterItem, Consumable, Item, ItemType, LocationTag,
             {ConsumableEffect, ConsumableEffectName, LearnSpellEffect},
         },
-        spells::spell_name::SpellName,
+        spells::SpellName,
         tag::Tag,
     },
     utils::rolls::roll_d100,
