@@ -19,6 +19,6 @@ jobs:
     - name: Build
       run: cargo build --verbose
     - name: Format
-      run: cargo fmt --check
+      run: rustup component add rustfmt --toolchain nightly-x86_64-unknown-linux-gnu && cargo fmt --check
     - name: Run tests
       run: cargo test --verbose
