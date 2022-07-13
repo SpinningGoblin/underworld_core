@@ -1,8 +1,8 @@
 use crate::{
     actions::{
-        action::Action, attack_npc::AttackNpc, exit_room::ExitRoom,
-        inspect_fixture::InspectFixture, inspect_npc::InspectNpc, look_at_fixture::LookAtFixture,
-        look_at_npc::LookAtNpc, loot_npc::LootNpc, CastSpellOnNpc, CastSpellOnPlayer, LootFixture,
+        Action, AttackNpc, ExitRoom,
+        InspectFixture, InspectNpc, LookAtFixture,
+        LookAtNpc, LootNpc, CastSpellOnNpc, CastSpellOnPlayer, LootFixture,
         MovePlayerItem, OpenFixture, OpenFixtureHiddenCompartment, UseItemOnPlayer,
     },
     components::{

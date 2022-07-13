@@ -5,7 +5,7 @@ pub fn main() {
         use serde::Serialize;
         use underworld_core::{
             actions::{
-                action::Action, attack_npc::AttackNpc, exit_room::ExitRoom, inspect_npc::InspectNpc,
+                Action, AttackNpc, ExitRoom, InspectNpc,
             },
             components::{games::GameState, PlayerCharacter},
             game::Game,
