@@ -7,3 +7,5 @@ pub mod generators;
 pub mod handlers;
 pub mod systems;
 mod utils;
+
+pub use game::Game;
