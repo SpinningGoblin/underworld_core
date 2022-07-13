@@ -1,6 +1,5 @@
 use crate::components::{
-    character::CharacterViewArgs,
-    player::{PlayerCharacter, PlayerCharacterView},
+    CharacterViewArgs, {PlayerCharacter, PlayerCharacterView},
 };
 
 pub fn check(player_character: PlayerCharacter) -> PlayerCharacterView {

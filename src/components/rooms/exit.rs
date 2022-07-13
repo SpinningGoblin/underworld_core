@@ -7,9 +7,9 @@ use poem_openapi::Object;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::components::{material::Material, size::Size};
+use crate::components::{Material, Size};
 
-use super::{exit_descriptor::ExitDescriptor, exit_type::ExitType};
+use super::{ExitDescriptor, ExitType};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]

@@ -1,7 +1,7 @@
 use rand::Rng;
 
 use crate::{
-    components::{damage::Health, size::Size, species::Species, stats::Stats},
+    components::{size::Size, species::Species, stats::Stats, Health},
     utils::rolls::{roll_d100, roll_d6},
 };
 

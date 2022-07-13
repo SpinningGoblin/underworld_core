@@ -5,14 +5,13 @@ use uuid::Uuid;
 
 use crate::{
     components::{
-        damage::{Attack, Defense},
-        inventory::Inventory,
         items::{
             CharacterItem, Consumable, Item, ItemType, LocationTag,
             {ConsumableEffect, ConsumableEffectName, LearnSpellEffect},
         },
         spells::SpellName,
         tag::Tag,
+        Inventory, {Attack, Defense},
     },
     utils::rolls::roll_d100,
 };

@@ -1,6 +1,6 @@
 use crate::{
     actions::AttackNpc,
-    components::{games::GameState, player::PlayerCharacter, species::Species},
+    components::{games::GameState, PlayerCharacter, Species},
     errors::Error,
     events::{DeadNpcBeaten, Event, NpcMissed},
     utils::{ids::parse_id, rolls::roll_d100},

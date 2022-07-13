@@ -3,9 +3,8 @@ use strum::IntoEnumIterator;
 use uuid::Uuid;
 
 use crate::components::{
-    material::Material,
     rooms::{Exit, ExitDescriptor, ExitType, RoomType},
-    size::Size,
+    Material, Size,
 };
 
 pub fn build_exits(room_type: &RoomType, entrance_id: Option<Uuid>) -> Vec<Exit> {

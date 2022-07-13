@@ -5,7 +5,7 @@ use poem_openapi::Object;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::components::damage::{Attack, Defense};
+use crate::components::{Attack, Defense};
 
 use super::{spell_name::SpellName, SpellType};
 

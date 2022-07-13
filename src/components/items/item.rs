@@ -7,9 +7,7 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use crate::components::{
-    damage::{Attack, Defense},
-    material::Material,
-    tag::Tag,
+    Material, Tag, {Attack, Defense},
 };
 
 use super::{

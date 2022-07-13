@@ -3,8 +3,8 @@ use std::collections::HashMap;
 use uuid::Uuid;
 
 use crate::components::{
-    non_player::NonPlayerViewArgs,
     rooms::{NpcPosition, NpcPositionView},
+    NonPlayerViewArgs,
 };
 
 pub fn view(

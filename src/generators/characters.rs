@@ -4,8 +4,7 @@ use rand::Rng;
 use strum::IntoEnumIterator;
 
 use crate::components::{
-    character::Character, effects::Effects, inventory::Inventory, items::ItemType,
-    life_modifier::LifeModifier, species::Species, spells::SpellMemory,
+    items::ItemType, spells::SpellMemory, Character, Effects, Inventory, LifeModifier, Species,
 };
 
 use super::{

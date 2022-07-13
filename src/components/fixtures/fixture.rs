@@ -10,8 +10,7 @@ use crate::components::{
     items::{
         Descriptor, {FixtureItem, FixtureItemView},
     },
-    material::Material,
-    size::Size,
+    Material, Size,
 };
 
 use super::fixture_type::FixtureType;

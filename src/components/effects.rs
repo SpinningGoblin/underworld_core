@@ -5,7 +5,7 @@ use poem_openapi::Object;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use super::damage::{Attack, Defense};
+use super::{Attack, Defense};
 
 #[derive(Clone, Debug, Default)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]

@@ -3,7 +3,7 @@ use uuid::Uuid;
 
 use crate::{
     actions::UseItemOnPlayer,
-    components::{items::ConsumableEffectName, player::PlayerCharacter, spells::Spell},
+    components::{items::ConsumableEffectName, spells::Spell, PlayerCharacter},
     errors::Error,
     events::{Event, PlayerItemRemoved, PlayerItemUsed, PlayerSpellLearned},
     utils::ids::parse_id,

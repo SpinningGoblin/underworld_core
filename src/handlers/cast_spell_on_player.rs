@@ -1,9 +1,8 @@
 use crate::{
     actions::CastSpellOnPlayer,
     components::{
-        damage::{Attack, Defense},
-        player::PlayerCharacter,
         spells::SpellName,
+        PlayerCharacter, {Attack, Defense},
     },
     errors::Error,
     events::{

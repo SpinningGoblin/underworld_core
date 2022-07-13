@@ -7,8 +7,7 @@ use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
 use crate::components::{
-    material::{BuiltWithMaterial, Material},
-    tag::{Tag, Tagged},
+    {BuiltWithMaterial, Material}, {Tag, Tagged},
 };
 
 #[derive(Clone, Debug, EnumIter, PartialEq, Eq, Hash)]

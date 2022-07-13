@@ -4,20 +4,10 @@ use strum::IntoEnumIterator;
 use uuid::Uuid;
 
 use crate::components::{
-    character::Character,
-    damage::{Attack, Defense},
-    effects::Effects,
-    inventory::Inventory,
-    items::{
-        character_item::CharacterItem, descriptor::Descriptor, item::Item, item_type::ItemType,
-        location_tag::LocationTag,
-    },
-    material::Material,
-    player::PlayerCharacter,
-    size::Size,
-    species::Species,
+    items::{CharacterItem, Descriptor, Item, ItemType, LocationTag},
     spells::{LearnedSpell, Spell, SpellMemory, SpellName},
-    tag::Tag,
+    Character, Effects, Inventory, Material, PlayerCharacter, Size, Species, Tag,
+    {Attack, Defense},
 };
 
 use super::{generator::Generator, stats::build_specific_health};

@@ -1,6 +1,5 @@
 use crate::components::{
-    character::CharacterViewArgs,
-    non_player::{NonPlayer, NonPlayerView},
+    CharacterViewArgs, {NonPlayer, NonPlayerView},
 };
 
 pub fn view(

@@ -6,11 +6,9 @@ use uuid::Uuid;
 
 use crate::{
     components::{
-        fixtures::{fixture::Fixture, fixture_type::FixtureType},
+        fixtures::{Fixture, FixtureType},
         items::{Descriptor, FixtureItem, Item, ItemType},
-        material::BuiltWithMaterial,
-        size::Size,
-        tag::{Tag, Tagged},
+        BuiltWithMaterial, Size, {Tag, Tagged},
     },
     utils::rolls::roll_d100,
 };

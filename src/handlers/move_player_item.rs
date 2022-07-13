@@ -1,6 +1,6 @@
 use crate::{
     actions::MovePlayerItem,
-    components::player::PlayerCharacter,
+    components::PlayerCharacter,
     errors::Error,
     events::{Event, PlayerItemMoved},
     utils::ids::parse_id,

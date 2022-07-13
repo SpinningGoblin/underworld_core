@@ -16,3 +16,16 @@ pub mod spells;
 pub mod stats;
 pub mod tag;
 pub mod worlds;
+
+pub use character::{Character, CharacterView, CharacterViewArgs};
+pub use damage::{Attack, Defense, Health};
+pub use effects::{Effects, EffectsView, Poison};
+pub use inventory::{Inventory, InventoryView};
+pub use life_modifier::LifeModifier;
+pub use material::{BuiltWithMaterial, Material, MaterialIter};
+pub use non_player::{NonPlayer, NonPlayerView, NonPlayerViewArgs};
+pub use player::{PlayerCharacter, PlayerCharacterView};
+pub use size::Size;
+pub use species::{Species, SpeciesIter};
+pub use stats::{Stats, StatsView};
+pub use tag::{Tag, Tagged};

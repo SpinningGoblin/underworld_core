@@ -10,7 +10,7 @@ use crate::{
         items::{
             ConsumableEffectName, {packed_tags_for_item_type, ready_tag_for_item_type},
         },
-        player::PlayerCharacter,
+        PlayerCharacter,
     },
     errors::Error,
     events::Event,

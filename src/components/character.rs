@@ -7,16 +7,11 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use super::{
-    effects::{Effects, EffectsView},
-    inventory::{Inventory, InventoryView},
     items::CharacterItem,
-    life_modifier::LifeModifier,
-    species::Species,
     spells::{
-        learned_spell::LearnedSpell,
-        spell_memory::{SpellMemory, SpellMemoryView},
+        LearnedSpell, {SpellMemory, SpellMemoryView},
     },
-    stats::{Stats, StatsView},
+    LifeModifier, Species, {Effects, EffectsView}, {Inventory, InventoryView}, {Stats, StatsView},
 };
 
 #[derive(Clone, Debug)]

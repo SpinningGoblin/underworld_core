@@ -5,9 +5,8 @@ use crate::{
     components::{
         fixtures::FixtureType,
         items::ItemType,
-        life_modifier::LifeModifier,
         rooms::{GroupDescriptor, NpcPosition, NpcPositionDescriptor, RoomType},
-        species::Species,
+        LifeModifier, Species,
     },
     generators::{
         characters::CharacterPrototype, generator::Generator, inventory::InventoryPrototype,

@@ -3,10 +3,8 @@ use std::ops::RangeInclusive;
 use uuid::Uuid;
 
 use crate::components::{
-    damage::{Attack, Defense},
     items::{Descriptor, Item, ItemType},
-    material::Material,
-    tag::{Tag, Tagged},
+    Material, {Attack, Defense}, {Tag, Tagged},
 };
 
 use super::{

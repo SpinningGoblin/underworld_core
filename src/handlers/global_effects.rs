@@ -1,5 +1,5 @@
 use crate::{
-    components::{games::GameState, player::PlayerCharacter},
+    components::{games::GameState, PlayerCharacter},
     events::{
         Event, NpcDamagedByPoison, NpcPoisonEffectDissipated, NpcPoisonEffectDurationChanged,
         PlayerKilledNpc,

@@ -4,7 +4,7 @@ use bevy_ecs::prelude::Component;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::components::non_player::NonPlayer;
+use crate::components::NonPlayer;
 
 use super::{
     descriptor::Descriptor, dimensions::Dimensions, exit::Exit, fixture_position::FixturePosition,

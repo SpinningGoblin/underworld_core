@@ -1,8 +1,7 @@
 use crate::components::{
-    character::{Character, CharacterView, CharacterViewArgs},
-    effects::EffectsView,
     spells::{LearnedSpellView, SpellMemoryView, SpellView},
     stats::StatsView,
+    EffectsView, {Character, CharacterView, CharacterViewArgs},
 };
 
 pub fn view(character: &Character, args: &CharacterViewArgs, knows_all: bool) -> CharacterView {

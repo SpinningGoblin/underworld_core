@@ -1,6 +1,6 @@
 use crate::{
     actions::SellPlayerItem,
-    components::player::PlayerCharacter,
+    components::PlayerCharacter,
     errors::Error,
     events::{Event, PlayerItemRemoved},
     utils::ids::parse_id,

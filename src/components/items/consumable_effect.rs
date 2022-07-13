@@ -7,8 +7,8 @@ use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
 use crate::components::{
-    damage::{Attack, Defense},
     spells::SpellName,
+    {Attack, Defense},
 };
 
 #[derive(Clone, Debug)]

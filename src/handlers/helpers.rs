@@ -1,5 +1,5 @@
 use crate::{
-    components::{non_player::NonPlayer, player::PlayerCharacter},
+    components::{NonPlayer, PlayerCharacter},
     events::{
         Event, NpcWeaponReadied, PlayerHit, PlayerHitNpc, PlayerKilled, PlayerKilledNpc,
         PlayerMissed,

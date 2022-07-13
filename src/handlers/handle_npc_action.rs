@@ -1,5 +1,5 @@
 use crate::{
-    components::{games::GameState, player::PlayerCharacter},
+    components::{games::GameState, PlayerCharacter},
     errors::Error,
     events::Event,
 };

@@ -5,7 +5,7 @@ use poem_openapi::Object;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use crate::components::non_player::{NonPlayer, NonPlayerView};
+use crate::components::{NonPlayer, NonPlayerView};
 
 use super::{group_descriptor::GroupDescriptor, npc_position_descriptor::NpcPositionDescriptor};
 

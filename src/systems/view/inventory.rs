@@ -1,4 +1,4 @@
-use crate::components::inventory::{Inventory, InventoryView};
+use crate::components::{Inventory, InventoryView};
 
 pub fn view(
     inventory: &Inventory,

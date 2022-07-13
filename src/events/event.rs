@@ -5,11 +5,10 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use crate::components::{
-    effects::Poison,
     games::GameState,
-    items::{character_item::CharacterItem, location_tag::LocationTag},
-    player::PlayerCharacter,
+    items::{CharacterItem, LocationTag},
     spells::LearnedSpell,
+    PlayerCharacter, Poison,
 };
 
 use super::NpcDamagedByPoison;

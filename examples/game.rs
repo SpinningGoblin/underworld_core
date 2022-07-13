@@ -7,7 +7,7 @@ pub fn main() {
             actions::{
                 action::Action, attack_npc::AttackNpc, exit_room::ExitRoom, inspect_npc::InspectNpc,
             },
-            components::{games::GameState, player::PlayerCharacter},
+            components::{games::GameState, PlayerCharacter},
             game::Game,
             generators::{game::game_generator, generator::Generator, players::player_generator},
         };

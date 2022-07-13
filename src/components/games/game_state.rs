@@ -8,19 +8,15 @@ use uuid::Uuid;
 
 use crate::{
     components::{
-        character::CharacterViewArgs,
         fixtures::FixtureViewArgs,
-        non_player::NonPlayerViewArgs,
         rooms::{Room, RoomView},
         worlds::World,
+        CharacterViewArgs, NonPlayerViewArgs,
     },
     systems::view::room::view,
 };
 
-use super::{
-    character_knowledge::CharacterKnowledge, fixture_knowledge::FixtureKnowledge,
-    statistics::Statistics,
-};
+use super::{CharacterKnowledge, FixtureKnowledge, Statistics};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
