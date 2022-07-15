@@ -19,12 +19,10 @@ pub fn handle(state: &GameState, player: &PlayerCharacter) -> Vec<Event> {
 
             if damage >= player.character.get_current_health() {
                 events.push(Event::PlayerKilled(PlayerKilled { killer_id: None }));
+            } else if poison_effect.duration - 1 <= 0 {
+                events.push(Event::PlayerPoisonDissipated);
             } else {
-                if poison_effect.duration - 1 <= 0 {
-                    events.push(Event::PlayerPoisonDissipated);
-                } else {
-                    events.push(Event::PlayerPoisonDurationChanged(-1));
-                }
+                events.push(Event::PlayerPoisonDurationChanged(-1));
             }
         }
     }
