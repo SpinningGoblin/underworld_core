@@ -205,7 +205,10 @@ impl ItemPrototype {
         let (num_effects, mut possible_effects) = if (1..=30).contains(&level) {
             (0, Vec::new())
         } else if (31..=50).contains(&level) {
-            (rng.gen_range(0..=1), vec![AttackEffect::Crushing, AttackEffect::Sharp])
+            (
+                rng.gen_range(0..=1),
+                vec![AttackEffect::Crushing, AttackEffect::Sharp],
+            )
         } else if (51..=65).contains(&level) {
             (
                 rng.gen_range(0..=1),
