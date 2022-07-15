@@ -15,6 +15,8 @@ use super::helpers::damage_npc;
 const TOXIC_RANGE: RangeInclusive<i32> = 3..=6;
 const TOXIC_DURATION_RANGE: RangeInclusive<i32> = 2..=4;
 
+const ACID_DESTROYS_ITEM_CHANCE: i32 = 25;
+
 pub fn handle(
     attack_npc: &AttackNpc,
     state: &GameState,
@@ -68,14 +70,16 @@ pub fn handle(
                         }));
                     }
                     AttackEffect::Acidic => {
-                        let equipped_items = npc.character.inventory.readied_weapons();
-                        let index = rng.gen_range(0..equipped_items.len());
-                        if let Some(character_item) = equipped_items.get(index) {
-                            events.push(Event::NpcHitWithAcid(npc.id));
-                            events.push(Event::NpcItemDestroyed(NpcItemDestroyed {
-                                npc_id: npc.id,
-                                item_id: character_item.item.id,
-                            }))
+                        if roll_d100(&mut rng, 1, 0) <= ACID_DESTROYS_ITEM_CHANCE {
+                            let equipped_items = npc.character.inventory.readied_weapons();
+                            let index = rng.gen_range(0..equipped_items.len());
+                            if let Some(character_item) = equipped_items.get(index) {
+                                events.push(Event::NpcHitWithAcid(npc.id));
+                                events.push(Event::NpcItemDestroyed(NpcItemDestroyed {
+                                    npc_id: npc.id,
+                                    item_id: character_item.item.id,
+                                }))
+                            }
                         }
                     }
                     AttackEffect::Sharp | AttackEffect::Crushing => {}
