@@ -6,18 +6,10 @@ use crate::{
     },
 };
 
-pub fn handle(
-    state: &GameState,
-    player: &PlayerCharacter,
-    existing_events: &Vec<Event>,
-) -> Vec<Event> {
+pub fn handle(state: &GameState, player: &PlayerCharacter) -> Vec<Event> {
     let mut events: Vec<Event> = Vec::new();
 
-    let player_dead = existing_events
-        .iter()
-        .any(|event| matches!(event, Event::PlayerKilled(_)));
-
-    if !player_dead {
+    if !player.character.is_dead() {
         if let Some(poison_effect) = &player.character.current_effects.poison {
             let damage = player
                 .character
@@ -43,14 +35,7 @@ pub fn handle(
         .iter()
         .map(|npc_position| &npc_position.npc)
     {
-        let npc_dead = existing_events.iter().any(|event| {
-            match event {
-                Event::PlayerKilledNpc(npc_killed) => npc_killed.npc_id.eq(&npc.id),
-                _ => false,
-            }
-        });
-
-        if npc_dead {
+        if npc.character.is_dead() {
             continue;
         }
 
