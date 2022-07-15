@@ -201,7 +201,7 @@ pub fn apply_events(
                     .remove_item(&player_item_removed.item_id);
             }
             Event::PlayerItemDestroyed(item_id) => {
-                new_player.character.remove_item(&item_id);
+                new_player.character.remove_item(item_id);
             }
             Event::PlayerSpellLearned(player_spell_learned) => {
                 new_player.character.spell_memory.add_spell(LearnedSpell {
