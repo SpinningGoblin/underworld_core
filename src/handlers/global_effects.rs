@@ -6,23 +6,33 @@ use crate::{
     },
 };
 
-pub fn handle(state: &GameState, player: &PlayerCharacter) -> Vec<Event> {
+pub fn handle(
+    state: &GameState,
+    player: &PlayerCharacter,
+    existing_events: &Vec<Event>,
+) -> Vec<Event> {
     let mut events: Vec<Event> = Vec::new();
 
-    if let Some(poison_effect) = &player.character.current_effects.poison {
-        let damage = player
-            .character
-            .get_current_health()
-            .min(poison_effect.damage);
-        events.push(Event::PlayerDamagedByPoison(damage));
+    let player_dead = existing_events
+        .iter()
+        .any(|event| matches!(event, Event::PlayerKilled(_)));
 
-        if damage >= player.character.get_current_health() {
-            events.push(Event::PlayerKilled(PlayerKilled { killer_id: None }));
-        } else {
-            if poison_effect.duration - 1 <= 0 {
-                events.push(Event::PlayerPoisonDissipated);
+    if !player_dead {
+        if let Some(poison_effect) = &player.character.current_effects.poison {
+            let damage = player
+                .character
+                .get_current_health()
+                .min(poison_effect.damage);
+            events.push(Event::PlayerDamagedByPoison(damage));
+
+            if damage >= player.character.get_current_health() {
+                events.push(Event::PlayerKilled(PlayerKilled { killer_id: None }));
             } else {
-                events.push(Event::PlayerPoisonDurationChanged(-1));
+                if poison_effect.duration - 1 <= 0 {
+                    events.push(Event::PlayerPoisonDissipated);
+                } else {
+                    events.push(Event::PlayerPoisonDurationChanged(-1));
+                }
             }
         }
     }
@@ -33,6 +43,17 @@ pub fn handle(state: &GameState, player: &PlayerCharacter) -> Vec<Event> {
         .iter()
         .map(|npc_position| &npc_position.npc)
     {
+        let npc_dead = existing_events.iter().any(|event| {
+            match event {
+                Event::PlayerKilledNpc(npc_killed) => npc_killed.npc_id.eq(&npc.id),
+                _ => false,
+            }
+        });
+
+        if npc_dead {
+            continue;
+        }
+
         if let Some(poison_effect) = &npc.character.current_effects.poison {
             let damage = npc.character.get_current_health().min(poison_effect.damage);
             events.push(Event::NpcDamagedByPoison(NpcDamagedByPoison {

@@ -103,7 +103,8 @@ pub fn handle_action(
         }
     });
 
-    events.append(&mut super::global_effects::handle(state, player));
+    let mut global_events = super::global_effects::handle(state, player, &events);
+    events.append(&mut global_events);
 
     let (new_state, new_player) = apply_events(&events, state, player);
 
