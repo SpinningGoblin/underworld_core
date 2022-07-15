@@ -72,7 +72,9 @@ pub fn npc_attack_player(
         }
 
         if player_damage >= player.character.get_current_health() {
-            events.push(Event::PlayerKilled(PlayerKilled { killer_id: npc.id }));
+            events.push(Event::PlayerKilled(PlayerKilled {
+                killer_id: Some(npc.id),
+            }));
 
             if player.character.current_effects.resurrection_aura {
                 events.push(Event::PlayerResurrected);

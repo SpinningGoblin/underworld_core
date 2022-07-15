@@ -2,7 +2,7 @@ use crate::{
     components::{games::GameState, PlayerCharacter},
     events::{
         Event, NpcDamagedByPoison, NpcPoisonEffectDissipated, NpcPoisonEffectDurationChanged,
-        PlayerKilledNpc,
+        PlayerKilled, PlayerKilledNpc,
     },
 };
 
@@ -10,11 +10,20 @@ pub fn handle(state: &GameState, player: &PlayerCharacter) -> Vec<Event> {
     let mut events: Vec<Event> = Vec::new();
 
     if let Some(poison_effect) = &player.character.current_effects.poison {
-        events.push(Event::PlayerDamagedByPoison(poison_effect.damage));
-        if poison_effect.duration - 1 <= 0 {
-            events.push(Event::PlayerPoisonDissipated);
+        let damage = player
+            .character
+            .get_current_health()
+            .min(poison_effect.damage);
+        events.push(Event::PlayerDamagedByPoison(damage));
+
+        if damage >= player.character.get_current_health() {
+            events.push(Event::PlayerKilled(PlayerKilled { killer_id: None }));
         } else {
-            events.push(Event::PlayerPoisonDurationChanged(-1));
+            if poison_effect.duration - 1 <= 0 {
+                events.push(Event::PlayerPoisonDissipated);
+            } else {
+                events.push(Event::PlayerPoisonDurationChanged(-1));
+            }
         }
     }
 

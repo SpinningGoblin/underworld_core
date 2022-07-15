@@ -8,5 +8,5 @@ use uuid::Uuid;
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct PlayerKilled {
-    pub killer_id: Uuid,
+    pub killer_id: Option<Uuid>,
 }
