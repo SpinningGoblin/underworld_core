@@ -204,6 +204,7 @@ impl ItemPrototype {
         Some(Attack {
             num_rolls,
             modifier,
+            effects: Vec::new(),
         })
     }
 

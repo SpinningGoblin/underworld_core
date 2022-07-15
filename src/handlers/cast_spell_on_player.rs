@@ -45,6 +45,7 @@ pub fn handle(
             let attack = learned_spell.spell.attack.clone().unwrap_or(Attack {
                 num_rolls: 2,
                 modifier: 0,
+                effects: Vec::new(),
             });
             events.push(Event::PlayerGainsRetributionAura(
                 PlayerGainsRetributionAura { attack },

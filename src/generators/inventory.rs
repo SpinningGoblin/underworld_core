@@ -169,21 +169,25 @@ impl InventoryPrototype {
             Some(Attack {
                 num_rolls: 2,
                 modifier: 0,
+                effects: Vec::new(),
             })
         } else if spell_name == &SpellName::Retribution {
             Some(Attack {
                 num_rolls: 3,
                 modifier: -1,
+                effects: Vec::new(),
             })
         } else if spell_name == &SpellName::QuickHeal {
             Some(Attack {
                 num_rolls: 1,
                 modifier: 0,
+                effects: Vec::new(),
             })
         } else if spell_name == &SpellName::Heal {
             Some(Attack {
                 num_rolls: 2,
                 modifier: 0,
+                effects: Vec::new(),
             })
         } else {
             None

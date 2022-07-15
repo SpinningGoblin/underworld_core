@@ -1,13 +1,20 @@
+use std::ops::RangeInclusive;
+
+use rand::Rng;
+
 use crate::{
-    components::{NonPlayer, PlayerCharacter},
+    components::{damage::AttackEffect, NonPlayer, PlayerCharacter},
     events::{
-        Event, NpcWeaponReadied, PlayerHit, PlayerHitNpc, PlayerKilled, PlayerKilledNpc,
-        PlayerMissed,
+        Event, NpcWeaponReadied, PlayerHit, PlayerHitNpc, PlayerKilled,
+        PlayerKilledNpc, PlayerMissed, PlayerPoisoned,
     },
     utils::rolls::roll_d6,
 };
 
 const PLAYER_DODGE_CHANCE: i32 = 1;
+
+const TOXIC_RANGE: RangeInclusive<i32> = 3..=6;
+const TOXIC_DURATION_RANGE: RangeInclusive<i32> = 2..=4;
 
 pub fn npc_attack_player(
     player: &PlayerCharacter,
@@ -25,7 +32,16 @@ pub fn npc_attack_player(
 
     let mut events: Vec<Event> = Vec::new();
     if npc.character.has_weapons_readied() {
-        let player_defense = player.character.defense();
+        let attack_effects = npc.character.attack_effects();
+        // Sharpness cuts through armour
+        let player_defense = if attack_effects
+            .iter()
+            .any(|effect| matches!(effect, AttackEffect::Sharp))
+        {
+            player.character.defense() / 2
+        } else {
+            player.character.defense()
+        };
         let character_attack = npc.character.attack();
         let mut player_damage = (character_attack - player_defense).max(1);
 
@@ -59,13 +75,35 @@ pub fn npc_attack_player(
             if player.character.current_effects.resurrection_aura {
                 events.push(Event::PlayerResurrected);
             }
+        } else {
+            // Handle any other attack effects that weren't previously handled.
+            for effect in attack_effects.iter() {
+                match effect {
+                    AttackEffect::Toxic => {
+                        events.push(Event::PlayerPoisoned(PlayerPoisoned {
+                            damage: rng.gen_range(TOXIC_RANGE),
+                            duration: rng.gen_range(TOXIC_DURATION_RANGE),
+                        }));
+                    }
+                    AttackEffect::Acidic => {
+                        let equipped_items = player.character.inventory.readied_weapons();
+                        let index = rng.gen_range(0..equipped_items.len());
+                        if let Some(character_item) = equipped_items.get(index) {
+                            events.push(Event::PlayerHitWithAcid);
+                            events.push(Event::PlayerItemDestroyed(character_item.item.id));
+                        }
+                    }
+                    AttackEffect::Sharp | AttackEffect::Crushing => {}
+                }
+            }
         }
 
         if let Some(retribution_aura) = &player.character.current_effects.retribution_aura {
             let mut rng = rand::thread_rng();
             let damage = retribution_aura.attack_roll(&mut rng);
-            events.append(&mut damage_npc(player, npc, damage));
-            events.push(Event::PlayerRetributionAuraDissipated)
+            let (mut damage_events, _) = damage_npc(player, npc, damage);
+            events.append(&mut damage_events);
+            events.push(Event::PlayerRetributionAuraDissipated);
         }
     } else if npc_can_ready {
         // If there are no weapons readied, then all the NPC does is ready the weapon.
@@ -87,7 +125,7 @@ pub fn npc_attack_player(
     events
 }
 
-pub fn damage_npc(player: &PlayerCharacter, npc: &NonPlayer, damage: i32) -> Vec<Event> {
+pub fn damage_npc(player: &PlayerCharacter, npc: &NonPlayer, damage: i32) -> (Vec<Event>, bool) {
     let mut events: Vec<Event> = vec![Event::PlayerHitNpc(PlayerHitNpc {
         npc_id: npc.id,
         damage,
@@ -111,5 +149,5 @@ pub fn damage_npc(player: &PlayerCharacter, npc: &NonPlayer, damage: i32) -> Vec
         }
     }
 
-    events
+    (events, npc_dead)
 }

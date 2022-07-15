@@ -191,6 +191,7 @@ fn starter_weapon(rng: &mut ThreadRng) -> CharacterItem {
         attack: Some(Attack {
             num_rolls: 1,
             modifier: -1,
+            effects: Vec::new(),
         }),
         defense: None,
         consumable: None,

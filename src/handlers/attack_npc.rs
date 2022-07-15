@@ -1,12 +1,19 @@
+use std::ops::RangeInclusive;
+
+use rand::Rng;
+
 use crate::{
     actions::AttackNpc,
-    components::{games::GameState, PlayerCharacter, Species},
+    components::{damage::AttackEffect, games::GameState, PlayerCharacter, Species},
     errors::Error,
-    events::{DeadNpcBeaten, Event, NpcMissed},
+    events::{DeadNpcBeaten, Event, NpcItemDestroyed, NpcMissed, NpcPoisoned},
     utils::{ids::parse_id, rolls::roll_d100},
 };
 
 use super::helpers::damage_npc;
+
+const TOXIC_RANGE: RangeInclusive<i32> = 3..=6;
+const TOXIC_DURATION_RANGE: RangeInclusive<i32> = 2..=4;
 
 pub fn handle(
     attack_npc: &AttackNpc,
@@ -14,6 +21,7 @@ pub fn handle(
     player: &PlayerCharacter,
 ) -> Result<Vec<Event>, Error> {
     let mut events: Vec<Event> = Vec::new();
+    let mut rng = rand::thread_rng();
 
     let room = state.current_room();
     let npc_id = parse_id(&attack_npc.npc_id)?;
@@ -34,12 +42,48 @@ pub fn handle(
             npc_id,
         }));
     } else {
-        let defense = npc.character.defense();
+        let attack_effects = player.character.attack_effects();
+        let defense = if attack_effects
+            .iter()
+            .any(|effect| matches!(effect, AttackEffect::Sharp))
+        {
+            npc.character.defense() / 2
+        } else {
+            npc.character.defense()
+        };
         let attack = player.character.attack();
         let attack_damage = (attack - defense).max(1);
         let damage = attack_damage.min(npc.character.get_current_health());
+        let (mut damage_events, npc_dead) = damage_npc(player, npc, damage);
+        // If npc is alive, handle any attack effects on player weapons
 
-        events.append(&mut damage_npc(player, npc, damage));
+        if !npc_dead {
+            for effect in attack_effects.iter() {
+                match effect {
+                    AttackEffect::Toxic => {
+                        events.push(Event::NpcPoisoned(NpcPoisoned {
+                            npc_id: npc.id,
+                            damage: rng.gen_range(TOXIC_RANGE),
+                            duration: rng.gen_range(TOXIC_DURATION_RANGE),
+                        }));
+                    }
+                    AttackEffect::Acidic => {
+                        let equipped_items = npc.character.inventory.readied_weapons();
+                        let index = rng.gen_range(0..equipped_items.len());
+                        if let Some(character_item) = equipped_items.get(index) {
+                            events.push(Event::NpcHitWithAcid(npc.id));
+                            events.push(Event::NpcItemDestroyed(NpcItemDestroyed {
+                                npc_id: npc.id,
+                                item_id: character_item.item.id,
+                            }))
+                        }
+                    }
+                    AttackEffect::Sharp | AttackEffect::Crushing => {}
+                }
+            }
+        }
+
+        events.append(&mut damage_events);
     }
 
     Ok(events)

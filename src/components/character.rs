@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use super::{
+    damage::AttackEffect,
     items::CharacterItem,
     spells::{
         LearnedSpell, {SpellMemory, SpellMemoryView},
@@ -137,6 +138,22 @@ impl Character {
                     .unwrap_or_default()
             })
             .sum()
+    }
+
+    pub fn attack_effects(&self) -> Vec<AttackEffect> {
+        self.inventory
+            .equipment
+            .iter()
+            .filter(|character_item| character_item.is_at_the_ready())
+            .flat_map(|character_item| {
+                character_item
+                    .item
+                    .attack
+                    .as_ref()
+                    .map(|attack| attack.effects.clone())
+                    .unwrap_or_default()
+            })
+            .collect()
     }
 
     pub fn defense(&self) -> i32 {

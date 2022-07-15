@@ -32,6 +32,8 @@ pub enum Event {
     NpcDamagedByPoison(NpcDamagedByPoison),
     NpcHealthDiscovered(super::NpcHealthDiscovered),
     NpcHiddenDiscovered(super::NpcHiddenDiscovered),
+    NpcHitWithAcid(Uuid),
+    NpcItemDestroyed(super::NpcItemDestroyed),
     NpcMissed(super::NpcMissed),
     NpcPackedDiscovered(super::NpcPackedDiscovered),
     NpcPoisonDurationChanged(super::NpcPoisonEffectDurationChanged),
@@ -50,6 +52,8 @@ pub enum Event {
     PlayerHit(super::PlayerHit),
     PlayerHitNpc(super::PlayerHitNpc),
     PlayerItemMoved(super::PlayerItemMoved),
+    PlayerHitWithAcid,
+    PlayerItemDestroyed(Uuid),
     PlayerItemRemoved(super::PlayerItemRemoved),
     PlayerItemUsed(super::PlayerItemUsed),
     PlayerKilled(super::PlayerKilled),
@@ -196,6 +200,9 @@ pub fn apply_events(
                     .character
                     .remove_item(&player_item_removed.item_id);
             }
+            Event::PlayerItemDestroyed(item_id) => {
+                new_player.character.remove_item(&item_id);
+            }
             Event::PlayerSpellLearned(player_spell_learned) => {
                 new_player.character.spell_memory.add_spell(LearnedSpell {
                     id: player_spell_learned.spell_id,
@@ -298,11 +305,24 @@ pub fn apply_events(
             Event::PlayerPoisonDissipated => {
                 new_player.character.current_effects.poison = None;
             }
+            Event::NpcItemDestroyed(npc_item_destroyed) => {
+                if let Some(position) = new_game
+                    .current_room_mut()
+                    .find_npc_mut(&npc_item_destroyed.npc_id)
+                {
+                    position
+                        .npc
+                        .character
+                        .remove_item(&npc_item_destroyed.item_id);
+                }
+            }
             Event::NpcMissed(_)
             | Event::DeadNpcBeaten(_)
             | Event::PlayerMissed(_)
             | Event::NpcViewed(_)
-            | Event::FixtureViewed(_) => {}
+            | Event::FixtureViewed(_)
+            | Event::NpcHitWithAcid(_)
+            | Event::PlayerHitWithAcid => {}
         }
     }
 
