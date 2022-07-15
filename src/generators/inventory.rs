@@ -18,7 +18,7 @@ use crate::{
 
 use super::{
     generator::Generator,
-    items::{item_generator, item_generator_for_level},
+    items::item_generator_for_level,
     utils::item_types::{type_inherently_multiple, type_is_for_weapon, type_is_for_wearable},
 };
 
@@ -134,7 +134,7 @@ impl InventoryPrototype {
             };
 
             used_types.push(wearable_type.clone());
-            let generator = item_generator(wearable_type, true);
+            let generator = item_generator_for_level(wearable_type, true, self.danger_level);
             let wearable = generator.generate();
             let hidden_roll = roll_d100(rng, 1, 0);
             let multiple = type_inherently_multiple(wearable_type);
