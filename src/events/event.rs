@@ -57,6 +57,7 @@ pub enum Event {
     PlayerMaxHealthChanged(i32),
     PlayerMissed(super::PlayerMissed),
     PlayerPoisonLevelChanged(i32),
+    PlayerPoisonDissipated,
     PlayerPoisoned(super::PlayerPoisoned),
     PlayerPoisonDurationChanged(i32),
     PlayerResurrected,
@@ -293,6 +294,9 @@ pub fn apply_events(
                 {
                     position.npc.character.current_effects.poison = None;
                 }
+            }
+            Event::PlayerPoisonDissipated => {
+                new_player.character.current_effects.poison = None;
             }
             Event::NpcMissed(_)
             | Event::DeadNpcBeaten(_)

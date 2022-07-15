@@ -11,7 +11,11 @@ pub fn handle(state: &GameState, player: &PlayerCharacter) -> Vec<Event> {
 
     if let Some(poison_effect) = &player.character.current_effects.poison {
         events.push(Event::PlayerDamagedByPoison(poison_effect.damage));
-        events.push(Event::PlayerPoisonDurationChanged(-1));
+        if poison_effect.duration - 1 <= 0 {
+            events.push(Event::PlayerPoisonDissipated);
+        } else {
+            events.push(Event::PlayerPoisonDurationChanged(-1));
+        }
     }
 
     for npc in state
