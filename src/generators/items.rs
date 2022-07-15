@@ -3,6 +3,7 @@ use std::ops::RangeInclusive;
 use uuid::Uuid;
 
 use crate::components::{
+    damage::AttackEffect,
     items::{Descriptor, Item, ItemType},
     Material, {Attack, Defense}, {Tag, Tagged},
 };
@@ -201,10 +202,47 @@ impl ItemPrototype {
         let mut rng = rand::thread_rng();
         let num_rolls = rng.gen_range(roll_range);
 
+        let (num_effects, mut possible_effects) = if (1..=30).contains(&level) {
+            (0, Vec::new())
+        } else if (31..=50).contains(&level) {
+            (rng.gen_range(0..=1), vec![AttackEffect::Crushing, AttackEffect::Sharp])
+        } else if (51..=65).contains(&level) {
+            (
+                rng.gen_range(0..=1),
+                vec![
+                    AttackEffect::Crushing,
+                    AttackEffect::Sharp,
+                    AttackEffect::Acidic,
+                    AttackEffect::Toxic,
+                ],
+            )
+        } else {
+            (
+                rng.gen_range(1..=3),
+                vec![
+                    AttackEffect::Crushing,
+                    AttackEffect::Sharp,
+                    AttackEffect::Acidic,
+                    AttackEffect::Toxic,
+                ],
+            )
+        };
+
+        let effects: Vec<AttackEffect> = if num_effects > 0 {
+            (0..num_effects)
+                .map(|_| {
+                    let index = rng.gen_range(0..possible_effects.len());
+                    possible_effects.remove(index)
+                })
+                .collect()
+        } else {
+            Vec::new()
+        };
+
         Some(Attack {
             num_rolls,
             modifier,
-            effects: Vec::new(),
+            effects,
         })
     }
 
