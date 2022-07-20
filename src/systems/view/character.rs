@@ -75,6 +75,7 @@ pub fn view(character: &Character, args: &CharacterViewArgs, knows_all: bool) ->
             resurrection_aura: character.current_effects.resurrection_aura,
             knows_has_resurrection_aura: true,
             poison: character.current_effects.poison.clone(),
+            covered_in_oil: character.current_effects.covered_in_oil,
         },
     }
 }

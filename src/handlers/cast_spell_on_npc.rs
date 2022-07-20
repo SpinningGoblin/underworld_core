@@ -46,8 +46,18 @@ pub fn handle(
     events.push(Event::PlayerSpellUsed(PlayerSpellUsed { spell_id }));
 
     match learned_spell.spell.name {
-        SpellName::ElectricBlast | SpellName::RagingFireball => {
+        SpellName::ElectricBlast => {
             let spell_damage = learned_spell.spell.damage();
+            let damage = spell_damage.min(npc.character.get_current_health());
+            let (mut damage_events, _) = damage_npc(player, npc, damage);
+            events.append(&mut damage_events);
+        }
+        SpellName::RagingFireball => {
+            let spell_damage = if npc.character.current_effects.covered_in_oil {
+                learned_spell.spell.damage() * 2
+            } else {
+                learned_spell.spell.damage()
+            };
             let damage = spell_damage.min(npc.character.get_current_health());
             let (mut damage_events, _) = damage_npc(player, npc, damage);
             events.append(&mut damage_events);

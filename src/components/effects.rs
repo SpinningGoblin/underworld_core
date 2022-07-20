@@ -15,6 +15,7 @@ pub struct Effects {
     pub retribution_aura: Option<Attack>,
     pub poison: Option<Poison>,
     pub resurrection_aura: bool,
+    pub covered_in_oil: bool,
 }
 
 #[derive(Clone, Debug)]
@@ -32,6 +33,7 @@ pub struct EffectsView {
     pub resurrection_aura: bool,
     pub knows_has_resurrection_aura: bool,
     pub poison: Option<Poison>,
+    pub covered_in_oil: bool,
 }
 
 #[derive(Clone, Debug)]
