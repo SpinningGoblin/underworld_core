@@ -17,6 +17,7 @@ use super::SpellType;
 )]
 #[cfg_attr(feature = "openapi", derive(Enum), oai(rename_all = "snake_case"))]
 pub enum SpellName {
+    AcidSplash,
     ElectricBlast,
     GreatHeal,
     Heal,
@@ -35,7 +36,8 @@ impl SpellName {
             SpellName::ElectricBlast
             | SpellName::RagingFireball
             | SpellName::PoisonCloud
-            | SpellName::PoisonDart => SpellType::Attack,
+            | SpellName::PoisonDart
+            | SpellName::AcidSplash => SpellType::Attack,
             SpellName::Heal | SpellName::QuickHeal | SpellName::GreatHeal => SpellType::Healing,
             SpellName::Phoenix | SpellName::Retribution | SpellName::TinyShield => {
                 SpellType::PlayerEffect

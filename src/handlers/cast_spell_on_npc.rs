@@ -7,10 +7,10 @@ use crate::{
     components::{games::GameState, spells::SpellName, PlayerCharacter},
     errors::Error,
     events::{
-        Event, NpcPoisonEffectDurationChanged, NpcPoisonLevelChanged, NpcPoisoned,
-        PlayerSpellForgotten, PlayerSpellUsed,
+        Event, NpcItemDestroyed, NpcPoisonEffectDurationChanged, NpcPoisonLevelChanged,
+        NpcPoisoned, PlayerSpellForgotten, PlayerSpellUsed,
     },
-    utils::ids::parse_id,
+    utils::{ids::parse_id, rolls::roll_d100},
 };
 
 use super::helpers::damage_npc;
@@ -20,6 +20,8 @@ const POISON_DART_DURATION_RANGE: RangeInclusive<i32> = 1..=4;
 
 const POISON_CLOUD_DAMAGE_RANGE: RangeInclusive<i32> = 1..=8;
 const POISON_CLOUD_DURATION_RANGE: RangeInclusive<i32> = 2..=5;
+
+const ACID_DESTROYS_ITEM_CHANCE: i32 = 75;
 
 pub fn handle(
     cast_spell_on_npc: &CastSpellOnNpc,
@@ -42,6 +44,7 @@ pub fn handle(
     let mut events: Vec<Event> = Vec::new();
 
     events.push(Event::PlayerSpellUsed(PlayerSpellUsed { spell_id }));
+
     match learned_spell.spell.name {
         SpellName::ElectricBlast | SpellName::RagingFireball => {
             let spell_damage = learned_spell.spell.damage();
@@ -104,8 +107,27 @@ pub fn handle(
                 }
             }
         }
+        SpellName::AcidSplash => {
+            let mut rng = rand::thread_rng();
+            if roll_d100(&mut rng, 1, 0) <= ACID_DESTROYS_ITEM_CHANCE {
+                let equipped_items = npc.character.inventory.readied_weapons();
+                let index = rng.gen_range(0..equipped_items.len());
+                if let Some(character_item) = equipped_items.get(index) {
+                    events.push(Event::NpcHitWithAcid(npc_id));
+                    events.push(Event::NpcItemDestroyed(NpcItemDestroyed {
+                        npc_id,
+                        item_id: character_item.item.id,
+                    }));
+                }
+            }
+        }
         // TODO: There are non-damage spells that someone could cast on NPCs.
-        _ => {}
+        SpellName::GreatHeal
+        | SpellName::Heal
+        | SpellName::Phoenix
+        | SpellName::QuickHeal
+        | SpellName::Retribution
+        | SpellName::TinyShield => {}
     }
 
     if learned_spell.spell.uses - 1 == 0 {

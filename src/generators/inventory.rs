@@ -156,11 +156,7 @@ impl InventoryPrototype {
         let index = rng.gen_range(0..spell_names.len());
         let spell_name = spell_names.get(index).unwrap();
 
-        let spell_uses: i32 = if spell_name == &SpellName::Phoenix {
-            1
-        } else {
-            rng.gen_range(1..=6)
-        };
+        let spell_uses: i32 = self.spell_uses(rng, spell_name);
 
         let spell_attack = if matches!(
             spell_name,
@@ -238,6 +234,21 @@ impl InventoryPrototype {
             is_multiple: false,
             at_the_ready: false,
         }]
+    }
+
+    fn spell_uses(&self, rng: &mut ThreadRng, spell_name: &SpellName) -> i32 {
+        match *spell_name {
+            SpellName::AcidSplash => rng.gen_range(1..=3),
+            SpellName::ElectricBlast
+            | SpellName::RagingFireball
+            | SpellName::PoisonCloud
+            | SpellName::PoisonDart
+            | SpellName::TinyShield => rng.gen_range(1..=6),
+            SpellName::Heal => rng.gen_range(1..=5),
+            SpellName::GreatHeal | SpellName::Phoenix => 1,
+            SpellName::QuickHeal => rng.gen_range(3..=10),
+            SpellName::Retribution => rng.gen_range(2..=3),
+        }
     }
 }
 

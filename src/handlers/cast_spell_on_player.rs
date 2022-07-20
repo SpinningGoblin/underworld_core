@@ -1,3 +1,5 @@
+use rand::Rng;
+
 use crate::{
     actions::CastSpellOnPlayer,
     components::{
@@ -9,8 +11,10 @@ use crate::{
         Event, PlayerGainsRetributionAura, PlayerGainsShieldAura, PlayerHealed, PlayerHit,
         PlayerPoisoned, PlayerSpellForgotten, PlayerSpellUsed,
     },
-    utils::ids::parse_id,
+    utils::{ids::parse_id, rolls::roll_d100},
 };
+
+const ACID_DESTROYS_ITEM_CHANCE: i32 = 75;
 
 pub fn handle(
     cast_spell_on_player: &CastSpellOnPlayer,
@@ -71,6 +75,17 @@ pub fn handle(
             } else {
                 events.push(Event::PlayerPoisonLevelChanged(1));
                 events.push(Event::PlayerPoisonDurationChanged(1));
+            }
+        }
+        SpellName::AcidSplash => {
+            let mut rng = rand::thread_rng();
+            if roll_d100(&mut rng, 1, 0) <= ACID_DESTROYS_ITEM_CHANCE {
+                let equipped_items = player.character.inventory.readied_weapons();
+                let index = rng.gen_range(0..equipped_items.len());
+                if let Some(character_item) = equipped_items.get(index) {
+                    events.push(Event::PlayerHitWithAcid);
+                    events.push(Event::PlayerItemDestroyed(character_item.item.id));
+                }
             }
         }
     }
