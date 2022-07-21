@@ -160,6 +160,7 @@ impl ItemPrototype {
             | ItemType::PlateBoots
             | ItemType::PlateGauntlets
             | ItemType::PlateHelmet
+            | ItemType::Pot
             | ItemType::Scroll
             | ItemType::Shirt
             | ItemType::Shackles
@@ -282,6 +283,7 @@ impl ItemPrototype {
             | ItemType::Mace
             | ItemType::Morningstar
             | ItemType::Pike
+            | ItemType::Pot
             | ItemType::Scroll
             | ItemType::ShortSword
             | ItemType::Spear

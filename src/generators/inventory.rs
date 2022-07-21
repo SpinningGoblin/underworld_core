@@ -222,6 +222,7 @@ impl InventoryPrototype {
                         spell_defense,
                         spell_uses,
                     }),
+                    oil_splash_effect: None,
                 },
                 uses: 1,
             }),
@@ -313,5 +314,6 @@ fn item_type_is_for_tags(item_type: &ItemType, tag: &LocationTag) -> bool {
         ItemType::Shackles => tag.eq(&LocationTag::Wrist) | tag.eq(&LocationTag::Ankle),
         ItemType::Trousers => tag.eq(&LocationTag::Leg),
         ItemType::Scroll => tag.eq(&LocationTag::Packed) | tag.eq(&LocationTag::Pockets),
+        ItemType::Pot => tag.eq(&LocationTag::Packed),
     }
 }

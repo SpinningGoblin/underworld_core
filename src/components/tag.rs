@@ -23,6 +23,7 @@ pub enum Tag {
     Blade,
     Blunt,
     Bone,
+    Ceramic,
     Cloth,
     Clothing,
     Combat,
@@ -40,6 +41,7 @@ pub enum Tag {
     Rope,
     Shield,
     Stone,
+    Throwable,
     Whip,
     Wood,
 }
