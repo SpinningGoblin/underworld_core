@@ -225,6 +225,7 @@ impl InventoryPrototype {
                 },
                 uses: 1,
             }),
+            is_throwable: false,
         };
 
         vec![CharacterItem {

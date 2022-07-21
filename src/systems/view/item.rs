@@ -60,5 +60,6 @@ pub fn view(item: &Item, sees_full_item: bool, knows_all: bool) -> ItemView {
         defense_known,
         consumable,
         knows_consumable,
+        is_throwable: item.is_throwable,
     }
 }
