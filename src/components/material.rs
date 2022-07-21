@@ -6,7 +6,7 @@ use poem_openapi::Enum;
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
-use super::tag::{Tag, Tagged};
+use super::{Tag, Tagged};
 
 #[derive(Clone, Debug, PartialEq, Eq, EnumIter)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]

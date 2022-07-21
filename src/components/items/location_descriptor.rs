@@ -6,9 +6,9 @@ use poem_openapi::Enum;
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
-use crate::components::tag::Tag;
+use crate::components::Tag;
 
-use super::location_tag::LocationTag;
+use super::LocationTag;
 
 #[derive(Clone, Debug, EnumIter, PartialEq, Eq)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]

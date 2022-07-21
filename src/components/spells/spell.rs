@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::components::{Attack, Defense};
 
-use super::{spell_name::SpellName, SpellType};
+use super::{SpellName, SpellType};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]

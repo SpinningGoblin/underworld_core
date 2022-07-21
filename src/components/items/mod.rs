@@ -1,12 +1,12 @@
-pub mod character_item;
-pub mod consumable;
-pub mod consumable_effect;
-pub mod descriptor;
-pub mod fixture_item;
-pub mod item;
-pub mod item_type;
-pub mod location_descriptor;
-pub mod location_tag;
+mod character_item;
+mod consumable;
+mod consumable_effect;
+mod descriptor;
+mod fixture_item;
+mod item;
+mod item_type;
+mod location_descriptor;
+mod location_tag;
 
 pub use character_item::{CharacterItem, CharacterItemView};
 pub use consumable::{Consumable, ConsumableView};

@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::components::{NonPlayer, NonPlayerView};
 
-use super::{group_descriptor::GroupDescriptor, npc_position_descriptor::NpcPositionDescriptor};
+use super::{GroupDescriptor, NpcPositionDescriptor};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]

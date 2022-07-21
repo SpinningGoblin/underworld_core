@@ -5,7 +5,7 @@ use poem_openapi::Object;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
-use super::consumable_effect::ConsumableEffect;
+use super::ConsumableEffect;
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]

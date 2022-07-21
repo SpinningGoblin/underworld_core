@@ -11,9 +11,7 @@ use crate::components::{
 };
 
 use super::{
-    consumable::{Consumable, ConsumableView},
-    descriptor::Descriptor,
-    item_type::ItemType,
+    Descriptor, ItemType, {Consumable, ConsumableView},
 };
 
 #[derive(Clone, Debug)]

@@ -7,7 +7,7 @@ use poem_openapi::Object;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use super::spell::{Spell, SpellView};
+use super::{Spell, SpellView};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
