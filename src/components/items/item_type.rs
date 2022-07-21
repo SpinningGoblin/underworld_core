@@ -41,6 +41,7 @@ pub enum ItemType {
     PlateBoots,
     PlateGauntlets,
     PlateHelmet,
+    Pot,
     Scroll,
     Shield,
     ShortSword,
@@ -121,6 +122,7 @@ impl Tagged for ItemType {
             ItemType::Fedora => vec![Tag::Clothing],
             ItemType::TopHat => vec![Tag::Clothing],
             ItemType::Scroll => vec![Tag::Consumable, Tag::Teachable],
+            ItemType::Pot => vec![Tag::Consumable, Tag::Throwable],
         }
     }
 }

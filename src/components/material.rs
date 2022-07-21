@@ -18,6 +18,7 @@ use super::{Tag, Tagged};
 #[cfg_attr(feature = "openapi", derive(Enum), oai(rename_all = "snake_case"))]
 pub enum Material {
     Bone,
+    Ceramic,
     Cotton,
     Fur,
     Gold,
@@ -56,6 +57,7 @@ impl Tagged for Material {
             Material::Wool => vec![Tag::Cloth],
             Material::Paper => vec![Tag::Paper],
             Material::Papyrus => vec![Tag::Paper],
+            Material::Ceramic => vec![Tag::Ceramic],
         }
     }
 }

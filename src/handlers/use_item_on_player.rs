@@ -47,6 +47,7 @@ pub fn handle(
                 Vec::new()
             }
         }
+        ConsumableEffectName::OilSplash => Vec::new(),
     };
 
     events.push(Event::PlayerItemUsed(PlayerItemUsed { item_id }));

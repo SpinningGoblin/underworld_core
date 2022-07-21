@@ -103,6 +103,7 @@ pub fn ready_tag_for_item_type(item_type: &ItemType) -> LocationTag {
         ItemType::LoinCloth => LocationTag::Waist,
         ItemType::Shackles => LocationTag::Wrist,
         ItemType::Scroll => LocationTag::Pockets,
+        ItemType::Pot => LocationTag::Packed,
     }
 }
 
@@ -160,6 +161,7 @@ pub fn packed_tags_for_item_type(item_type: &ItemType) -> Vec<LocationTag> {
         ItemType::Pike => vec![LocationTag::Packed, LocationTag::Back],
         ItemType::Spear => vec![LocationTag::Packed, LocationTag::Back],
         ItemType::Scroll => vec![LocationTag::Packed, LocationTag::Pockets],
+        ItemType::Pot => vec![LocationTag::Packed],
     }
 }
 
@@ -205,5 +207,6 @@ pub fn location_tags_for_item_type(item_type: &ItemType) -> Vec<LocationTag> {
         ItemType::Pike => vec![LocationTag::Hand, LocationTag::Back],
         ItemType::Spear => vec![LocationTag::Hand, LocationTag::Back],
         ItemType::Scroll => vec![LocationTag::Packed, LocationTag::Pockets],
+        ItemType::Pot => vec![LocationTag::Packed],
     }
 }
