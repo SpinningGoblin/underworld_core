@@ -6,9 +6,7 @@ use poem_openapi::Object;
 use serde::{Deserialize, Serialize};
 
 use super::{
-    descriptor::Descriptor, dimensions::Dimensions, exit::ExitView,
-    fixture_position::FixturePositionView, flavour::Flavour, npc_position::NpcPositionView,
-    room_type::RoomType,
+    Descriptor, Dimensions, ExitView, FixturePositionView, Flavour, NpcPositionView, RoomType,
 };
 
 #[derive(Clone, Debug)]

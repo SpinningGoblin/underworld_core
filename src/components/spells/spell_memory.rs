@@ -6,7 +6,7 @@ use poem_openapi::Object;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use super::learned_spell::{LearnedSpell, LearnedSpellView};
+use super::{LearnedSpell, LearnedSpellView};
 
 #[derive(Clone, Debug, Default)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]

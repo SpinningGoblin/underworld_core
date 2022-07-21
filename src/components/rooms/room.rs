@@ -6,10 +6,7 @@ use uuid::Uuid;
 
 use crate::components::NonPlayer;
 
-use super::{
-    descriptor::Descriptor, dimensions::Dimensions, exit::Exit, fixture_position::FixturePosition,
-    flavour::Flavour, npc_position::NpcPosition, room_type::RoomType,
-};
+use super::{Descriptor, Dimensions, Exit, FixturePosition, Flavour, NpcPosition, RoomType};
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]

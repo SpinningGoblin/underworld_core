@@ -6,8 +6,7 @@ use poem_openapi::Object;
 use serde::{Deserialize, Serialize};
 
 use super::{
-    item::{Item, ItemView},
-    location_tag::LocationTag,
+    LocationTag, {Item, ItemView},
 };
 
 #[derive(Clone, Debug)]

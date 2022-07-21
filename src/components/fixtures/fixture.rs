@@ -13,7 +13,7 @@ use crate::components::{
     Material, Size,
 };
 
-use super::fixture_type::FixtureType;
+use super::FixtureType;
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
