@@ -37,6 +37,8 @@ pub struct Item {
     pub defense: Option<Defense>,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub consumable: Option<Consumable>,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub is_throwable: bool,
 }
 
 impl Item {
@@ -95,6 +97,7 @@ pub struct ItemView {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub consumable: Option<ConsumableView>,
     pub knows_consumable: bool,
+    pub is_throwable: bool,
 }
 
 impl ItemView {
