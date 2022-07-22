@@ -29,6 +29,7 @@ pub enum Event {
     FixtureViewed(super::FixtureViewed),
     ItemTakenFromFixture(super::ItemTakenFromFixture),
     ItemTakenFromNpc(super::ItemTakenFromNpc),
+    NpcCoveredInOil(Uuid),
     NpcDamagedByPoison(NpcDamagedByPoison),
     NpcHealthDiscovered(super::NpcHealthDiscovered),
     NpcHiddenDiscovered(super::NpcHiddenDiscovered),
@@ -314,6 +315,11 @@ pub fn apply_events(
                         .npc
                         .character
                         .remove_item(&npc_item_destroyed.item_id);
+                }
+            }
+            Event::NpcCoveredInOil(npc_id) => {
+                if let Some(position) = new_game.current_room_mut().find_npc_mut(npc_id) {
+                    position.npc.character.current_effects.covered_in_oil = true;
                 }
             }
             Event::NpcMissed(_)
