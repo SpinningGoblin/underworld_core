@@ -12,6 +12,7 @@ pub use character_item::{CharacterItem, CharacterItemView};
 pub use consumable::{Consumable, ConsumableView};
 pub use consumable_effect::{
     ConsumableEffect, ConsumableEffectName, ConsumableEffectNameIter, LearnSpellEffect,
+    OilSplashEffect,
 };
 pub use descriptor::{Descriptor, DescriptorIter};
 pub use fixture_item::{FixtureItem, FixtureItemView};
