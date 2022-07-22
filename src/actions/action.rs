@@ -26,4 +26,5 @@ pub enum Action {
     OpenFixtureHiddenCompartment(super::OpenFixtureHiddenCompartment),
     SellPlayerItem(super::SellPlayerItem),
     UseItemOnPlayer(super::UseItemOnPlayer),
+    ThrowItemAtNpc(super::ThrowItemAtNpc),
 }
