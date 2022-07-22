@@ -13,6 +13,7 @@ pub mod move_player_item;
 pub mod open_fixture;
 pub mod open_fixture_hidden_compartment;
 pub mod sell_player_item;
+mod throw_item_at_npc;
 pub mod use_item_on_player;
 
 pub use {
@@ -21,5 +22,6 @@ pub use {
     inspect_npc::InspectNpc, look_at_fixture::LookAtFixture, look_at_npc::LookAtNpc,
     loot_fixture::LootFixture, loot_npc::LootNpc, move_player_item::MovePlayerItem,
     open_fixture::OpenFixture, open_fixture_hidden_compartment::OpenFixtureHiddenCompartment,
-    sell_player_item::SellPlayerItem, use_item_on_player::UseItemOnPlayer,
+    sell_player_item::SellPlayerItem, throw_item_at_npc::ThrowItemAtNpc,
+    use_item_on_player::UseItemOnPlayer,
 };

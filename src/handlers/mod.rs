@@ -15,6 +15,7 @@ mod npc_action;
 mod open_fixture;
 mod open_fixture_hidden_compartment;
 mod sell_player_item;
+mod throw_item_at_npc;
 mod use_item_on_player;
 mod view_fixture;
 mod view_npc;

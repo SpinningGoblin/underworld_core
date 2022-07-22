@@ -101,6 +101,9 @@ pub fn handle_action(
         Action::SellPlayerItem(sell_player_item) => {
             super::sell_player_item::handle(sell_player_item, player)?
         }
+        Action::ThrowItemAtNpc(throw_item_at_npc) => {
+            super::throw_item_at_npc::handle(throw_item_at_npc, state, player)?
+        }
     });
 
     let (intermediate_state, intermediate_player) = apply_events(&events, state, player);
