@@ -6,7 +6,7 @@ use uuid::Uuid;
 use crate::{
     components::{
         items::{
-            CharacterItem, Consumable, Item, ItemType, LocationTag,
+            CharacterItem, Consumable, Item, ItemType, LocationTag, OilSplashEffect,
             {ConsumableEffect, ConsumableEffectName, LearnSpellEffect},
         },
         spells::SpellName,
@@ -23,6 +23,7 @@ use super::{
 };
 
 const GENERATE_SCROLL_CHANCE: i32 = 25;
+const GENERATE_POT_CHANCE: i32 = 20;
 const WEAPON_NOT_IN_HAND_CHANCE: i32 = 10;
 
 pub struct InventoryPrototype {
@@ -252,6 +253,57 @@ impl InventoryPrototype {
             SpellName::Retribution => rng.gen_range(2..=3),
         }
     }
+
+    fn pots(&self, rng: &mut ThreadRng) -> Vec<CharacterItem> {
+        let possible_materials = super::utils::materials::possible_materials(&ItemType::Pot);
+        let material = if possible_materials.is_empty() {
+            None
+        } else {
+            let material_index = rng.gen_range(0..possible_materials.len());
+            possible_materials.get(material_index).cloned()
+        };
+
+        let covers_all_enemies = roll_d100(rng, 1, 0) <= 90;
+
+        let possible_descriptors = super::utils::item_descriptors::possible_descriptors(
+            &ItemType::Pot,
+            &material,
+            self.danger_level,
+        );
+        let descriptors = if possible_descriptors.is_empty() {
+            Vec::new()
+        } else {
+            let descriptor_index = rng.gen_range(0..possible_descriptors.len());
+            let descriptor = possible_descriptors.get(descriptor_index).cloned().unwrap();
+            vec![descriptor]
+        };
+
+        vec![CharacterItem {
+            item: Item {
+                id: Uuid::new_v4(),
+                name: None,
+                item_type: ItemType::Pot,
+                tags: vec![Tag::Throwable],
+                descriptors,
+                material,
+                attack: None,
+                defense: None,
+                consumable: Some(Consumable {
+                    uses: 1,
+                    effect: ConsumableEffect {
+                        name: ConsumableEffectName::OilSplash,
+                        learn_spell_effect: None,
+                        oil_splash_effect: Some(OilSplashEffect { covers_all_enemies }),
+                    },
+                }),
+                is_throwable: true,
+            },
+            is_hidden: false,
+            equipped_location: LocationTag::Packed,
+            is_multiple: false,
+            at_the_ready: false,
+        }]
+    }
 }
 
 impl Generator<Inventory> for InventoryPrototype {
@@ -267,11 +319,18 @@ impl Generator<Inventory> for InventoryPrototype {
             Vec::new()
         };
 
+        let pots = if roll_d100(&mut rng, 1, 0) <= GENERATE_POT_CHANCE {
+            self.pots(&mut rng)
+        } else {
+            Vec::new()
+        };
+
         Inventory {
             equipment: equipped_weapons
                 .into_iter()
                 .chain(equipped_wearables.into_iter())
                 .chain(spell_scrolls.into_iter())
+                .chain(pots.into_iter())
                 .collect(),
         }
     }
