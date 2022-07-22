@@ -1,6 +1,10 @@
 use strum::IntoEnumIterator;
 
-use crate::components::{items::Descriptor, tag::Tag};
+use crate::components::{
+    items::{Descriptor, ItemType},
+    tag::Tag,
+    Material, Tagged,
+};
 
 pub fn valid_for_level(descriptor: &Descriptor, level: u32) -> bool {
     match descriptor {
@@ -110,4 +114,25 @@ fn tags_for_descriptor(descriptor: &Descriptor) -> Vec<Tag> {
         Descriptor::Keen => vec![Tag::Blade],
         Descriptor::Quality => vec![Tag::Blade, Tag::Blunt],
     }
+}
+
+pub fn possible_descriptors(
+    item_type: &ItemType,
+    material: &Option<Material>,
+    level: u32,
+) -> Vec<Descriptor> {
+    match material {
+        Some(material) => {
+            let tags: Vec<Tag> = item_type
+                .tags()
+                .into_iter()
+                .chain(material.tags().into_iter())
+                .collect();
+            matches_tags(&tags)
+        }
+        None => matches_tags(&item_type.tags()),
+    }
+    .into_iter()
+    .filter(|descriptor| valid_for_level(descriptor, level))
+    .collect()
 }

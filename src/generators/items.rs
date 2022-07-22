@@ -5,13 +5,10 @@ use uuid::Uuid;
 use crate::components::{
     damage::AttackEffect,
     items::{Descriptor, Item, ItemType},
-    Material, {Attack, Defense}, {Tag, Tagged},
+    Material, Tagged, {Attack, Defense},
 };
 
-use super::{
-    generator::Generator,
-    utils::item_descriptors::{matches_tags, valid_for_level},
-};
+use super::generator::Generator;
 
 pub fn item_generator(item_type: &ItemType, is_equipped: bool) -> impl Generator<Item> {
     ItemPrototype {
@@ -90,7 +87,12 @@ impl ItemPrototype {
             return Vec::new();
         }
 
-        let mut possible_descriptors: Vec<Descriptor> = self.possible_descriptors(material);
+        let mut possible_descriptors: Vec<Descriptor> =
+            super::utils::item_descriptors::possible_descriptors(
+                &self.item_type,
+                material,
+                self.level(),
+            );
         let descriptors = num_descriptor_range.filter_map(|_| {
             if possible_descriptors.is_empty() {
                 None
@@ -111,24 +113,6 @@ impl ItemPrototype {
             ItemType::Shackles => vec![Descriptor::SetOf],
             _ => Vec::new(),
         }
-    }
-
-    fn possible_descriptors(&self, material: &Option<Material>) -> Vec<Descriptor> {
-        match material {
-            Some(material) => {
-                let tags: Vec<Tag> = self
-                    .item_type
-                    .tags()
-                    .into_iter()
-                    .chain(material.tags().into_iter())
-                    .collect();
-                matches_tags(&tags)
-            }
-            None => matches_tags(&self.item_type.tags()),
-        }
-        .into_iter()
-        .filter(|descriptor| valid_for_level(descriptor, self.level()))
-        .collect()
     }
 
     fn attack(&self, rng: &mut ThreadRng) -> Option<Attack> {
