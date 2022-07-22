@@ -114,11 +114,11 @@ impl Generator<Stats> for StatsPrototype {
                 } else if (11..=15).contains(&self.danger_level) {
                     4
                 } else if (16..=20).contains(&self.danger_level) {
-                    5
-                } else if (21..=30).contains(&self.danger_level) {
                     6
-                } else {
+                } else if (21..=30).contains(&self.danger_level) {
                     8
+                } else {
+                    12
                 };
 
                 let num_rolls = self.num_health_rolls + additional_rolls;
