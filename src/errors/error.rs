@@ -9,6 +9,7 @@ pub enum Error {
     InvalidIdError(String),
     ItemNotDirectlyUsableError(String),
     ItemNotFoundError(String),
+    ItemNotThrowableError(String),
     NpcNotFoundError(String),
     PlayerIsDeadError,
     SpellNotFoundError(String),
