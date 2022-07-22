@@ -11,7 +11,7 @@ use crate::components::{
 };
 
 use super::{
-    Descriptor, ItemType, {Consumable, ConsumableView},
+    Descriptor, ItemType, Throwable, ThrowableView, {Consumable, ConsumableView},
 };
 
 #[derive(Clone, Debug)]
@@ -38,7 +38,7 @@ pub struct Item {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub consumable: Option<Consumable>,
     #[cfg_attr(feature = "serialization", serde(default))]
-    pub is_throwable: bool,
+    pub throwable: Option<Throwable>,
 }
 
 impl Item {
@@ -97,7 +97,7 @@ pub struct ItemView {
     #[cfg_attr(feature = "serialization", serde(default))]
     pub consumable: Option<ConsumableView>,
     pub knows_consumable: bool,
-    pub is_throwable: bool,
+    pub throwable: Option<ThrowableView>,
 }
 
 impl ItemView {

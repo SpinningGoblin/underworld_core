@@ -97,7 +97,7 @@ fn starter_wearables() -> Vec<CharacterItem> {
             damage_resistance: 1,
         }),
         consumable: None,
-        is_throwable: false,
+        throwable: None,
     };
 
     let shirt = Item {
@@ -112,7 +112,7 @@ fn starter_wearables() -> Vec<CharacterItem> {
             damage_resistance: 1,
         }),
         consumable: None,
-        is_throwable: false,
+        throwable: None,
     };
 
     let boots = Item {
@@ -127,7 +127,7 @@ fn starter_wearables() -> Vec<CharacterItem> {
             damage_resistance: 1,
         }),
         consumable: None,
-        is_throwable: false,
+        throwable: None,
     };
 
     vec![
@@ -198,7 +198,7 @@ fn starter_weapon(rng: &mut ThreadRng) -> CharacterItem {
         }),
         defense: None,
         consumable: None,
-        is_throwable: false,
+        throwable: None,
     };
 
     CharacterItem {

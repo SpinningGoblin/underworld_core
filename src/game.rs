@@ -191,7 +191,6 @@ impl Game {
                                         item_id: character_item.item.id.to_string(),
                                     }));
                                 }
-                                ConsumableEffectName::OilSplash => {}
                             },
                             None => {}
                         }

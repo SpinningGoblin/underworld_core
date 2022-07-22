@@ -6,7 +6,8 @@ use uuid::Uuid;
 use crate::{
     components::{
         items::{
-            CharacterItem, Consumable, Item, ItemType, LocationTag, OilSplashEffect,
+            CharacterItem, Consumable, Item, ItemType, LocationTag, OilSplashEffect, Throwable,
+            ThrowableEffect, ThrowableEffectName,
             {ConsumableEffect, ConsumableEffectName, LearnSpellEffect},
         },
         spells::SpellName,
@@ -223,11 +224,10 @@ impl InventoryPrototype {
                         spell_defense,
                         spell_uses,
                     }),
-                    oil_splash_effect: None,
                 },
                 uses: 1,
             }),
-            is_throwable: false,
+            throwable: None,
         };
 
         vec![CharacterItem {
@@ -288,15 +288,14 @@ impl InventoryPrototype {
                 material,
                 attack: None,
                 defense: None,
-                consumable: Some(Consumable {
+                consumable: None,
+                throwable: Some(Throwable {
                     uses: 1,
-                    effect: ConsumableEffect {
-                        name: ConsumableEffectName::OilSplash,
-                        learn_spell_effect: None,
+                    effect: ThrowableEffect {
+                        name: ThrowableEffectName::OilSplash,
                         oil_splash_effect: Some(OilSplashEffect { covers_all_enemies }),
                     },
                 }),
-                is_throwable: true,
             },
             is_hidden: false,
             equipped_location: LocationTag::Packed,

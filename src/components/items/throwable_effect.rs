@@ -6,11 +6,6 @@ use poem_openapi::{Enum, Object};
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
-use crate::components::{
-    spells::SpellName,
-    {Attack, Defense},
-};
-
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
@@ -19,10 +14,10 @@ use crate::components::{
     serde(rename_all = "snake_case")
 )]
 #[cfg_attr(feature = "openapi", derive(Object), oai(rename_all = "snake_case"))]
-pub struct ConsumableEffect {
-    pub name: ConsumableEffectName,
+pub struct ThrowableEffect {
+    pub name: ThrowableEffectName,
     #[cfg_attr(feature = "serialization", serde(default))]
-    pub learn_spell_effect: Option<LearnSpellEffect>,
+    pub oil_splash_effect: Option<OilSplashEffect>,
 }
 
 #[derive(Clone, Debug, EnumIter, PartialEq, Eq, Hash)]
@@ -35,10 +30,10 @@ pub struct ConsumableEffect {
 #[cfg_attr(
     feature = "openapi",
     derive(Enum),
-    oai(rename_all = "snake_case", rename = "ConsumableEffectName")
+    oai(rename_all = "snake_case", rename = "ThrowableEffectName")
 )]
-pub enum ConsumableEffectName {
-    LearnSpell,
+pub enum ThrowableEffectName {
+    OilSplash,
 }
 
 #[derive(Clone, Debug)]
@@ -48,10 +43,7 @@ pub enum ConsumableEffectName {
     derive(Deserialize, Serialize),
     serde(rename_all = "snake_case")
 )]
-#[cfg_attr(feature = "openapi", derive(Object), oai(rename_all = "snake_case"))]
-pub struct LearnSpellEffect {
-    pub spell_name: SpellName,
-    pub spell_attack: Option<Attack>,
-    pub spell_defense: Option<Defense>,
-    pub spell_uses: i32,
+#[cfg_attr(feature = "openapi", derive(Object))]
+pub struct OilSplashEffect {
+    pub covers_all_enemies: bool,
 }

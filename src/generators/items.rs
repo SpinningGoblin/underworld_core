@@ -61,7 +61,7 @@ impl Generator<Item> for ItemPrototype {
             attack,
             defense,
             consumable: None,
-            is_throwable: false,
+            throwable: None,
         }
     }
 }

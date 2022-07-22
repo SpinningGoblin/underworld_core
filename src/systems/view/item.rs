@@ -1,5 +1,5 @@
 use crate::components::items::{
-    ConsumableView, {Item, ItemView},
+    ConsumableView, ThrowableView, {Item, ItemView},
 };
 
 pub fn view(item: &Item, sees_full_item: bool, knows_all: bool) -> ItemView {
@@ -45,6 +45,11 @@ pub fn view(item: &Item, sees_full_item: bool, knows_all: bool) -> ItemView {
         (None, false)
     };
 
+    let throwable = item.throwable.as_ref().map(|throwable| ThrowableView {
+        uses: throwable.uses,
+        effect: throwable.effect.clone(),
+    });
+
     ItemView {
         id: item.id.to_string(),
         name: item.name.clone(),
@@ -60,6 +65,6 @@ pub fn view(item: &Item, sees_full_item: bool, knows_all: bool) -> ItemView {
         defense_known,
         consumable,
         knows_consumable,
-        is_throwable: item.is_throwable,
+        throwable,
     }
 }
