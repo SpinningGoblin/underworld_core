@@ -11,10 +11,15 @@ use super::{Attack, Defense};
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct Effects {
+    #[cfg_attr(feature = "serialization", serde(default))]
     pub shield_aura: Option<Defense>,
+    #[cfg_attr(feature = "serialization", serde(default))]
     pub retribution_aura: Option<Attack>,
+    #[cfg_attr(feature = "serialization", serde(default))]
     pub poison: Option<Poison>,
+    #[cfg_attr(feature = "serialization", serde(default))]
     pub resurrection_aura: bool,
+    #[cfg_attr(feature = "serialization", serde(default))]
     pub covered_in_oil: bool,
 }
 
