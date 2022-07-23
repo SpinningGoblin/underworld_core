@@ -23,6 +23,7 @@ pub struct ConsumableEffect {
     pub name: ConsumableEffectName,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub learn_spell_effect: Option<LearnSpellEffect>,
+    pub healing_effect: Option<HealingEffect>,
 }
 
 #[derive(Clone, Debug, EnumIter, PartialEq, Eq, Hash)]
@@ -39,6 +40,7 @@ pub struct ConsumableEffect {
 )]
 pub enum ConsumableEffectName {
     LearnSpell,
+    HealingGrog,
 }
 
 #[derive(Clone, Debug)]
@@ -54,4 +56,16 @@ pub struct LearnSpellEffect {
     pub spell_attack: Option<Attack>,
     pub spell_defense: Option<Defense>,
     pub spell_uses: i32,
+}
+
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(
+    feature = "serialization",
+    derive(Deserialize, Serialize),
+    serde(rename_all = "snake_case")
+)]
+#[cfg_attr(feature = "openapi", derive(Object), oai(rename_all = "snake_case"))]
+pub struct HealingEffect {
+    pub healing: Attack,
 }

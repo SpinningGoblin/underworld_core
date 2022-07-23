@@ -6,13 +6,12 @@ use uuid::Uuid;
 use crate::{
     components::{
         items::{
-            CharacterItem, Consumable, Item, ItemType, LocationTag, OilSplashEffect, Throwable,
-            ThrowableEffect, ThrowableEffectName,
+            CharacterItem, Consumable, HealingEffect, Item, ItemType, LocationTag, OilSplashEffect,
+            Throwable, ThrowableEffect, ThrowableEffectName,
             {ConsumableEffect, ConsumableEffectName, LearnSpellEffect},
         },
         spells::SpellName,
-        tag::Tag,
-        Inventory, {Attack, Defense},
+        Inventory, Tagged, {Attack, Defense},
     },
     utils::rolls::roll_d100,
 };
@@ -23,7 +22,7 @@ use super::{
     utils::item_types::{type_inherently_multiple, type_is_for_weapon, type_is_for_wearable},
 };
 
-const GENERATE_SCROLL_CHANCE: i32 = 25;
+const GENERATE_CONSUMABLE_CHANCE: i32 = 25;
 const GENERATE_POT_CHANCE: i32 = 20;
 const WEAPON_NOT_IN_HAND_CHANCE: i32 = 10;
 
@@ -153,92 +152,6 @@ impl InventoryPrototype {
         equipped_wearables
     }
 
-    fn spell_scrolls(&self, rng: &mut ThreadRng) -> Vec<CharacterItem> {
-        let spell_names: Vec<SpellName> = SpellName::iter().collect();
-        let index = rng.gen_range(0..spell_names.len());
-        let spell_name = spell_names.get(index).unwrap();
-
-        let spell_uses: i32 = self.spell_uses(rng, spell_name);
-
-        let spell_attack = if matches!(
-            spell_name,
-            SpellName::RagingFireball | SpellName::ElectricBlast
-        ) {
-            Some(Attack {
-                num_rolls: 2,
-                modifier: 0,
-                effects: Vec::new(),
-            })
-        } else if spell_name == &SpellName::Retribution {
-            Some(Attack {
-                num_rolls: 3,
-                modifier: -1,
-                effects: Vec::new(),
-            })
-        } else if spell_name == &SpellName::QuickHeal {
-            Some(Attack {
-                num_rolls: 1,
-                modifier: 0,
-                effects: Vec::new(),
-            })
-        } else if spell_name == &SpellName::Heal {
-            Some(Attack {
-                num_rolls: 2,
-                modifier: 0,
-                effects: Vec::new(),
-            })
-        } else {
-            None
-        };
-
-        let spell_defense = if spell_name == &SpellName::TinyShield {
-            let damage_resistance = rng.gen_range(2..=10);
-            Some(Defense { damage_resistance })
-        } else {
-            None
-        };
-
-        let possible_materials = super::utils::materials::possible_materials(&ItemType::Scroll);
-        let material = if possible_materials.is_empty() {
-            None
-        } else {
-            let material_index = rng.gen_range(0..possible_materials.len());
-            possible_materials.get(material_index).cloned()
-        };
-
-        let item = Item {
-            id: Uuid::new_v4(),
-            name: None,
-            item_type: ItemType::Scroll,
-            tags: vec![Tag::Consumable, Tag::Teachable],
-            descriptors: Vec::new(),
-            material,
-            attack: None,
-            defense: None,
-            consumable: Some(Consumable {
-                effect: ConsumableEffect {
-                    name: ConsumableEffectName::LearnSpell,
-                    learn_spell_effect: Some(LearnSpellEffect {
-                        spell_name: spell_name.clone(),
-                        spell_attack,
-                        spell_defense,
-                        spell_uses,
-                    }),
-                },
-                uses: 1,
-            }),
-            throwable: None,
-        };
-
-        vec![CharacterItem {
-            item,
-            is_hidden: false,
-            equipped_location: LocationTag::Packed,
-            is_multiple: false,
-            at_the_ready: false,
-        }]
-    }
-
     fn spell_uses(&self, rng: &mut ThreadRng, spell_name: &SpellName) -> i32 {
         match *spell_name {
             SpellName::AcidSplash => rng.gen_range(1..=3),
@@ -283,7 +196,7 @@ impl InventoryPrototype {
                 id: Uuid::new_v4(),
                 name: None,
                 item_type: ItemType::Pot,
-                tags: vec![Tag::Throwable],
+                tags: ItemType::Pot.tags(),
                 descriptors,
                 material,
                 attack: None,
@@ -303,6 +216,208 @@ impl InventoryPrototype {
             at_the_ready: false,
         }]
     }
+
+    fn healing_grog_consumable(&self, rng: &mut ThreadRng) -> Consumable {
+        let num_rolls = if (1..=10).contains(&self.danger_level) {
+            1
+        } else if (11..=25).contains(&self.danger_level) {
+            2
+        } else if (26..=40).contains(&self.danger_level) {
+            3
+        } else if (41..=60).contains(&self.danger_level) {
+            4
+        } else {
+            5
+        };
+        let healing = Attack {
+            num_rolls,
+            modifier: 0,
+            effects: Vec::new(),
+        };
+
+        let uses = rng.gen_range(1..=5);
+
+        Consumable {
+            effect: ConsumableEffect {
+                name: ConsumableEffectName::HealingGrog,
+                learn_spell_effect: None,
+                healing_effect: Some(HealingEffect { healing }),
+            },
+            uses,
+        }
+    }
+
+    fn spell_consumable(&self, rng: &mut ThreadRng) -> Consumable {
+        let spell_names: Vec<SpellName> = SpellName::iter().collect();
+        let index = rng.gen_range(0..spell_names.len());
+        let spell_name = spell_names.get(index).unwrap();
+
+        let spell_uses: i32 = self.spell_uses(rng, spell_name);
+
+        let spell_attack = if matches!(
+            spell_name,
+            SpellName::RagingFireball | SpellName::ElectricBlast
+        ) {
+            let num_rolls = if (1..=10).contains(&self.danger_level) {
+                2
+            } else if (11..=25).contains(&self.danger_level) {
+                5
+            } else if (26..=40).contains(&self.danger_level) {
+                9
+            } else if (41..=60).contains(&self.danger_level) {
+                15
+            } else {
+                20
+            };
+            Some(Attack {
+                num_rolls,
+                modifier: 0,
+                effects: Vec::new(),
+            })
+        } else if spell_name == &SpellName::Retribution {
+            let num_rolls = if (1..=10).contains(&self.danger_level) {
+                3
+            } else if (11..=25).contains(&self.danger_level) {
+                4
+            } else if (26..=40).contains(&self.danger_level) {
+                6
+            } else if (41..=60).contains(&self.danger_level) {
+                8
+            } else {
+                10
+            };
+
+            Some(Attack {
+                num_rolls,
+                modifier: -1,
+                effects: Vec::new(),
+            })
+        } else if spell_name == &SpellName::QuickHeal {
+            let num_rolls = if (1..=10).contains(&self.danger_level) {
+                1
+            } else if (11..=25).contains(&self.danger_level) {
+                2
+            } else if (26..=40).contains(&self.danger_level) {
+                3
+            } else if (41..=60).contains(&self.danger_level) {
+                4
+            } else {
+                5
+            };
+            Some(Attack {
+                num_rolls,
+                modifier: 0,
+                effects: Vec::new(),
+            })
+        } else if spell_name == &SpellName::Heal {
+            let num_rolls = if (1..=10).contains(&self.danger_level) {
+                2
+            } else if (11..=25).contains(&self.danger_level) {
+                4
+            } else if (26..=40).contains(&self.danger_level) {
+                6
+            } else if (41..=60).contains(&self.danger_level) {
+                8
+            } else {
+                10
+            };
+
+            Some(Attack {
+                num_rolls,
+                modifier: 0,
+                effects: Vec::new(),
+            })
+        } else {
+            None
+        };
+
+        let spell_defense = if spell_name == &SpellName::TinyShield {
+            let damage_resistance = if (1..=10).contains(&self.danger_level) {
+                rng.gen_range(2..=10)
+            } else if (11..=25).contains(&self.danger_level) {
+                rng.gen_range(5..=20)
+            } else if (26..=40).contains(&self.danger_level) {
+                rng.gen_range(10..=30)
+            } else if (41..=60).contains(&self.danger_level) {
+                rng.gen_range(15..=40)
+            } else {
+                rng.gen_range(20..=50)
+            };
+            Some(Defense { damage_resistance })
+        } else {
+            None
+        };
+
+        Consumable {
+            effect: ConsumableEffect {
+                name: ConsumableEffectName::LearnSpell,
+                learn_spell_effect: Some(LearnSpellEffect {
+                    spell_name: spell_name.clone(),
+                    spell_attack,
+                    spell_defense,
+                    spell_uses,
+                }),
+                healing_effect: None,
+            },
+            uses: 1,
+        }
+    }
+
+    fn consumables(&self, rng: &mut ThreadRng) -> Vec<CharacterItem> {
+        let names: Vec<ConsumableEffectName> = ConsumableEffectName::iter().collect();
+        let name_index = rng.gen_range(0..names.len());
+        let consumable_name = names.get(name_index).cloned().unwrap();
+
+        let consumable = match consumable_name {
+            ConsumableEffectName::LearnSpell => self.spell_consumable(rng),
+            ConsumableEffectName::HealingGrog => self.healing_grog_consumable(rng),
+        };
+
+        let possible_materials = super::utils::materials::possible_materials(&ItemType::Scroll);
+        let material = if possible_materials.is_empty() {
+            None
+        } else {
+            let material_index = rng.gen_range(0..possible_materials.len());
+            possible_materials.get(material_index).cloned()
+        };
+
+        let item_type = match consumable_name {
+            ConsumableEffectName::LearnSpell => ItemType::Scroll,
+            ConsumableEffectName::HealingGrog => ItemType::Pot,
+        };
+
+        let possible_descriptors = super::utils::item_descriptors::possible_descriptors(
+            &item_type,
+            &material,
+            self.danger_level,
+        );
+        let descriptors = if possible_descriptors.is_empty() {
+            Vec::new()
+        } else {
+            let descriptor_index = rng.gen_range(0..possible_descriptors.len());
+            let descriptor = possible_descriptors.get(descriptor_index).cloned().unwrap();
+            vec![descriptor]
+        };
+
+        vec![CharacterItem {
+            item: Item {
+                id: Uuid::new_v4(),
+                name: None,
+                tags: item_type.tags(),
+                item_type,
+                descriptors,
+                material,
+                attack: None,
+                defense: None,
+                consumable: Some(consumable),
+                throwable: None,
+            },
+            is_hidden: false,
+            equipped_location: LocationTag::Packed,
+            is_multiple: false,
+            at_the_ready: false,
+        }]
+    }
 }
 
 impl Generator<Inventory> for InventoryPrototype {
@@ -312,8 +427,8 @@ impl Generator<Inventory> for InventoryPrototype {
         let equipped_weapons = self.equipped_weapons(&mut rng);
         let equipped_wearables = self.equipped_wearables(&mut rng);
 
-        let spell_scrolls = if roll_d100(&mut rng, 1, 0) <= GENERATE_SCROLL_CHANCE {
-            self.spell_scrolls(&mut rng)
+        let consumables = if roll_d100(&mut rng, 1, 0) <= GENERATE_CONSUMABLE_CHANCE {
+            self.consumables(&mut rng)
         } else {
             Vec::new()
         };
@@ -328,7 +443,7 @@ impl Generator<Inventory> for InventoryPrototype {
             equipment: equipped_weapons
                 .into_iter()
                 .chain(equipped_wearables.into_iter())
-                .chain(spell_scrolls.into_iter())
+                .chain(consumables.into_iter())
                 .chain(pots.into_iter())
                 .collect(),
         }
@@ -373,5 +488,6 @@ fn item_type_is_for_tags(item_type: &ItemType, tag: &LocationTag) -> bool {
         ItemType::Trousers => tag.eq(&LocationTag::Leg),
         ItemType::Scroll => tag.eq(&LocationTag::Packed) | tag.eq(&LocationTag::Pockets),
         ItemType::Pot => tag.eq(&LocationTag::Packed),
+        ItemType::Flask => tag.eq(&LocationTag::Packed),
     }
 }

@@ -186,7 +186,8 @@ impl Game {
                     if character_item.is_consumable() {
                         match &character_item.item.consumable {
                             Some(consumable) => match &consumable.effect.name {
-                                ConsumableEffectName::LearnSpell => {
+                                ConsumableEffectName::LearnSpell
+                                | ConsumableEffectName::HealingGrog => {
                                     actions.push(Action::UseItemOnPlayer(UseItemOnPlayer {
                                         item_id: character_item.item.id.to_string(),
                                     }));

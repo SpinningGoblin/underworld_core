@@ -5,7 +5,7 @@ use crate::{
     actions::UseItemOnPlayer,
     components::{items::ConsumableEffectName, spells::Spell, PlayerCharacter},
     errors::Error,
-    events::{Event, PlayerItemRemoved, PlayerItemUsed, PlayerSpellLearned},
+    events::{Event, PlayerHealed, PlayerItemRemoved, PlayerItemUsed, PlayerSpellLearned},
     utils::ids::parse_id,
 };
 
@@ -43,6 +43,17 @@ pub fn handle(
                     spell,
                     spell_id: Uuid::new_v4(),
                 })]
+            } else {
+                Vec::new()
+            }
+        }
+        ConsumableEffectName::HealingGrog => {
+            if let Some(heal_effect) = consumable.effect.healing_effect {
+                let mut rng = rand::thread_rng();
+                let healing = heal_effect.healing.attack_roll(&mut rng);
+                let damage_healed = healing
+                    .min(player.character.stats.health.max - player.character.stats.health.current);
+                vec![Event::PlayerHealed(PlayerHealed { damage_healed })]
             } else {
                 Vec::new()
             }

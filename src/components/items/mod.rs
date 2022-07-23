@@ -13,7 +13,8 @@ mod throwable_effect;
 pub use character_item::{CharacterItem, CharacterItemView};
 pub use consumable::{Consumable, ConsumableView};
 pub use consumable_effect::{
-    ConsumableEffect, ConsumableEffectName, ConsumableEffectNameIter, LearnSpellEffect,
+    ConsumableEffect, ConsumableEffectName, ConsumableEffectNameIter, HealingEffect,
+    LearnSpellEffect,
 };
 pub use descriptor::{Descriptor, DescriptorIter};
 pub use fixture_item::{FixtureItem, FixtureItemView};
