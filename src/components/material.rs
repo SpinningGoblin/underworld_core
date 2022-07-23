@@ -21,6 +21,7 @@ pub enum Material {
     Ceramic,
     Cotton,
     Fur,
+    Glass,
     Gold,
     Hide,
     Iron,
@@ -58,6 +59,7 @@ impl Tagged for Material {
             Material::Paper => vec![Tag::Paper],
             Material::Papyrus => vec![Tag::Paper],
             Material::Ceramic => vec![Tag::Ceramic],
+            Material::Glass => vec![Tag::Container],
         }
     }
 }

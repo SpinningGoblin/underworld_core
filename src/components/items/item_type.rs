@@ -27,6 +27,7 @@ pub enum ItemType {
     Dagger,
     Dirk,
     Fedora,
+    Flask,
     Gloves,
     GreatSword,
     Halberd,
@@ -123,6 +124,7 @@ impl Tagged for ItemType {
             ItemType::TopHat => vec![Tag::Clothing],
             ItemType::Scroll => vec![Tag::Consumable, Tag::Teachable],
             ItemType::Pot => vec![Tag::Consumable, Tag::Throwable],
+            ItemType::Flask => vec![Tag::Consumable],
         }
     }
 }

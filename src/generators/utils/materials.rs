@@ -121,5 +121,13 @@ pub fn possible_materials(item_type: &ItemType) -> Vec<Material> {
             ]
         }
         ItemType::Pot => vec![Material::Bone, Material::Ceramic],
+        ItemType::Flask => vec![
+            Material::Ceramic,
+            Material::Bone,
+            Material::Glass,
+            Material::Steel,
+            Material::Iron,
+            Material::Gold,
+        ],
     }
 }

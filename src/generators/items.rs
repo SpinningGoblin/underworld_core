@@ -137,6 +137,7 @@ impl ItemPrototype {
             | ItemType::Cloak
             | ItemType::Crown
             | ItemType::Fedora
+            | ItemType::Flask
             | ItemType::Gloves
             | ItemType::Helm
             | ItemType::LoinCloth
@@ -260,6 +261,7 @@ impl ItemPrototype {
             ItemType::Club
             | ItemType::Dagger
             | ItemType::Dirk
+            | ItemType::Flask
             | ItemType::GreatSword
             | ItemType::Halberd
             | ItemType::Hammer
