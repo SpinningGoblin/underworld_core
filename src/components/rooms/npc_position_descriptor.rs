@@ -31,7 +31,6 @@ pub enum NpcPositionDescriptor {
     IsCrouchedOverChest,
     IsRummagingThroughAChest,
     IsCrouchedInTheCenterOfRoom,
-    IsSittingAndDozingInCenterOfRoom,
     SittingInAChairIs,
     IsLyingInPoolBlood,
 }

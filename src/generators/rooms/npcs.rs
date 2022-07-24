@@ -173,7 +173,6 @@ fn other_positions() -> Vec<NpcPositionDescriptor> {
         NpcPositionDescriptor::IsStandingAround,
         NpcPositionDescriptor::IsLyingInPoolBlood,
         NpcPositionDescriptor::IsCrouchedInTheCenterOfRoom,
-        NpcPositionDescriptor::IsSittingAndDozingInCenterOfRoom,
     ]
 }
 
