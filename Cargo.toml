@@ -6,16 +6,16 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-rand = "0.8.5"
-bevy_ecs = { version = "0.7.0", optional = true }
-chrono = { version = "0.4.19", features = ["serde"] }
-serde = { version = "1.0.139", features = ["derive"], optional = true }
-serde_json = { version = "1.0.82", optional = true }
-uuid = { version = "1.1.2", features = ["v4", "fast-rng", "serde"] }
-poem-openapi = { version = "2.0.4", optional = true }
+rand = "0.8"
+bevy_ecs = { version = "0.7", optional = true }
+chrono = { version = "0.4", features = ["serde"] }
+serde = { version = "1.0", features = ["derive"], optional = true }
+serde_json = { version = "1.0", optional = true }
+uuid = { version = "1.1", features = ["v4", "fast-rng", "serde"] }
+poem-openapi = { version = "2.0", optional = true }
 strum = "0.24"
 strum_macros = "0.24"
-thiserror = "1.0.31"
+thiserror = "1.0"
 
 [features]
 bevy_components = ["bevy_ecs"]
