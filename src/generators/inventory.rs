@@ -373,17 +373,17 @@ impl InventoryPrototype {
             ConsumableEffectName::HealingGrog => self.healing_grog_consumable(rng),
         };
 
-        let possible_materials = super::utils::materials::possible_materials(&ItemType::Scroll);
+        let item_type = match consumable_name {
+            ConsumableEffectName::LearnSpell => ItemType::Scroll,
+            ConsumableEffectName::HealingGrog => ItemType::Flask,
+        };
+
+        let possible_materials = super::utils::materials::possible_materials(&item_type);
         let material = if possible_materials.is_empty() {
             None
         } else {
             let material_index = rng.gen_range(0..possible_materials.len());
             possible_materials.get(material_index).cloned()
-        };
-
-        let item_type = match consumable_name {
-            ConsumableEffectName::LearnSpell => ItemType::Scroll,
-            ConsumableEffectName::HealingGrog => ItemType::Pot,
         };
 
         let possible_descriptors = super::utils::item_descriptors::possible_descriptors(
