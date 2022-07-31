@@ -10,16 +10,6 @@ use crate::components::{
 
 use super::generator::Generator;
 
-pub fn item_generator(item_type: &ItemType, is_equipped: bool) -> impl Generator<Item> {
-    ItemPrototype {
-        item_type: item_type.clone(),
-        num_descriptors: 1..=2,
-        materials: super::utils::materials::possible_materials(item_type),
-        is_equipped,
-        item_level: None,
-    }
-}
-
 pub fn item_generator_for_level(
     item_type: &ItemType,
     is_equipped: bool,
