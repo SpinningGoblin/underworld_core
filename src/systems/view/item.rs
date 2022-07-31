@@ -55,6 +55,7 @@ pub fn view(item: &Item, sees_full_item: bool, knows_all: bool) -> ItemView {
         name: item.name.clone(),
         item_type: item.item_type.clone(),
         tags: item.tags.clone(),
+        is_equippable: item.is_equippable(),
         descriptors,
         descriptors_known,
         material,

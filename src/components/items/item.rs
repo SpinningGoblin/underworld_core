@@ -49,6 +49,10 @@ impl Item {
             .unwrap_or_default()
     }
 
+    pub fn is_equippable(&self) -> bool {
+        self.is_weapon() || self.is_wearable()
+    }
+
     pub fn is_weapon(&self) -> bool {
         self.tags.iter().any(|tag| tag.is_weapon())
     }
@@ -98,6 +102,7 @@ pub struct ItemView {
     pub consumable: Option<ConsumableView>,
     pub knows_consumable: bool,
     pub throwable: Option<ThrowableView>,
+    pub is_equippable: bool,
 }
 
 impl ItemView {
