@@ -13,6 +13,6 @@ use crate::components::items::LocationTag;
 #[cfg_attr(feature = "openapi", derive(Object))]
 pub struct MovePlayerItem {
     pub item_id: String,
-    pub location_tag: LocationTag,
+    pub location_tag: Option<LocationTag>,
     pub put_at_the_ready: bool,
 }

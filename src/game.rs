@@ -199,7 +199,7 @@ impl Game {
                         let location_tag = ready_tag_for_item_type(&character_item.item.item_type);
                         actions.push(Action::MovePlayerItem(MovePlayerItem {
                             item_id: character_item.item.id.to_string(),
-                            location_tag,
+                            location_tag: Some(location_tag),
                             put_at_the_ready: true,
                         }));
                     } else {
@@ -208,7 +208,7 @@ impl Game {
                         {
                             actions.push(Action::MovePlayerItem(MovePlayerItem {
                                 item_id: character_item.item.id.to_string(),
-                                location_tag,
+                                location_tag: Some(location_tag),
                                 put_at_the_ready: false,
                             }));
                         }
