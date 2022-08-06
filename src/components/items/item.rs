@@ -50,7 +50,7 @@ impl Item {
     }
 
     pub fn is_equippable(&self) -> bool {
-        self.is_weapon() || self.is_wearable()
+        self.is_weapon() || self.is_wearable() || self.tags.iter().any(|tag| tag.is_equippable())
     }
 
     pub fn is_weapon(&self) -> bool {

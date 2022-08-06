@@ -31,6 +31,7 @@ pub enum Tag {
     Container,
     Damage,
     Defense,
+    Equippable,
     Equipped,
     Fixture,
     Instrument,
@@ -42,6 +43,9 @@ pub enum Tag {
     Shield,
     Stone,
     Throwable,
+    Thrust,
+    Weapon,
+    Wearable,
     Whip,
     Wood,
 }
@@ -51,11 +55,21 @@ impl Tag {
         matches!(*self, Tag::Consumable | Tag::Teachable)
     }
 
+    pub fn is_equippable(&self) -> bool {
+        self.is_weapon() || self.is_wearable() || matches!(*self, Tag::Equippable)
+    }
+
     pub fn is_weapon(&self) -> bool {
-        matches!(*self, Tag::Blade | Tag::Blunt | Tag::Whip)
+        matches!(
+            *self,
+            Tag::Blade | Tag::Blunt | Tag::Whip | Tag::Weapon | Tag::Thrust
+        )
     }
 
     pub fn is_wearable(&self) -> bool {
-        matches!(*self, Tag::Accessory | Tag::Armour | Tag::Clothing)
+        matches!(
+            *self,
+            Tag::Accessory | Tag::Armour | Tag::Clothing | Tag::Wearable
+        )
     }
 }
