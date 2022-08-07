@@ -32,7 +32,6 @@ pub enum Tag {
     Damage,
     Defense,
     Equippable,
-    Equipped,
     Fixture,
     Instrument,
     Teachable,
