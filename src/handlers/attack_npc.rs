@@ -99,7 +99,7 @@ const SHADOW_DODGE_CHANCE: i32 = 25;
 fn npc_will_dodge(species: &Species) -> bool {
     let mut rng = rand::thread_rng();
     match *species {
-        Species::Phantom =>roll_percent_succeeds(&mut rng, PHANTOM_DODGE_CHANCE),
+        Species::Phantom => roll_percent_succeeds(&mut rng, PHANTOM_DODGE_CHANCE),
         Species::Shadow => roll_percent_succeeds(&mut rng, SHADOW_DODGE_CHANCE),
         _ => false,
     }
