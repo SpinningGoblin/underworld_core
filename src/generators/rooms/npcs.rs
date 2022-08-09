@@ -180,7 +180,7 @@ fn barrel_positions() -> Vec<NpcPositionDescriptor> {
 }
 
 fn bed_positions() -> Vec<NpcPositionDescriptor> {
-    vec![NpcPositionDescriptor::IsSleepingInTheBed]
+    vec![]
 }
 
 fn chair_positions() -> Vec<NpcPositionDescriptor> {
@@ -202,11 +202,11 @@ fn crate_positions() -> Vec<NpcPositionDescriptor> {
 }
 
 fn cot_positions() -> Vec<NpcPositionDescriptor> {
-    vec![NpcPositionDescriptor::IsSleepingInACot]
+    vec![]
 }
 
 fn sleeping_roll_positions() -> Vec<NpcPositionDescriptor> {
-    vec![NpcPositionDescriptor::IsSleepingInSleepingRoll]
+    vec![]
 }
 
 fn table_positions() -> Vec<NpcPositionDescriptor> {

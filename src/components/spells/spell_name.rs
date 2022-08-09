@@ -22,11 +22,11 @@ pub enum SpellName {
     GreatHeal,
     Heal,
     Phoenix,
+    PoisonCloud,
+    PoisonDart,
     QuickHeal,
     RagingFireball,
     Retribution,
-    PoisonCloud,
-    PoisonDart,
     TinyShield,
 }
 

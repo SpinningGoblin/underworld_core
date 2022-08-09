@@ -20,10 +20,10 @@ use strum_macros::EnumIter;
 )]
 pub enum Flavour {
     AStrangeBreezeBlows,
+    IsSomethingWatchingYou,
     MoldMossCoversWalls,
-    UnseenLightsFlickerWalls,
     SmellsLikeOldGoblinSocks,
     SomethingSquishyAllOverFloor,
-    IsSomethingWatchingYou,
+    UnseenLightsFlickerWalls,
     YouHearScratchingAllAroundYou,
 }

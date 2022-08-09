@@ -17,12 +17,12 @@ use strum_macros::EnumIter;
 pub enum RoomType {
     Cave,
     Cavern,
-    PrisonCell,
-    Room,
-    EntryWay,
-    TavernHall,
-    Mausoleum,
     Cemetery,
     Crypt,
+    EntryWay,
+    Mausoleum,
+    PrisonCell,
+    Room,
+    TavernHall,
     TempleHall,
 }

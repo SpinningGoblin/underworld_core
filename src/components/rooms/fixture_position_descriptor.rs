@@ -15,8 +15,8 @@ use strum_macros::EnumIter;
 )]
 #[cfg_attr(feature = "openapi", derive(Enum), oai(rename_all = "snake_case"))]
 pub enum FixturePositionDescriptor {
+    CrackedAndBrokenOnTheGround,
     IsInTheCorner,
     SitsAlongOneSide,
     StandsInTheCorner,
-    CrackedAndBrokenOnTheGround,
 }
