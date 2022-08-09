@@ -11,7 +11,7 @@ use crate::{
         Event, PlayerGainsRetributionAura, PlayerGainsShieldAura, PlayerHealed, PlayerHit,
         PlayerPoisoned, PlayerSpellForgotten, PlayerSpellUsed,
     },
-    utils::{ids::parse_id, rolls::roll_d100},
+    utils::{ids::parse_id, rolls::roll_percent_succeeds},
 };
 
 const ACID_DESTROYS_ITEM_CHANCE: i32 = 75;
@@ -79,7 +79,7 @@ pub fn handle(
         }
         SpellName::AcidSplash => {
             let mut rng = rand::thread_rng();
-            if roll_d100(&mut rng, 1, 0) <= ACID_DESTROYS_ITEM_CHANCE {
+            if roll_percent_succeeds(&mut rng, ACID_DESTROYS_ITEM_CHANCE) {
                 let equipped_items = player.character.inventory.readied_weapons();
                 let index = rng.gen_range(0..equipped_items.len());
                 if let Some(character_item) = equipped_items.get(index) {

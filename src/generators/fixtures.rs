@@ -10,7 +10,7 @@ use crate::{
         items::{Descriptor, FixtureItem, Item, ItemType},
         BuiltWithMaterial, Size, {Tag, Tagged},
     },
-    utils::rolls::roll_d100,
+    utils::rolls::roll_percent_succeeds,
 };
 
 use super::{
@@ -58,7 +58,7 @@ pub fn get_generator_for_level(
 impl Generator<Fixture> for FixturePrototype {
     fn generate(&self) -> Fixture {
         let mut rng = rand::thread_rng();
-        let has_material = roll_d100(&mut rng, 1, 0) <= HAS_MATERIAL_CHANCE;
+        let has_material = roll_percent_succeeds(&mut rng, HAS_MATERIAL_CHANCE);
 
         let material = if has_material {
             let possible_materials = self.fixture_type.possible_materials();
@@ -72,8 +72,7 @@ impl Generator<Fixture> for FixturePrototype {
             None
         };
 
-        let non_average_size_roll: i32 = roll_d100(&mut rng, 1, 0);
-        let size = if non_average_size_roll <= HAS_NON_STANDARD_SIZE {
+        let size = if roll_percent_succeeds(&mut rng, HAS_NON_STANDARD_SIZE) {
             let possibilities = non_average_sizes();
             if possibilities.is_empty() {
                 Size::Average

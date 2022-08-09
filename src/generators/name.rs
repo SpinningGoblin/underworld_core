@@ -1,13 +1,12 @@
 use rand::Rng;
 
-use crate::utils::rolls::roll_d100;
+use crate::utils::rolls::roll_percent_succeeds;
 
 const CHANCE_UNNAMED: i32 = 10;
 
 pub fn generate_name() -> Option<String> {
     let mut rng = rand::thread_rng();
-    let no_name_roll = roll_d100(&mut rng, 1, 0);
-    if no_name_roll <= CHANCE_UNNAMED {
+    if roll_percent_succeeds(&mut rng, CHANCE_UNNAMED) {
         return None;
     }
 

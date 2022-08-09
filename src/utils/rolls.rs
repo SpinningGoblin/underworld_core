@@ -19,3 +19,7 @@ pub fn roll_d100(rng: &mut ThreadRng, num_rolls: usize, modifier: i32) -> i32 {
         .sum();
     0.max(roll + modifier)
 }
+
+pub fn roll_percent_succeeds(rng: &mut ThreadRng, percent: i32) -> bool {
+    roll_d100(rng, 1, 0) <= percent
+}

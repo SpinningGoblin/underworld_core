@@ -7,7 +7,7 @@ use crate::{
         rooms::{FixturePosition, FixturePositionDescriptor, GroupDescriptor, RoomType},
     },
     generators::{fixtures::get_generator_for_level, generator::Generator},
-    utils::rolls::roll_d100,
+    utils::rolls::roll_percent_succeeds,
 };
 
 pub fn build_fixture_positions(
@@ -168,15 +168,14 @@ impl FixtureGenerators {
         }
 
         let mut rng = rand::thread_rng();
-        let roll = roll_d100(&mut rng, 1, 0);
         let last_generated = self.fixture_types.get(self.current_index).unwrap();
-        if last_generated == &FixtureType::Table && roll <= 75 {
+        if last_generated == &FixtureType::Table && roll_percent_succeeds(&mut rng, 75) {
             return Some(get_generator_for_level(
                 &FixtureType::Chair,
                 has_hidden_compartment(&FixtureType::Chair),
                 self.danger_level,
             ));
-        } else if last_generated == &FixtureType::Barrel && roll <= 75 {
+        } else if last_generated == &FixtureType::Barrel && roll_percent_succeeds(&mut rng, 75) {
             return Some(get_generator_for_level(
                 &FixtureType::Crate,
                 has_hidden_compartment(&FixtureType::Crate),
@@ -185,7 +184,7 @@ impl FixtureGenerators {
         }
 
         // I don't really want to switch up generators all that often
-        if roll <= 95 {
+        if roll_percent_succeeds(&mut rng, 95) {
             return Some(get_generator_for_level(
                 last_generated,
                 has_hidden_compartment(last_generated),
@@ -222,8 +221,7 @@ fn has_hidden_compartment(fixture_type: &FixtureType) -> bool {
     };
 
     let mut rng = rand::thread_rng();
-    let roll = roll_d100(&mut rng, 1, 0);
-    roll <= chance_of_hidden_compartment
+    roll_percent_succeeds(&mut rng, chance_of_hidden_compartment)
 }
 
 fn possible_fixtures(room_type: &RoomType) -> Vec<FixtureType> {

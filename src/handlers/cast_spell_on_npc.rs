@@ -10,7 +10,7 @@ use crate::{
         Event, NpcItemDestroyed, NpcPoisonEffectDurationChanged, NpcPoisonLevelChanged,
         NpcPoisoned, PlayerSpellForgotten, PlayerSpellUsed,
     },
-    utils::{ids::parse_id, rolls::roll_d100},
+    utils::{ids::parse_id, rolls::roll_percent_succeeds},
 };
 
 use super::helpers::damage_npc;
@@ -119,7 +119,7 @@ pub fn handle(
         }
         SpellName::AcidSplash => {
             let mut rng = rand::thread_rng();
-            if roll_d100(&mut rng, 1, 0) <= ACID_DESTROYS_ITEM_CHANCE {
+            if roll_percent_succeeds(&mut rng, ACID_DESTROYS_ITEM_CHANCE) {
                 let equipped_items = npc.character.inventory.readied_weapons();
                 let index = rng.gen_range(0..equipped_items.len());
                 if let Some(character_item) = equipped_items.get(index) {

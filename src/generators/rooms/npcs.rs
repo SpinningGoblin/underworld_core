@@ -12,10 +12,10 @@ use crate::{
         characters::CharacterPrototype, generator::Generator, inventory::InventoryPrototype,
         name::generate_name, non_players::NonPlayerPrototype,
     },
-    utils::rolls::roll_d100,
+    utils::rolls::{roll_d100, roll_percent_succeeds},
 };
 
-const SWITCH_SPECIES_CHANCE: i32 = 10;
+const KEEP_SPECIES_CHANGE: i32 = 90;
 
 pub fn build_npc_positions(
     room_type: &RoomType,
@@ -82,8 +82,7 @@ fn num_groups(room_type: &RoomType) -> usize {
 
 fn switch_species(species: &Species) -> Species {
     let mut rng = rand::thread_rng();
-    let switch_roll = roll_d100(&mut rng, 1, 0);
-    if switch_roll > SWITCH_SPECIES_CHANCE {
+    if roll_percent_succeeds(&mut rng, KEEP_SPECIES_CHANGE) {
         return species.clone();
     }
 
@@ -226,13 +225,11 @@ const UNDEAD_CHANCE: i32 = 15;
 
 fn life_modifier(species: &Species) -> Option<LifeModifier> {
     let mut rng = rand::thread_rng();
-    let roll = roll_d100(&mut rng, 1, 0);
-
     if matches!(species, &Species::Phantom | &Species::Shadow) {
         return None;
     }
 
-    if roll < UNDEAD_CHANCE {
+    if roll_percent_succeeds(&mut rng, UNDEAD_CHANCE) {
         let type_roll = roll_d100(&mut rng, 1, 0);
         match type_roll {
             0..=33 => Some(LifeModifier::Skeleton),

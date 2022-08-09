@@ -2,7 +2,7 @@ use rand::Rng;
 
 use crate::{
     components::{size::Size, species::Species, stats::Stats, Health},
-    utils::rolls::{roll_d100, roll_d6},
+    utils::rolls::{roll_d6, roll_percent_succeeds},
 };
 
 use super::generator::Generator;
@@ -92,8 +92,7 @@ impl Generator<Stats> for StatsPrototype {
     fn generate(&self) -> Stats {
         let mut rng = rand::thread_rng();
 
-        let non_average_height_roll = roll_d100(&mut rng, 1, 0);
-        let height = if non_average_height_roll <= NON_AVERAGE_HEIGHT_CHANCE {
+        let height = if roll_percent_succeeds(&mut rng, NON_AVERAGE_HEIGHT_CHANCE) {
             let possibilities = non_average_heights();
             let index = rng.gen_range(0..possibilities.len());
             match possibilities.get(index) {

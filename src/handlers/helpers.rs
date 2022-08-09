@@ -8,7 +8,7 @@ use crate::{
         Event, NpcWeaponReadied, PlayerHit, PlayerHitNpc, PlayerKilled, PlayerKilledNpc,
         PlayerMissed, PlayerPoisoned,
     },
-    utils::rolls::{roll_d100, roll_d6},
+    utils::rolls::{roll_d6, roll_percent_succeeds},
 };
 
 const PLAYER_DODGE_CHANCE: i32 = 1;
@@ -90,7 +90,7 @@ pub fn npc_attack_player(
                         }));
                     }
                     AttackEffect::Acidic => {
-                        if roll_d100(&mut rng, 1, 0) <= ACID_DESTROYS_ITEM_CHANCE {
+                        if roll_percent_succeeds(&mut rng, ACID_DESTROYS_ITEM_CHANCE) {
                             let equipped_items = player.character.inventory.readied_weapons();
                             let index = rng.gen_range(0..equipped_items.len());
                             if let Some(character_item) = equipped_items.get(index) {

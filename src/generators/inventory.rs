@@ -13,7 +13,7 @@ use crate::{
         spells::SpellName,
         Inventory, Tagged, {Attack, Defense},
     },
-    utils::rolls::roll_d100,
+    utils::rolls::roll_percent_succeeds,
 };
 
 use super::{
@@ -24,7 +24,7 @@ use super::{
 
 const GENERATE_CONSUMABLE_CHANCE: i32 = 25;
 const GENERATE_POT_CHANCE: i32 = 20;
-const WEAPON_NOT_IN_HAND_CHANCE: i32 = 10;
+const WEAPON_IN_HAND_CHANCE: i32 = 95;
 
 pub struct InventoryPrototype {
     pub item_types: Vec<ItemType>,
@@ -55,8 +55,7 @@ impl InventoryPrototype {
                 break;
             }
 
-            let roll = roll_d100(rng, 1, 0);
-            let tag = if roll > WEAPON_NOT_IN_HAND_CHANCE {
+            let tag = if roll_percent_succeeds(rng, WEAPON_IN_HAND_CHANCE) {
                 LocationTag::Hand
             } else {
                 let tag_index = rng.gen_range(0..location_tags.len());
@@ -81,13 +80,12 @@ impl InventoryPrototype {
             let generator = item_generator_for_level(weapon_type, true, self.danger_level);
             let weapon = generator.generate();
 
-            let hidden_roll = roll_d100(rng, 1, 0);
             let multiple = type_inherently_multiple(weapon_type);
 
             equipped_weapons.push(CharacterItem {
                 is_multiple: multiple,
                 item: weapon,
-                is_hidden: hidden_roll <= self.hidden_weapon_chance,
+                is_hidden: roll_percent_succeeds(rng, self.hidden_weapon_chance),
                 at_the_ready: tag.eq(&LocationTag::Hand),
                 equipped_location: tag,
             })
@@ -137,13 +135,12 @@ impl InventoryPrototype {
             used_types.push(wearable_type.clone());
             let generator = item_generator_for_level(wearable_type, true, self.danger_level);
             let wearable = generator.generate();
-            let hidden_roll = roll_d100(rng, 1, 0);
             let multiple = type_inherently_multiple(wearable_type);
 
             equipped_wearables.push(CharacterItem {
                 is_multiple: multiple,
                 item: wearable,
-                is_hidden: hidden_roll <= self.hidden_wearable_chance,
+                is_hidden: roll_percent_succeeds(rng, self.hidden_wearable_chance),
                 at_the_ready: true,
                 equipped_location: tag,
             })
@@ -176,7 +173,7 @@ impl InventoryPrototype {
             possible_materials.get(material_index).cloned()
         };
 
-        let covers_all_enemies = roll_d100(rng, 1, 0) <= 90;
+        let covers_all_enemies = roll_percent_succeeds(rng, 90);
 
         let possible_descriptors = super::utils::item_descriptors::possible_descriptors(
             &ItemType::Pot,
@@ -427,13 +424,13 @@ impl Generator<Inventory> for InventoryPrototype {
         let equipped_weapons = self.equipped_weapons(&mut rng);
         let equipped_wearables = self.equipped_wearables(&mut rng);
 
-        let consumables = if roll_d100(&mut rng, 1, 0) <= GENERATE_CONSUMABLE_CHANCE {
+        let consumables = if roll_percent_succeeds(&mut rng, GENERATE_CONSUMABLE_CHANCE) {
             self.consumables(&mut rng)
         } else {
             Vec::new()
         };
 
-        let pots = if roll_d100(&mut rng, 1, 0) <= GENERATE_POT_CHANCE {
+        let pots = if roll_percent_succeeds(&mut rng, GENERATE_POT_CHANCE) {
             self.pots(&mut rng)
         } else {
             Vec::new()
