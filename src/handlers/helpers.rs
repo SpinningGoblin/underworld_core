@@ -34,19 +34,10 @@ pub fn npc_attack_player(
 
     let mut events: Vec<Event> = Vec::new();
     if npc.character.has_weapons_readied() {
-        let attack_effects = npc.character.attack_effects();
-        // Sharpness cuts through armour
-        let player_defense = if attack_effects
-            .iter()
-            .any(|effect| matches!(effect, AttackEffect::Sharp))
-        {
-            player.character.defense() / 2
-        } else {
-            player.character.defense()
-        };
-        let character_attack = npc.character.attack();
-        let mut player_damage = (character_attack - player_defense).max(1);
-
+        let npc_attack = npc.character.full_attack();
+        let attack_damage = npc_attack.attack_damage(&mut rng);
+        let player_defense = player.character.full_defense();
+        let mut player_damage = player_defense.calculate_damage_taken(&attack_damage);
         if let Some(defense_aura) = &player.character.current_effects.shield_aura {
             let actual_damage = player_damage - defense_aura.damage_resistance;
 
@@ -81,7 +72,7 @@ pub fn npc_attack_player(
             }
         } else {
             // Handle any other attack effects that weren't previously handled.
-            for effect in attack_effects.iter() {
+            for effect in attack_damage.effects.iter() {
                 match effect {
                     AttackEffect::Toxic => {
                         events.push(Event::PlayerPoisoned(PlayerPoisoned {

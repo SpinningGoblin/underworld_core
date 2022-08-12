@@ -87,7 +87,7 @@ impl Generator<Character> for CharacterPrototype {
         };
 
         let stats_generator =
-            build_default_health_rolls_for_danger_level(&self.species, self.danger_level);
+            build_default_health_rolls_for_danger_level(&self.species, self.danger_level, true);
         let stats = stats_generator.generate();
 
         Character {

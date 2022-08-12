@@ -44,23 +44,16 @@ pub fn handle(
             npc_id,
         }));
     } else {
-        let attack_effects = player.character.attack_effects();
-        let defense = if attack_effects
-            .iter()
-            .any(|effect| matches!(effect, AttackEffect::Sharp))
-        {
-            npc.character.defense() / 2
-        } else {
-            npc.character.defense()
-        };
-        let attack = player.character.attack();
-        let attack_damage = (attack - defense).max(1);
-        let damage = attack_damage.min(npc.character.get_current_health());
+        let npc_defense = npc.character.full_defense();
+        let player_attack = player.character.full_attack();
+        let attack_damage = player_attack.attack_damage(&mut rng);
+        let calculated_damage = npc_defense.calculate_damage_taken(&attack_damage);
+        let damage = calculated_damage.min(npc.character.get_current_health());
         let (mut damage_events, npc_dead) = damage_npc(player, npc, damage);
-        // If npc is alive, handle any attack effects on player weapons
 
+        // If npc is alive, handle any attack effects on player weapons
         if !npc_dead {
-            for effect in attack_effects.iter() {
+            for effect in player_attack.effects.iter() {
                 match effect {
                     AttackEffect::Toxic => {
                         events.push(Event::NpcPoisoned(NpcPoisoned {

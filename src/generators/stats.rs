@@ -1,45 +1,29 @@
 use rand::Rng;
 
 use crate::{
-    components::{size::Size, species::Species, stats::Stats, Health},
+    components::{
+        damage::AttackEffect, size::Size, species::Species, stats::Stats, Attack, Defense, Health,
+    },
     utils::rolls::{roll_d6, roll_percent_succeeds},
 };
 
 use super::generator::Generator;
 
-pub fn build_specific_health(max_health: i32) -> StatsPrototype {
+pub fn build_specific_health(
+    max_health: i32,
+    species: &Species,
+    use_species_base: bool,
+) -> StatsPrototype {
     StatsPrototype {
         max_health: Some(max_health),
         num_health_rolls: 0,
         danger_level: 1,
+        species: species.clone(),
+        use_species_base,
     }
 }
 
-pub fn build_specific_health_danger_level(max_health: i32, danger_level: u32) -> StatsPrototype {
-    StatsPrototype {
-        max_health: Some(max_health),
-        num_health_rolls: 0,
-        danger_level,
-    }
-}
-
-pub fn build(num_health_rolls: usize) -> StatsPrototype {
-    StatsPrototype {
-        max_health: None,
-        num_health_rolls,
-        danger_level: 1,
-    }
-}
-
-pub fn build_danger_level(num_health_rolls: usize, danger_level: u32) -> StatsPrototype {
-    StatsPrototype {
-        max_health: None,
-        num_health_rolls,
-        danger_level,
-    }
-}
-
-pub fn build_default_health_rolls(species: &Species) -> StatsPrototype {
+pub fn build_default_health_rolls(species: &Species, use_species_base: bool) -> StatsPrototype {
     let num_health_rolls = match *species {
         Species::Ogre => 5,
         Species::Dragonkin | Species::Phantom | Species::Rockoblin | Species::Shadow => 4,
@@ -50,12 +34,15 @@ pub fn build_default_health_rolls(species: &Species) -> StatsPrototype {
         max_health: None,
         num_health_rolls,
         danger_level: 1,
+        species: species.clone(),
+        use_species_base,
     }
 }
 
 pub fn build_default_health_rolls_for_danger_level(
     species: &Species,
     danger_level: u32,
+    use_species_base: bool,
 ) -> StatsPrototype {
     let num_health_rolls = match *species {
         Species::Ogre => 5,
@@ -67,6 +54,8 @@ pub fn build_default_health_rolls_for_danger_level(
         max_health: None,
         num_health_rolls,
         danger_level,
+        species: species.clone(),
+        use_species_base,
     }
 }
 
@@ -74,6 +63,8 @@ pub struct StatsPrototype {
     pub max_health: Option<i32>,
     pub num_health_rolls: usize,
     pub danger_level: u32,
+    pub species: Species,
+    pub use_species_base: bool,
 }
 
 const NON_AVERAGE_HEIGHT_CHANCE: i32 = 40;
@@ -146,6 +137,75 @@ impl Generator<Stats> for StatsPrototype {
             max: max_health,
         };
 
-        Stats { health, height }
+        Stats {
+            health,
+            height,
+            base_attack: self.base_attack(),
+            base_damage_resistance: self.base_damage_resistance(),
+        }
+    }
+}
+
+impl StatsPrototype {
+    fn base_attack(&self) -> Option<Attack> {
+        if !self.use_species_base {
+            return None;
+        }
+
+        match self.species {
+            Species::Bugbear => Some(Attack {
+                num_rolls: 1,
+                modifier: 0,
+                effects: Vec::new(),
+            }),
+            Species::Dragonkin | Species::Lizardkin | Species::Orc => Some(Attack {
+                num_rolls: 1,
+                modifier: 1,
+                effects: Vec::new(),
+            }),
+            Species::Goblin => Some(Attack {
+                num_rolls: 0,
+                modifier: 2,
+                effects: Vec::new(),
+            }),
+            Species::Ogre | Species::Phantom | Species::Shadow => Some(Attack {
+                num_rolls: 2,
+                modifier: -1,
+                effects: vec![AttackEffect::Crushing],
+            }),
+            Species::Kobold
+            | Species::Moblin
+            | Species::Hobgoblin
+            | Species::Frogkin
+            | Species::Rockoblin
+            | Species::Turtlekin => return None,
+        }
+    }
+
+    fn base_damage_resistance(&self) -> Option<Defense> {
+        if !self.use_species_base {
+            return None;
+        }
+
+        match self.species {
+            Species::Turtlekin => Some(Defense {
+                damage_resistance: 2,
+            }),
+            Species::Rockoblin => Some(Defense {
+                damage_resistance: 3,
+            }),
+            Species::Bugbear
+            | Species::Dragonkin
+            | Species::Frogkin
+            | Species::Goblin
+            | Species::Hobgoblin
+            | Species::Kobold
+            | Species::Lizardkin
+            | Species::Moblin
+            | Species::Ogre
+            | Species::Orc
+            | Species::Phantom
+            | Species::Shadow => None,
+        }
     }
 }

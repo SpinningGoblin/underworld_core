@@ -21,7 +21,7 @@ pub struct Attack {
     pub effects: Vec<AttackEffect>,
 }
 
-#[derive(Clone, Debug, EnumIter, PartialEq, Eq)]
+#[derive(Clone, Debug, EnumIter, PartialEq, Eq, PartialOrd, Ord)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
     feature = "serialization",
@@ -49,6 +49,34 @@ impl Attack {
             roll
         }
     }
+
+    pub fn attack_damage(&self, rng: &mut ThreadRng) -> AttackDamage {
+        let roll = crate::utils::rolls::roll_d6(rng, self.num_rolls, self.modifier);
+
+        let damage = if self
+            .effects
+            .iter()
+            .any(|effect| matches!(*effect, AttackEffect::Crushing))
+        {
+            roll + (roll / 2)
+        } else {
+            roll
+        };
+
+        AttackDamage {
+            damage,
+            effects: self.effects.clone(),
+        }
+    }
+}
+
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
+#[cfg_attr(feature = "openapi", derive(Object))]
+pub struct AttackDamage {
+    pub damage: i32,
+    pub effects: Vec<AttackEffect>,
 }
 
 #[derive(Clone, Debug)]
@@ -57,6 +85,23 @@ impl Attack {
 #[cfg_attr(feature = "openapi", derive(Object))]
 pub struct Defense {
     pub damage_resistance: i32,
+}
+
+impl Defense {
+    pub fn calculate_damage_taken(&self, attack_damage: &AttackDamage) -> i32 {
+        let resistance = if attack_damage
+            .effects
+            .iter()
+            .any(|effect| matches!(*effect, AttackEffect::Sharp))
+        {
+            self.damage_resistance / 2
+        } else {
+            self.damage_resistance
+        };
+
+        // You always take 1 damage from attacks.
+        (attack_damage.damage - resistance).max(1)
+    }
 }
 
 #[derive(Clone, Debug)]

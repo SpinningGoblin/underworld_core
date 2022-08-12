@@ -6,7 +6,10 @@ use poem_openapi::Object;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use super::items::{CharacterItem, CharacterItemView};
+use super::{
+    items::{CharacterItem, CharacterItemView},
+    Attack, Defense,
+};
 
 #[derive(Clone, Debug, Default)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
@@ -83,6 +86,42 @@ impl Inventory {
             .into_iter()
             .max_by(|a, b| a.item.num_attack_rolls().cmp(&b.item.num_attack_rolls()))
     }
+
+    pub fn full_attack(&self) -> Option<Attack> {
+        self.equipment
+            .iter()
+            .filter_map(|character_item| {
+                if character_item.at_the_ready {
+                    character_item.item.attack.clone()
+                } else {
+                    None
+                }
+            })
+            .reduce(|accum, item| Attack {
+                num_rolls: accum.num_rolls + item.num_rolls,
+                modifier: accum.modifier + item.modifier,
+                effects: accum
+                    .effects
+                    .into_iter()
+                    .chain(item.effects.into_iter())
+                    .collect(),
+            })
+    }
+
+    pub fn full_defense(&self) -> Option<Defense> {
+        self.equipment
+            .iter()
+            .filter_map(|character_item| {
+                if character_item.at_the_ready {
+                    character_item.item.defense.clone()
+                } else {
+                    None
+                }
+            })
+            .reduce(|accum, item| Defense {
+                damage_resistance: accum.damage_resistance + item.damage_resistance,
+            })
+    }
 }
 
 #[derive(Clone, Debug)]
@@ -108,5 +147,133 @@ impl InventoryView {
             .filter(|item| item.is_weapon() && item.is_equipped())
             .cloned()
             .collect()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use uuid::Uuid;
+
+    use crate::components::{
+        damage::AttackEffect,
+        items::{CharacterItem, Item, ItemType, LocationTag},
+        Attack, Defense,
+    };
+
+    use super::Inventory;
+
+    #[test]
+    fn full_attack() {
+        let inventory = Inventory {
+            equipment: vec![
+                CharacterItem {
+                    item: Item {
+                        id: Uuid::new_v4(),
+                        name: None,
+                        item_type: ItemType::Spear,
+                        tags: Vec::new(),
+                        descriptors: Vec::new(),
+                        material: None,
+                        attack: Some(Attack {
+                            num_rolls: 2,
+                            modifier: 2,
+                            effects: vec![AttackEffect::Crushing],
+                        }),
+                        defense: None,
+                        consumable: None,
+                        throwable: None,
+                    },
+                    is_hidden: false,
+                    equipped_location: LocationTag::Hand,
+                    is_multiple: false,
+                    at_the_ready: true,
+                },
+                CharacterItem {
+                    item: Item {
+                        id: Uuid::new_v4(),
+                        name: None,
+                        item_type: ItemType::LongSword,
+                        tags: Vec::new(),
+                        descriptors: Vec::new(),
+                        material: None,
+                        attack: Some(Attack {
+                            num_rolls: 1,
+                            modifier: -2,
+                            effects: vec![AttackEffect::Sharp],
+                        }),
+                        defense: None,
+                        consumable: None,
+                        throwable: None,
+                    },
+                    is_hidden: false,
+                    equipped_location: LocationTag::Hand,
+                    is_multiple: false,
+                    at_the_ready: true,
+                },
+            ],
+        };
+
+        let merged = inventory.full_attack();
+        assert!(merged.is_some());
+        let attack = merged.unwrap();
+        assert_eq!(attack.num_rolls, 3);
+        assert_eq!(attack.modifier, 0);
+        assert_eq!(
+            attack.effects,
+            vec![AttackEffect::Crushing, AttackEffect::Sharp]
+        );
+    }
+
+    #[test]
+    fn full_defense() {
+        let inventory = Inventory {
+            equipment: vec![
+                CharacterItem {
+                    item: Item {
+                        id: Uuid::new_v4(),
+                        name: None,
+                        item_type: ItemType::PlateBoots,
+                        tags: Vec::new(),
+                        descriptors: Vec::new(),
+                        material: None,
+                        attack: None,
+                        defense: Some(Defense {
+                            damage_resistance: 2,
+                        }),
+                        consumable: None,
+                        throwable: None,
+                    },
+                    is_hidden: false,
+                    equipped_location: LocationTag::Feet,
+                    is_multiple: false,
+                    at_the_ready: true,
+                },
+                CharacterItem {
+                    item: Item {
+                        id: Uuid::new_v4(),
+                        name: None,
+                        item_type: ItemType::PlateGauntlets,
+                        tags: Vec::new(),
+                        descriptors: Vec::new(),
+                        material: None,
+                        attack: None,
+                        defense: Some(Defense {
+                            damage_resistance: 6,
+                        }),
+                        consumable: None,
+                        throwable: None,
+                    },
+                    is_hidden: false,
+                    equipped_location: LocationTag::Hand,
+                    is_multiple: false,
+                    at_the_ready: true,
+                },
+            ],
+        };
+
+        let merged = inventory.full_defense();
+        assert!(merged.is_some());
+        let attack = merged.unwrap();
+        assert_eq!(attack.damage_resistance, 8);
     }
 }

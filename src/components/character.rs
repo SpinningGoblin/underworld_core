@@ -12,7 +12,8 @@ use super::{
     spells::{
         LearnedSpell, {SpellMemory, SpellMemoryView},
     },
-    LifeModifier, Species, {Effects, EffectsView}, {Inventory, InventoryView}, {Stats, StatsView},
+    Attack, Defense, LifeModifier, Species, {Effects, EffectsView}, {Inventory, InventoryView},
+    {Stats, StatsView},
 };
 
 #[derive(Clone, Debug)]
@@ -102,10 +103,6 @@ impl Character {
         self.stats.health.current = 0;
     }
 
-    pub fn no_weapons_readied(&self) -> bool {
-        self.inventory.readied_weapons().is_empty()
-    }
-
     pub fn has_weapons_readied(&self) -> bool {
         !self.inventory.readied_weapons().is_empty()
     }
@@ -122,53 +119,55 @@ impl Character {
         self.inventory.strongest_non_readied_weapon()
     }
 
-    pub fn attack(&self) -> i32 {
-        let mut rng = rand::thread_rng();
+    pub fn full_attack(&self) -> Attack {
+        let base_attack = self.stats.base_attack.clone().unwrap_or(Attack {
+            num_rolls: 0,
+            modifier: 0,
+            effects: Vec::new(),
+        });
 
-        self.inventory
-            .equipment
-            .iter()
-            .filter(|character_item| character_item.at_the_ready)
-            .map(|character_item| {
-                character_item
-                    .item
-                    .attack
-                    .as_ref()
-                    .map(|attack| attack.attack_roll(&mut rng))
-                    .unwrap_or_default()
-            })
-            .sum()
+        let inventory_full_attack = self.inventory.full_attack().unwrap_or(Attack {
+            num_rolls: 0,
+            modifier: 0,
+            effects: Vec::new(),
+        });
+
+        let mut effects: Vec<AttackEffect> = base_attack
+            .effects
+            .into_iter()
+            .chain(inventory_full_attack.effects.into_iter())
+            .collect();
+
+        effects.sort();
+        effects.dedup();
+
+        Attack {
+            num_rolls: inventory_full_attack.num_rolls + base_attack.num_rolls,
+            modifier: inventory_full_attack.modifier + base_attack.modifier,
+            effects,
+        }
     }
 
-    pub fn attack_effects(&self) -> Vec<AttackEffect> {
-        self.inventory
-            .equipment
-            .iter()
-            .filter(|character_item| character_item.is_at_the_ready())
-            .flat_map(|character_item| {
-                character_item
-                    .item
-                    .attack
-                    .as_ref()
-                    .map(|attack| attack.effects.clone())
-                    .unwrap_or_default()
-            })
-            .collect()
-    }
+    pub fn full_defense(&self) -> Defense {
+        let Defense {
+            damage_resistance: inventory_resistance,
+        } = self.inventory.full_defense().unwrap_or(Defense {
+            damage_resistance: 0,
+        });
 
-    pub fn defense(&self) -> i32 {
-        self.inventory
-            .equipment
-            .iter()
-            .map(|character_item| {
-                character_item
-                    .item
-                    .defense
-                    .as_ref()
-                    .map(|defense| defense.damage_resistance)
-                    .unwrap_or_default()
-            })
-            .sum()
+        let Defense {
+            damage_resistance: base_resistance,
+        } = self
+            .stats
+            .base_damage_resistance
+            .clone()
+            .unwrap_or(Defense {
+                damage_resistance: 0,
+            });
+
+        Defense {
+            damage_resistance: base_resistance + inventory_resistance,
+        }
     }
 }
 

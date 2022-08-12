@@ -33,12 +33,6 @@ pub fn player_generator(
 impl Generator<PlayerCharacter> for PlayerCharacterPrototype {
     fn generate(&self) -> PlayerCharacter {
         let mut rng = rand::thread_rng();
-        let stats_generator = build_specific_health(25);
-        let mut stats = stats_generator.generate();
-
-        if let Some(size) = &self.size {
-            stats.height = size.clone();
-        }
 
         let species = match &self.species {
             Some(it) => it.clone(),
@@ -48,6 +42,13 @@ impl Generator<PlayerCharacter> for PlayerCharacterPrototype {
                 options.get(index).unwrap().clone()
             }
         };
+
+        let stats_generator = build_specific_health(25, &species, false);
+        let mut stats = stats_generator.generate();
+
+        if let Some(size) = &self.size {
+            stats.height = size.clone();
+        }
 
         let starter_weapon = starter_weapon(&mut rng);
         let starter_wearables = starter_wearables();
