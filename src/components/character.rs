@@ -120,17 +120,8 @@ impl Character {
     }
 
     pub fn full_attack(&self) -> Attack {
-        let base_attack = self.stats.base_attack.clone().unwrap_or(Attack {
-            num_rolls: 0,
-            modifier: 0,
-            effects: Vec::new(),
-        });
-
-        let inventory_full_attack = self.inventory.full_attack().unwrap_or(Attack {
-            num_rolls: 0,
-            modifier: 0,
-            effects: Vec::new(),
-        });
+        let base_attack = self.stats.base_attack.clone().unwrap_or_default();
+        let inventory_full_attack = self.inventory.full_attack().unwrap_or_default();
 
         let mut effects: Vec<AttackEffect> = base_attack
             .effects
@@ -151,19 +142,14 @@ impl Character {
     pub fn full_defense(&self) -> Defense {
         let Defense {
             damage_resistance: inventory_resistance,
-        } = self.inventory.full_defense().unwrap_or(Defense {
-            damage_resistance: 0,
-        });
-
+        } = self.inventory.full_defense().unwrap_or_default();
         let Defense {
             damage_resistance: base_resistance,
         } = self
             .stats
             .base_damage_resistance
             .clone()
-            .unwrap_or(Defense {
-                damage_resistance: 0,
-            });
+            .unwrap_or_default();
 
         Defense {
             damage_resistance: base_resistance + inventory_resistance,
