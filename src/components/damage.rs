@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 
 use strum_macros::EnumIter;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 #[cfg_attr(feature = "openapi", derive(Object))]
@@ -79,7 +79,7 @@ pub struct AttackDamage {
     pub effects: Vec<AttackEffect>,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 #[cfg_attr(feature = "openapi", derive(Object))]
