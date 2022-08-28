@@ -15,7 +15,13 @@ pub fn view(
     let args = fixture_view_args
         .get(&fixture_position.fixture.id)
         .cloned()
-        .unwrap_or_default();
+        .unwrap_or_else(|| {
+            if knows_all {
+                FixtureViewArgs::knows_all_args()
+            } else {
+                FixtureViewArgs::default()
+            }
+        });
     let fixture = super::fixture::view(&fixture_position.fixture, &args, knows_all);
 
     FixturePositionView {
