@@ -42,3 +42,11 @@ pub struct NonPlayerView {
 pub struct NonPlayerViewArgs {
     pub character_args: CharacterViewArgs,
 }
+
+impl NonPlayerViewArgs {
+    pub fn knows_all_args() -> NonPlayerViewArgs {
+        NonPlayerViewArgs {
+            character_args: CharacterViewArgs::knows_all_args(),
+        }
+    }
+}

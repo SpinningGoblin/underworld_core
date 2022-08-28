@@ -83,3 +83,11 @@ pub struct FixtureView {
 pub struct FixtureViewArgs {
     pub knows_has_hidden_compartment: bool,
 }
+
+impl FixtureViewArgs {
+    pub fn knows_all_args() -> FixtureViewArgs {
+        FixtureViewArgs {
+            knows_has_hidden_compartment: true,
+        }
+    }
+}

@@ -184,3 +184,14 @@ pub struct CharacterViewArgs {
     pub knows_hidden_in_inventory: bool,
     pub knows_packed_in_inventory: bool,
 }
+
+impl CharacterViewArgs {
+    pub fn knows_all_args() -> CharacterViewArgs {
+        CharacterViewArgs {
+            knows_health: true,
+            knows_inventory: true,
+            knows_hidden_in_inventory: true,
+            knows_packed_in_inventory: true,
+        }
+    }
+}
