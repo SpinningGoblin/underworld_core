@@ -178,7 +178,7 @@ impl StatsPrototype {
             | Species::Hobgoblin
             | Species::Frogkin
             | Species::Rockoblin
-            | Species::Turtlekin => return None,
+            | Species::Turtlekin => None,
         }
     }
 
