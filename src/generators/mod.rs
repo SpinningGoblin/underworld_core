@@ -10,3 +10,5 @@ pub mod players;
 pub mod rooms;
 pub mod stats;
 mod utils;
+
+pub use rooms::RoomGeneratorBuilder;

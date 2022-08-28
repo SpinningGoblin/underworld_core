@@ -26,6 +26,81 @@ struct RoomPrototype {
     pub danger_level: u32,
 }
 
+#[derive(Default)]
+pub struct RoomGeneratorBuilder {
+    num_descriptors: Option<RangeInclusive<usize>>,
+    room_type: Option<RoomType>,
+    possible_descriptors: Option<Vec<Descriptor>>,
+    entrance_id: Option<Uuid>,
+    danger_level: Option<u32>,
+}
+
+impl RoomGeneratorBuilder {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn num_descriptors(&mut self, num_descriptors: RangeInclusive<usize>) -> &mut Self {
+        self.num_descriptors = Some(num_descriptors);
+
+        self
+    }
+
+    pub fn room_type(&mut self, room_type: RoomType) -> &mut Self {
+        self.room_type = Some(room_type);
+
+        self
+    }
+
+    pub fn possible_descriptors(&mut self, possible_descriptors: Vec<Descriptor>) -> &mut Self {
+        self.possible_descriptors = Some(possible_descriptors);
+
+        self
+    }
+
+    pub fn entrance_id(&mut self, entrance_id: Uuid) -> &mut Self {
+        self.entrance_id = Some(entrance_id);
+
+        self
+    }
+
+    pub fn danger_level(&mut self, danger_level: u32) -> &mut Self {
+        self.danger_level = Some(danger_level);
+
+        self
+    }
+
+    pub fn build(&self) -> impl Generator<Room> {
+        let num_descriptors = match &self.num_descriptors {
+            Some(it) => it.clone(),
+            None => 0..=2,
+        };
+
+        let room_type = match &self.room_type {
+            Some(it) => it.clone(),
+            None => {
+                let room_types: Vec<RoomType> = RoomType::iter().collect();
+                let mut rng = rand::thread_rng();
+                let index = rng.gen_range(0..room_types.len());
+                room_types.get(index).unwrap().clone()
+            }
+        };
+
+        let possible_descriptors = match &self.possible_descriptors {
+            Some(it) => it.clone(),
+            None => room_type.possible_descriptors(),
+        };
+
+        RoomPrototype {
+            num_descriptors,
+            room_type,
+            possible_descriptors,
+            entrance_id: self.entrance_id,
+            danger_level: self.danger_level.unwrap_or(1),
+        }
+    }
+}
+
 impl Generator<Room> for RoomPrototype {
     fn generate(&self) -> Room {
         let mut rng = rand::thread_rng();
@@ -118,5 +193,37 @@ impl RoomType {
 
     fn possible_flavours(&self) -> Vec<Flavour> {
         Flavour::iter().collect()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use uuid::Uuid;
+
+    use crate::{
+        components::rooms::{Descriptor, RoomType},
+        generators::generator::Generator,
+    };
+
+    use super::RoomGeneratorBuilder;
+
+    #[test]
+    fn test_builder() {
+        let entrance_id = Uuid::new_v4();
+        let generator = RoomGeneratorBuilder::new()
+            .num_descriptors(1..=1)
+            .room_type(RoomType::TavernHall)
+            .possible_descriptors(vec![Descriptor::Freezing])
+            .entrance_id(entrance_id)
+            .danger_level(10)
+            .build();
+        let room = generator.generate();
+
+        assert_eq!(RoomType::TavernHall, room.room_type);
+        assert_eq!(1, room.descriptors.len());
+        assert_eq!(
+            Descriptor::Freezing,
+            room.descriptors.get(0).unwrap().clone()
+        );
     }
 }
