@@ -52,7 +52,7 @@ pub fn build_npc_positions(
 
                 if position_descriptor == Some(NpcPositionDescriptor::IsLyingInPoolBlood)
                     && !matches!(&npc.character.species, Species::Phantom | Species::Shadow)
-                    && npc.character.life_modifier == None
+                    && npc.character.life_modifier.is_none()
                 {
                     npc.kill();
                 }
