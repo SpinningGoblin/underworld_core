@@ -9,7 +9,7 @@ use rand::Rng;
 use strum::IntoEnumIterator;
 use uuid::Uuid;
 
-use crate::components::rooms::{Descriptor, Flavour, Room, RoomType};
+use crate::components::rooms::{Descriptor, Dimensions, Flavour, Room, RoomType};
 
 use self::{
     dimensions::build_dimensions, exits::build_exits, fixtures::build_fixture_positions,
@@ -24,6 +24,10 @@ struct RoomPrototype {
     pub possible_descriptors: Vec<Descriptor>,
     pub entrance_id: Option<Uuid>,
     pub danger_level: u32,
+    pub possible_flavour_texts: Vec<Flavour>,
+    pub include_flavour_text: bool,
+    pub name: Option<String>,
+    pub dimensions: Option<Dimensions>,
 }
 
 #[derive(Default)]
@@ -33,6 +37,10 @@ pub struct RoomGeneratorBuilder {
     possible_descriptors: Option<Vec<Descriptor>>,
     entrance_id: Option<Uuid>,
     danger_level: Option<u32>,
+    include_flavour_text: Option<bool>,
+    possible_flavour_texts: Option<Vec<Flavour>>,
+    name: Option<String>,
+    dimensions: Option<Dimensions>,
 }
 
 impl RoomGeneratorBuilder {
@@ -70,6 +78,30 @@ impl RoomGeneratorBuilder {
         self
     }
 
+    pub fn include_flavour_text(&mut self, include_flavour: bool) -> &mut Self {
+        self.include_flavour_text = Some(include_flavour);
+
+        self
+    }
+
+    pub fn possible_flavour_texts(&mut self, possible_flavour_texts: Vec<Flavour>) -> &mut Self {
+        self.possible_flavour_texts = Some(possible_flavour_texts);
+
+        self
+    }
+
+    pub fn name(&mut self, name: &str) -> &mut Self {
+        self.name = Some(name.to_string());
+
+        self
+    }
+
+    pub fn dimensions(&mut self, dimensions: Dimensions) -> &mut Self {
+        self.dimensions = Some(dimensions);
+
+        self
+    }
+
     pub fn build(&self) -> impl Generator<Room> {
         let num_descriptors = match &self.num_descriptors {
             Some(it) => it.clone(),
@@ -91,12 +123,21 @@ impl RoomGeneratorBuilder {
             None => room_type.possible_descriptors(),
         };
 
+        let possible_flavour_texts = match &self.possible_flavour_texts {
+            Some(it) => it.clone(),
+            None => room_type.possible_flavours(),
+        };
+
         RoomPrototype {
             num_descriptors,
             room_type,
             possible_descriptors,
             entrance_id: self.entrance_id,
             danger_level: self.danger_level.unwrap_or(1),
+            possible_flavour_texts,
+            include_flavour_text: self.include_flavour_text.unwrap_or(true),
+            name: self.name.clone(),
+            dimensions: self.dimensions.clone(),
         }
     }
 }
@@ -120,18 +161,21 @@ impl Generator<Room> for RoomPrototype {
             }
         }
 
-        let flavour_options = self.room_type.possible_flavours();
-        let index = rng.gen_range(0..flavour_options.len());
-        let flavour = flavour_options.get(index).cloned();
+        let flavour = if self.include_flavour_text {
+            let index = rng.gen_range(0..self.possible_flavour_texts.len());
+            self.possible_flavour_texts.get(index).cloned()
+        } else {
+            None
+        };
 
         let (fixture_positions, used_fixtures) =
             build_fixture_positions(&self.room_type, self.danger_level);
 
         Room {
-            dimensions: build_dimensions(),
+            dimensions: self.dimensions.clone().unwrap_or_else(build_dimensions),
             descriptors,
             id: Uuid::new_v4(),
-            name: None,
+            name: self.name.clone(),
             room_type: self.room_type.clone(),
             fixture_positions,
             npc_positions: build_npc_positions(&self.room_type, used_fixtures, self.danger_level),
@@ -148,6 +192,10 @@ pub fn room_generator(room_type: &RoomType, entrance_id: Option<Uuid>) -> impl G
         possible_descriptors: room_type.possible_descriptors(),
         entrance_id,
         danger_level: 1,
+        possible_flavour_texts: room_type.possible_flavours(),
+        include_flavour_text: true,
+        name: None,
+        dimensions: None,
     }
 }
 
@@ -162,6 +210,10 @@ pub fn room_generator_for_danger_level(
         possible_descriptors: room_type.possible_descriptors(),
         entrance_id,
         danger_level,
+        possible_flavour_texts: room_type.possible_flavours(),
+        include_flavour_text: true,
+        name: None,
+        dimensions: None,
     }
 }
 
