@@ -13,7 +13,7 @@ use super::{exits::ExitGenerationArgs, RoomPrototype};
 
 #[derive(Default)]
 pub struct RoomGeneratorBuilder {
-    num_descriptors: Option<RangeInclusive<usize>>,
+    num_descriptors: Option<RangeInclusive<u16>>,
     room_type: Option<RoomType>,
     possible_descriptors: Option<Vec<Descriptor>>,
     entrance_id: Option<Uuid>,
@@ -30,7 +30,7 @@ impl RoomGeneratorBuilder {
         Self::default()
     }
 
-    pub fn num_descriptors(&mut self, num_descriptors: RangeInclusive<usize>) -> &mut Self {
+    pub fn num_descriptors(&mut self, num_descriptors: RangeInclusive<u16>) -> &mut Self {
         self.num_descriptors = Some(num_descriptors);
 
         self

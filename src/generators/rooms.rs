@@ -23,7 +23,7 @@ use self::{
 use super::generator::Generator;
 
 struct RoomPrototype {
-    pub num_descriptors: RangeInclusive<usize>,
+    pub num_descriptors: RangeInclusive<u16>,
     pub room_type: RoomType,
     pub possible_descriptors: Vec<Descriptor>,
     pub entrance_id: Option<Uuid>,
