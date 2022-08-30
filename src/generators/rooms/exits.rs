@@ -1,3 +1,5 @@
+use std::ops::RangeInclusive;
+
 use rand::{prelude::ThreadRng, Rng};
 use strum::IntoEnumIterator;
 use uuid::Uuid;
@@ -7,9 +9,23 @@ use crate::components::{
     Material, Size,
 };
 
-pub fn build_exits(room_type: &RoomType, entrance_id: Option<Uuid>) -> Vec<Exit> {
+#[derive(Default, Clone)]
+pub struct ExitGenerationArgs {
+    pub num_exits: Option<RangeInclusive<u16>>,
+    pub possible_exit_types: Option<Vec<ExitType>>,
+}
+
+pub fn build_exits(
+    room_type: &RoomType,
+    entrance_id: Option<Uuid>,
+    args: &ExitGenerationArgs,
+) -> Vec<Exit> {
     let mut rng = rand::thread_rng();
-    let num_exits = num_exits(&mut rng, room_type);
+    let num_exits = args
+        .num_exits
+        .as_ref()
+        .map(|range| rng.gen_range(range.clone()))
+        .unwrap_or_else(|| num_exits(&mut rng, room_type));
 
     (0..num_exits)
         .map(|index| {
@@ -22,7 +38,15 @@ pub fn build_exits(room_type: &RoomType, entrance_id: Option<Uuid>) -> Vec<Exit>
                 Uuid::new_v4()
             };
 
-            let exit_type = exit_type(&mut rng, room_type);
+            let exit_type = args
+                .possible_exit_types
+                .as_ref()
+                .filter(|exit_types| exit_types.is_empty())
+                .map(|exit_types| {
+                    let index = rng.gen_range(0..exit_types.len());
+                    exit_types.get(index).unwrap().clone()
+                })
+                .unwrap_or_else(|| exit_type(&mut rng, room_type));
             let material = material(&mut rng, &exit_type);
             let size = size(&mut rng, &exit_type);
             let descriptors = descriptors(&mut rng, &exit_type, &material);
@@ -40,7 +64,7 @@ pub fn build_exits(room_type: &RoomType, entrance_id: Option<Uuid>) -> Vec<Exit>
         .collect()
 }
 
-fn num_exits(rng: &mut ThreadRng, room_type: &RoomType) -> usize {
+fn num_exits(rng: &mut ThreadRng, room_type: &RoomType) -> u16 {
     match *room_type {
         RoomType::PrisonCell => rng.gen_range(1..=2),
         RoomType::Cavern

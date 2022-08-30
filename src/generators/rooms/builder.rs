@@ -9,7 +9,7 @@ use crate::{
     generators::generator::Generator,
 };
 
-use super::RoomPrototype;
+use super::{exits::ExitGenerationArgs, RoomPrototype};
 
 #[derive(Default)]
 pub struct RoomGeneratorBuilder {
@@ -22,6 +22,7 @@ pub struct RoomGeneratorBuilder {
     possible_flavour_texts: Option<Vec<Flavour>>,
     name: Option<String>,
     dimensions: Option<Dimensions>,
+    exit_generation_args: Option<ExitGenerationArgs>,
 }
 
 impl RoomGeneratorBuilder {
@@ -83,6 +84,12 @@ impl RoomGeneratorBuilder {
         self
     }
 
+    pub fn exit_generation_args(&mut self, exit_generation_args: ExitGenerationArgs) -> &mut Self {
+        self.exit_generation_args = Some(exit_generation_args);
+
+        self
+    }
+
     pub fn build(&self) -> impl Generator<Room> {
         let num_descriptors = match &self.num_descriptors {
             Some(it) => it.clone(),
@@ -109,6 +116,11 @@ impl RoomGeneratorBuilder {
             None => room_type.possible_flavours(),
         };
 
+        let exit_generation_args = match &self.exit_generation_args {
+            Some(it) => it.clone(),
+            None => ExitGenerationArgs::default(),
+        };
+
         RoomPrototype {
             num_descriptors,
             room_type,
@@ -119,6 +131,7 @@ impl RoomGeneratorBuilder {
             include_flavour_text: self.include_flavour_text.unwrap_or(true),
             name: self.name.clone(),
             dimensions: self.dimensions.clone(),
+            exit_generation_args,
         }
     }
 }

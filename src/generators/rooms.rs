@@ -5,6 +5,7 @@ mod fixtures;
 pub mod npcs;
 
 pub use builder::RoomGeneratorBuilder;
+pub use exits::ExitGenerationArgs;
 
 use std::ops::RangeInclusive;
 
@@ -31,6 +32,7 @@ struct RoomPrototype {
     pub include_flavour_text: bool,
     pub name: Option<String>,
     pub dimensions: Option<Dimensions>,
+    pub exit_generation_args: ExitGenerationArgs,
 }
 
 impl Generator<Room> for RoomPrototype {
@@ -71,7 +73,11 @@ impl Generator<Room> for RoomPrototype {
             fixture_positions,
             npc_positions: build_npc_positions(&self.room_type, used_fixtures, self.danger_level),
             flavour,
-            exits: build_exits(&self.room_type, self.entrance_id),
+            exits: build_exits(
+                &self.room_type,
+                self.entrance_id,
+                &self.exit_generation_args,
+            ),
         }
     }
 }
@@ -87,6 +93,7 @@ pub fn room_generator(room_type: &RoomType, entrance_id: Option<Uuid>) -> impl G
         include_flavour_text: true,
         name: None,
         dimensions: None,
+        exit_generation_args: ExitGenerationArgs::default(),
     }
 }
 
@@ -105,6 +112,7 @@ pub fn room_generator_for_danger_level(
         include_flavour_text: true,
         name: None,
         dimensions: None,
+        exit_generation_args: ExitGenerationArgs::default(),
     }
 }
 
