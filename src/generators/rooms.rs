@@ -41,7 +41,7 @@ impl Generator<Room> for RoomPrototype {
 
         let mut descriptors: Vec<Descriptor> = Vec::new();
         let num_descriptors = rng.gen_range(self.num_descriptors.clone());
-        let descriptor_range = 0..=num_descriptors;
+        let descriptor_range = 0..num_descriptors;
         if !descriptor_range.is_empty() {
             let mut possible_descriptors = self.possible_descriptors.clone();
             for _ in descriptor_range {
