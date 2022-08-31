@@ -21,6 +21,4 @@ pub struct InspectNpc {
     pub discover_health: bool,
     /// Attempt to discover the items the NPC has packed away.
     pub discover_packed_items: bool,
-    /// Attempt to discover any hidden items the NPC has.
-    pub discover_hidden_items: bool,
 }

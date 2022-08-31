@@ -19,7 +19,6 @@ pub fn handle(look_at_npc: &LookAtNpc, state: &GameState) -> Result<Vec<Event>, 
     let args = CharacterViewArgs {
         knows_health: knowledge.knows_health,
         knows_inventory: knowledge.knows_inventory,
-        knows_hidden_in_inventory: knowledge.knows_hidden_in_inventory,
         knows_packed_in_inventory: knowledge.knows_packed_in_inventory,
     };
 

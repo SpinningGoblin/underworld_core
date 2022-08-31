@@ -30,8 +30,6 @@ pub struct InventoryPrototype {
     pub item_types: Vec<ItemType>,
     pub num_equipped_weapons: RangeInclusive<usize>,
     pub num_equipped_wearables: RangeInclusive<usize>,
-    pub hidden_weapon_chance: i32,
-    pub hidden_wearable_chance: i32,
     pub danger_level: u32,
 }
 
@@ -85,7 +83,6 @@ impl InventoryPrototype {
             equipped_weapons.push(CharacterItem {
                 is_multiple: multiple,
                 item: weapon,
-                is_hidden: roll_percent_succeeds(rng, self.hidden_weapon_chance),
                 at_the_ready: tag.eq(&LocationTag::Hand),
                 equipped_location: tag,
             })
@@ -140,7 +137,6 @@ impl InventoryPrototype {
             equipped_wearables.push(CharacterItem {
                 is_multiple: multiple,
                 item: wearable,
-                is_hidden: roll_percent_succeeds(rng, self.hidden_wearable_chance),
                 at_the_ready: true,
                 equipped_location: tag,
             })
@@ -207,7 +203,6 @@ impl InventoryPrototype {
                     },
                 }),
             },
-            is_hidden: false,
             equipped_location: LocationTag::Packed,
             is_multiple: false,
             at_the_ready: false,
@@ -409,7 +404,6 @@ impl InventoryPrototype {
                 consumable: Some(consumable),
                 throwable: None,
             },
-            is_hidden: false,
             equipped_location: LocationTag::Packed,
             is_multiple: false,
             at_the_ready: false,

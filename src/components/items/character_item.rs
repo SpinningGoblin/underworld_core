@@ -14,7 +14,6 @@ use super::{
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct CharacterItem {
     pub item: Item,
-    pub is_hidden: bool,
     pub equipped_location: LocationTag,
     pub is_multiple: bool,
     pub at_the_ready: bool,
@@ -64,9 +63,7 @@ impl CharacterItem {
 #[cfg_attr(feature = "openapi", derive(Object), oai(rename = "CharacterItem"))]
 pub struct CharacterItemView {
     pub item: ItemView,
-    pub is_hidden: Option<bool>,
-    pub knows_equipped_location: bool,
-    pub equipped_location: Option<LocationTag>,
+    pub equipped_location: LocationTag,
     pub is_multiple: bool,
     pub at_the_ready: bool,
 }

@@ -123,7 +123,6 @@ impl Game {
                         npc_id: npc.id.to_string(),
                         discover_health: true,
                         discover_packed_items: true,
-                        discover_hidden_items: true,
                     }),
                 ];
 

@@ -11,7 +11,6 @@ pub struct CharacterKnowledge {
     pub knows_species: bool,
     pub knows_life_modifier: bool,
     pub knows_inventory: bool,
-    pub knows_hidden_in_inventory: bool,
     pub knows_packed_in_inventory: bool,
 }
 
@@ -22,7 +21,6 @@ impl Default for CharacterKnowledge {
             knows_species: true,
             knows_life_modifier: true,
             knows_inventory: true,
-            knows_hidden_in_inventory: false,
             knows_packed_in_inventory: false,
         }
     }

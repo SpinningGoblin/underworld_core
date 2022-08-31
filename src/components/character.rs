@@ -181,7 +181,6 @@ pub struct CharacterView {
 pub struct CharacterViewArgs {
     pub knows_health: bool,
     pub knows_inventory: bool,
-    pub knows_hidden_in_inventory: bool,
     pub knows_packed_in_inventory: bool,
 }
 
@@ -190,7 +189,6 @@ impl CharacterViewArgs {
         CharacterViewArgs {
             knows_health: true,
             knows_inventory: true,
-            knows_hidden_in_inventory: true,
             knows_packed_in_inventory: true,
         }
     }

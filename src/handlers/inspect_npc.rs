@@ -2,13 +2,12 @@ use crate::{
     actions::InspectNpc,
     components::games::GameState,
     errors::Error,
-    events::{Event, NpcHealthDiscovered, NpcHiddenDiscovered, NpcPackedDiscovered},
+    events::{Event, NpcHealthDiscovered, NpcPackedDiscovered},
     utils::{ids::parse_id, rolls::roll_d6},
 };
 
 const DISCOVER_HEALTH_CHANCE: i32 = 5;
 const DISCOVER_PACKED_CHANCE: i32 = 4;
-const DISCOVER_HIDDEN_CHANCE: i32 = 2;
 
 pub fn handle(inspect_npc: &InspectNpc, state: &GameState) -> Result<Vec<Event>, Error> {
     let mut events: Vec<Event> = Vec::new();
@@ -22,7 +21,6 @@ pub fn handle(inspect_npc: &InspectNpc, state: &GameState) -> Result<Vec<Event>,
     if npc.character.is_dead() {
         events.push(Event::NpcHealthDiscovered(NpcHealthDiscovered { npc_id }));
         events.push(Event::NpcPackedDiscovered(NpcPackedDiscovered { npc_id }));
-        events.push(Event::NpcHiddenDiscovered(NpcHiddenDiscovered { npc_id }));
     } else {
         let mut rng = rand::thread_rng();
 
@@ -32,10 +30,6 @@ pub fn handle(inspect_npc: &InspectNpc, state: &GameState) -> Result<Vec<Event>,
 
         if inspect_npc.discover_packed_items && roll_d6(&mut rng, 1, 0) >= DISCOVER_PACKED_CHANCE {
             events.push(Event::NpcPackedDiscovered(NpcPackedDiscovered { npc_id }));
-        }
-
-        if inspect_npc.discover_hidden_items && roll_d6(&mut rng, 1, 0) >= DISCOVER_HIDDEN_CHANCE {
-            events.push(Event::NpcHiddenDiscovered(NpcHiddenDiscovered { npc_id }));
         }
     }
 

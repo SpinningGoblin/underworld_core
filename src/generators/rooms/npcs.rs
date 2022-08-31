@@ -269,8 +269,6 @@ fn npc_prototype(
         item_types: ItemType::iter().collect(),
         num_equipped_weapons,
         num_equipped_wearables,
-        hidden_weapon_chance: 0,
-        hidden_wearable_chance: 0,
     };
 
     let character_prototype = CharacterPrototype {

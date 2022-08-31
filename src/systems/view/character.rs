@@ -15,7 +15,6 @@ pub fn view(character: &Character, args: &CharacterViewArgs, knows_all: bool) ->
         (
             Some(super::inventory::view(
                 &character.inventory,
-                args.knows_hidden_in_inventory,
                 args.knows_packed_in_inventory,
                 knows_all,
             )),

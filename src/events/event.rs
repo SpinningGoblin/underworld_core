@@ -32,7 +32,6 @@ pub enum Event {
     NpcCoveredInOil(Uuid),
     NpcDamagedByPoison(NpcDamagedByPoison),
     NpcHealthDiscovered(super::NpcHealthDiscovered),
-    NpcHiddenDiscovered(super::NpcHiddenDiscovered),
     NpcHitWithAcid(Uuid),
     NpcItemDestroyed(super::NpcItemDestroyed),
     NpcMissed(super::NpcMissed),
@@ -136,11 +135,6 @@ pub fn apply_events(
                 let mut knowledge = new_game.npc_knowledge(&health_discovered.npc_id);
                 knowledge.knows_health = true;
                 new_game.set_npc_knowledge(health_discovered.npc_id, knowledge);
-            }
-            Event::NpcHiddenDiscovered(hidden_discovered) => {
-                let mut knowledge = new_game.npc_knowledge(&hidden_discovered.npc_id);
-                knowledge.knows_hidden_in_inventory = true;
-                new_game.set_npc_knowledge(hidden_discovered.npc_id, knowledge);
             }
             Event::NpcPackedDiscovered(packed_discovered) => {
                 let mut knowledge = new_game.npc_knowledge(&packed_discovered.npc_id);
@@ -364,7 +358,6 @@ fn take_item_from_fixture(
     let fixture_item = fixture_position.fixture.remove_item(item_id).unwrap();
 
     let packed_item = CharacterItem {
-        is_hidden: false,
         equipped_location: LocationTag::Packed,
         is_multiple: false,
         item: fixture_item.item,
@@ -383,7 +376,6 @@ fn take_item_from_npc(
     let character_item = position.npc.character.remove_item(item_id).unwrap();
 
     let packed_item = CharacterItem {
-        is_hidden: false,
         equipped_location: LocationTag::Packed,
         is_multiple: character_item.is_multiple,
         item: character_item.item,

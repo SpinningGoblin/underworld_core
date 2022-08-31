@@ -8,7 +8,6 @@ mod item_taken_from_fixture;
 mod item_taken_from_npc;
 mod npc_damaged_by_poison;
 mod npc_health_discovered;
-mod npc_hidden_discovered;
 mod npc_item_destroyed;
 mod npc_missed;
 mod npc_packed_discovered;
@@ -44,8 +43,8 @@ pub use {
     fixture_opened::FixtureOpened, fixture_viewed::FixtureViewed,
     item_taken_from_fixture::ItemTakenFromFixture, item_taken_from_npc::ItemTakenFromNpc,
     npc_damaged_by_poison::NpcDamagedByPoison, npc_health_discovered::NpcHealthDiscovered,
-    npc_hidden_discovered::NpcHiddenDiscovered, npc_item_destroyed::NpcItemDestroyed,
-    npc_missed::NpcMissed, npc_packed_discovered::NpcPackedDiscovered,
+    npc_item_destroyed::NpcItemDestroyed, npc_missed::NpcMissed,
+    npc_packed_discovered::NpcPackedDiscovered,
     npc_poison_effect_dissipated::NpcPoisonEffectDissipated,
     npc_poison_effect_duration_changed::NpcPoisonEffectDurationChanged,
     npc_poison_level_changed::NpcPoisonLevelChanged, npc_poisoned::NpcPoisoned,

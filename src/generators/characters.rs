@@ -55,8 +55,6 @@ fn character(args: CharacterArgs) -> CharacterPrototype {
         item_types: args.item_types,
         num_equipped_weapons: args.num_equipped_weapons,
         num_equipped_wearables: args.num_equipped_wearables,
-        hidden_weapon_chance: 0,
-        hidden_wearable_chance: 0,
         danger_level: 1,
     };
 
