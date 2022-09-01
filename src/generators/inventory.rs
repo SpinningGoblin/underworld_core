@@ -22,17 +22,19 @@ use super::{
     utils::item_types::{type_is_for_weapon, type_is_for_wearable},
 };
 
-const GENERATE_CONSUMABLE_CHANCE: i32 = 25;
-const GENERATE_POT_CHANCE: i32 = 20;
-const WEAPON_IN_HAND_CHANCE: i32 = 95;
-
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct InventoryGeneratorBuilder {
     possible_item_types: Option<Vec<ItemType>>,
     num_equipped_weapons: Option<RangeInclusive<u16>>,
     num_equipped_wearables: Option<RangeInclusive<u16>>,
     danger_level: Option<u32>,
+    generate_consumable_chance: Option<i32>,
+    generate_throwable_chance: Option<i32>,
 }
+
+const GENERATE_CONSUMABLE_CHANCE: i32 = 25;
+const GENERATE_POT_CHANCE: i32 = 20;
+const WEAPON_IN_HAND_CHANCE: i32 = 95;
 
 impl InventoryGeneratorBuilder {
     pub fn new() -> Self {
@@ -50,14 +52,14 @@ impl InventoryGeneratorBuilder {
         let max = if num_equipped_weapons.end() > &2 {
             2
         } else {
-            num_equipped_weapons.end().clone()
+            *num_equipped_weapons.end()
         };
         let min = if num_equipped_weapons.start() > &2 {
             2
         } else if num_equipped_weapons.start() > &max {
-            max.clone()
+            max
         } else {
-            num_equipped_weapons.start().clone()
+            *num_equipped_weapons.start()
         };
         self.num_equipped_weapons = Some(min..=max);
         self
@@ -71,14 +73,14 @@ impl InventoryGeneratorBuilder {
         let max = if num_equipped_wearables.end() > &8 {
             8
         } else {
-            num_equipped_wearables.end().clone()
+            *num_equipped_wearables.end()
         };
         let min = if num_equipped_wearables.start() > &8 {
             8
         } else if num_equipped_wearables.start() > &max {
-            max.clone()
+            max
         } else {
-            num_equipped_wearables.start().clone()
+            *num_equipped_wearables.start()
         };
         self.num_equipped_wearables = Some(min..=max);
         self
@@ -86,6 +88,18 @@ impl InventoryGeneratorBuilder {
 
     pub fn danger_level(&mut self, danger_level: u32) -> &mut Self {
         self.danger_level = Some(danger_level);
+
+        self
+    }
+
+    pub fn generate_consumable_chance(&mut self, generate_chance: i32) -> &mut Self {
+        self.generate_consumable_chance = Some(generate_chance);
+
+        self
+    }
+
+    pub fn generate_throwable_chance(&mut self, generate_chance: i32) -> &mut Self {
+        self.generate_throwable_chance = Some(generate_chance);
 
         self
     }
@@ -106,13 +120,17 @@ impl InventoryGeneratorBuilder {
             None => 3..=8,
         };
 
-        let danger_level = self.danger_level.unwrap_or(1);
-
         InventoryPrototype {
             item_types,
             num_equipped_weapons,
             num_equipped_wearables,
-            danger_level,
+            danger_level: self.danger_level.unwrap_or(1),
+            generate_consumable_chance: self
+                .generate_consumable_chance
+                .unwrap_or(GENERATE_CONSUMABLE_CHANCE),
+            generate_throwable_chance: self
+                .generate_throwable_chance
+                .unwrap_or(GENERATE_POT_CHANCE),
         }
     }
 }
@@ -122,6 +140,8 @@ struct InventoryPrototype {
     pub num_equipped_weapons: RangeInclusive<u16>,
     pub num_equipped_wearables: RangeInclusive<u16>,
     pub danger_level: u32,
+    pub generate_consumable_chance: i32,
+    pub generate_throwable_chance: i32,
 }
 
 impl InventoryPrototype {
@@ -502,13 +522,13 @@ impl Generator<Inventory> for InventoryPrototype {
         let equipped_weapons = self.equipped_weapons(&mut rng);
         let equipped_wearables = self.equipped_wearables(&mut rng);
 
-        let consumables = if roll_percent_succeeds(&mut rng, GENERATE_CONSUMABLE_CHANCE) {
+        let consumables = if roll_percent_succeeds(&mut rng, self.generate_consumable_chance) {
             self.consumables(&mut rng)
         } else {
             Vec::new()
         };
 
-        let pots = if roll_percent_succeeds(&mut rng, GENERATE_POT_CHANCE) {
+        let pots = if roll_percent_succeeds(&mut rng, self.generate_throwable_chance) {
             self.pots(&mut rng)
         } else {
             Vec::new()

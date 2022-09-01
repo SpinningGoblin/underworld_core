@@ -5,11 +5,11 @@ use crate::{
     components::{
         fixtures::FixtureType,
         rooms::{GroupDescriptor, NpcPosition, NpcPositionDescriptor, RoomType},
-        LifeModifier, Species,
+        LifeModifier, NonPlayer, Species,
     },
     generators::{
-        characters::CharacterPrototype, generator::Generator, name::generate_name,
-        non_players::NonPlayerPrototype, InventoryGeneratorBuilder,
+        generator::Generator, non_players::NonPlayerGeneratorBuilder, CharacterGeneratorBuilder,
+        InventoryGeneratorBuilder,
     },
     utils::rolls::{roll_d100, roll_percent_succeeds},
 };
@@ -244,7 +244,7 @@ fn npc_prototype(
     species: &Species,
     life_modifier: Option<LifeModifier>,
     danger_level: u32,
-) -> NonPlayerPrototype {
+) -> impl Generator<NonPlayer> {
     let num_equipped_weapons = if (1..=10).contains(&danger_level) {
         1..=1
     } else if (11..=40).contains(&danger_level) {
@@ -263,22 +263,26 @@ fn npc_prototype(
         4..=8
     };
 
-    let inventory_generator = InventoryGeneratorBuilder::default()
+    let inventory_generator = InventoryGeneratorBuilder::new()
         .danger_level(danger_level)
         .num_equipped_weapons(num_equipped_weapons)
         .num_equipped_wearables(num_equipped_wearables)
-        .build();
+        .to_owned();
 
-    let character_prototype = CharacterPrototype {
-        species: species.clone(),
-        inventory_generator: Box::new(inventory_generator),
-        life_modifier,
-        has_inventory: true,
-        danger_level,
-    };
+    let mut character_gen_builder = CharacterGeneratorBuilder::new()
+        .danger_level(danger_level)
+        .inventory_generator_builder(inventory_generator)
+        .species(species.clone())
+        .to_owned();
 
-    NonPlayerPrototype {
-        name: generate_name(),
-        character_generator: Box::new(character_prototype),
+    if let Some(modifier) = life_modifier {
+        character_gen_builder.life_modifier(modifier);
     }
+
+    let npc_gen_builder = NonPlayerGeneratorBuilder::default()
+        .danger_level(danger_level)
+        .character_gen_builder(character_gen_builder)
+        .to_owned();
+
+    npc_gen_builder.build()
 }

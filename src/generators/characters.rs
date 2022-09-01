@@ -1,10 +1,8 @@
-use std::ops::RangeInclusive;
-
 use rand::Rng;
 use strum::IntoEnumIterator;
 
 use crate::components::{
-    items::ItemType, spells::SpellMemory, Character, Effects, Inventory, LifeModifier, Species,
+    spells::SpellMemory, Character, Effects, Inventory, LifeModifier, Species,
 };
 
 use super::{
@@ -12,74 +10,92 @@ use super::{
     InventoryGeneratorBuilder,
 };
 
-pub struct CharacterPrototype {
-    pub inventory_generator: Box<dyn Generator<Inventory>>,
+struct CharacterPrototype {
+    pub inventory_gen_builder: InventoryGeneratorBuilder,
     pub species: Species,
     pub life_modifier: Option<LifeModifier>,
     pub has_inventory: bool,
     pub danger_level: u32,
 }
 
-struct CharacterArgs {
-    num_equipped_weapons: RangeInclusive<u16>,
-    num_equipped_wearables: RangeInclusive<u16>,
-    species: Species,
-    item_types: Vec<ItemType>,
+#[derive(Default, Clone)]
+pub struct CharacterGeneratorBuilder {
+    inventory_generator_builder: Option<InventoryGeneratorBuilder>,
+    species: Option<Species>,
     life_modifier: Option<LifeModifier>,
-    has_inventory: bool,
+    has_inventory: Option<bool>,
+    danger_level: Option<u32>,
 }
 
-pub fn random_character_generator() -> impl Generator<Character> {
-    random_species_character()
-}
-
-pub fn species_character_generator(species: Species) -> impl Generator<Character> {
-    basic_character(species)
-}
-
-fn basic_character(species: Species) -> CharacterPrototype {
-    let args = CharacterArgs {
-        species,
-        num_equipped_weapons: 1..=2,
-        num_equipped_wearables: 1..=2,
-        item_types: ItemType::iter().collect(),
-        life_modifier: None,
-        has_inventory: true,
-    };
-
-    character(args)
-}
-
-fn character(args: CharacterArgs) -> CharacterPrototype {
-    let inventory_generator = InventoryGeneratorBuilder::default()
-        .danger_level(1)
-        .possible_item_types(args.item_types)
-        .num_equipped_weapons(args.num_equipped_weapons)
-        .num_equipped_wearables(args.num_equipped_wearables)
-        .build();
-
-    CharacterPrototype {
-        inventory_generator: Box::new(inventory_generator),
-        species: args.species,
-        life_modifier: args.life_modifier,
-        has_inventory: args.has_inventory,
-        danger_level: 1,
+impl CharacterGeneratorBuilder {
+    pub fn new() -> Self {
+        Self::default()
     }
-}
 
-fn random_species_character() -> CharacterPrototype {
-    let mut rng = rand::thread_rng();
-    let all_species: Vec<Species> = Species::iter().collect();
-    let index = rng.gen_range(0..all_species.len());
-    let species = all_species.get(index).cloned().unwrap_or(Species::Shadow);
+    pub fn inventory_generator_builder(&mut self, builder: InventoryGeneratorBuilder) -> &mut Self {
+        self.inventory_generator_builder = Some(builder);
 
-    basic_character(species)
+        self
+    }
+
+    pub fn species(&mut self, species: Species) -> &mut Self {
+        self.species = Some(species);
+
+        self
+    }
+
+    pub fn life_modifier(&mut self, life_modifier: LifeModifier) -> &mut Self {
+        self.life_modifier = Some(life_modifier);
+
+        self
+    }
+
+    pub fn has_inventory(&mut self, has_inventory: bool) -> &mut Self {
+        self.has_inventory = Some(has_inventory);
+
+        self
+    }
+
+    pub fn danger_level(&mut self, danger_level: u32) -> &mut Self {
+        self.danger_level = Some(danger_level);
+
+        self
+    }
+
+    pub fn build(&self) -> impl Generator<Character> {
+        let mut rng = rand::thread_rng();
+        let danger_level = self.danger_level.unwrap_or(1);
+
+        let inventory_gen_builder = match &self.inventory_generator_builder {
+            Some(builder) => builder.to_owned(),
+            None => InventoryGeneratorBuilder::new()
+                .danger_level(danger_level)
+                .to_owned(),
+        };
+
+        let species = match &self.species {
+            Some(it) => it.to_owned(),
+            None => {
+                let all: Vec<Species> = Species::iter().collect();
+                let index = rng.gen_range(0..all.len());
+                all.get(index).unwrap().to_owned()
+            }
+        };
+
+        CharacterPrototype {
+            inventory_gen_builder,
+            species,
+            life_modifier: self.life_modifier.clone(),
+            has_inventory: self.has_inventory.unwrap_or(true),
+            danger_level,
+        }
+    }
 }
 
 impl Generator<Character> for CharacterPrototype {
     fn generate(&self) -> Character {
         let inventory = if self.has_inventory {
-            self.inventory_generator.generate()
+            self.inventory_gen_builder.build().generate()
         } else {
             Inventory::default()
         };
