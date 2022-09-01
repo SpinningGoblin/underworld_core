@@ -4,13 +4,12 @@ use strum::IntoEnumIterator;
 use crate::{
     components::{
         fixtures::FixtureType,
-        items::ItemType,
         rooms::{GroupDescriptor, NpcPosition, NpcPositionDescriptor, RoomType},
         LifeModifier, Species,
     },
     generators::{
-        characters::CharacterPrototype, generator::Generator, inventory::InventoryPrototype,
-        name::generate_name, non_players::NonPlayerPrototype,
+        characters::CharacterPrototype, generator::Generator, name::generate_name,
+        non_players::NonPlayerPrototype, InventoryGeneratorBuilder,
     },
     utils::rolls::{roll_d100, roll_percent_succeeds},
 };
@@ -264,16 +263,15 @@ fn npc_prototype(
         4..=8
     };
 
-    let inventory_prototype = InventoryPrototype {
-        danger_level,
-        item_types: ItemType::iter().collect(),
-        num_equipped_weapons,
-        num_equipped_wearables,
-    };
+    let inventory_generator = InventoryGeneratorBuilder::default()
+        .danger_level(danger_level)
+        .num_equipped_weapons(num_equipped_weapons)
+        .num_equipped_wearables(num_equipped_wearables)
+        .build();
 
     let character_prototype = CharacterPrototype {
         species: species.clone(),
-        inventory_generator: Box::new(inventory_prototype),
+        inventory_generator: Box::new(inventory_generator),
         life_modifier,
         has_inventory: true,
         danger_level,

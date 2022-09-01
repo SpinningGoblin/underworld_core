@@ -26,10 +26,101 @@ const GENERATE_CONSUMABLE_CHANCE: i32 = 25;
 const GENERATE_POT_CHANCE: i32 = 20;
 const WEAPON_IN_HAND_CHANCE: i32 = 95;
 
-pub struct InventoryPrototype {
+#[derive(Default)]
+pub struct InventoryGeneratorBuilder {
+    possible_item_types: Option<Vec<ItemType>>,
+    num_equipped_weapons: Option<RangeInclusive<u16>>,
+    num_equipped_wearables: Option<RangeInclusive<u16>>,
+    danger_level: Option<u32>,
+}
+
+impl InventoryGeneratorBuilder {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn possible_item_types(&mut self, item_types: Vec<ItemType>) -> &mut Self {
+        self.possible_item_types = Some(item_types);
+
+        self
+    }
+
+    /// Set a range for the number of equipped weapons. Max is 2 weapons equipped.
+    pub fn num_equipped_weapons(&mut self, num_equipped_weapons: RangeInclusive<u16>) -> &mut Self {
+        let max = if num_equipped_weapons.end() > &2 {
+            2
+        } else {
+            num_equipped_weapons.end().clone()
+        };
+        let min = if num_equipped_weapons.start() > &2 {
+            2
+        } else if num_equipped_weapons.start() > &max {
+            max.clone()
+        } else {
+            num_equipped_weapons.start().clone()
+        };
+        self.num_equipped_weapons = Some(min..=max);
+        self
+    }
+
+    /// Set a range for the number of equipped wearables. Max is 8.
+    pub fn num_equipped_wearables(
+        &mut self,
+        num_equipped_wearables: RangeInclusive<u16>,
+    ) -> &mut Self {
+        let max = if num_equipped_wearables.end() > &8 {
+            8
+        } else {
+            num_equipped_wearables.end().clone()
+        };
+        let min = if num_equipped_wearables.start() > &8 {
+            8
+        } else if num_equipped_wearables.start() > &max {
+            max.clone()
+        } else {
+            num_equipped_wearables.start().clone()
+        };
+        self.num_equipped_wearables = Some(min..=max);
+        self
+    }
+
+    pub fn danger_level(&mut self, danger_level: u32) -> &mut Self {
+        self.danger_level = Some(danger_level);
+
+        self
+    }
+
+    pub fn build(&self) -> impl Generator<Inventory> {
+        let item_types = match &self.possible_item_types {
+            Some(it) => it.clone(),
+            None => ItemType::iter().collect(),
+        };
+
+        let num_equipped_weapons = match &self.num_equipped_weapons {
+            Some(range) => range.clone(),
+            None => 1..=2,
+        };
+
+        let num_equipped_wearables = match &self.num_equipped_wearables {
+            Some(range) => range.clone(),
+            None => 3..=8,
+        };
+
+        let danger_level = self.danger_level.unwrap_or(1);
+
+        InventoryPrototype {
+            item_types,
+            num_equipped_weapons,
+            num_equipped_wearables,
+            danger_level,
+        }
+    }
+}
+
+struct InventoryPrototype {
     pub item_types: Vec<ItemType>,
-    pub num_equipped_weapons: RangeInclusive<usize>,
-    pub num_equipped_wearables: RangeInclusive<usize>,
+    pub num_equipped_weapons: RangeInclusive<u16>,
+    pub num_equipped_wearables: RangeInclusive<u16>,
     pub danger_level: u32,
 }
 

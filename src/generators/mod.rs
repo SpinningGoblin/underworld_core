@@ -11,6 +11,7 @@ pub mod rooms;
 pub mod stats;
 mod utils;
 
+pub use inventory::InventoryGeneratorBuilder;
 pub use rooms::{
     random_room_generator, random_room_generator_for_danger_level, room_generator,
     room_generator_for_danger_level, ExitGenerationArgs, RoomGeneratorBuilder,

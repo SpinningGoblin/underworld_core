@@ -8,8 +8,8 @@ use crate::components::{
 };
 
 use super::{
-    generator::Generator, inventory::InventoryPrototype,
-    stats::build_default_health_rolls_for_danger_level,
+    generator::Generator, stats::build_default_health_rolls_for_danger_level,
+    InventoryGeneratorBuilder,
 };
 
 pub struct CharacterPrototype {
@@ -21,8 +21,8 @@ pub struct CharacterPrototype {
 }
 
 struct CharacterArgs {
-    num_equipped_weapons: RangeInclusive<usize>,
-    num_equipped_wearables: RangeInclusive<usize>,
+    num_equipped_weapons: RangeInclusive<u16>,
+    num_equipped_wearables: RangeInclusive<u16>,
     species: Species,
     item_types: Vec<ItemType>,
     life_modifier: Option<LifeModifier>,
@@ -51,15 +51,15 @@ fn basic_character(species: Species) -> CharacterPrototype {
 }
 
 fn character(args: CharacterArgs) -> CharacterPrototype {
-    let inventory_prototype = InventoryPrototype {
-        item_types: args.item_types,
-        num_equipped_weapons: args.num_equipped_weapons,
-        num_equipped_wearables: args.num_equipped_wearables,
-        danger_level: 1,
-    };
+    let inventory_generator = InventoryGeneratorBuilder::default()
+        .danger_level(1)
+        .possible_item_types(args.item_types)
+        .num_equipped_weapons(args.num_equipped_weapons)
+        .num_equipped_wearables(args.num_equipped_wearables)
+        .build();
 
     CharacterPrototype {
-        inventory_generator: Box::new(inventory_prototype),
+        inventory_generator: Box::new(inventory_generator),
         species: args.species,
         life_modifier: args.life_modifier,
         has_inventory: args.has_inventory,
