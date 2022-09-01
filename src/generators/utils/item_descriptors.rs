@@ -35,7 +35,6 @@ pub fn valid_for_level(descriptor: &Descriptor, level: u32) -> bool {
         Descriptor::Dirty => level <= 50,
         Descriptor::Bloodstained
         | Descriptor::Colourful
-        | Descriptor::SetOf
         | Descriptor::Smoothed
         | Descriptor::Weathered => true,
     }
@@ -84,7 +83,6 @@ fn tags_for_descriptor(descriptor: &Descriptor) -> Vec<Tag> {
         Descriptor::Ripped => vec![Tag::Cloth],
         Descriptor::Rusty => vec![Tag::Metal],
         Descriptor::Scuffed => vec![Tag::Leather],
-        Descriptor::SetOf => vec![],
         Descriptor::Shimmering => vec![Tag::Cloth, Tag::Clothing],
         Descriptor::Shiny => vec![Tag::Metal],
         Descriptor::Smoothed => vec![Tag::Bone, Tag::Stone, Tag::Wood],

@@ -39,7 +39,6 @@ pub enum Descriptor {
     Rotting,
     Rusty,
     Scuffed,
-    SetOf,
     Shimmering,
     Shiny,
     Smoothed,

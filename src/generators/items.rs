@@ -92,17 +92,7 @@ impl ItemPrototype {
             }
         });
 
-        descriptors
-            .into_iter()
-            .chain(self.necessary_descriptors().into_iter())
-            .collect()
-    }
-
-    fn necessary_descriptors(&self) -> Vec<Descriptor> {
-        match self.item_type {
-            ItemType::Shackles => vec![Descriptor::SetOf],
-            _ => Vec::new(),
-        }
+        descriptors.into_iter().collect()
     }
 
     fn attack(&self, rng: &mut ThreadRng) -> Option<Attack> {
