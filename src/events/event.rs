@@ -359,7 +359,6 @@ fn take_item_from_fixture(
 
     let packed_item = CharacterItem {
         equipped_location: LocationTag::Packed,
-        is_multiple: false,
         item: fixture_item.item,
         at_the_ready: false,
     };
@@ -377,7 +376,6 @@ fn take_item_from_npc(
 
     let packed_item = CharacterItem {
         equipped_location: LocationTag::Packed,
-        is_multiple: character_item.is_multiple,
         item: character_item.item,
         at_the_ready: false,
     };

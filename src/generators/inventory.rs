@@ -19,7 +19,7 @@ use crate::{
 use super::{
     generator::Generator,
     items::item_generator_for_level,
-    utils::item_types::{type_inherently_multiple, type_is_for_weapon, type_is_for_wearable},
+    utils::item_types::{type_is_for_weapon, type_is_for_wearable},
 };
 
 const GENERATE_CONSUMABLE_CHANCE: i32 = 25;
@@ -78,10 +78,7 @@ impl InventoryPrototype {
             let generator = item_generator_for_level(weapon_type, true, self.danger_level);
             let weapon = generator.generate();
 
-            let multiple = type_inherently_multiple(weapon_type);
-
             equipped_weapons.push(CharacterItem {
-                is_multiple: multiple,
                 item: weapon,
                 at_the_ready: tag.eq(&LocationTag::Hand),
                 equipped_location: tag,
@@ -132,10 +129,8 @@ impl InventoryPrototype {
             used_types.push(wearable_type.clone());
             let generator = item_generator_for_level(wearable_type, true, self.danger_level);
             let wearable = generator.generate();
-            let multiple = type_inherently_multiple(wearable_type);
 
             equipped_wearables.push(CharacterItem {
-                is_multiple: multiple,
                 item: wearable,
                 at_the_ready: true,
                 equipped_location: tag,
@@ -204,7 +199,6 @@ impl InventoryPrototype {
                 }),
             },
             equipped_location: LocationTag::Packed,
-            is_multiple: false,
             at_the_ready: false,
         }]
     }
@@ -405,7 +399,6 @@ impl InventoryPrototype {
                 throwable: None,
             },
             equipped_location: LocationTag::Packed,
-            is_multiple: false,
             at_the_ready: false,
         }]
     }

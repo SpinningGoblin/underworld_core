@@ -184,7 +184,6 @@ mod tests {
                         throwable: None,
                     },
                     equipped_location: LocationTag::Hand,
-                    is_multiple: false,
                     at_the_ready: true,
                 },
                 CharacterItem {
@@ -205,7 +204,6 @@ mod tests {
                         throwable: None,
                     },
                     equipped_location: LocationTag::Hand,
-                    is_multiple: false,
                     at_the_ready: true,
                 },
             ],
@@ -242,7 +240,6 @@ mod tests {
                         throwable: None,
                     },
                     equipped_location: LocationTag::Feet,
-                    is_multiple: false,
                     at_the_ready: true,
                 },
                 CharacterItem {
@@ -261,7 +258,6 @@ mod tests {
                         throwable: None,
                     },
                     equipped_location: LocationTag::Hand,
-                    is_multiple: false,
                     at_the_ready: true,
                 },
             ],

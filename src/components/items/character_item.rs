@@ -15,7 +15,6 @@ use super::{
 pub struct CharacterItem {
     pub item: Item,
     pub equipped_location: LocationTag,
-    pub is_multiple: bool,
     pub at_the_ready: bool,
 }
 
@@ -64,7 +63,6 @@ impl CharacterItem {
 pub struct CharacterItemView {
     pub item: ItemView,
     pub equipped_location: LocationTag,
-    pub is_multiple: bool,
     pub at_the_ready: bool,
 }
 

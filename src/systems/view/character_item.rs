@@ -5,7 +5,6 @@ pub fn view(character_item: &CharacterItem, knows_all: bool) -> CharacterItemVie
 
     CharacterItemView {
         item: super::item::view(&character_item.item, !full_item_hidden, knows_all),
-        is_multiple: character_item.is_multiple,
         at_the_ready: character_item.at_the_ready,
         equipped_location: character_item.equipped_location.clone(),
     }
