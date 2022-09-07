@@ -117,63 +117,6 @@ impl Generator<Room> for RoomPrototype {
     }
 }
 
-pub fn room_generator(room_type: &RoomType, entrance_id: Option<Uuid>) -> impl Generator<Room> {
-    RoomPrototype {
-        num_descriptors: 1..=2,
-        room_type: *room_type,
-        possible_descriptors: room_type.possible_descriptors(),
-        entrance_id,
-        danger_level: 1,
-        possible_flavour_texts: room_type.possible_flavours(),
-        include_flavour_text: true,
-        name: None,
-        dimensions: None,
-        build_exit_args: BuildExitArgs::default(),
-        build_npc_args: BuildNpcsArgs::default(),
-    }
-}
-
-pub fn room_generator_for_danger_level(
-    room_type: &RoomType,
-    entrance_id: Option<Uuid>,
-    danger_level: u32,
-) -> impl Generator<Room> {
-    RoomPrototype {
-        num_descriptors: 1..=2,
-        room_type: *room_type,
-        possible_descriptors: room_type.possible_descriptors(),
-        entrance_id,
-        danger_level,
-        possible_flavour_texts: room_type.possible_flavours(),
-        include_flavour_text: true,
-        name: None,
-        dimensions: None,
-        build_exit_args: BuildExitArgs::default(),
-        build_npc_args: BuildNpcsArgs::default(),
-    }
-}
-
-pub fn random_room_generator(entrance_id: Option<Uuid>) -> impl Generator<Room> {
-    let room_types: Vec<RoomType> = RoomType::iter().collect();
-    let mut rng = rand::thread_rng();
-    let index = rng.gen_range(0..room_types.len());
-    let room_type = room_types.get(index).unwrap();
-
-    room_generator(room_type, entrance_id)
-}
-
-pub fn random_room_generator_for_danger_level(
-    entrance_id: Option<Uuid>,
-    danger_level: u32,
-) -> impl Generator<Room> {
-    let room_types: Vec<RoomType> = RoomType::iter().collect();
-    let mut rng = rand::thread_rng();
-    let index = rng.gen_range(0..room_types.len());
-    let room_type = room_types.get(index).unwrap();
-
-    room_generator_for_danger_level(room_type, entrance_id, danger_level)
-}
-
 impl RoomType {
     fn possible_descriptors(&self) -> Vec<Descriptor> {
         Descriptor::iter().collect()

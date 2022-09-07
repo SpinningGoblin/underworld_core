@@ -3,7 +3,7 @@ use crate::{
     components::games::GameState,
     errors::Error,
     events::{Event, RoomExited, RoomFirstSeen, RoomGenerated},
-    generators::{generator::Generator, rooms::random_room_generator_for_danger_level},
+    generators::{generator::Generator, RoomGeneratorBuilder},
     utils::ids::parse_id,
 };
 
@@ -32,8 +32,10 @@ pub fn handle(exit_room: &ExitRoom, state: &GameState) -> Result<Vec<Event>, Err
     let room_id = match other_room_id {
         Some(id) => id,
         None => {
-            let room_generator =
-                random_room_generator_for_danger_level(Some(exit_id), state.danger_level);
+            let room_generator = RoomGeneratorBuilder::new()
+                .danger_level(state.danger_level)
+                .entrance_id(exit_id)
+                .build();
             let room = room_generator.generate();
             let room_id = room.id;
             events.push(Event::RoomGenerated(RoomGenerated {

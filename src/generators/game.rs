@@ -8,7 +8,7 @@ use crate::components::{
     worlds::{ExitMap, World},
 };
 
-use super::{generator::Generator, rooms::room_generator};
+use super::{generator::Generator, RoomGeneratorBuilder};
 
 pub fn game_generator() -> impl Generator<GameState> {
     GamePrototype {}
@@ -18,7 +18,10 @@ struct GamePrototype {}
 
 impl Generator<GameState> for GamePrototype {
     fn generate(&self) -> GameState {
-        let entry = room_generator(&RoomType::EntryWay, None).generate();
+        let entry = RoomGeneratorBuilder::new()
+            .room_type(RoomType::EntryWay)
+            .build()
+            .generate();
 
         let exit_maps: Vec<ExitMap> = entry
             .exits
