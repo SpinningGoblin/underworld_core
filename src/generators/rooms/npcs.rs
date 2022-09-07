@@ -35,15 +35,15 @@ pub fn build_npc_positions(
             // Get the group size based on the species.
             let group_size = group_size(&starter_species);
             let life_modifier = life_modifier(&starter_species);
-            let mut species = starter_species.clone();
+            let mut species = starter_species;
             let mut prototype =
-                npc_prototype(&starter_species, life_modifier.clone(), danger_level);
+                npc_prototype(&starter_species, life_modifier, danger_level);
 
             let mut npc_positions: Vec<NpcPosition> = Vec::new();
             (0..group_size).for_each(|index| {
                 if index > 0 {
                     species = switch_species(&species);
-                    prototype = npc_prototype(&species, life_modifier.clone(), danger_level);
+                    prototype = npc_prototype(&species, life_modifier, danger_level);
                 }
                 let mut npc = prototype.generate();
 
@@ -82,7 +82,7 @@ fn num_groups(room_type: &RoomType) -> usize {
 fn switch_species(species: &Species) -> Species {
     let mut rng = rand::thread_rng();
     if roll_percent_succeeds(&mut rng, KEEP_SPECIES_CHANGE) {
-        return species.clone();
+        return *species;
     }
 
     let choices = match *species {
@@ -93,14 +93,14 @@ fn switch_species(species: &Species) -> Species {
         Species::Frogkin | Species::Lizardkin | Species::Turtlekin => {
             vec![Species::Lizardkin, Species::Frogkin, Species::Turtlekin]
         }
-        _ => vec![species.clone()],
+        _ => vec![*species],
     };
 
     let index = rng.gen_range(0..choices.len());
     choices
         .get(index)
         .cloned()
-        .unwrap_or_else(|| species.clone())
+        .unwrap_or(*species)
 }
 
 fn choose_species() -> Species {
@@ -272,7 +272,7 @@ fn npc_prototype(
     let mut character_gen_builder = CharacterGeneratorBuilder::new()
         .danger_level(danger_level)
         .inventory_generator_builder(inventory_generator)
-        .species(species.clone())
+        .species(*species)
         .to_owned();
 
     if let Some(modifier) = life_modifier {

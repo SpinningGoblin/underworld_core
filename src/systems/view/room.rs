@@ -45,11 +45,11 @@ pub fn view(
         id: room.id.to_string(),
         name: room.name.clone(),
         descriptors: room.descriptors.clone(),
-        room_type: room.room_type.clone(),
+        room_type: room.room_type,
         fixture_positions,
         dimensions: room.dimensions.clone(),
         npc_positions,
-        flavour: room.flavour.clone(),
+        flavour: room.flavour,
         exits,
     }
 }

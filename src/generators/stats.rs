@@ -18,7 +18,7 @@ pub fn build_specific_health(
         max_health: Some(max_health),
         num_health_rolls: 0,
         danger_level: 1,
-        species: species.clone(),
+        species: *species,
         use_species_base,
     }
 }
@@ -34,7 +34,7 @@ pub fn build_default_health_rolls(species: &Species, use_species_base: bool) -> 
         max_health: None,
         num_health_rolls,
         danger_level: 1,
-        species: species.clone(),
+        species: *species,
         use_species_base,
     }
 }
@@ -54,7 +54,7 @@ pub fn build_default_health_rolls_for_danger_level(
         max_health: None,
         num_health_rolls,
         danger_level,
-        species: species.clone(),
+        species: *species,
         use_species_base,
     }
 }
@@ -87,7 +87,7 @@ impl Generator<Stats> for StatsPrototype {
             let possibilities = non_average_heights();
             let index = rng.gen_range(0..possibilities.len());
             match possibilities.get(index) {
-                Some(height) => height.clone(),
+                Some(height) => *height,
                 None => Size::Average,
             }
         } else {

@@ -32,7 +32,7 @@ pub fn handle(
         ConsumableEffectName::LearnSpell => {
             if let Some(learn_spell_effect) = consumable.effect.learn_spell_effect {
                 let spell = Spell {
-                    name: learn_spell_effect.spell_name.clone(),
+                    name: learn_spell_effect.spell_name,
                     attack: learn_spell_effect.spell_attack.clone(),
                     defense: learn_spell_effect.spell_defense.clone(),
                     uses: learn_spell_effect.spell_uses,

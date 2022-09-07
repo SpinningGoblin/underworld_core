@@ -10,7 +10,7 @@ use crate::components::Tag;
 
 use super::LocationTag;
 
-#[derive(Clone, Debug, EnumIter, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, EnumIter, PartialEq, Eq)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
     feature = "serialization",

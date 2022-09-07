@@ -128,7 +128,7 @@ pub fn apply_events(
                     .remove_item(&item_moved.item_id)
                     .unwrap();
                 character_item.at_the_ready = item_moved.at_the_ready;
-                character_item.equipped_location = item_moved.location.clone();
+                character_item.equipped_location = item_moved.location;
                 new_player.character.add_item(character_item);
             }
             Event::NpcHealthDiscovered(health_discovered) => {

@@ -85,7 +85,7 @@ impl CharacterGeneratorBuilder {
         CharacterPrototype {
             inventory_gen_builder,
             species,
-            life_modifier: self.life_modifier.clone(),
+            life_modifier: self.life_modifier,
             has_inventory: self.has_inventory.unwrap_or(true),
             danger_level,
         }
@@ -107,8 +107,8 @@ impl Generator<Character> for CharacterPrototype {
         Character {
             stats,
             inventory,
-            species: self.species.clone(),
-            life_modifier: self.life_modifier.clone(),
+            species: self.species,
+            life_modifier: self.life_modifier,
             current_effects: Effects::default(),
             spell_memory: SpellMemory::default(),
         }

@@ -69,7 +69,7 @@ impl Generator<Room> for RoomPrototype {
             descriptors,
             id: Uuid::new_v4(),
             name: self.name.clone(),
-            room_type: self.room_type.clone(),
+            room_type: self.room_type,
             fixture_positions,
             npc_positions: build_npc_positions(&self.room_type, used_fixtures, self.danger_level),
             flavour,
@@ -85,7 +85,7 @@ impl Generator<Room> for RoomPrototype {
 pub fn room_generator(room_type: &RoomType, entrance_id: Option<Uuid>) -> impl Generator<Room> {
     RoomPrototype {
         num_descriptors: 1..=2,
-        room_type: room_type.clone(),
+        room_type: *room_type,
         possible_descriptors: room_type.possible_descriptors(),
         entrance_id,
         danger_level: 1,
@@ -104,7 +104,7 @@ pub fn room_generator_for_danger_level(
 ) -> impl Generator<Room> {
     RoomPrototype {
         num_descriptors: 1..=2,
-        room_type: room_type.clone(),
+        room_type: *room_type,
         possible_descriptors: room_type.possible_descriptors(),
         entrance_id,
         danger_level,

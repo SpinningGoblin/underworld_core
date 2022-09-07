@@ -33,7 +33,7 @@ pub fn get_generator(
     has_hidden_compartment: bool,
 ) -> impl Generator<Fixture> {
     FixturePrototype {
-        fixture_type: fixture_type.clone(),
+        fixture_type: *fixture_type,
         has_hidden_compartment,
         num_items: 0..=2,
         num_hidden_items: 0..=2,
@@ -48,7 +48,7 @@ pub fn get_generator_for_level(
 ) -> impl Generator<Fixture> {
     FixturePrototype {
         danger_level,
-        fixture_type: fixture_type.clone(),
+        fixture_type: *fixture_type,
         has_hidden_compartment,
         num_items: 0..=2,
         num_hidden_items: 0..=2,
@@ -79,7 +79,7 @@ impl Generator<Fixture> for FixturePrototype {
             } else {
                 let index = rng.gen_range(0..possibilities.len());
                 match possibilities.get(index) {
-                    Some(height) => height.clone(),
+                    Some(height) => *height,
                     None => Size::Average,
                 }
             }
@@ -157,7 +157,7 @@ impl Generator<Fixture> for FixturePrototype {
             id: Uuid::new_v4(),
             name: None,
             material,
-            fixture_type: self.fixture_type.clone(),
+            fixture_type: self.fixture_type,
             size,
             descriptors,
             items: items

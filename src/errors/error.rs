@@ -1,4 +1,4 @@
-#[derive(Debug, thiserror::Error, strum_macros::Display)]
+#[derive(Clone, Debug, thiserror::Error, strum_macros::Display)]
 pub enum Error {
     ExitNotFoundError(String),
     FixtureNotFoundError(String),

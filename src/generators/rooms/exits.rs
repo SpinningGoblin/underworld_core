@@ -44,7 +44,7 @@ pub fn build_exits(
                 .filter(|exit_types| exit_types.is_empty())
                 .map(|exit_types| {
                     let index = rng.gen_range(0..exit_types.len());
-                    exit_types.get(index).unwrap().clone()
+                    *exit_types.get(index).unwrap()
                 })
                 .unwrap_or_else(|| exit_type(&mut rng, room_type));
             let material = material(&mut rng, &exit_type);

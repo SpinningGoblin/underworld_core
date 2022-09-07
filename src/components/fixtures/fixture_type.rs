@@ -10,7 +10,7 @@ use crate::components::{
     {BuiltWithMaterial, Material}, {Tag, Tagged},
 };
 
-#[derive(Clone, Debug, EnumIter, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy, Debug, EnumIter, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
     feature = "serialization",

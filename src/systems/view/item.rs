@@ -10,7 +10,7 @@ pub fn view(item: &Item, sees_full_item: bool, knows_all: bool) -> ItemView {
     };
 
     let (material, material_known) = if sees_full_item || knows_all {
-        (item.material.clone(), true)
+        (item.material, true)
     } else {
         (None, false)
     };
@@ -53,7 +53,7 @@ pub fn view(item: &Item, sees_full_item: bool, knows_all: bool) -> ItemView {
     ItemView {
         id: item.id.to_string(),
         name: item.name.clone(),
-        item_type: item.item_type.clone(),
+        item_type: item.item_type,
         tags: item.tags.clone(),
         is_equippable: item.is_equippable(),
         descriptors,

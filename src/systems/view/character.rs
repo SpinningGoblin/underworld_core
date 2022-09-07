@@ -34,7 +34,7 @@ pub fn view(character: &Character, args: &CharacterViewArgs, knows_all: bool) ->
                     .map(|learned_spell| LearnedSpellView {
                         id: learned_spell.id.to_string(),
                         spell: SpellView {
-                            name: learned_spell.spell.name.clone(),
+                            name: learned_spell.spell.name,
                             attack: learned_spell.spell.attack.clone(),
                             knows_attack: true,
                             defense: learned_spell.spell.defense.clone(),
@@ -58,10 +58,10 @@ pub fn view(character: &Character, args: &CharacterViewArgs, knows_all: bool) ->
         stats: StatsView {
             health,
             health_known,
-            height: character.stats.height.clone(),
+            height: character.stats.height,
         },
-        species: character.species.clone(),
-        life_modifier: character.life_modifier.clone(),
+        species: character.species,
+        life_modifier: character.life_modifier,
         inventory,
         inventory_known,
         spell_memory,

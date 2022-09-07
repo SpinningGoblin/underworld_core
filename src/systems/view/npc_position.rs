@@ -24,8 +24,8 @@ pub fn view(
         });
     let npc = super::non_player::view(&npc_position.npc, &args.character_args, knows_all);
     NpcPositionView {
-        group_descriptor: npc_position.group_descriptor.clone(),
+        group_descriptor: npc_position.group_descriptor,
         npc,
-        position_descriptor: npc_position.position_descriptor.clone(),
+        position_descriptor: npc_position.position_descriptor,
     }
 }

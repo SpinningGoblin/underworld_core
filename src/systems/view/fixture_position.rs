@@ -25,8 +25,8 @@ pub fn view(
     let fixture = super::fixture::view(&fixture_position.fixture, &args, knows_all);
 
     FixturePositionView {
-        group_descriptor: fixture_position.group_descriptor.clone(),
+        group_descriptor: fixture_position.group_descriptor,
         fixture,
-        position_descriptor: fixture_position.position_descriptor.clone(),
+        position_descriptor: fixture_position.position_descriptor,
     }
 }

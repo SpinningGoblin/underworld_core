@@ -8,7 +8,7 @@ use strum_macros::EnumIter;
 
 use super::item_type::ItemType;
 
-#[derive(Clone, Debug, EnumIter, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy, Debug, EnumIter, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
     feature = "serialization",

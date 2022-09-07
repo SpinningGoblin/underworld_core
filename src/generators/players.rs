@@ -35,11 +35,11 @@ impl Generator<PlayerCharacter> for PlayerCharacterPrototype {
         let mut rng = rand::thread_rng();
 
         let species = match &self.species {
-            Some(it) => it.clone(),
+            Some(it) => *it,
             None => {
                 let options: Vec<Species> = Species::iter().collect();
                 let index = rng.gen_range(0..options.len());
-                options.get(index).unwrap().clone()
+                *options.get(index).unwrap()
             }
         };
 
@@ -47,7 +47,7 @@ impl Generator<PlayerCharacter> for PlayerCharacterPrototype {
         let mut stats = stats_generator.generate();
 
         if let Some(size) = &self.size {
-            stats.height = size.clone();
+            stats.height = *size;
         }
 
         let starter_weapon = starter_weapon(&mut rng);
@@ -159,7 +159,7 @@ fn starter_weapon(rng: &mut ThreadRng) -> CharacterItem {
     ];
 
     let index = rng.gen_range(0..weapon_types.len());
-    let item_type = weapon_types.get(index).unwrap_or(&ItemType::Dagger).clone();
+    let item_type = *weapon_types.get(index).unwrap_or(&ItemType::Dagger);
 
     let tags = if item_type == ItemType::Club {
         vec![Tag::Blunt]

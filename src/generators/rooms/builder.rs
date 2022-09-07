@@ -97,12 +97,12 @@ impl RoomGeneratorBuilder {
         };
 
         let room_type = match &self.room_type {
-            Some(it) => it.clone(),
+            Some(it) => *it,
             None => {
                 let room_types: Vec<RoomType> = RoomType::iter().collect();
                 let mut rng = rand::thread_rng();
                 let index = rng.gen_range(0..room_types.len());
-                room_types.get(index).unwrap().clone()
+                *room_types.get(index).unwrap()
             }
         };
 

@@ -49,9 +49,9 @@ pub fn view(fixture: &Fixture, args: &FixtureViewArgs, knows_all: bool) -> Fixtu
     FixtureView {
         id: fixture.id.to_string(),
         name: fixture.name.clone(),
-        fixture_type: fixture.fixture_type.clone(),
-        material: fixture.material.clone(),
-        size: fixture.size.clone(),
+        fixture_type: fixture.fixture_type,
+        material: fixture.material,
+        size: fixture.size,
         descriptors: fixture.descriptors.clone(),
         items,
         has_hidden_compartment: has_hidden,

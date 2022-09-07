@@ -35,7 +35,7 @@ fn height() -> Size {
         let possibilities = non_average_heights();
         let index = rng.gen_range(0..possibilities.len());
         match possibilities.get(index) {
-            Some(height) => height.clone(),
+            Some(height) => *height,
             None => Size::Average,
         }
     } else {
@@ -49,7 +49,7 @@ fn length() -> Size {
         let possibilities = non_average_lengths();
         let index = rng.gen_range(0..possibilities.len());
         match possibilities.get(index) {
-            Some(length) => length.clone(),
+            Some(length) => *length,
             None => Size::Average,
         }
     } else {
@@ -63,7 +63,7 @@ fn width() -> Size {
         let possibilities = non_average_widths();
         let index = rng.gen_range(0..possibilities.len());
         match possibilities.get(index) {
-            Some(width) => width.clone(),
+            Some(width) => *width,
             None => Size::Average,
         }
     } else {

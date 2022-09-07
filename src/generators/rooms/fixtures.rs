@@ -36,7 +36,7 @@ pub fn build_fixture_positions(
             let fixture = if let Some(generator) = fixture_generators.next() {
                 let fixture = generator.generate();
                 if !used_fixtures.contains(&fixture.fixture_type) {
-                    used_fixtures.push(fixture.fixture_type.clone());
+                    used_fixtures.push(fixture.fixture_type);
                 }
                 fixture
             } else {

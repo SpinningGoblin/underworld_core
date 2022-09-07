@@ -237,7 +237,7 @@ impl InventoryPrototype {
                 _ => continue,
             };
 
-            used_types.push(wearable_type.clone());
+            used_types.push(*wearable_type);
             let generator = item_generator_for_level(wearable_type, true, self.danger_level);
             let wearable = generator.generate();
 
@@ -449,7 +449,7 @@ impl InventoryPrototype {
             effect: ConsumableEffect {
                 name: ConsumableEffectName::LearnSpell,
                 learn_spell_effect: Some(LearnSpellEffect {
-                    spell_name: spell_name.clone(),
+                    spell_name: *spell_name,
                     spell_attack,
                     spell_defense,
                     spell_uses,

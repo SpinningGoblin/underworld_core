@@ -16,7 +16,7 @@ pub fn item_generator_for_level(
     level: u32,
 ) -> impl Generator<Item> {
     ItemPrototype {
-        item_type: item_type.clone(),
+        item_type: *item_type,
         num_descriptors: 1..=2,
         materials: super::utils::materials::possible_materials(item_type),
         is_equipped,
@@ -44,7 +44,7 @@ impl Generator<Item> for ItemPrototype {
         Item {
             id: Uuid::new_v4(),
             name: None,
-            item_type: self.item_type.clone(),
+            item_type: self.item_type,
             tags,
             descriptors,
             material,

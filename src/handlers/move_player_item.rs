@@ -47,7 +47,7 @@ pub fn handle(
     }
 
     let location = match &move_player_item.location_tag {
-        Some(it) => it.clone(),
+        Some(it) => *it,
         None => {
             if move_player_item.put_at_the_ready {
                 ready_tag_for_item_type(&character_item.item.item_type)
