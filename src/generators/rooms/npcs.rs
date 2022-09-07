@@ -36,8 +36,7 @@ pub fn build_npc_positions(
             let group_size = group_size(&starter_species);
             let life_modifier = life_modifier(&starter_species);
             let mut species = starter_species;
-            let mut prototype =
-                npc_prototype(&starter_species, life_modifier, danger_level);
+            let mut prototype = npc_prototype(&starter_species, life_modifier, danger_level);
 
             let mut npc_positions: Vec<NpcPosition> = Vec::new();
             (0..group_size).for_each(|index| {
@@ -97,10 +96,7 @@ fn switch_species(species: &Species) -> Species {
     };
 
     let index = rng.gen_range(0..choices.len());
-    choices
-        .get(index)
-        .cloned()
-        .unwrap_or(*species)
+    choices.get(index).cloned().unwrap_or(*species)
 }
 
 fn choose_species() -> Species {
