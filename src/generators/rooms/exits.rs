@@ -1,31 +1,16 @@
-use std::ops::RangeInclusive;
-
 use rand::{prelude::ThreadRng, Rng};
-use strum::IntoEnumIterator;
 use uuid::Uuid;
 
 use crate::components::{
-    rooms::{Exit, ExitDescriptor, ExitType, RoomType},
+    rooms::{Exit, ExitDescriptor, ExitType},
     Material, Size,
 };
 
-#[derive(Default, Clone)]
-pub struct ExitGenerationArgs {
-    pub num_exits: Option<RangeInclusive<u16>>,
-    pub possible_exit_types: Option<Vec<ExitType>>,
-}
+use super::BuildExitArgs;
 
-pub fn build_exits(
-    room_type: &RoomType,
-    entrance_id: Option<Uuid>,
-    args: &ExitGenerationArgs,
-) -> Vec<Exit> {
+pub fn build_exits(entrance_id: Option<Uuid>, args: &BuildExitArgs) -> Vec<Exit> {
     let mut rng = rand::thread_rng();
-    let num_exits = args
-        .num_exits
-        .as_ref()
-        .map(|range| rng.gen_range(range.clone()))
-        .unwrap_or_else(|| num_exits(&mut rng, room_type));
+    let num_exits = rng.gen_range(args.num_exits.clone());
 
     (0..num_exits)
         .map(|index| {
@@ -38,15 +23,8 @@ pub fn build_exits(
                 Uuid::new_v4()
             };
 
-            let exit_type = args
-                .possible_exit_types
-                .as_ref()
-                .filter(|exit_types| exit_types.is_empty())
-                .map(|exit_types| {
-                    let index = rng.gen_range(0..exit_types.len());
-                    *exit_types.get(index).unwrap()
-                })
-                .unwrap_or_else(|| exit_type(&mut rng, room_type));
+            let index = rng.gen_range(0..args.exit_types.len());
+            let exit_type = args.exit_types.get(index).cloned().unwrap();
             let material = material(&mut rng, &exit_type);
             let size = size(&mut rng, &exit_type);
             let descriptors = descriptors(&mut rng, &exit_type, &material);
@@ -62,37 +40,6 @@ pub fn build_exits(
         })
         .into_iter()
         .collect()
-}
-
-fn num_exits(rng: &mut ThreadRng, room_type: &RoomType) -> u16 {
-    match *room_type {
-        RoomType::PrisonCell => rng.gen_range(1..=2),
-        RoomType::Cavern
-        | RoomType::TavernHall
-        | RoomType::Mausoleum
-        | RoomType::Cemetery
-        | RoomType::Crypt
-        | RoomType::TempleHall
-        | RoomType::Cave
-        | RoomType::Room => rng.gen_range(3..=5),
-        RoomType::EntryWay => 2,
-    }
-}
-
-fn exit_type(rng: &mut ThreadRng, room_type: &RoomType) -> ExitType {
-    let possible_types: Vec<ExitType> = match *room_type {
-        RoomType::PrisonCell => vec![
-            ExitType::DugOutTunnelEntrance,
-            ExitType::Door,
-            ExitType::OpeningToTheVoid,
-            ExitType::HoleInTheFloor,
-            ExitType::HoleInTheWall,
-        ],
-        _ => ExitType::iter().collect(),
-    };
-
-    let index = rng.gen_range(0..possible_types.len());
-    possible_types.get(index).unwrap().to_owned()
 }
 
 fn material(rng: &mut ThreadRng, exit_type: &ExitType) -> Option<Material> {

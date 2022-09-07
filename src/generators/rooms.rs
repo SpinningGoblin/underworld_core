@@ -4,8 +4,7 @@ mod exits;
 mod fixtures;
 pub mod npcs;
 
-pub use builder::RoomGeneratorBuilder;
-pub use exits::ExitGenerationArgs;
+pub use builder::{ExitGenerationArgs, RoomGeneratorBuilder, RoomNpcGenerationArgs};
 
 use std::ops::RangeInclusive;
 
@@ -13,7 +12,10 @@ use rand::Rng;
 use strum::IntoEnumIterator;
 use uuid::Uuid;
 
-use crate::components::rooms::{Descriptor, Dimensions, Flavour, Room, RoomType};
+use crate::components::{
+    rooms::{Descriptor, Dimensions, ExitType, Flavour, Room, RoomType},
+    LifeModifier, Species,
+};
 
 use self::{
     dimensions::build_dimensions, exits::build_exits, fixtures::build_fixture_positions,
@@ -21,6 +23,38 @@ use self::{
 };
 
 use super::generator::Generator;
+
+pub struct BuildNpcsArgs {
+    pub num_groups: RangeInclusive<u16>,
+    pub possible_species: Vec<Species>,
+    pub possible_life_modifiers: Vec<LifeModifier>,
+    pub allow_npcs_to_spawn_dead: bool,
+}
+
+impl Default for BuildNpcsArgs {
+    fn default() -> Self {
+        Self {
+            num_groups: 1..=2,
+            possible_species: Species::iter().collect(),
+            possible_life_modifiers: LifeModifier::iter().collect(),
+            allow_npcs_to_spawn_dead: true,
+        }
+    }
+}
+
+pub struct BuildExitArgs {
+    pub num_exits: RangeInclusive<u16>,
+    pub exit_types: Vec<ExitType>,
+}
+
+impl Default for BuildExitArgs {
+    fn default() -> Self {
+        Self {
+            num_exits: 2..=3,
+            exit_types: ExitType::iter().collect(),
+        }
+    }
+}
 
 struct RoomPrototype {
     pub num_descriptors: RangeInclusive<u16>,
@@ -32,7 +66,8 @@ struct RoomPrototype {
     pub include_flavour_text: bool,
     pub name: Option<String>,
     pub dimensions: Option<Dimensions>,
-    pub exit_generation_args: ExitGenerationArgs,
+    pub build_exit_args: BuildExitArgs,
+    pub build_npc_args: BuildNpcsArgs,
 }
 
 impl Generator<Room> for RoomPrototype {
@@ -71,13 +106,13 @@ impl Generator<Room> for RoomPrototype {
             name: self.name.clone(),
             room_type: self.room_type,
             fixture_positions,
-            npc_positions: build_npc_positions(&self.room_type, used_fixtures, self.danger_level),
-            flavour,
-            exits: build_exits(
-                &self.room_type,
-                self.entrance_id,
-                &self.exit_generation_args,
+            npc_positions: build_npc_positions(
+                used_fixtures,
+                self.danger_level,
+                &self.build_npc_args,
             ),
+            flavour,
+            exits: build_exits(self.entrance_id, &self.build_exit_args),
         }
     }
 }
@@ -93,7 +128,8 @@ pub fn room_generator(room_type: &RoomType, entrance_id: Option<Uuid>) -> impl G
         include_flavour_text: true,
         name: None,
         dimensions: None,
-        exit_generation_args: ExitGenerationArgs::default(),
+        build_exit_args: BuildExitArgs::default(),
+        build_npc_args: BuildNpcsArgs::default(),
     }
 }
 
@@ -112,7 +148,8 @@ pub fn room_generator_for_danger_level(
         include_flavour_text: true,
         name: None,
         dimensions: None,
-        exit_generation_args: ExitGenerationArgs::default(),
+        build_exit_args: BuildExitArgs::default(),
+        build_npc_args: BuildNpcsArgs::default(),
     }
 }
 

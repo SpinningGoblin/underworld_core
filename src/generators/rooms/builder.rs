@@ -5,11 +5,28 @@ use strum::IntoEnumIterator;
 use uuid::Uuid;
 
 use crate::{
-    components::rooms::{Descriptor, Dimensions, Flavour, Room, RoomType},
+    components::{
+        rooms::{Descriptor, Dimensions, ExitType, Flavour, Room, RoomType},
+        LifeModifier, Species,
+    },
     generators::generator::Generator,
 };
 
-use super::{exits::ExitGenerationArgs, RoomPrototype};
+use super::{BuildExitArgs, BuildNpcsArgs, RoomPrototype};
+
+#[derive(Default, Clone)]
+pub struct ExitGenerationArgs {
+    pub num_exits: Option<RangeInclusive<u16>>,
+    pub possible_exit_types: Option<Vec<ExitType>>,
+}
+
+#[derive(Default, Clone)]
+pub struct RoomNpcGenerationArgs {
+    pub num_groups: Option<RangeInclusive<u16>>,
+    pub possible_species: Option<Vec<Species>>,
+    pub possible_life_modifiers: Option<Vec<LifeModifier>>,
+    pub allow_npcs_to_spawn_dead: Option<bool>,
+}
 
 #[derive(Default)]
 pub struct RoomGeneratorBuilder {
@@ -23,6 +40,7 @@ pub struct RoomGeneratorBuilder {
     name: Option<String>,
     dimensions: Option<Dimensions>,
     exit_generation_args: Option<ExitGenerationArgs>,
+    room_npc_generation_args: Option<RoomNpcGenerationArgs>,
 }
 
 impl RoomGeneratorBuilder {
@@ -90,6 +108,15 @@ impl RoomGeneratorBuilder {
         self
     }
 
+    pub fn room_npc_generation_args(
+        &mut self,
+        room_npc_generation_args: RoomNpcGenerationArgs,
+    ) -> &mut Self {
+        self.room_npc_generation_args = Some(room_npc_generation_args);
+
+        self
+    }
+
     pub fn build(&self) -> impl Generator<Room> {
         let num_descriptors = match &self.num_descriptors {
             Some(it) => it.clone(),
@@ -116,9 +143,66 @@ impl RoomGeneratorBuilder {
             None => room_type.possible_flavours(),
         };
 
-        let exit_generation_args = match &self.exit_generation_args {
-            Some(it) => it.clone(),
-            None => ExitGenerationArgs::default(),
+        let build_exit_args = match &self.exit_generation_args {
+            Some(exit_generation_args) => {
+                let num_exits = match &exit_generation_args.num_exits {
+                    Some(it) => it.clone(),
+                    None => num_exits(&room_type),
+                };
+
+                let exit_types = match &exit_generation_args.possible_exit_types {
+                    Some(it) => it.clone(),
+                    None => exit_types(&room_type),
+                };
+
+                BuildExitArgs {
+                    num_exits,
+                    exit_types,
+                }
+            }
+            None => BuildExitArgs {
+                num_exits: num_exits(&room_type),
+                exit_types: exit_types(&room_type),
+            },
+        };
+
+        let build_npc_args = match &self.room_npc_generation_args {
+            Some(room_npc_generation_args) => {
+                let num_groups = match &room_npc_generation_args.num_groups {
+                    Some(it) => it.clone(),
+                    None => num_groups(&room_type),
+                };
+
+                let possible_species = match &room_npc_generation_args.possible_species {
+                    Some(it) => it.clone(),
+                    None => Species::iter().collect(),
+                };
+
+                let possible_life_modifiers =
+                    match &room_npc_generation_args.possible_life_modifiers {
+                        Some(it) => it.clone(),
+                        None => LifeModifier::iter().collect(),
+                    };
+
+                let allow_npcs_to_spawn_dead =
+                    match &room_npc_generation_args.allow_npcs_to_spawn_dead {
+                        Some(it) => *it,
+                        None => true,
+                    };
+
+                BuildNpcsArgs {
+                    num_groups,
+                    possible_species,
+                    possible_life_modifiers,
+                    allow_npcs_to_spawn_dead,
+                }
+            }
+            None => BuildNpcsArgs {
+                num_groups: num_groups(&room_type),
+                possible_species: Species::iter().collect(),
+                possible_life_modifiers: LifeModifier::iter().collect(),
+                allow_npcs_to_spawn_dead: true,
+            },
         };
 
         RoomPrototype {
@@ -131,7 +215,44 @@ impl RoomGeneratorBuilder {
             include_flavour_text: self.include_flavour_text.unwrap_or(true),
             name: self.name.clone(),
             dimensions: self.dimensions.clone(),
-            exit_generation_args,
+            build_exit_args,
+            build_npc_args,
         }
+    }
+}
+
+fn num_exits(room_type: &RoomType) -> RangeInclusive<u16> {
+    match *room_type {
+        RoomType::PrisonCell => 1..=2,
+        RoomType::Cavern
+        | RoomType::TavernHall
+        | RoomType::Mausoleum
+        | RoomType::Cemetery
+        | RoomType::Crypt
+        | RoomType::TempleHall
+        | RoomType::Cave
+        | RoomType::Room => 3..=5,
+        RoomType::EntryWay => 2..=2,
+    }
+}
+
+fn num_groups(room_type: &RoomType) -> RangeInclusive<u16> {
+    match *room_type {
+        RoomType::PrisonCell | RoomType::EntryWay | RoomType::Mausoleum => 0..=1,
+        RoomType::Cave | RoomType::Crypt | RoomType::Room | RoomType::TempleHall => 1..=2,
+        RoomType::Cemetery | RoomType::Cavern | RoomType::TavernHall => 1..=3,
+    }
+}
+
+fn exit_types(room_type: &RoomType) -> Vec<ExitType> {
+    match *room_type {
+        RoomType::PrisonCell => vec![
+            ExitType::DugOutTunnelEntrance,
+            ExitType::Door,
+            ExitType::OpeningToTheVoid,
+            ExitType::HoleInTheFloor,
+            ExitType::HoleInTheWall,
+        ],
+        _ => ExitType::iter().collect(),
     }
 }
