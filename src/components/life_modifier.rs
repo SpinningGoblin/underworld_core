@@ -4,8 +4,9 @@ use bevy_ecs::prelude::Component;
 use poem_openapi::Enum;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
+use strum_macros::EnumIter;
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, EnumIter, PartialEq, Eq)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(
     feature = "serialization",
