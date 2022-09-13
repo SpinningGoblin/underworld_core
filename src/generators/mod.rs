@@ -13,4 +13,6 @@ mod utils;
 
 pub use characters::CharacterGeneratorBuilder;
 pub use inventory::InventoryGeneratorBuilder;
-pub use rooms::{ExitGenerationArgs, RoomGeneratorBuilder, RoomNpcGenerationArgs};
+pub use rooms::{
+    ExitGenerationArgs, RoomFixtureGenerationArgs, RoomGeneratorBuilder, RoomNpcGenerationArgs,
+};

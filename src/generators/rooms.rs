@@ -4,7 +4,9 @@ mod exits;
 mod fixtures;
 pub mod npcs;
 
-pub use builder::{ExitGenerationArgs, RoomGeneratorBuilder, RoomNpcGenerationArgs};
+pub use builder::{
+    ExitGenerationArgs, RoomFixtureGenerationArgs, RoomGeneratorBuilder, RoomNpcGenerationArgs,
+};
 
 use std::ops::RangeInclusive;
 
