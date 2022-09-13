@@ -24,7 +24,6 @@ pub fn build_fixture_positions(
     let mut used_fixtures: Vec<FixtureType> = Vec::new();
     let mut positions: Vec<FixturePosition> = Vec::new();
     let num_groups = rng.gen_range(build_fixtures_args.num_groups.clone());
-    println!("{}", num_groups);
     for _ in 0..num_groups {
         let mut fixture_generators =
             FixtureGenerators::build(danger_level, build_fixtures_args.possible_types.clone());
@@ -153,7 +152,6 @@ impl FixtureGenerators {
 
     fn next(&mut self) -> Option<impl Generator<Fixture>> {
         if self.fixture_types.is_empty() {
-            println!("Returning None");
             return None;
         }
 
