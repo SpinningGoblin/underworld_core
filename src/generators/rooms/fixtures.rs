@@ -1,5 +1,4 @@
 use rand::Rng;
-use strum::IntoEnumIterator;
 
 use crate::{
     components::{
@@ -10,21 +9,28 @@ use crate::{
     utils::rolls::roll_percent_succeeds,
 };
 
+use super::BuildFixturesArgs;
+
 pub fn build_fixture_positions(
+    build_fixtures_args: &BuildFixturesArgs,
     room_type: &RoomType,
     danger_level: u32,
 ) -> (Vec<FixturePosition>, Vec<FixtureType>) {
-    let num_groups_range = 0..num_groups(room_type);
-    if num_groups_range.is_empty() {
+    if build_fixtures_args.num_groups.is_empty() {
         return (Vec::new(), Vec::new());
     }
 
     let mut rng = rand::thread_rng();
     let mut used_fixtures: Vec<FixtureType> = Vec::new();
     let mut positions: Vec<FixturePosition> = Vec::new();
-    for _ in num_groups_range {
-        let mut fixture_generators =
-            FixtureGenerators::build_with_previous(room_type, &used_fixtures, danger_level);
+    for _ in build_fixtures_args.num_groups.clone() {
+        let possible_fixtures = build_fixtures_args
+            .possible_types
+            .iter()
+            .filter(|fixture| !used_fixtures.contains(fixture))
+            .cloned()
+            .collect();
+        let mut fixture_generators = FixtureGenerators::build(danger_level, possible_fixtures);
 
         let range = 0..group_size(room_type);
 
@@ -51,7 +57,7 @@ pub fn build_fixture_positions(
                 group_descriptors.get(index)
             };
 
-            let possible_positions = possible_positions(&fixture.fixture_type);
+            let possible_positions = possible_positions(&fixture.fixture_type, room_type);
             let position_descriptor = if possible_positions.is_empty() {
                 None
             } else {
@@ -70,8 +76,11 @@ pub fn build_fixture_positions(
     (positions, used_fixtures)
 }
 
-fn possible_positions(fixture_type: &FixtureType) -> Vec<FixturePositionDescriptor> {
-    let mut possibilities = single_possible_positions();
+fn possible_positions(
+    fixture_type: &FixtureType,
+    room_type: &RoomType,
+) -> Vec<FixturePositionDescriptor> {
+    let mut possibilities = single_possible_positions(room_type);
 
     let can_be_broken_on_ground = vec![
         FixtureType::StatueWarrior,
@@ -86,12 +95,22 @@ fn possible_positions(fixture_type: &FixtureType) -> Vec<FixturePositionDescript
     possibilities
 }
 
-fn single_possible_positions() -> Vec<FixturePositionDescriptor> {
-    vec![
-        FixturePositionDescriptor::IsInTheCorner,
-        FixturePositionDescriptor::SitsAlongOneSide,
-        FixturePositionDescriptor::StandsInTheCorner,
-    ]
+fn single_possible_positions(room_type: &RoomType) -> Vec<FixturePositionDescriptor> {
+    match *room_type {
+        RoomType::Cave
+        | RoomType::Crypt
+        | RoomType::EntryWay
+        | RoomType::Mausoleum
+        | RoomType::PrisonCell
+        | RoomType::Room
+        | RoomType::TavernHall
+        | RoomType::TempleHall => vec![
+            FixturePositionDescriptor::IsInTheCorner,
+            FixturePositionDescriptor::SitsAlongOneSide,
+            FixturePositionDescriptor::StandsInTheCorner,
+        ],
+        RoomType::Cavern | RoomType::Cemetery => Vec::new(),
+    }
 }
 
 fn single_group_descriptors() -> Vec<GroupDescriptor> {
@@ -100,18 +119,6 @@ fn single_group_descriptors() -> Vec<GroupDescriptor> {
         GroupDescriptor::ALone,
         GroupDescriptor::ASingle,
     ]
-}
-
-fn num_groups(room_type: &RoomType) -> usize {
-    let range = match *room_type {
-        RoomType::PrisonCell => 0..=1,
-        RoomType::Room => 0..=1,
-        RoomType::EntryWay => 0..=1,
-        _ => 0..=2,
-    };
-
-    let mut rng = rand::thread_rng();
-    rng.gen_range(range)
 }
 
 fn group_size(room_type: &RoomType) -> usize {
@@ -132,31 +139,26 @@ struct FixtureGenerators {
 }
 
 impl FixtureGenerators {
-    fn build_with_previous(
-        room_type: &RoomType,
-        previous: &[FixtureType],
-        danger_level: u32,
-    ) -> Self {
-        let possible_fixtures: Vec<FixtureType> = possible_fixtures(room_type)
-            .iter()
-            .filter(|fixture| !previous.contains(fixture))
-            .cloned()
-            .collect();
-        let index = if possible_fixtures.is_empty() {
+    fn build(danger_level: u32, fixture_types: Vec<FixtureType>) -> Self {
+        let index = if fixture_types.is_empty() {
             0
         } else {
             let mut rng = rand::thread_rng();
-            rng.gen_range(0..possible_fixtures.len())
+            rng.gen_range(0..fixture_types.len())
         };
         Self {
-            fixture_types: possible_fixtures,
+            fixture_types,
+            danger_level,
             current_index: index,
             generated_once: false,
-            danger_level,
         }
     }
 
     fn next(&mut self) -> Option<impl Generator<Fixture>> {
+        if self.fixture_types.is_empty() {
+            return None;
+        }
+
         if !self.generated_once {
             self.generated_once = true;
             let fixture_type = self.fixture_types.get(self.current_index).unwrap();
@@ -222,29 +224,4 @@ fn has_hidden_compartment(fixture_type: &FixtureType) -> bool {
 
     let mut rng = rand::thread_rng();
     roll_percent_succeeds(&mut rng, chance_of_hidden_compartment)
-}
-
-fn possible_fixtures(room_type: &RoomType) -> Vec<FixtureType> {
-    match *room_type {
-        RoomType::PrisonCell => vec![
-            FixtureType::Bucket,
-            FixtureType::Cot,
-            FixtureType::SleepingRoll,
-        ],
-        RoomType::EntryWay => vec![
-            FixtureType::Barrel,
-            FixtureType::Bucket,
-            FixtureType::Chair,
-            FixtureType::Chest,
-            FixtureType::WeaponRack,
-        ],
-        RoomType::TavernHall => vec![
-            FixtureType::Chair,
-            FixtureType::Table,
-            FixtureType::Barrel,
-            FixtureType::Crate,
-            FixtureType::Bucket,
-        ],
-        _ => FixtureType::iter().collect(),
-    }
 }

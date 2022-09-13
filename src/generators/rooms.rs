@@ -13,6 +13,7 @@ use strum::IntoEnumIterator;
 use uuid::Uuid;
 
 use crate::components::{
+    fixtures::FixtureType,
     rooms::{Descriptor, Dimensions, ExitType, Flavour, Room, RoomType},
     LifeModifier, Species,
 };
@@ -38,6 +39,20 @@ impl Default for BuildNpcsArgs {
             possible_species: Species::iter().collect(),
             possible_life_modifiers: LifeModifier::iter().collect(),
             allow_npcs_to_spawn_dead: true,
+        }
+    }
+}
+
+pub struct BuildFixturesArgs {
+    pub num_groups: RangeInclusive<u16>,
+    pub possible_types: Vec<FixtureType>,
+}
+
+impl Default for BuildFixturesArgs {
+    fn default() -> Self {
+        Self {
+            num_groups: 1..=2,
+            possible_types: FixtureType::iter().collect(),
         }
     }
 }
@@ -68,6 +83,7 @@ struct RoomPrototype {
     pub dimensions: Option<Dimensions>,
     pub build_exit_args: BuildExitArgs,
     pub build_npc_args: BuildNpcsArgs,
+    pub build_fixtures_args: BuildFixturesArgs,
 }
 
 impl Generator<Room> for RoomPrototype {
@@ -96,8 +112,11 @@ impl Generator<Room> for RoomPrototype {
             None
         };
 
-        let (fixture_positions, used_fixtures) =
-            build_fixture_positions(&self.room_type, self.danger_level);
+        let (fixture_positions, used_fixtures) = build_fixture_positions(
+            &self.build_fixtures_args,
+            &self.room_type,
+            self.danger_level,
+        );
 
         Room {
             dimensions: self.dimensions.clone().unwrap_or_else(build_dimensions),

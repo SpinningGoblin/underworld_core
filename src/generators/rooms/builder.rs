@@ -6,13 +6,14 @@ use uuid::Uuid;
 
 use crate::{
     components::{
+        fixtures::FixtureType,
         rooms::{Descriptor, Dimensions, ExitType, Flavour, Room, RoomType},
         LifeModifier, Species,
     },
     generators::generator::Generator,
 };
 
-use super::{BuildExitArgs, BuildNpcsArgs, RoomPrototype};
+use super::{BuildExitArgs, BuildFixturesArgs, BuildNpcsArgs, RoomPrototype};
 
 #[derive(Default, Clone)]
 pub struct ExitGenerationArgs {
@@ -28,6 +29,12 @@ pub struct RoomNpcGenerationArgs {
     pub allow_npcs_to_spawn_dead: Option<bool>,
 }
 
+#[derive(Default, Clone)]
+pub struct RoomFixtureGenerationArgs {
+    pub num_groups: Option<RangeInclusive<u16>>,
+    pub possible_types: Option<Vec<FixtureType>>,
+}
+
 #[derive(Default)]
 pub struct RoomGeneratorBuilder {
     num_descriptors: Option<RangeInclusive<u16>>,
@@ -41,6 +48,7 @@ pub struct RoomGeneratorBuilder {
     dimensions: Option<Dimensions>,
     exit_generation_args: Option<ExitGenerationArgs>,
     room_npc_generation_args: Option<RoomNpcGenerationArgs>,
+    room_fixture_generation_args: Option<RoomFixtureGenerationArgs>,
 }
 
 impl RoomGeneratorBuilder {
@@ -104,6 +112,15 @@ impl RoomGeneratorBuilder {
 
     pub fn exit_generation_args(&mut self, exit_generation_args: ExitGenerationArgs) -> &mut Self {
         self.exit_generation_args = Some(exit_generation_args);
+
+        self
+    }
+
+    pub fn room_fixture_generation_args(
+        &mut self,
+        room_fixture_generation_args: RoomFixtureGenerationArgs,
+    ) -> &mut Self {
+        self.room_fixture_generation_args = Some(room_fixture_generation_args);
 
         self
     }
@@ -205,6 +222,29 @@ impl RoomGeneratorBuilder {
             },
         };
 
+        let build_fixtures_args = match &self.room_fixture_generation_args {
+            Some(room_fixture_gen_args) => {
+                let num_groups = match &room_fixture_gen_args.num_groups {
+                    Some(it) => it.to_owned(),
+                    None => num_fixture_groups(&room_type),
+                };
+
+                let possible_types = match &room_fixture_gen_args.possible_types {
+                    Some(it) => it.to_owned(),
+                    None => possible_fixtures(&room_type),
+                };
+
+                BuildFixturesArgs {
+                    num_groups,
+                    possible_types,
+                }
+            }
+            None => BuildFixturesArgs {
+                num_groups: num_fixture_groups(&room_type),
+                possible_types: possible_fixtures(&room_type),
+            },
+        };
+
         RoomPrototype {
             num_descriptors,
             room_type,
@@ -217,7 +257,33 @@ impl RoomGeneratorBuilder {
             dimensions: self.dimensions.clone(),
             build_exit_args,
             build_npc_args,
+            build_fixtures_args,
         }
+    }
+}
+
+fn possible_fixtures(room_type: &RoomType) -> Vec<FixtureType> {
+    match *room_type {
+        RoomType::PrisonCell => vec![
+            FixtureType::Bucket,
+            FixtureType::Cot,
+            FixtureType::SleepingRoll,
+        ],
+        RoomType::EntryWay => vec![
+            FixtureType::Barrel,
+            FixtureType::Bucket,
+            FixtureType::Chair,
+            FixtureType::Chest,
+            FixtureType::WeaponRack,
+        ],
+        RoomType::TavernHall => vec![
+            FixtureType::Chair,
+            FixtureType::Table,
+            FixtureType::Barrel,
+            FixtureType::Crate,
+            FixtureType::Bucket,
+        ],
+        _ => FixtureType::iter().collect(),
     }
 }
 
@@ -233,6 +299,15 @@ fn num_exits(room_type: &RoomType) -> RangeInclusive<u16> {
         | RoomType::Cave
         | RoomType::Room => 3..=5,
         RoomType::EntryWay => 2..=2,
+    }
+}
+
+fn num_fixture_groups(room_type: &RoomType) -> RangeInclusive<u16> {
+    match *room_type {
+        RoomType::PrisonCell => 0..=1,
+        RoomType::Room => 0..=1,
+        RoomType::EntryWay => 0..=1,
+        _ => 0..=2,
     }
 }
 
