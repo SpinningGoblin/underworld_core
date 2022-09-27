@@ -3,7 +3,7 @@ use rand::Rng;
 use crate::{
     components::{
         fixtures::{Fixture, FixtureType},
-        rooms::{FixturePosition, FixturePositionDescriptor, GroupDescriptor, RoomType},
+        rooms::{FixturePosition, FixturePositionDescriptor, RoomType},
     },
     generators::{fixtures::get_generator_for_level, generator::Generator},
     utils::rolls::roll_percent_succeeds,
@@ -45,14 +45,6 @@ pub fn build_fixture_positions(
                 continue;
             };
 
-            let group_descriptors = single_group_descriptors();
-            let group_descriptor = if group_descriptors.is_empty() {
-                None
-            } else {
-                let index = rng.gen_range(0..group_descriptors.len());
-                group_descriptors.get(index)
-            };
-
             let possible_positions = possible_positions(&fixture.fixture_type, room_type);
             let position_descriptor = if possible_positions.is_empty() {
                 None
@@ -62,7 +54,6 @@ pub fn build_fixture_positions(
             };
 
             positions.push(FixturePosition {
-                group_descriptor: group_descriptor.cloned(),
                 fixture,
                 position_descriptor,
             });
@@ -107,14 +98,6 @@ fn single_possible_positions(room_type: &RoomType) -> Vec<FixturePositionDescrip
         ],
         RoomType::Cavern | RoomType::Cemetery => Vec::new(),
     }
-}
-
-fn single_group_descriptors() -> Vec<GroupDescriptor> {
-    vec![
-        GroupDescriptor::A,
-        GroupDescriptor::ALone,
-        GroupDescriptor::ASingle,
-    ]
 }
 
 fn group_size(room_type: &RoomType) -> usize {

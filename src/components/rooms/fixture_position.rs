@@ -7,16 +7,12 @@ use serde::{Deserialize, Serialize};
 
 use crate::components::fixtures::{Fixture, FixtureView};
 
-use super::{
-    fixture_position_descriptor::FixturePositionDescriptor, group_descriptor::GroupDescriptor,
-};
+use super::fixture_position_descriptor::FixturePositionDescriptor;
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct FixturePosition {
-    #[cfg_attr(feature = "serialization", serde(default))]
-    pub group_descriptor: Option<GroupDescriptor>,
     pub fixture: Fixture,
     pub position_descriptor: Option<FixturePositionDescriptor>,
 }
@@ -26,8 +22,6 @@ pub struct FixturePosition {
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 #[cfg_attr(feature = "openapi", derive(Object), oai(rename = "FixturePosition"))]
 pub struct FixturePositionView {
-    #[cfg_attr(feature = "serialization", serde(default))]
-    pub group_descriptor: Option<GroupDescriptor>,
     pub fixture: FixtureView,
     pub position_descriptor: Option<FixturePositionDescriptor>,
 }

@@ -3,7 +3,7 @@ use rand::Rng;
 use crate::{
     components::{
         fixtures::FixtureType,
-        rooms::{GroupDescriptor, NpcPosition, NpcPositionDescriptor},
+        rooms::{NpcPosition, NpcPositionDescriptor},
         LifeModifier, NonPlayer, Species,
     },
     generators::{
@@ -58,7 +58,6 @@ pub fn build_npc_positions(
                 }
 
                 npc_positions.push(NpcPosition {
-                    group_descriptor: group_descriptor(),
                     npc,
                     position_descriptor,
                 });
@@ -116,22 +115,6 @@ fn group_size(species: &Species) -> usize {
 
     let mut rng = rand::thread_rng();
     rng.gen_range(range)
-}
-
-pub fn group_descriptor() -> Option<GroupDescriptor> {
-    let options = single_group_descriptors();
-
-    let mut rng = rand::thread_rng();
-    let index = rng.gen_range(0..options.len());
-    options.get(index).cloned()
-}
-
-fn single_group_descriptors() -> Vec<GroupDescriptor> {
-    vec![
-        GroupDescriptor::A,
-        GroupDescriptor::ALone,
-        GroupDescriptor::ASingle,
-    ]
 }
 
 fn position_descriptor(

@@ -7,14 +7,12 @@ use serde::{Deserialize, Serialize};
 
 use crate::components::{NonPlayer, NonPlayerView};
 
-use super::{GroupDescriptor, NpcPositionDescriptor};
+use super::NpcPositionDescriptor;
 
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 pub struct NpcPosition {
-    #[cfg_attr(feature = "serialization", serde(default))]
-    pub group_descriptor: Option<GroupDescriptor>,
     pub npc: NonPlayer,
     pub position_descriptor: Option<NpcPositionDescriptor>,
 }
@@ -24,8 +22,6 @@ pub struct NpcPosition {
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
 #[cfg_attr(feature = "openapi", derive(Object), oai(rename = "NpcPosition"))]
 pub struct NpcPositionView {
-    #[cfg_attr(feature = "serialization", serde(default))]
-    pub group_descriptor: Option<GroupDescriptor>,
     pub npc: NonPlayerView,
     pub position_descriptor: Option<NpcPositionDescriptor>,
 }
