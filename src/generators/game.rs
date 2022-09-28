@@ -42,7 +42,7 @@ impl Generator<GameState> for GamePrototype {
                 rooms: vec![entry],
                 exit_graph: exit_maps,
             },
-            player_knows_all: false,
+            all_knowledge_unlocked: false,
             player_npc_knowledge: HashMap::new(),
             player_fixture_knowledge: HashMap::new(),
             player_statistics: HashMap::new(),

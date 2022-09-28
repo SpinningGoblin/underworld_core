@@ -21,7 +21,11 @@ pub fn handle(look_at_fixture: &LookAtFixture, state: &GameState) -> Result<Vec<
         knows_has_hidden_compartment: knowledge.knows_has_hidden_compartment,
     };
 
-    let view = fixture::view(&fixture_position.fixture, &args, state.player_knows_all);
+    let view = fixture::view(
+        &fixture_position.fixture,
+        &args,
+        state.all_knowledge_unlocked,
+    );
 
     Ok(vec![Event::FixtureViewed(FixtureViewed {
         fixture_view: view,

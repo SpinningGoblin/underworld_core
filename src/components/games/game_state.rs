@@ -2,6 +2,8 @@ use std::collections::HashMap;
 
 #[cfg(feature = "bevy_components")]
 use bevy_ecs::prelude::Component;
+#[cfg(feature = "openapi")]
+use poem_openapi::Object;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
@@ -10,7 +12,7 @@ use crate::{
     components::{
         fixtures::FixtureViewArgs,
         rooms::{Room, RoomView},
-        worlds::World,
+        worlds::{World, WorldView},
         CharacterViewArgs, NonPlayerViewArgs,
     },
     systems::view::room::view,
@@ -28,7 +30,7 @@ pub struct GameState {
     pub current_room_id: Uuid,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub rooms_seen: Vec<Uuid>,
-    pub player_knows_all: bool,
+    pub all_knowledge_unlocked: bool,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub player_npc_knowledge: HashMap<Uuid, CharacterKnowledge>,
     #[cfg_attr(feature = "serialization", serde(default))]
@@ -112,9 +114,7 @@ impl GameState {
             .unwrap()
     }
 
-    pub fn view_current_room(&self) -> RoomView {
-        let room = self.current_room();
-
+    pub fn view_room(&self, room: &Room) -> RoomView {
         let mut fixture_args: HashMap<Uuid, FixtureViewArgs> = HashMap::new();
 
         for fixture_id in room
@@ -176,9 +176,39 @@ impl GameState {
             npc_args,
             fixture_args,
             exit_visitations,
-            self.player_knows_all,
+            self.all_knowledge_unlocked,
         )
     }
+
+    pub fn view_current_room(&self) -> RoomView {
+        self.view_room(self.current_room())
+    }
+}
+
+#[derive(Clone, Debug)]
+#[cfg_attr(feature = "bevy_components", derive(Component))]
+#[cfg_attr(
+    feature = "serialization",
+    derive(Deserialize, Serialize),
+    serde(rename_all = "snake_case")
+)]
+#[cfg_attr(feature = "openapi", derive(Object), oai(rename = "GameState"))]
+pub struct GameStateView {
+    pub id: String,
+    pub name: Option<String>,
+    pub world: WorldView,
+    pub current_room_id: String,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub rooms_seen: Vec<String>,
+    pub all_knowledge_unlocked: bool,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub player_npc_knowledge: HashMap<String, CharacterKnowledge>,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub player_fixture_knowledge: HashMap<String, FixtureKnowledge>,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub player_statistics: HashMap<String, Statistics>,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub danger_level: u32,
 }
 
 #[cfg(test)]

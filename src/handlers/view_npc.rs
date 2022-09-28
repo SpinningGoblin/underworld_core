@@ -22,7 +22,7 @@ pub fn handle(look_at_npc: &LookAtNpc, state: &GameState) -> Result<Vec<Event>, 
         knows_packed_in_inventory: knowledge.knows_packed_in_inventory,
     };
 
-    let view = non_player::view(npc, &args, state.player_knows_all);
+    let view = non_player::view(npc, &args, state.all_knowledge_unlocked);
 
     Ok(vec![Event::NpcViewed(NpcViewed { npc_view: view })])
 }
