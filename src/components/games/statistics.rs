@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, Default)]
 #[cfg_attr(feature = "bevy_components", derive(Component))]
 #[cfg_attr(feature = "serialization", derive(Deserialize, Serialize))]
-#[cfg_attr(feature = "openapi", derive(Object), oai(rename = "CharacterItem"))]
+#[cfg_attr(feature = "openapi", derive(Object))]
 pub struct Statistics {
     pub num_killed: i64,
     pub total_damage_taken: i32,
