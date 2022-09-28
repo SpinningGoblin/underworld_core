@@ -65,17 +65,3 @@ pub struct CharacterItemView {
     pub equipped_location: LocationTag,
     pub at_the_ready: bool,
 }
-
-impl CharacterItemView {
-    pub fn is_equipped(&self) -> bool {
-        self.at_the_ready
-    }
-
-    pub fn is_weapon(&self) -> bool {
-        self.item.is_weapon()
-    }
-
-    pub fn is_wearable(&self) -> bool {
-        self.item.is_wearable()
-    }
-}

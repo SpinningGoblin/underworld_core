@@ -132,24 +132,6 @@ pub struct InventoryView {
     pub equipment: Vec<CharacterItemView>,
 }
 
-impl InventoryView {
-    pub fn equipped_wearables(&self) -> Vec<CharacterItemView> {
-        self.equipment
-            .iter()
-            .filter(|item| item.is_wearable() && item.is_equipped())
-            .cloned()
-            .collect()
-    }
-
-    pub fn equipped_weapons(&self) -> Vec<CharacterItemView> {
-        self.equipment
-            .iter()
-            .filter(|item| item.is_weapon() && item.is_equipped())
-            .cloned()
-            .collect()
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use uuid::Uuid;
