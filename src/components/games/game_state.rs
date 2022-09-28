@@ -40,6 +40,10 @@ pub struct GameState {
 }
 
 impl GameState {
+    pub fn get_player_stats(&self, player_id: &Uuid) -> Option<Statistics> {
+        self.player_statistics.get(player_id).cloned()
+    }
+
     pub fn npc_knowledge(&self, npc_id: &Uuid) -> CharacterKnowledge {
         self.player_npc_knowledge
             .get(npc_id)
