@@ -51,7 +51,9 @@ impl Tagged for FixtureType {
             FixtureType::Crate => vec![Tag::Fixture, Tag::Container],
             FixtureType::Bucket => vec![Tag::Fixture, Tag::Container],
             FixtureType::Coffin => vec![Tag::Fixture, Tag::Container],
-            _ => vec![Tag::Fixture],
+            FixtureType::Pillar
+            | FixtureType::StatueTentacledMonstrosity
+            | FixtureType::StatueWarrior => vec![Tag::Fixture],
         }
     }
 }
