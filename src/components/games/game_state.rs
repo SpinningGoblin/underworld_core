@@ -30,6 +30,7 @@ pub struct GameState {
     pub current_room_id: Uuid,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub rooms_seen: Vec<Uuid>,
+    #[cfg_attr(feature = "serialization", serde(default))]
     pub all_knowledge_unlocked: bool,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub player_npc_knowledge: HashMap<Uuid, CharacterKnowledge>,
@@ -198,16 +199,11 @@ pub struct GameStateView {
     pub name: Option<String>,
     pub world: WorldView,
     pub current_room_id: String,
-    #[cfg_attr(feature = "serialization", serde(default))]
     pub rooms_seen: Vec<String>,
     pub all_knowledge_unlocked: bool,
-    #[cfg_attr(feature = "serialization", serde(default))]
     pub player_npc_knowledge: HashMap<String, CharacterKnowledge>,
-    #[cfg_attr(feature = "serialization", serde(default))]
     pub player_fixture_knowledge: HashMap<String, FixtureKnowledge>,
-    #[cfg_attr(feature = "serialization", serde(default))]
     pub player_statistics: HashMap<String, Statistics>,
-    #[cfg_attr(feature = "serialization", serde(default))]
     pub danger_level: u32,
 }
 
