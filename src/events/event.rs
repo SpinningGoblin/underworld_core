@@ -22,6 +22,7 @@ use super::NpcDamagedByPoison;
 )]
 pub enum Event {
     GameDangerLevelIncreased(u32),
+    GhostEscapesToTheVoid(super::GhostEscapesToTheVoid),
     DeadNpcBeaten(super::DeadNpcBeaten),
     FixtureHasHiddenCompartmentDiscovered(super::FixtureHasHiddenCompartmentDiscovered),
     FixtureHiddenCompartmentOpened(super::FixtureHiddenCompartmentOpened),
@@ -43,6 +44,7 @@ pub enum Event {
     NpcViewed(super::NpcViewed),
     NpcWeaponReadied(super::NpcWeaponReadied),
     PlayerDamagedByPoison(i32),
+    PlayerDropsAllItems,
     PlayerGainedGold(u32),
     PlayerGainsResurrectionAura,
     PlayerGainsRetributionAura(super::PlayerGainsRetributionAura),
@@ -316,13 +318,20 @@ pub fn apply_events(
                     position.npc.character.current_effects.covered_in_oil = true;
                 }
             }
+            Event::PlayerDropsAllItems => {
+                new_game
+                    .current_room_mut()
+                    .loose_items
+                    .append(&mut new_player.character.inventory.drop_all());
+            }
             Event::NpcMissed(_)
             | Event::DeadNpcBeaten(_)
             | Event::PlayerMissed(_)
             | Event::NpcViewed(_)
             | Event::FixtureViewed(_)
             | Event::NpcHitWithAcid(_)
-            | Event::PlayerHitWithAcid => {}
+            | Event::PlayerHitWithAcid
+            | Event::GhostEscapesToTheVoid(_) => {}
         }
     }
 

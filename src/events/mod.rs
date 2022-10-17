@@ -4,6 +4,7 @@ mod fixture_has_hidden_compartment_discovered;
 mod fixture_hidden_compartment_opened;
 mod fixture_opened;
 mod fixture_viewed;
+mod ghost_escapes_to_the_void;
 mod item_taken_from_fixture;
 mod item_taken_from_npc;
 mod npc_damaged_by_poison;
@@ -41,6 +42,7 @@ pub use {
     fixture_has_hidden_compartment_discovered::FixtureHasHiddenCompartmentDiscovered,
     fixture_hidden_compartment_opened::FixtureHiddenCompartmentOpened,
     fixture_opened::FixtureOpened, fixture_viewed::FixtureViewed,
+    ghost_escapes_to_the_void::GhostEscapesToTheVoid,
     item_taken_from_fixture::ItemTakenFromFixture, item_taken_from_npc::ItemTakenFromNpc,
     npc_damaged_by_poison::NpcDamagedByPoison, npc_health_discovered::NpcHealthDiscovered,
     npc_item_destroyed::NpcItemDestroyed, npc_missed::NpcMissed,

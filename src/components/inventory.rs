@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use super::{
-    items::{CharacterItem, CharacterItemView},
+    items::{CharacterItem, CharacterItemView, Item},
     Attack, Defense,
 };
 
@@ -121,6 +121,18 @@ impl Inventory {
             .reduce(|accum, item| Defense {
                 damage_resistance: accum.damage_resistance + item.damage_resistance,
             })
+    }
+
+    pub fn drop_all(&mut self) -> Vec<Item> {
+        let item_indexes = 0..self.equipment.len();
+        let mut items: Vec<Item> = Vec::new();
+
+        for index in item_indexes {
+            let character_item = self.equipment.remove(index);
+            items.push(character_item.item);
+        }
+
+        items
     }
 }
 
