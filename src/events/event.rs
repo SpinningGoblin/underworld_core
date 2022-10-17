@@ -62,6 +62,7 @@ pub enum Event {
     PlayerKilledNpc(super::PlayerKilledNpc),
     PlayerMaxHealthChanged(i32),
     PlayerMissed(super::PlayerMissed),
+    PlayerPicksUpItem(Uuid),
     PlayerPoisonLevelChanged(i32),
     PlayerPoisonDissipated,
     PlayerPoisoned(super::PlayerPoisoned),
@@ -323,6 +324,18 @@ pub fn apply_events(
                     .current_room_mut()
                     .loose_items
                     .append(&mut new_player.character.inventory.drop_all());
+            }
+            Event::PlayerPicksUpItem(item_id) => {
+                let item = new_game
+                    .current_room_mut()
+                    .remove_loose_item(item_id)
+                    .unwrap();
+                let packed_item = CharacterItem {
+                    equipped_location: LocationTag::Packed,
+                    item,
+                    at_the_ready: false,
+                };
+                new_player.character.add_item(packed_item)
             }
             Event::NpcMissed(_)
             | Event::DeadNpcBeaten(_)
