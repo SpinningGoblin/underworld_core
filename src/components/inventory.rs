@@ -124,15 +124,9 @@ impl Inventory {
     }
 
     pub fn drop_all(&mut self) -> Vec<Item> {
-        let item_indexes = 0..self.equipment.len();
-        let mut items: Vec<Item> = Vec::new();
-
-        for index in item_indexes {
-            let character_item = self.equipment.remove(index);
-            items.push(character_item.item);
-        }
-
-        items
+        let mut items: Vec<CharacterItem> = Vec::new();
+        items.append(&mut self.equipment);
+        items.into_iter().map(|ci| ci.item).collect()
     }
 }
 
@@ -155,6 +149,59 @@ mod tests {
     };
 
     use super::Inventory;
+
+    #[test]
+    fn drop_all() {
+        let mut inventory = Inventory {
+            equipment: vec![
+                CharacterItem {
+                    item: Item {
+                        id: Uuid::new_v4(),
+                        name: None,
+                        item_type: ItemType::Spear,
+                        tags: Vec::new(),
+                        descriptors: Vec::new(),
+                        material: None,
+                        attack: Some(Attack {
+                            num_rolls: 2,
+                            modifier: 2,
+                            effects: vec![AttackEffect::Crushing],
+                        }),
+                        defense: None,
+                        consumable: None,
+                        throwable: None,
+                    },
+                    equipped_location: LocationTag::Hand,
+                    at_the_ready: true,
+                },
+                CharacterItem {
+                    item: Item {
+                        id: Uuid::new_v4(),
+                        name: None,
+                        item_type: ItemType::LongSword,
+                        tags: Vec::new(),
+                        descriptors: Vec::new(),
+                        material: None,
+                        attack: Some(Attack {
+                            num_rolls: 1,
+                            modifier: -2,
+                            effects: vec![AttackEffect::Sharp],
+                        }),
+                        defense: None,
+                        consumable: None,
+                        throwable: None,
+                    },
+                    equipped_location: LocationTag::Hand,
+                    at_the_ready: true,
+                },
+            ],
+        };
+
+        let items = inventory.drop_all();
+
+        assert_eq!(0, inventory.equipment.len());
+        assert_eq!(2, items.len());
+    }
 
     #[test]
     fn full_attack() {
