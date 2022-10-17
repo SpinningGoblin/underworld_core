@@ -5,6 +5,8 @@ use poem_openapi::Object;
 #[cfg(feature = "serialization")]
 use serde::{Deserialize, Serialize};
 
+use crate::components::items::ItemView;
+
 use super::{
     Descriptor, Dimensions, ExitView, FixturePositionView, Flavour, NpcPositionView, RoomType,
 };
@@ -23,6 +25,7 @@ pub struct RoomView {
     pub npc_positions: Vec<NpcPositionView>,
     pub flavour: Option<Flavour>,
     pub exits: Vec<ExitView>,
+    pub loose_items: Vec<ItemView>,
 }
 
 #[derive(Clone, Debug, Default)]

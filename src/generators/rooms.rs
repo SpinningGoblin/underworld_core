@@ -134,6 +134,7 @@ impl Generator<Room> for RoomPrototype {
             ),
             flavour,
             exits: build_exits(self.entrance_id, &self.build_exit_args),
+            loose_items: Vec::new(),
         }
     }
 }

@@ -51,5 +51,10 @@ pub fn view(
         npc_positions,
         flavour: room.flavour,
         exits,
+        loose_items: room
+            .loose_items
+            .iter()
+            .map(|item| super::item::view(item, true, knows_all))
+            .collect(),
     }
 }

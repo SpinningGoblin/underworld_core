@@ -4,7 +4,7 @@ use bevy_ecs::prelude::Component;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::components::NonPlayer;
+use crate::components::{items::Item, NonPlayer};
 
 use super::{Descriptor, Dimensions, Exit, FixturePosition, Flavour, NpcPosition, RoomType};
 
@@ -27,6 +27,8 @@ pub struct Room {
     pub flavour: Option<Flavour>,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub exits: Vec<Exit>,
+    #[cfg_attr(feature = "serialization", serde(default))]
+    pub loose_items: Vec<Item>,
 }
 
 impl Room {
