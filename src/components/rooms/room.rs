@@ -65,6 +65,16 @@ impl Room {
             .find(|fixture_position| fixture_position.fixture.id.eq(fixture_id))
     }
 
+    pub fn remove_loose_item(&mut self, item_id: &Uuid) -> Option<Item> {
+        let index = self
+            .loose_items
+            .iter()
+            .enumerate()
+            .find(|(_, item)| item.id.eq(item_id))
+            .map(|(index, _)| index);
+        index.map(|i| self.loose_items.remove(i))
+    }
+
     pub fn index_of_npc_position(&self, npc_id: &Uuid) -> Option<usize> {
         self.npc_positions
             .iter()
