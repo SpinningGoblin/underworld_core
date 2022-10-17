@@ -104,6 +104,7 @@ pub fn handle_action(
         Action::ThrowItemAtNpc(throw_item_at_npc) => {
             super::throw_item_at_npc::handle(throw_item_at_npc, state, player)?
         }
+        Action::PickUpItem(pick_up_item) => super::pick_up_item::handle(pick_up_item, state)?,
     });
 
     let (mut intermediate_state, mut intermediate_player) = apply_events(&events, state, player);
