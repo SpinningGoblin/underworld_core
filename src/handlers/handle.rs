@@ -4,7 +4,7 @@ use crate::{
     actions::Action,
     components::{games::GameState, PlayerCharacter},
     errors::Error,
-    events::{apply_events, Event},
+    events::{apply_events, Event, GhostEscapesToTheVoid},
 };
 
 use super::NpcAction;
@@ -106,18 +106,38 @@ pub fn handle_action(
         }
     });
 
-    let (intermediate_state, intermediate_player) = apply_events(&events, state, player);
+    let (mut intermediate_state, mut intermediate_player) = apply_events(&events, state, player);
 
     let mut global_events =
         super::global_effects::handle(&intermediate_state, &intermediate_player);
-    let (new_state, new_player) =
+    (intermediate_state, intermediate_player) =
         apply_events(&global_events, &intermediate_state, &intermediate_player);
 
     events.append(&mut global_events);
+
+    let mut dead_events = dead_player_events(&intermediate_player);
+
+    let (new_state, new_player) =
+        apply_events(&dead_events, &intermediate_state, &intermediate_player);
+    events.append(&mut dead_events);
 
     Ok(HandledAction {
         new_state,
         new_player,
         events,
     })
+}
+
+fn dead_player_events(player: &PlayerCharacter) -> Vec<Event> {
+    if !player.character.is_dead() {
+        return Vec::new();
+    }
+
+    vec![
+        Event::GhostEscapesToTheVoid(GhostEscapesToTheVoid {
+            character: player.character.clone(),
+            name: player.name.clone(),
+        }),
+        Event::PlayerDropsAllItems,
+    ]
 }
