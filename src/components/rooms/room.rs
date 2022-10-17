@@ -74,16 +74,4 @@ impl Room {
             .map(|(index, _)| index);
         index.map(|i| self.loose_items.remove(i))
     }
-
-    pub fn index_of_npc_position(&self, npc_id: &Uuid) -> Option<usize> {
-        self.npc_positions
-            .iter()
-            .enumerate()
-            .find(|(_, npc_position)| npc_position.npc.id.eq(npc_id))
-            .map(|(index, _)| index)
-    }
-
-    pub fn remove_npc_position(&mut self, index: usize) -> NpcPosition {
-        self.npc_positions.remove(index)
-    }
 }
