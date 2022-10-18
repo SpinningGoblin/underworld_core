@@ -2,7 +2,7 @@ use uuid::Uuid;
 
 use crate::{
     actions::Action,
-    components::{games::GameState, PlayerCharacter},
+    components::{games::GameState, LifeModifier, PlayerCharacter},
     errors::Error,
     events::{apply_events, Event, GhostEscapesToTheVoid},
 };
@@ -134,9 +134,12 @@ fn dead_player_events(player: &PlayerCharacter) -> Vec<Event> {
         return Vec::new();
     }
 
+    let mut character = player.character.clone();
+    character.life_modifier = Some(LifeModifier::Ghost);
+
     vec![
         Event::GhostEscapesToTheVoid(GhostEscapesToTheVoid {
-            character: player.character.clone(),
+            character,
             name: player.name.clone(),
         }),
         Event::PlayerDropsAllItems,
