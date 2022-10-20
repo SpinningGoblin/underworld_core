@@ -132,6 +132,7 @@ pub fn handle(
             }
         }
         // TODO: There are non-damage spells that someone could cast on NPCs.
+        // For now I'm going to have those be no-ops.
         SpellName::GreatHeal
         | SpellName::Heal
         | SpellName::Phoenix
