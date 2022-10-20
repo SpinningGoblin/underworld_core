@@ -49,8 +49,6 @@ pub fn handle_action(
 
     npc_actions.append(&mut match action {
         Action::InspectFixture(_)
-        | Action::LootFixture(_)
-        | Action::LootNpc(_)
         | Action::OpenFixture(_)
         | Action::OpenFixtureHiddenCompartment(_) => {
             if let Some(npc) = state.current_room().first_alive_npc() {
@@ -59,12 +57,27 @@ pub fn handle_action(
                 Vec::new()
             }
         }
-        _ => Vec::new(),
+        Action::AttackNpc(_)
+        | Action::CastSpellOnNpc(_)
+        | Action::CastSpellOnPlayer(_)
+        | Action::ExitRoom(_)
+        | Action::InspectNpc(_)
+        | Action::LookAtFixture(_)
+        | Action::LookAtNpc(_)
+        | Action::LootFixture(_)
+        | Action::LootNpc(_)
+        | Action::MovePlayerItem(_)
+        | Action::PickUpItem(_)
+        | Action::SellPlayerItem(_)
+        | Action::UseItemOnPlayer(_)
+        | Action::ThrowItemAtNpc(_) => Vec::new(),
     });
 
     let mut events: Vec<Event> = Vec::new();
 
     // Go through all npc actions and handle those. I'll do them first.
+    // This means the NPCs essentially get "first hit" on the player, which I think
+    // is fine.
     for npc_action in npc_actions.iter() {
         events.append(&mut super::handle_npc_action(npc_action, state, player)?);
     }
