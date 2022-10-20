@@ -29,11 +29,17 @@ pub fn handle(loot_fixture: &LootFixture, state: &GameState) -> Result<Vec<Event
         .iter()
         .filter(|fixture_item| item_ids.contains(&fixture_item.item.id));
 
-    // TODO: I should probably check to make sure the fixture is actually open here.
-    // But for now I'm just going to blindly move the items from the fixture to the player.
-
     let mut events: Vec<Event> = Vec::new();
     for matching_item in matching_items {
+        if (matching_item.is_in_hidden_compartment
+            && !fixture_position.fixture.hidden_compartment_open)
+            || (matching_item.is_inside && !fixture_position.fixture.open)
+        {
+            return Err(Error::ItemCannotBeTakenFromFixture(
+                matching_item.item.id.to_string(),
+            ));
+        }
+
         events.push(Event::ItemTakenFromFixture(ItemTakenFromFixture {
             fixture_id,
             item_id: matching_item.item.id,

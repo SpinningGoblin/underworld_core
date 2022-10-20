@@ -15,4 +15,5 @@ pub enum Error {
     SpellNotFoundError(String),
     TooManyWeaponsEquippedError,
     TooManyWearablesEquippedError,
+    ItemCannotBeTakenFromFixture(String),
 }
