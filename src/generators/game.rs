@@ -47,6 +47,7 @@ impl Generator<GameState> for GamePrototype {
             player_fixture_knowledge: HashMap::new(),
             player_statistics: HashMap::new(),
             danger_level: 1,
+            ghosts: Vec::new(),
         }
     }
 }

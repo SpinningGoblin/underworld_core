@@ -1,0 +1,1390 @@
+{
+  "id": "c5863894-e790-4225-b6f6-579ec0c5cb11",
+  "name": null,
+  "world": {
+    "rooms": [
+      {
+        "id": "0fe49e93-8e4d-4955-a7b2-c5381d1e9db6",
+        "name": null,
+        "descriptors": ["freezing"],
+        "room_type": "entry_way",
+        "fixture_positions": [],
+        "dimensions": {
+          "height": "tall",
+          "width": "huge",
+          "length": "average"
+        },
+        "npc_positions": [
+          {
+            "npc": {
+              "character": {
+                "stats": {
+                  "health": { "current": 0, "max": 7 },
+                  "height": "squat",
+                  "base_attack": null,
+                  "base_damage_resistance": null
+                },
+                "species": "kobold",
+                "life_modifier": null,
+                "inventory": { "equipment": [] },
+                "current_effects": {
+                  "shield_aura": null,
+                  "retribution_aura": null,
+                  "poison": null,
+                  "resurrection_aura": false,
+                  "covered_in_oil": false
+                },
+                "spell_memory": { "spells": [] }
+              },
+              "id": "1b113d47-1664-4c85-9cbf-fabf41fb11e7",
+              "name": "wodmer"
+            },
+            "position_descriptor": null
+          },
+          {
+            "npc": {
+              "character": {
+                "stats": {
+                  "health": { "current": 0, "max": 11 },
+                  "height": "short",
+                  "base_attack": null,
+                  "base_damage_resistance": null
+                },
+                "species": "kobold",
+                "life_modifier": null,
+                "inventory": { "equipment": [] },
+                "current_effects": {
+                  "shield_aura": null,
+                  "retribution_aura": null,
+                  "poison": null,
+                  "resurrection_aura": false,
+                  "covered_in_oil": false
+                },
+                "spell_memory": { "spells": [] }
+              },
+              "id": "1fec1ce3-4d88-405d-975a-66fbaf9a9aab",
+              "name": "norzerg"
+            },
+            "position_descriptor": null
+          }
+        ],
+        "flavour": "smells_like_old_goblin_socks",
+        "exits": [
+          {
+            "id": "9496a24f-1f20-4c2d-b9f5-194129f10b38",
+            "name": null,
+            "exit_type": "hole_in_the_wall",
+            "material": null,
+            "descriptors": [],
+            "size": "small"
+          },
+          {
+            "id": "28c7e90e-41ff-4512-a9f5-63ebad3e89a5",
+            "name": null,
+            "exit_type": "opening_to_the_void",
+            "material": null,
+            "descriptors": [],
+            "size": "tiny"
+          }
+        ],
+        "loose_items": []
+      },
+      {
+        "id": "ca40b782-1f29-4714-a788-421184ce02d5",
+        "name": null,
+        "descriptors": ["dark"],
+        "room_type": "temple_hall",
+        "fixture_positions": [
+          {
+            "fixture": {
+              "id": "c51d1a10-7d98-4eb5-8b01-8b5858b01871",
+              "name": null,
+              "fixture_type": "chair",
+              "material": "gold",
+              "size": "average",
+              "descriptors": ["shiny"],
+              "items": [],
+              "can_be_opened": false,
+              "open": false,
+              "has_hidden_compartment": false,
+              "hidden_compartment_open": false
+            },
+            "position_descriptor": "is_in_the_corner"
+          },
+          {
+            "fixture": {
+              "id": "7f279eca-ed29-4263-a0e8-8e55be4e324d",
+              "name": null,
+              "fixture_type": "chair",
+              "material": "gold",
+              "size": "average",
+              "descriptors": ["bloodstained", "shiny"],
+              "items": [],
+              "can_be_opened": false,
+              "open": false,
+              "has_hidden_compartment": false,
+              "hidden_compartment_open": false
+            },
+            "position_descriptor": "is_in_the_corner"
+          }
+        ],
+        "dimensions": {
+          "height": "average",
+          "width": "average",
+          "length": "average"
+        },
+        "npc_positions": [
+          {
+            "npc": {
+              "character": {
+                "stats": {
+                  "health": { "current": 0, "max": 12 },
+                  "height": "average",
+                  "base_attack": null,
+                  "base_damage_resistance": null
+                },
+                "species": "moblin",
+                "life_modifier": null,
+                "inventory": { "equipment": [] },
+                "current_effects": {
+                  "shield_aura": null,
+                  "retribution_aura": null,
+                  "poison": null,
+                  "resurrection_aura": false,
+                  "covered_in_oil": false
+                },
+                "spell_memory": { "spells": [] }
+              },
+              "id": "d853f9e5-7e07-409f-a24c-52ee43ebdec1",
+              "name": "la"
+            },
+            "position_descriptor": null
+          },
+          {
+            "npc": {
+              "character": {
+                "stats": {
+                  "health": { "current": 0, "max": 13 },
+                  "height": "average",
+                  "base_attack": {
+                    "num_rolls": 1,
+                    "modifier": 1,
+                    "effects": []
+                  },
+                  "base_damage_resistance": null
+                },
+                "species": "dragonkin",
+                "life_modifier": null,
+                "inventory": { "equipment": [] },
+                "current_effects": {
+                  "shield_aura": null,
+                  "retribution_aura": null,
+                  "poison": null,
+                  "resurrection_aura": false,
+                  "covered_in_oil": false
+                },
+                "spell_memory": { "spells": [] }
+              },
+              "id": "9d308edd-5c9d-4e3f-988b-868b0b5c61e4",
+              "name": "norncar"
+            },
+            "position_descriptor": null
+          }
+        ],
+        "flavour": "you_hear_scratching_all_around_you",
+        "exits": [
+          {
+            "id": "9496a24f-1f20-4c2d-b9f5-194129f10b38",
+            "name": null,
+            "exit_type": "hole_in_the_wall",
+            "material": null,
+            "descriptors": [],
+            "size": "large"
+          },
+          {
+            "id": "a16399f9-f2a9-4fd6-b09e-955bdc189e10",
+            "name": null,
+            "exit_type": "opening_to_the_void",
+            "material": null,
+            "descriptors": [],
+            "size": "massive"
+          },
+          {
+            "id": "d824f50d-657e-4bbc-a67f-7c84ec311f90",
+            "name": null,
+            "exit_type": "staircase_down",
+            "material": "stone",
+            "descriptors": ["old"],
+            "size": "massive"
+          },
+          {
+            "id": "3e13cc33-8ddc-4353-9c69-96a5ad2eeb49",
+            "name": null,
+            "exit_type": "opening_to_the_void",
+            "material": null,
+            "descriptors": [],
+            "size": "huge"
+          },
+          {
+            "id": "7f45c1e0-f47e-4a99-8cb4-03cd6b37fb4f",
+            "name": null,
+            "exit_type": "staircase_up",
+            "material": "stone",
+            "descriptors": [],
+            "size": "long"
+          }
+        ],
+        "loose_items": []
+      },
+      {
+        "id": "b6a9ebfd-c8c7-4cec-9bdb-0d1229127b91",
+        "name": null,
+        "descriptors": ["chill", "dark"],
+        "room_type": "entry_way",
+        "fixture_positions": [
+          {
+            "fixture": {
+              "id": "12462bc8-d799-4ebd-88b9-632e3d9dd1a5",
+              "name": null,
+              "fixture_type": "bucket",
+              "material": "iron",
+              "size": "tiny",
+              "descriptors": [],
+              "items": [],
+              "can_be_opened": false,
+              "open": false,
+              "has_hidden_compartment": false,
+              "hidden_compartment_open": false
+            },
+            "position_descriptor": "stands_in_the_corner"
+          },
+          {
+            "fixture": {
+              "id": "b25ae3de-c9e3-4022-9963-f0aa0c945f8c",
+              "name": null,
+              "fixture_type": "bucket",
+              "material": "gold",
+              "size": "small",
+              "descriptors": ["rusty"],
+              "items": [],
+              "can_be_opened": false,
+              "open": false,
+              "has_hidden_compartment": false,
+              "hidden_compartment_open": false
+            },
+            "position_descriptor": "sits_along_one_side"
+          }
+        ],
+        "dimensions": {
+          "height": "average",
+          "width": "average",
+          "length": "long"
+        },
+        "npc_positions": [
+          {
+            "npc": {
+              "character": {
+                "stats": {
+                  "health": { "current": 0, "max": 23 },
+                  "height": "average",
+                  "base_attack": null,
+                  "base_damage_resistance": { "damage_resistance": 2 }
+                },
+                "species": "turtlekin",
+                "life_modifier": null,
+                "inventory": { "equipment": [] },
+                "current_effects": {
+                  "shield_aura": null,
+                  "retribution_aura": null,
+                  "poison": null,
+                  "resurrection_aura": false,
+                  "covered_in_oil": false
+                },
+                "spell_memory": { "spells": [] }
+              },
+              "id": "94a6b895-1dd9-4eaa-b8e1-49c7fd739ea3",
+              "name": "log"
+            },
+            "position_descriptor": null
+          }
+        ],
+        "flavour": "is_something_watching_you",
+        "exits": [
+          {
+            "id": "a16399f9-f2a9-4fd6-b09e-955bdc189e10",
+            "name": null,
+            "exit_type": "hole_in_the_floor",
+            "material": null,
+            "descriptors": [],
+            "size": "short"
+          },
+          {
+            "id": "2e283dc3-716a-4e11-a657-e640541ee525",
+            "name": null,
+            "exit_type": "hole_in_the_wall",
+            "material": null,
+            "descriptors": [],
+            "size": "tiny"
+          }
+        ],
+        "loose_items": []
+      },
+      {
+        "id": "bd173f7b-bacf-48e4-b35c-93c0d6f266da",
+        "name": null,
+        "descriptors": ["dim"],
+        "room_type": "crypt",
+        "fixture_positions": [
+          {
+            "fixture": {
+              "id": "e1217054-0aac-4be1-b913-fc6cf9cd2d25",
+              "name": null,
+              "fixture_type": "cot",
+              "material": null,
+              "size": "huge",
+              "descriptors": ["moldy"],
+              "items": [],
+              "can_be_opened": false,
+              "open": false,
+              "has_hidden_compartment": false,
+              "hidden_compartment_open": false
+            },
+            "position_descriptor": "is_in_the_corner"
+          },
+          {
+            "fixture": {
+              "id": "d3167c2b-1913-41e9-846b-2dc2592370cc",
+              "name": null,
+              "fixture_type": "cot",
+              "material": "iron",
+              "size": "average",
+              "descriptors": ["rotting"],
+              "items": [],
+              "can_be_opened": false,
+              "open": false,
+              "has_hidden_compartment": false,
+              "hidden_compartment_open": false
+            },
+            "position_descriptor": "stands_in_the_corner"
+          },
+          {
+            "fixture": {
+              "id": "3f033f8b-e0ca-428b-90cc-005038489eba",
+              "name": null,
+              "fixture_type": "bed",
+              "material": "gold",
+              "size": "huge",
+              "descriptors": [],
+              "items": [],
+              "can_be_opened": false,
+              "open": false,
+              "has_hidden_compartment": false,
+              "hidden_compartment_open": false
+            },
+            "position_descriptor": "stands_in_the_corner"
+          }
+        ],
+        "dimensions": {
+          "height": "average",
+          "width": "narrow",
+          "length": "average"
+        },
+        "npc_positions": [
+          {
+            "npc": {
+              "character": {
+                "stats": {
+                  "health": { "current": 0, "max": 21 },
+                  "height": "average",
+                  "base_attack": {
+                    "num_rolls": 2,
+                    "modifier": -1,
+                    "effects": ["crushing"]
+                  },
+                  "base_damage_resistance": null
+                },
+                "species": "phantom",
+                "life_modifier": null,
+                "inventory": { "equipment": [] },
+                "current_effects": {
+                  "shield_aura": null,
+                  "retribution_aura": null,
+                  "poison": null,
+                  "resurrection_aura": false,
+                  "covered_in_oil": false
+                },
+                "spell_memory": { "spells": [] }
+              },
+              "id": "cc5bd464-8295-4f11-8fc7-add965189014",
+              "name": "bobogmog"
+            },
+            "position_descriptor": null
+          },
+          {
+            "npc": {
+              "character": {
+                "stats": {
+                  "health": { "current": 0, "max": 13 },
+                  "height": "average",
+                  "base_attack": {
+                    "num_rolls": 1,
+                    "modifier": 0,
+                    "effects": []
+                  },
+                  "base_damage_resistance": null
+                },
+                "species": "bugbear",
+                "life_modifier": null,
+                "inventory": { "equipment": [] },
+                "current_effects": {
+                  "shield_aura": null,
+                  "retribution_aura": null,
+                  "poison": null,
+                  "resurrection_aura": false,
+                  "covered_in_oil": false
+                },
+                "spell_memory": { "spells": [] }
+              },
+              "id": "e2534402-00be-40e7-8a65-1a989c19463c",
+              "name": "logglorrok"
+            },
+            "position_descriptor": null
+          }
+        ],
+        "flavour": "something_squishy_all_over_floor",
+        "exits": [
+          {
+            "id": "2e283dc3-716a-4e11-a657-e640541ee525",
+            "name": null,
+            "exit_type": "staircase_up",
+            "material": "wooden",
+            "descriptors": ["old"],
+            "size": "long"
+          },
+          {
+            "id": "3fa1595d-bbe4-41af-8e5a-11a5c970a06e",
+            "name": null,
+            "exit_type": "opening_to_the_void",
+            "material": null,
+            "descriptors": [],
+            "size": "huge"
+          },
+          {
+            "id": "c309002c-7c8a-40a5-8c9f-0d31bce3c7a7",
+            "name": null,
+            "exit_type": "door",
+            "material": "stone",
+            "descriptors": ["old"],
+            "size": "huge"
+          },
+          {
+            "id": "f39beb92-fa5c-41f1-9e7f-3c1befade9ee",
+            "name": null,
+            "exit_type": "staircase_down",
+            "material": "wooden",
+            "descriptors": ["old"],
+            "size": "huge"
+          },
+          {
+            "id": "ea01b63d-51d2-45b4-a43d-2e8ef2d60acb",
+            "name": null,
+            "exit_type": "hallway",
+            "material": null,
+            "descriptors": [],
+            "size": "narrow"
+          }
+        ],
+        "loose_items": []
+      },
+      {
+        "id": "4ca6fdea-f90d-4317-bba0-0eee0cbe0890",
+        "name": null,
+        "descriptors": ["moist", "chill"],
+        "room_type": "crypt",
+        "fixture_positions": [],
+        "dimensions": {
+          "height": "average",
+          "width": "average",
+          "length": "long"
+        },
+        "npc_positions": [
+          {
+            "npc": {
+              "character": {
+                "stats": {
+                  "health": { "current": 0, "max": 22 },
+                  "height": "average",
+                  "base_attack": {
+                    "num_rolls": 1,
+                    "modifier": 0,
+                    "effects": []
+                  },
+                  "base_damage_resistance": null
+                },
+                "species": "bugbear",
+                "life_modifier": "skeleton",
+                "inventory": { "equipment": [] },
+                "current_effects": {
+                  "shield_aura": null,
+                  "retribution_aura": null,
+                  "poison": null,
+                  "resurrection_aura": false,
+                  "covered_in_oil": false
+                },
+                "spell_memory": { "spells": [] }
+              },
+              "id": "562917d2-67a3-4095-aadc-bacfd7b1c5fa",
+              "name": "rokbal"
+            },
+            "position_descriptor": null
+          },
+          {
+            "npc": {
+              "character": {
+                "stats": {
+                  "health": { "current": 0, "max": 24 },
+                  "height": "average",
+                  "base_attack": {
+                    "num_rolls": 1,
+                    "modifier": 0,
+                    "effects": []
+                  },
+                  "base_damage_resistance": null
+                },
+                "species": "bugbear",
+                "life_modifier": "skeleton",
+                "inventory": { "equipment": [] },
+                "current_effects": {
+                  "shield_aura": null,
+                  "retribution_aura": null,
+                  "poison": null,
+                  "resurrection_aura": false,
+                  "covered_in_oil": false
+                },
+                "spell_memory": { "spells": [] }
+              },
+              "id": "6bf3299c-0cd8-4269-b616-8989bbb7d58b",
+              "name": null
+            },
+            "position_descriptor": null
+          }
+        ],
+        "flavour": "a_strange_breeze_blows",
+        "exits": [
+          {
+            "id": "3fa1595d-bbe4-41af-8e5a-11a5c970a06e",
+            "name": null,
+            "exit_type": "door",
+            "material": "stone",
+            "descriptors": ["old"],
+            "size": "squat"
+          },
+          {
+            "id": "5033912d-a355-4ea8-8751-5c8498385b1f",
+            "name": null,
+            "exit_type": "hallway",
+            "material": null,
+            "descriptors": [],
+            "size": "wide"
+          },
+          {
+            "id": "d218a364-cd25-46ed-a0e3-eca27693645a",
+            "name": null,
+            "exit_type": "opening_to_the_void",
+            "material": null,
+            "descriptors": [],
+            "size": "huge"
+          },
+          {
+            "id": "b8275cb3-6c95-413b-ab23-b3e5d48e8690",
+            "name": null,
+            "exit_type": "hole_in_the_wall",
+            "material": null,
+            "descriptors": [],
+            "size": "wide"
+          }
+        ],
+        "loose_items": []
+      },
+      {
+        "id": "69c0acd1-2299-41f4-ac2e-3a445334a183",
+        "name": null,
+        "descriptors": ["chill", "grimy"],
+        "room_type": "cave",
+        "fixture_positions": [],
+        "dimensions": {
+          "height": "tall",
+          "width": "average",
+          "length": "long"
+        },
+        "npc_positions": [
+          {
+            "npc": {
+              "character": {
+                "stats": {
+                  "health": { "current": 0, "max": 28 },
+                  "height": "short",
+                  "base_attack": null,
+                  "base_damage_resistance": { "damage_resistance": 3 }
+                },
+                "species": "rockoblin",
+                "life_modifier": null,
+                "inventory": {
+                  "equipment": [
+                    {
+                      "item": {
+                        "id": "de00503f-53b5-4a2a-a349-e0dc329e5b9e",
+                        "name": null,
+                        "item_type": "halberd",
+                        "tags": ["damage", "weapon", "equippable"],
+                        "descriptors": ["weathered"],
+                        "material": "bone",
+                        "attack": {
+                          "num_rolls": 4,
+                          "modifier": 2,
+                          "effects": []
+                        },
+                        "defense": null,
+                        "consumable": null,
+                        "throwable": null
+                      },
+                      "equipped_location": "hand",
+                      "at_the_ready": true
+                    },
+                    {
+                      "item": {
+                        "id": "8e645962-65d1-422d-af1e-2245da55592c",
+                        "name": null,
+                        "item_type": "halberd",
+                        "tags": ["damage", "weapon", "equippable"],
+                        "descriptors": ["smoothed"],
+                        "material": "wooden",
+                        "attack": {
+                          "num_rolls": 3,
+                          "modifier": 1,
+                          "effects": []
+                        },
+                        "defense": null,
+                        "consumable": null,
+                        "throwable": null
+                      },
+                      "equipped_location": "hand",
+                      "at_the_ready": true
+                    },
+                    {
+                      "item": {
+                        "id": "05376857-2128-45fb-bbb5-0ecf5c5dcd12",
+                        "name": null,
+                        "item_type": "shackles",
+                        "tags": ["accessory", "wearable", "equippable"],
+                        "descriptors": ["tarnished"],
+                        "material": "steel",
+                        "attack": null,
+                        "defense": { "damage_resistance": 3 },
+                        "consumable": null,
+                        "throwable": null
+                      },
+                      "equipped_location": "ankle",
+                      "at_the_ready": true
+                    },
+                    {
+                      "item": {
+                        "id": "29989c76-d9fd-497c-9b8c-b67ec60be5c0",
+                        "name": null,
+                        "item_type": "shackles",
+                        "tags": ["accessory", "wearable", "equippable"],
+                        "descriptors": ["weathered"],
+                        "material": "leather",
+                        "attack": null,
+                        "defense": { "damage_resistance": 3 },
+                        "consumable": null,
+                        "throwable": null
+                      },
+                      "equipped_location": "wrist",
+                      "at_the_ready": true
+                    },
+                    {
+                      "item": {
+                        "id": "188a986d-7126-412a-9bf8-def8483a8529",
+                        "name": null,
+                        "item_type": "pot",
+                        "tags": ["consumable", "throwable"],
+                        "descriptors": ["weathered"],
+                        "material": "bone",
+                        "attack": null,
+                        "defense": null,
+                        "consumable": null,
+                        "throwable": {
+                          "uses": 1,
+                          "effect": {
+                            "name": "oil_splash",
+                            "oil_splash_effect": { "covers_all_enemies": true }
+                          }
+                        }
+                      },
+                      "equipped_location": "packed",
+                      "at_the_ready": false
+                    }
+                  ]
+                },
+                "current_effects": {
+                  "shield_aura": null,
+                  "retribution_aura": null,
+                  "poison": null,
+                  "resurrection_aura": false,
+                  "covered_in_oil": false
+                },
+                "spell_memory": { "spells": [] }
+              },
+              "id": "f26d487c-490b-4fe5-8c4c-88999a2e3142",
+              "name": "grummang"
+            },
+            "position_descriptor": "is_lying_in_pool_blood"
+          },
+          {
+            "npc": {
+              "character": {
+                "stats": {
+                  "health": { "current": 31, "max": 31 },
+                  "height": "average",
+                  "base_attack": {
+                    "num_rolls": 2,
+                    "modifier": -1,
+                    "effects": ["crushing"]
+                  },
+                  "base_damage_resistance": null
+                },
+                "species": "phantom",
+                "life_modifier": null,
+                "inventory": {
+                  "equipment": [
+                    {
+                      "item": {
+                        "id": "b619ca65-7592-406b-8b43-a502c7c790dc",
+                        "name": null,
+                        "item_type": "great_sword",
+                        "tags": ["blade", "damage", "weapon", "equippable"],
+                        "descriptors": ["shiny"],
+                        "material": "iron",
+                        "attack": {
+                          "num_rolls": 4,
+                          "modifier": 1,
+                          "effects": []
+                        },
+                        "defense": null,
+                        "consumable": null,
+                        "throwable": null
+                      },
+                      "equipped_location": "hand",
+                      "at_the_ready": true
+                    },
+                    {
+                      "item": {
+                        "id": "4c5ffc9e-d538-4540-a21f-6875a3aa39e2",
+                        "name": null,
+                        "item_type": "whip",
+                        "tags": [
+                          "whip",
+                          "rope",
+                          "damage",
+                          "weapon",
+                          "equippable"
+                        ],
+                        "descriptors": ["weathered"],
+                        "material": "leather",
+                        "attack": {
+                          "num_rolls": 3,
+                          "modifier": 1,
+                          "effects": []
+                        },
+                        "defense": null,
+                        "consumable": null,
+                        "throwable": null
+                      },
+                      "equipped_location": "hand",
+                      "at_the_ready": true
+                    },
+                    {
+                      "item": {
+                        "id": "212dafe5-19fc-4857-b7e0-a92c9c3e7476",
+                        "name": null,
+                        "item_type": "shackles",
+                        "tags": ["accessory", "wearable", "equippable"],
+                        "descriptors": ["shiny"],
+                        "material": "iron",
+                        "attack": null,
+                        "defense": { "damage_resistance": 3 },
+                        "consumable": null,
+                        "throwable": null
+                      },
+                      "equipped_location": "wrist",
+                      "at_the_ready": true
+                    },
+                    {
+                      "item": {
+                        "id": "af7a53b1-4438-4d81-901d-00c91a0bc40a",
+                        "name": null,
+                        "item_type": "boots",
+                        "tags": ["armour", "defense", "wearable", "equippable"],
+                        "descriptors": ["tarnished"],
+                        "material": "iron",
+                        "attack": null,
+                        "defense": { "damage_resistance": 5 },
+                        "consumable": null,
+                        "throwable": null
+                      },
+                      "equipped_location": "feet",
+                      "at_the_ready": true
+                    }
+                  ]
+                },
+                "current_effects": {
+                  "shield_aura": null,
+                  "retribution_aura": null,
+                  "poison": null,
+                  "resurrection_aura": false,
+                  "covered_in_oil": false
+                },
+                "spell_memory": { "spells": [] }
+              },
+              "id": "c04d77b5-4077-4389-9c20-5dc741dc2a41",
+              "name": "toe"
+            },
+            "position_descriptor": "is_glaring_at_you"
+          }
+        ],
+        "flavour": "something_squishy_all_over_floor",
+        "exits": [
+          {
+            "id": "5033912d-a355-4ea8-8751-5c8498385b1f",
+            "name": null,
+            "exit_type": "dug_out_tunnel_entrance",
+            "material": null,
+            "descriptors": [],
+            "size": "wide"
+          },
+          {
+            "id": "95472c9b-603e-4f75-8f33-8e31be1bb16e",
+            "name": null,
+            "exit_type": "hole_in_the_floor",
+            "material": null,
+            "descriptors": [],
+            "size": "wide"
+          },
+          {
+            "id": "f7a63e0b-2c83-4792-bf60-962a3baff94f",
+            "name": null,
+            "exit_type": "hole_in_the_wall",
+            "material": null,
+            "descriptors": [],
+            "size": "short"
+          }
+        ],
+        "loose_items": []
+      },
+      {
+        "id": "744ec3a6-99d2-42a1-bd82-278498f56ac1",
+        "name": null,
+        "descriptors": ["moist"],
+        "room_type": "crypt",
+        "fixture_positions": [],
+        "dimensions": {
+          "height": "tall",
+          "width": "average",
+          "length": "average"
+        },
+        "npc_positions": [
+          {
+            "npc": {
+              "character": {
+                "stats": {
+                  "health": { "current": 0, "max": 33 },
+                  "height": "average",
+                  "base_attack": {
+                    "num_rolls": 2,
+                    "modifier": -1,
+                    "effects": ["crushing"]
+                  },
+                  "base_damage_resistance": null
+                },
+                "species": "shadow",
+                "life_modifier": null,
+                "inventory": { "equipment": [] },
+                "current_effects": {
+                  "shield_aura": null,
+                  "retribution_aura": null,
+                  "poison": null,
+                  "resurrection_aura": false,
+                  "covered_in_oil": false
+                },
+                "spell_memory": { "spells": [] }
+              },
+              "id": "24713656-bcb9-4117-81b7-aa766729b80a",
+              "name": "mankcrummang"
+            },
+            "position_descriptor": null
+          }
+        ],
+        "flavour": "smells_like_old_goblin_socks",
+        "exits": [
+          {
+            "id": "95472c9b-603e-4f75-8f33-8e31be1bb16e",
+            "name": null,
+            "exit_type": "staircase_down",
+            "material": "iron",
+            "descriptors": [],
+            "size": "narrow"
+          },
+          {
+            "id": "08029d73-fc69-4aee-9a99-37e82560e78e",
+            "name": null,
+            "exit_type": "hole_in_the_wall",
+            "material": null,
+            "descriptors": [],
+            "size": "tiny"
+          },
+          {
+            "id": "b210f9fb-a456-4c96-9da9-34bf8e113310",
+            "name": null,
+            "exit_type": "hole_in_the_floor",
+            "material": null,
+            "descriptors": [],
+            "size": "squat"
+          },
+          {
+            "id": "860e615c-4a57-4e88-8ebe-a062386be912",
+            "name": null,
+            "exit_type": "door",
+            "material": "stone",
+            "descriptors": ["old"],
+            "size": "average"
+          }
+        ],
+        "loose_items": []
+      },
+      {
+        "id": "2b4ce73a-30d9-48a4-8e2f-111a5df5a3df",
+        "name": null,
+        "descriptors": ["grimy", "dim"],
+        "room_type": "cave",
+        "fixture_positions": [
+          {
+            "fixture": {
+              "id": "9db74ab5-4d81-4057-97e4-0ace5ff58a17",
+              "name": null,
+              "fixture_type": "sleeping_roll",
+              "material": "hide",
+              "size": "large",
+              "descriptors": ["rotting"],
+              "items": [],
+              "can_be_opened": false,
+              "open": false,
+              "has_hidden_compartment": false,
+              "hidden_compartment_open": false
+            },
+            "position_descriptor": "stands_in_the_corner"
+          },
+          {
+            "fixture": {
+              "id": "70df1f0d-7bc3-42f9-ab52-a80ea60a8a6c",
+              "name": null,
+              "fixture_type": "sleeping_roll",
+              "material": "leather",
+              "size": "massive",
+              "descriptors": [],
+              "items": [],
+              "can_be_opened": false,
+              "open": false,
+              "has_hidden_compartment": false,
+              "hidden_compartment_open": false
+            },
+            "position_descriptor": "stands_in_the_corner"
+          },
+          {
+            "fixture": {
+              "id": "12f1c4ef-84b2-47c7-83a8-7bc798a2dc56",
+              "name": null,
+              "fixture_type": "sleeping_roll",
+              "material": "linen",
+              "size": "average",
+              "descriptors": [],
+              "items": [],
+              "can_be_opened": false,
+              "open": false,
+              "has_hidden_compartment": false,
+              "hidden_compartment_open": false
+            },
+            "position_descriptor": "sits_along_one_side"
+          },
+          {
+            "fixture": {
+              "id": "4c2b190e-07f2-4806-ab27-bb4f4ce2b9de",
+              "name": null,
+              "fixture_type": "weapon_rack",
+              "material": "iron",
+              "size": "tiny",
+              "descriptors": [],
+              "items": [
+                {
+                  "item": {
+                    "id": "cbe2c704-409a-4851-be6f-ef58fdddb7e0",
+                    "name": null,
+                    "item_type": "trousers",
+                    "tags": ["clothing", "wearable", "equippable"],
+                    "descriptors": ["colourful", "dirty"],
+                    "material": "leather",
+                    "attack": null,
+                    "defense": { "damage_resistance": 2 },
+                    "consumable": null,
+                    "throwable": null
+                  },
+                  "is_inside": false,
+                  "is_in_hidden_compartment": false
+                },
+                {
+                  "item": {
+                    "id": "887c7be7-bec1-453e-8bd8-ce3a16201480",
+                    "name": null,
+                    "item_type": "halberd",
+                    "tags": ["damage", "weapon", "equippable"],
+                    "descriptors": ["shiny"],
+                    "material": "iron",
+                    "attack": { "num_rolls": 3, "modifier": 0, "effects": [] },
+                    "defense": null,
+                    "consumable": null,
+                    "throwable": null
+                  },
+                  "is_inside": false,
+                  "is_in_hidden_compartment": false
+                }
+              ],
+              "can_be_opened": true,
+              "open": false,
+              "has_hidden_compartment": false,
+              "hidden_compartment_open": false
+            },
+            "position_descriptor": "is_in_the_corner"
+          }
+        ],
+        "dimensions": {
+          "height": "average",
+          "width": "average",
+          "length": "average"
+        },
+        "npc_positions": [
+          {
+            "npc": {
+              "character": {
+                "stats": {
+                  "health": { "current": 0, "max": 39 },
+                  "height": "massive",
+                  "base_attack": {
+                    "num_rolls": 2,
+                    "modifier": -1,
+                    "effects": ["crushing"]
+                  },
+                  "base_damage_resistance": null
+                },
+                "species": "shadow",
+                "life_modifier": null,
+                "inventory": { "equipment": [] },
+                "current_effects": {
+                  "shield_aura": null,
+                  "retribution_aura": null,
+                  "poison": null,
+                  "resurrection_aura": false,
+                  "covered_in_oil": false
+                },
+                "spell_memory": { "spells": [] }
+              },
+              "id": "3d530ffd-8cff-4189-bf43-9bc4c1d71142",
+              "name": "zo"
+            },
+            "position_descriptor": null
+          }
+        ],
+        "flavour": "mold_moss_covers_walls",
+        "exits": [
+          {
+            "id": "08029d73-fc69-4aee-9a99-37e82560e78e",
+            "name": null,
+            "exit_type": "staircase_down",
+            "material": "iron",
+            "descriptors": [],
+            "size": "long"
+          },
+          {
+            "id": "65e4f8eb-b035-41a1-ae6b-95fa2c03e484",
+            "name": null,
+            "exit_type": "dug_out_tunnel_entrance",
+            "material": null,
+            "descriptors": [],
+            "size": "large"
+          },
+          {
+            "id": "10f87588-e536-49c6-910c-10fc7d94ff13",
+            "name": null,
+            "exit_type": "door",
+            "material": "steel",
+            "descriptors": ["old"],
+            "size": "small"
+          },
+          {
+            "id": "6f3bec40-2e0d-4bae-8ce0-d9efa9d505a5",
+            "name": null,
+            "exit_type": "staircase_up",
+            "material": "steel",
+            "descriptors": ["old"],
+            "size": "long"
+          }
+        ],
+        "loose_items": []
+      }
+    ],
+    "exit_graph": [
+      {
+        "exit_id": "9496a24f-1f20-4c2d-b9f5-194129f10b38",
+        "left_room_id": "0fe49e93-8e4d-4955-a7b2-c5381d1e9db6",
+        "right_room_id": "ca40b782-1f29-4714-a788-421184ce02d5"
+      },
+      {
+        "exit_id": "28c7e90e-41ff-4512-a9f5-63ebad3e89a5",
+        "left_room_id": "0fe49e93-8e4d-4955-a7b2-c5381d1e9db6",
+        "right_room_id": null
+      },
+      {
+        "exit_id": "a16399f9-f2a9-4fd6-b09e-955bdc189e10",
+        "left_room_id": "ca40b782-1f29-4714-a788-421184ce02d5",
+        "right_room_id": "b6a9ebfd-c8c7-4cec-9bdb-0d1229127b91"
+      },
+      {
+        "exit_id": "d824f50d-657e-4bbc-a67f-7c84ec311f90",
+        "left_room_id": "ca40b782-1f29-4714-a788-421184ce02d5",
+        "right_room_id": null
+      },
+      {
+        "exit_id": "3e13cc33-8ddc-4353-9c69-96a5ad2eeb49",
+        "left_room_id": "ca40b782-1f29-4714-a788-421184ce02d5",
+        "right_room_id": null
+      },
+      {
+        "exit_id": "7f45c1e0-f47e-4a99-8cb4-03cd6b37fb4f",
+        "left_room_id": "ca40b782-1f29-4714-a788-421184ce02d5",
+        "right_room_id": null
+      },
+      {
+        "exit_id": "2e283dc3-716a-4e11-a657-e640541ee525",
+        "left_room_id": "b6a9ebfd-c8c7-4cec-9bdb-0d1229127b91",
+        "right_room_id": "bd173f7b-bacf-48e4-b35c-93c0d6f266da"
+      },
+      {
+        "exit_id": "3fa1595d-bbe4-41af-8e5a-11a5c970a06e",
+        "left_room_id": "bd173f7b-bacf-48e4-b35c-93c0d6f266da",
+        "right_room_id": "4ca6fdea-f90d-4317-bba0-0eee0cbe0890"
+      },
+      {
+        "exit_id": "c309002c-7c8a-40a5-8c9f-0d31bce3c7a7",
+        "left_room_id": "bd173f7b-bacf-48e4-b35c-93c0d6f266da",
+        "right_room_id": null
+      },
+      {
+        "exit_id": "f39beb92-fa5c-41f1-9e7f-3c1befade9ee",
+        "left_room_id": "bd173f7b-bacf-48e4-b35c-93c0d6f266da",
+        "right_room_id": null
+      },
+      {
+        "exit_id": "ea01b63d-51d2-45b4-a43d-2e8ef2d60acb",
+        "left_room_id": "bd173f7b-bacf-48e4-b35c-93c0d6f266da",
+        "right_room_id": null
+      },
+      {
+        "exit_id": "5033912d-a355-4ea8-8751-5c8498385b1f",
+        "left_room_id": "4ca6fdea-f90d-4317-bba0-0eee0cbe0890",
+        "right_room_id": "69c0acd1-2299-41f4-ac2e-3a445334a183"
+      },
+      {
+        "exit_id": "d218a364-cd25-46ed-a0e3-eca27693645a",
+        "left_room_id": "4ca6fdea-f90d-4317-bba0-0eee0cbe0890",
+        "right_room_id": null
+      },
+      {
+        "exit_id": "b8275cb3-6c95-413b-ab23-b3e5d48e8690",
+        "left_room_id": "4ca6fdea-f90d-4317-bba0-0eee0cbe0890",
+        "right_room_id": null
+      },
+      {
+        "exit_id": "95472c9b-603e-4f75-8f33-8e31be1bb16e",
+        "left_room_id": "69c0acd1-2299-41f4-ac2e-3a445334a183",
+        "right_room_id": "744ec3a6-99d2-42a1-bd82-278498f56ac1"
+      },
+      {
+        "exit_id": "f7a63e0b-2c83-4792-bf60-962a3baff94f",
+        "left_room_id": "69c0acd1-2299-41f4-ac2e-3a445334a183",
+        "right_room_id": null
+      },
+      {
+        "exit_id": "08029d73-fc69-4aee-9a99-37e82560e78e",
+        "left_room_id": "744ec3a6-99d2-42a1-bd82-278498f56ac1",
+        "right_room_id": "2b4ce73a-30d9-48a4-8e2f-111a5df5a3df"
+      },
+      {
+        "exit_id": "b210f9fb-a456-4c96-9da9-34bf8e113310",
+        "left_room_id": "744ec3a6-99d2-42a1-bd82-278498f56ac1",
+        "right_room_id": null
+      },
+      {
+        "exit_id": "860e615c-4a57-4e88-8ebe-a062386be912",
+        "left_room_id": "744ec3a6-99d2-42a1-bd82-278498f56ac1",
+        "right_room_id": null
+      },
+      {
+        "exit_id": "65e4f8eb-b035-41a1-ae6b-95fa2c03e484",
+        "left_room_id": "2b4ce73a-30d9-48a4-8e2f-111a5df5a3df",
+        "right_room_id": null
+      },
+      {
+        "exit_id": "10f87588-e536-49c6-910c-10fc7d94ff13",
+        "left_room_id": "2b4ce73a-30d9-48a4-8e2f-111a5df5a3df",
+        "right_room_id": null
+      },
+      {
+        "exit_id": "6f3bec40-2e0d-4bae-8ce0-d9efa9d505a5",
+        "left_room_id": "2b4ce73a-30d9-48a4-8e2f-111a5df5a3df",
+        "right_room_id": null
+      }
+    ]
+  },
+  "current_room_id": "2b4ce73a-30d9-48a4-8e2f-111a5df5a3df",
+  "rooms_seen": [
+    "0fe49e93-8e4d-4955-a7b2-c5381d1e9db6",
+    "ca40b782-1f29-4714-a788-421184ce02d5",
+    "b6a9ebfd-c8c7-4cec-9bdb-0d1229127b91",
+    "bd173f7b-bacf-48e4-b35c-93c0d6f266da",
+    "4ca6fdea-f90d-4317-bba0-0eee0cbe0890",
+    "69c0acd1-2299-41f4-ac2e-3a445334a183",
+    "744ec3a6-99d2-42a1-bd82-278498f56ac1",
+    "2b4ce73a-30d9-48a4-8e2f-111a5df5a3df"
+  ],
+  "all_knowledge_unlocked": true,
+  "player_npc_knowledge": {
+    "d853f9e5-7e07-409f-a24c-52ee43ebdec1": {
+      "knows_health": true,
+      "knows_species": true,
+      "knows_life_modifier": true,
+      "knows_inventory": true,
+      "knows_packed_in_inventory": true
+    },
+    "cc5bd464-8295-4f11-8fc7-add965189014": {
+      "knows_health": true,
+      "knows_species": true,
+      "knows_life_modifier": true,
+      "knows_inventory": true,
+      "knows_packed_in_inventory": true
+    },
+    "9d308edd-5c9d-4e3f-988b-868b0b5c61e4": {
+      "knows_health": true,
+      "knows_species": true,
+      "knows_life_modifier": true,
+      "knows_inventory": true,
+      "knows_packed_in_inventory": true
+    },
+    "562917d2-67a3-4095-aadc-bacfd7b1c5fa": {
+      "knows_health": true,
+      "knows_species": true,
+      "knows_life_modifier": true,
+      "knows_inventory": true,
+      "knows_packed_in_inventory": true
+    },
+    "94a6b895-1dd9-4eaa-b8e1-49c7fd739ea3": {
+      "knows_health": true,
+      "knows_species": true,
+      "knows_life_modifier": true,
+      "knows_inventory": true,
+      "knows_packed_in_inventory": true
+    },
+    "1fec1ce3-4d88-405d-975a-66fbaf9a9aab": {
+      "knows_health": true,
+      "knows_species": true,
+      "knows_life_modifier": true,
+      "knows_inventory": true,
+      "knows_packed_in_inventory": true
+    },
+    "6bf3299c-0cd8-4269-b616-8989bbb7d58b": {
+      "knows_health": true,
+      "knows_species": true,
+      "knows_life_modifier": true,
+      "knows_inventory": true,
+      "knows_packed_in_inventory": true
+    },
+    "1b113d47-1664-4c85-9cbf-fabf41fb11e7": {
+      "knows_health": true,
+      "knows_species": true,
+      "knows_life_modifier": true,
+      "knows_inventory": true,
+      "knows_packed_in_inventory": true
+    },
+    "e2534402-00be-40e7-8a65-1a989c19463c": {
+      "knows_health": true,
+      "knows_species": true,
+      "knows_life_modifier": true,
+      "knows_inventory": true,
+      "knows_packed_in_inventory": true
+    }
+  },
+  "player_fixture_knowledge": {
+    "b25ae3de-c9e3-4022-9963-f0aa0c945f8c": {
+      "knows_has_hidden_compartment": true
+    },
+    "c51d1a10-7d98-4eb5-8b01-8b5858b01871": {
+      "knows_has_hidden_compartment": true
+    },
+    "3f033f8b-e0ca-428b-90cc-005038489eba": {
+      "knows_has_hidden_compartment": true
+    },
+    "d3167c2b-1913-41e9-846b-2dc2592370cc": {
+      "knows_has_hidden_compartment": true
+    },
+    "e1217054-0aac-4be1-b913-fc6cf9cd2d25": {
+      "knows_has_hidden_compartment": true
+    },
+    "7f279eca-ed29-4263-a0e8-8e55be4e324d": {
+      "knows_has_hidden_compartment": true
+    },
+    "12462bc8-d799-4ebd-88b9-632e3d9dd1a5": {
+      "knows_has_hidden_compartment": true
+    }
+  },
+  "player_statistics": {
+    "4b36cd3e-ff75-4a3f-887a-7665b7faed47": {
+      "num_killed": 3,
+      "total_damage_taken": 64,
+      "total_damage_done": 32
+    },
+    "23933c8c-31f2-4c84-9f64-c6bb0ef78076": {
+      "num_killed": 1,
+      "total_damage_taken": 31,
+      "total_damage_done": 1
+    },
+    "a825a52c-ad62-4f72-9d30-cc88617c491d": {
+      "num_killed": 7,
+      "total_damage_taken": 96,
+      "total_damage_done": 179
+    },
+    "c06f7eb7-1a26-4df0-a309-819be5b432f7": {
+      "num_killed": 0,
+      "total_damage_taken": 42,
+      "total_damage_done": 1
+    },
+    "d669103f-d26f-4c32-b592-6b126ca06b9f": {
+      "num_killed": 0,
+      "total_damage_taken": 36,
+      "total_damage_done": 2
+    },
+    "20d4f5a3-6213-4fb2-8024-e7eeef2e2829": {
+      "num_killed": 0,
+      "total_damage_taken": 74,
+      "total_damage_done": 3
+    }
+  },
+  "danger_level": 19
+}

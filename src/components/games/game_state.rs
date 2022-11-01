@@ -13,7 +13,7 @@ use crate::{
         fixtures::FixtureViewArgs,
         rooms::{Room, RoomView},
         worlds::{World, WorldView},
-        CharacterViewArgs, NonPlayerViewArgs,
+        CharacterViewArgs, Ghost, NonPlayerViewArgs,
     },
     systems::view::room::view,
 };
@@ -40,6 +40,8 @@ pub struct GameState {
     pub player_statistics: HashMap<Uuid, Statistics>,
     #[cfg_attr(feature = "serialization", serde(default))]
     pub danger_level: u32,
+    #[cfg_attr(feature = "serialization", serde(default, skip))]
+    pub ghosts: Vec<Ghost>,
 }
 
 impl GameState {
@@ -221,5 +223,53 @@ mod tests {
         let stats = state.player_stats(&pc_id);
 
         assert_eq!(stats.num_killed, 1);
+    }
+
+    #[test]
+    #[cfg(feature = "serialization")]
+    fn can_be_deserialized_without_ghosts() {
+        use std::fs;
+
+        use super::GameState;
+
+        let text = fs::read_to_string("./fixtures/game.json").unwrap();
+        let game_state: GameState = serde_json::from_str(&text).unwrap();
+
+        assert_eq!(game_state.ghosts.len(), 0);
+    }
+
+    #[test]
+    #[cfg(feature = "serialization")]
+    fn serialization_skips_ghosts() {
+        use std::fs;
+
+        use super::GameState;
+        use crate::components::{
+            spells::SpellMemory, Character, Effects, Ghost, Health, Inventory, Stats,
+        };
+
+        let text = fs::read_to_string("./fixtures/game.json").unwrap();
+        let mut game_state: GameState = serde_json::from_str(&text).unwrap();
+
+        game_state.ghosts.push(Ghost {
+            character: Character {
+                stats: Stats {
+                    health: Health::from_max(2),
+                    height: crate::components::Size::Average,
+                    base_attack: None,
+                    base_damage_resistance: None,
+                },
+                species: crate::components::Species::Bugbear,
+                life_modifier: None,
+                inventory: Inventory::default(),
+                current_effects: Effects::default(),
+                spell_memory: SpellMemory::default(),
+            },
+            name: None,
+        });
+
+        let serialized = serde_json::to_string(&game_state).unwrap();
+
+        assert!(!serialized.contains("\"ghosts\":"));
     }
 }
