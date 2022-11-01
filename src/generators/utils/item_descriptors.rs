@@ -2,8 +2,7 @@ use strum::IntoEnumIterator;
 
 use crate::components::{
     items::{Descriptor, ItemType},
-    tag::Tag,
-    Material, Tagged,
+    Material, Tag, Tagged,
 };
 
 pub fn valid_for_level(descriptor: &Descriptor, level: u32) -> bool {

@@ -6,7 +6,7 @@ use uuid::Uuid;
 use crate::components::{
     items::{CharacterItem, Descriptor, Item, ItemType, LocationTag},
     spells::{LearnedSpell, Spell, SpellMemory, SpellName},
-    Character, Effects, Inventory, Material, PlayerCharacter, Size, Species, Tag,
+    Character, Effects, Inventory, Material, PlayerCharacter, Size, Species, Stats, Tag,
     {Attack, Defense},
 };
 
@@ -44,7 +44,7 @@ impl Generator<PlayerCharacter> for PlayerCharacterPrototype {
         };
 
         let stats_generator = build_specific_health(25, &species, false);
-        let mut stats = stats_generator.generate();
+        let mut stats: Stats = stats_generator.generate();
 
         if let Some(size) = &self.size {
             stats.height = *size;

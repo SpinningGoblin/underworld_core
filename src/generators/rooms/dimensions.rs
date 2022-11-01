@@ -1,7 +1,7 @@
 use rand::Rng;
 
 use crate::{
-    components::{rooms::Dimensions, size::Size},
+    components::{rooms::Dimensions, Size},
     utils::rolls::roll_percent_succeeds,
 };
 

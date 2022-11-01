@@ -1,9 +1,7 @@
 use rand::Rng;
 
 use crate::{
-    components::{
-        damage::AttackEffect, size::Size, species::Species, stats::Stats, Attack, Defense, Health,
-    },
+    components::{damage::AttackEffect, Attack, Defense, Health, Size, Species, Stats},
     utils::rolls::{roll_d6, roll_percent_succeeds},
 };
 
