@@ -18,7 +18,7 @@ pub fn handle(
 
     let knowledge = state.fixture_knowledge(&fixture_id);
 
-    if !knowledge.knows_has_hidden_compartment {
+    if !knowledge.knows_has_hidden_compartment && !state.all_knowledge_unlocked {
         return Err(Error::FixtureHasHiddenCompartmentUnknown(
             fixture_id.to_string(),
         ));
