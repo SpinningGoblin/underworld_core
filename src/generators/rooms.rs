@@ -17,7 +17,7 @@ use uuid::Uuid;
 use crate::components::{
     fixtures::FixtureType,
     rooms::{Descriptor, Dimensions, ExitType, Flavour, Room, RoomType},
-    LifeModifier, Species,
+    Ghost, LifeModifier, Species,
 };
 
 use self::{
@@ -32,6 +32,7 @@ pub struct BuildNpcsArgs {
     pub possible_species: Vec<Species>,
     pub possible_life_modifiers: Vec<LifeModifier>,
     pub allow_npcs_to_spawn_dead: bool,
+    pub ghosts: Vec<Ghost>,
 }
 
 impl Default for BuildNpcsArgs {
@@ -41,6 +42,7 @@ impl Default for BuildNpcsArgs {
             possible_species: Species::iter().collect(),
             possible_life_modifiers: LifeModifier::iter().collect(),
             allow_npcs_to_spawn_dead: true,
+            ghosts: Vec::new(),
         }
     }
 }

@@ -3,7 +3,7 @@ use crate::{
     components::games::GameState,
     errors::Error,
     events::{Event, RoomExited, RoomFirstSeen, RoomGenerated},
-    generators::{generator::Generator, RoomGeneratorBuilder},
+    generators::{generator::Generator, RoomGeneratorBuilder, RoomNpcGenerationArgs},
     utils::ids::parse_id,
 };
 
@@ -35,6 +35,13 @@ pub fn handle(exit_room: &ExitRoom, state: &GameState) -> Result<Vec<Event>, Err
             let room_generator = RoomGeneratorBuilder::new()
                 .danger_level(state.danger_level)
                 .entrance_id(exit_id)
+                .room_npc_generation_args(RoomNpcGenerationArgs {
+                    num_groups: None,
+                    possible_species: None,
+                    possible_life_modifiers: None,
+                    allow_npcs_to_spawn_dead: None,
+                    ghosts: Some(state.ghosts.to_vec()),
+                })
                 .build();
             let room = room_generator.generate();
             let room_id = room.id;

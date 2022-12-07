@@ -1,4 +1,5 @@
 use rand::Rng;
+use uuid::Uuid;
 
 use crate::{
     components::{
@@ -15,6 +16,8 @@ use crate::{
 
 use super::BuildNpcsArgs;
 
+const SPAWN_FROM_GHOST_CHANCE: i32 = 10;
+
 pub fn build_npc_positions(
     fixtures_in_room: Vec<FixtureType>,
     danger_level: u32,
@@ -28,6 +31,8 @@ pub fn build_npc_positions(
         return Vec::new();
     }
 
+    let mut ghost_spawned = false;
+
     (0..num_groups)
         .flat_map(|_| {
             // For each group, find a starting race.
@@ -40,27 +45,49 @@ pub fn build_npc_positions(
 
             let mut npc_positions: Vec<NpcPosition> = Vec::new();
             (0..group_size).for_each(|index| {
-                if index > 0 {
-                    species = switch_species(&species);
-                    prototype = npc_prototype(&species, life_modifier, danger_level);
+                if roll_percent_succeeds(&mut rng, SPAWN_FROM_GHOST_CHANCE)
+                    && !args.ghosts.is_empty()
+                    && !ghost_spawned
+                {
+                    let index = rng.gen_range(0..args.ghosts.len());
+                    let ghost = args.ghosts.get(index).unwrap();
+
+                    let npc = NonPlayer {
+                        character: ghost.character.clone(),
+                        id: Uuid::new_v4(),
+                        name: ghost.name.clone(),
+                    };
+
+                    let position_descriptor = position_descriptor(&fixtures_in_room, false);
+
+                    npc_positions.push(NpcPosition {
+                        npc,
+                        position_descriptor,
+                    });
+                    ghost_spawned = true;
+                } else {
+                    if index > 0 {
+                        species = switch_species(&species);
+                        prototype = npc_prototype(&species, life_modifier, danger_level);
+                    }
+                    let mut npc = prototype.generate();
+
+                    let include_dead_spawn_positions = args.allow_npcs_to_spawn_dead
+                        && !matches!(&npc.character.species, Species::Phantom | Species::Shadow)
+                        && npc.character.life_modifier.is_none();
+
+                    let position_descriptor =
+                        position_descriptor(&fixtures_in_room, include_dead_spawn_positions);
+
+                    if position_descriptor == Some(NpcPositionDescriptor::IsLyingInPoolBlood) {
+                        npc.kill();
+                    }
+
+                    npc_positions.push(NpcPosition {
+                        npc,
+                        position_descriptor,
+                    });
                 }
-                let mut npc = prototype.generate();
-
-                let include_dead_spawn_positions = args.allow_npcs_to_spawn_dead
-                    && !matches!(&npc.character.species, Species::Phantom | Species::Shadow)
-                    && npc.character.life_modifier.is_none();
-
-                let position_descriptor =
-                    position_descriptor(&fixtures_in_room, include_dead_spawn_positions);
-
-                if position_descriptor == Some(NpcPositionDescriptor::IsLyingInPoolBlood) {
-                    npc.kill();
-                }
-
-                npc_positions.push(NpcPosition {
-                    npc,
-                    position_descriptor,
-                });
             });
 
             npc_positions

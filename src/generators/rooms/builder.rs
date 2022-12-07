@@ -8,7 +8,7 @@ use crate::{
     components::{
         fixtures::FixtureType,
         rooms::{Descriptor, Dimensions, ExitType, Flavour, Room, RoomType},
-        LifeModifier, Species,
+        Ghost, LifeModifier, Species,
     },
     generators::generator::Generator,
 };
@@ -27,6 +27,7 @@ pub struct RoomNpcGenerationArgs {
     pub possible_species: Option<Vec<Species>>,
     pub possible_life_modifiers: Option<Vec<LifeModifier>>,
     pub allow_npcs_to_spawn_dead: Option<bool>,
+    pub ghosts: Option<Vec<Ghost>>,
 }
 
 #[derive(Default, Clone)]
@@ -207,11 +208,17 @@ impl RoomGeneratorBuilder {
                         None => true,
                     };
 
+                let ghosts = match &room_npc_generation_args.ghosts {
+                    Some(it) => it.to_vec(),
+                    None => Vec::new(),
+                };
+
                 BuildNpcsArgs {
                     num_groups,
                     possible_species,
                     possible_life_modifiers,
                     allow_npcs_to_spawn_dead,
+                    ghosts,
                 }
             }
             None => BuildNpcsArgs {
@@ -219,6 +226,7 @@ impl RoomGeneratorBuilder {
                 possible_species: Species::iter().collect(),
                 possible_life_modifiers: LifeModifier::iter().collect(),
                 allow_npcs_to_spawn_dead: true,
+                ghosts: Vec::new(),
             },
         };
 
